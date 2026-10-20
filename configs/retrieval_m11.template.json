@@ -1,0 +1,26 @@
+{
+  "claims_path": "${TFFV_RETRIEVAL_CLAIMS}",
+  "corpus_path": "${TFFV_RETRIEVAL_CORPUS}",
+  "data_manifest_path": "${TFFV_RETRIEVAL_DATA_MANIFEST}",
+  "segmentation": {"words": 180, "overlap": 30},
+  "bm25": {"k1": 1.2, "b": 0.75},
+  "rrf_constant": 60,
+  "dedup_threshold": 0.95,
+  "seed": 2026,
+  "device": "cuda",
+  "dtype": "float16",
+  "max_length": 1024,
+  "batch_size": 1,
+  "embedding": {
+    "model_id": "Qwen/Qwen3-Embedding-0.6B",
+    "local_path": "${TFFV_EMBED_MODEL}",
+    "revision": "${TFFV_EMBED_REVISION}",
+    "snapshot_sha256": "${TFFV_EMBED_SHA256}"
+  },
+  "reranker": {
+    "model_id": "Qwen/Qwen3-Reranker-0.6B",
+    "local_path": "${TFFV_RERANK_MODEL}",
+    "revision": "${TFFV_RERANK_REVISION}",
+    "snapshot_sha256": "${TFFV_RERANK_SHA256}"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "REPLACE_AFTER_INSPECTION",
+  "split": "train",
+  "role": "source",
+  "population_status": "previously_inspected",
+  "frozen": true,
+  "expected_records": 0,
+  "labels": ["SUPPORTED", "REFUTED", "NOT ENOUGH INFO", "CONFLICTING"],
+  "evidence_protocol": "REPLACE_WITH_VERIFIED_PROTOCOL",
+  "checkpoint_id": "REPLACE_WITH_EXACT_IDENTIFIER_AND_REVISION",
+  "checkpoint_hash_type": "snapshot_content_sha256",
+  "checkpoint_sha256": "REQUIRED_VERIFIED_CONTENT_HASH",
+  "prompt_id": "REQUIRED",
+  "prompt_sha256": "REQUIRED_HASH_OF_EXACT_PROMPT",
+  "scoring_protocol": "REQUIRED_INCLUDING_VERBALIZERS_AGGREGATION_AND_TRUNCATION",
+  "grouping_verified": false,
+  "grouping_provenance": "REQUIRED_ALGORITHM_THRESHOLD_INPUT_HASH_AND_GROUP_ARTIFACT_HASH",
+  "gold_accessed_during_inference": false,
+  "source_sha256": "REQUIRED_CANONICAL_JSONL_HASH",
+  "predictions_sha256": "REQUIRED_CANONICAL_PREDICTIONS_JSONL_HASH",
+  "confidence_definition": "REQUIRED_IF_CONFIDENCE_PRESENT_NOT_CALIBRATED_BY_DEFAULT"
+}

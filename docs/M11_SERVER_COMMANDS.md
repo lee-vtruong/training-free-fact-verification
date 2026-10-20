@@ -1,0 +1,260 @@
+# M1.1 — Lệnh để người dùng chạy trên terminal server
+
+Codex chỉ code, test local, hướng dẫn và phân tích output người dùng gửi lại.
+**Không có lệnh SSH, push/pull hay GPU job nào được Codex tự chạy.**
+Các lệnh dưới đây do người dùng thực thi, sau khi đã chuyển code mới lên server.
+Không sửa repo ERRORFlow. Không dùng dữ liệu QA/gold làm corpus độc lập.
+
+## 0. Đồng bộ code: local → GitHub → server
+
+Luôn gửi kèm lệnh push và pull mỗi lần bàn giao code. Người dùng tự thực hiện.
+Tại lần kiểm tra 2026-10-20, local chưa có commit, branch `master`, chưa có
+remote. Ba lệnh setup đầu dưới đây chỉ dành cho trạng thái ban đầu này.
+
+**Windows PowerShell — máy local:**
+
+```powershell
+cd C:\Users\ASUS\Downloads\training-free-fact-verification
+git branch -m main
+git remote add origin https://github.com/lee-vtruong/training-free-fact-verification.git
+git status --short --branch
+git remote -v
+python scripts/run_tests.py
+git add .gitignore .env.example AGENTS.md README.md pyproject.toml configs src scripts tests docs reports outputs/.gitkeep
+git diff --cached --stat
+git diff --cached --check
+git commit -m "Implement M1.1 retrieval pipelines and reproducible server commands"
+git push -u origin main
+git rev-parse --short HEAD
+```
+
+Chỉ tiếp tục commit/push khi tests pass và staged files đúng phạm vi. Không
+stage datasets, checkpoints, `.env`, caches hoặc generated outputs. GitHub repo
+phải tồn tại và tài khoản có quyền push. Chưa kiểm tra lịch sử GitHub trong
+phiên này; nếu push bị từ chối vì remote có commits khác, gửi lỗi để xử lý theo
+lịch sử thực tế, không force-push.
+
+Nếu Windows báo WinError 5 với `pytest-of-ASUS` hoặc `.pytest_cache`, dùng
+`python scripts/run_tests.py` như trên. Runner tạo temporary directory riêng
+cho mỗi lần chạy và tắt disk cache; không cần Administrator, sửa ACL hoặc xóa
+temporary/cache directories cũ. Đây khác với Git `safe.directory`, vốn chỉ giải
+quyết việc Git tin cậy repository, không thay đổi quyền filesystem.
+
+**Linux terminal — server đã clone repo:**
+
+```bash
+cd ~/whale/training-free-fact-verification
+git status --short --branch
+git remote -v
+git switch main
+git pull --ff-only origin main
+git rev-parse --short HEAD
+```
+
+Nếu working tree server có thay đổi hoặc lệnh Git báo lỗi, dừng trước khi chạy
+experiment và gửi output; không reset/stash tự động. Đối chiếu commit local và
+server sau pull.
+
+**Nếu server chưa clone repo**, dùng thay cho block pull:
+
+```bash
+mkdir -p ~/whale
+cd ~/whale
+git clone https://github.com/lee-vtruong/training-free-fact-verification.git
+cd training-free-fact-verification
+git status --short --branch
+git remote -v
+git rev-parse --short HEAD
+```
+
+Sau khi đồng bộ thành công mới chạy bước 1 bên dưới. Những lần sau bỏ setup
+branch/remote; vẫn kiểm tra branch/remote, stage files cụ thể, commit/push rồi
+pull trên server. Các lệnh này không thao tác vào ERRORFlow.
+
+## 1. Chạy trước: kiểm tra hạ tầng, chưa inference
+
+Trong terminal Linux của server:
+
+```bash
+cd ~/whale/training-free-fact-verification
+git status --short --branch
+git remote -v
+python3 scripts/m11_resources.py \
+  --old-root ~/whale/ERRORFlow \
+  --model-root ~/whale/cache/models \
+  --model-root ~/.cache/huggingface/hub \
+  --output outputs/m11-resources-001
+cat outputs/m11-resources-001/resources.json
+```
+
+`~/whale/...` là đường dẫn quy ước, chưa được xác minh. Nếu repo hoặc model
+cache nằm nơi khác, thay bằng path thực tế. Nếu thư mục output đã tồn tại, dùng
+tên mới; không xóa/overwrite output cũ. Scan giới hạn depth/file count, bỏ qua
+old outputs và thư mục ẩn; thiếu path trong scan không chứng minh nó không tồn tại.
+
+**Gửi lại `resources.json` để xác nhận paths và dependencies trước.** Nếu cần
+kiểm tra corpus/schema riêng, gửi tên file, field names, kích thước và provenance;
+không đưa secrets hoặc labels vào input retrieval. Không tự nhận model đã có
+chỉ vì tồn tại một thư mục tên tương tự.
+
+## 2. Environment và synthetic smoke, sau khi kiểm tra tài nguyên
+
+Nếu cần môi trường mới, chỉ tạo trong repo mới. Không sửa ERRORFlow/GraphCURE venv.
+Việc cài package có thể tải dependency lớn: kiểm tra dung lượng trước.
+
+```bash
+test -d .venv || python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev,retrieval]'
+python scripts/run_tests.py
+export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"
+python scripts/m11_smoke.py --output outputs/m11-synthetic-smoke-001
+cat outputs/m11-synthetic-smoke-001/evaluation/comparison.md
+```
+
+Smoke này dùng test doubles, **không phải Qwen hay AVeriTeC benchmark**. Không
+có checkpoint download. Không dùng synthetic metrics để chọn pipeline.
+Nếu môi trường độc lập đã tương thích, có thể dùng nó thay vì tạo lại.
+
+## 3. Chuẩn bị inputs và snapshots đã được kiểm chứng
+
+Xem `docs/M11_RETRIEVAL_PROTOCOL.md` cho schema. Chỉ cấu hình các paths thực tế:
+
+```bash
+export TFFV_RETRIEVAL_CLAIMS=/absolute/path/to/label_free_claims.jsonl
+export TFFV_RETRIEVAL_CORPUS=/absolute/path/to/independent_documents.jsonl
+export TFFV_RETRIEVAL_DATA_MANIFEST=/absolute/path/to/reviewed_data_manifest.json
+export TFFV_EMBED_MODEL=/absolute/path/to/Qwen3-Embedding-0.6B/snapshot
+export TFFV_RERANK_MODEL=/absolute/path/to/Qwen3-Reranker-0.6B/snapshot
+export TFFV_EMBED_REVISION=ACTUAL_40_CHARACTER_UPSTREAM_COMMIT
+export TFFV_RERANK_REVISION=ACTUAL_40_CHARACTER_UPSTREAM_COMMIT
+```
+
+Các giá trị trên là placeholders cần thay; không tự đoán model revision.
+Template data manifest tại `configs/retrieval_data_manifest.template.json`.
+Điền hashes/counts và xác nhận từng review flag bằng evidence thực tế.
+Có thể lấy SHA256 của hai file canonical bằng:
+
+```bash
+sha256sum "$TFFV_RETRIEVAL_CLAIMS" "$TFFV_RETRIEVAL_CORPUS"
+```
+
+Không có automatic adapter cho raw AVeriTeC/corpus chưa được xem schema.
+Sau khi biết raw fields/provenance, mới viết conversion có version/hash;
+không rename gold QA thành `web_document` để vượt validation.
+
+Đọc model bytes để fingerprint, chưa inference:
+
+```bash
+python -m tffv.retrieval.cli fingerprint \
+  --model-dir "$TFFV_EMBED_MODEL" --output outputs/m11-embed-fingerprint-001
+python -m tffv.retrieval.cli fingerprint \
+  --model-dir "$TFFV_RERANK_MODEL" --output outputs/m11-rerank-fingerprint-001
+export TFFV_EMBED_SHA256="$(python -c 'import json; print(json.load(open("outputs/m11-embed-fingerprint-001/snapshot.json"))["snapshot_sha256"])')"
+export TFFV_RERANK_SHA256="$(python -c 'import json; print(json.load(open("outputs/m11-rerank-fingerprint-001/snapshot.json"))["snapshot_sha256"])')"
+```
+
+Fingerprint đọc toàn bộ weights, có I/O nhưng không chạy GPU. Không tự tải model
+nếu thiếu; báo lại paths và dung lượng để quyết định bước tiếp theo.
+
+## 4. Preflight và real-model smoke có giới hạn
+
+Template đọc các biến môi trường bên trên; không tự load `.env`.
+
+```bash
+python -m tffv.retrieval.cli benchmark \
+  --config configs/retrieval_m11.template.json \
+  --max-claims 3 --max-passages 256
+```
+
+Lệnh này chỉ validate/hiện workload, chưa load model hoặc inference. Smoke tối đa
+256 passage embeddings + 3 query embeddings + 120 cặp reranking; corpus nhỏ
+hơn sẽ dùng workload nhỏ hơn. Chưa có ước lượng runtime/VRAM thực nghiệm.
+Chỉ chạy sau khi GPU/dung lượng và input đã được xác nhận:
+
+```bash
+mkdir -p outputs/logs
+set -o pipefail
+python -m tffv.retrieval.cli benchmark \
+  --config configs/retrieval_m11.template.json \
+  --max-claims 3 --max-passages 256 \
+  --output outputs/m11-real-smoke-001 --execute \
+  2>&1 | tee outputs/logs/m11-real-smoke-001.log
+python -m tffv.retrieval.cli evaluate \
+  --run outputs/m11-real-smoke-001 \
+  --output outputs/m11-real-smoke-eval-001
+cat outputs/m11-real-smoke-eval-001/comparison.md
+```
+
+Smoke subset không đại diện toàn bộ corpus và không được dùng để chọn method.
+Gửi manifest, summary và log về trước khi benchmark lớn. Nếu có failure, gửi
+`failure.json` và log; không xóa artifact hay tự giảm context để che lỗi.
+
+## 5. Full benchmark — chỉ sau khi người dùng quyết định chạy workload
+
+Trước hết in workload toàn bộ, không có `--execute`:
+
+```bash
+python -m tffv.retrieval.cli benchmark \
+  --config configs/retrieval_m11.template.json
+```
+
+Với P passages, N claims: encode P documents và N queries; rerank tối đa
+N × min(40,P) cặp. Vector cache float32 chiếm khoảng P × 1024 × 4 bytes, chưa
+tính corpus, BM25 postings và output. Full corpus có index cache khác smoke
+subset; các full rerun tương thích sẽ tái sử dụng cùng index đã seal.
+
+Sau khi đã xem workload và xác nhận tài nguyên, người dùng có thể chạy trong tmux:
+
+```bash
+tmux new -s tf-retrieval-m11
+cd ~/whale/training-free-fact-verification
+source .venv/bin/activate
+export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"
+# Export lại các biến inputs/models nếu đây là terminal mới.
+mkdir -p outputs/logs
+set -o pipefail
+python -m tffv.retrieval.cli benchmark \
+  --config configs/retrieval_m11.template.json \
+  --output outputs/m11-full-001 --execute \
+  2>&1 | tee outputs/logs/m11-full-001.log
+```
+
+## 6. Đánh giá cache đã seal
+
+Không có relevance annotations hợp lệ:
+
+```bash
+python -m tffv.retrieval.cli evaluate \
+  --run outputs/m11-full-001 --output outputs/m11-full-eval-001
+cat outputs/m11-full-eval-001/comparison.md
+```
+
+Recall/MRR/nDCG sẽ là `not measured`, không phải zero. Nếu có qrels passage-level
+đã được kiểm chứng và mapping đúng passage index, dùng một output mới:
+
+```bash
+python -m tffv.retrieval.cli evaluate \
+  --run outputs/m11-full-001 --output outputs/m11-full-qrels-eval-001 \
+  --qrels /absolute/path/to/validated_qrels.jsonl \
+  --qrels-manifest /absolute/path/to/validated_qrels_manifest.json
+```
+
+Qrels JSONL: đúng ba fields `sample_id`, `passage_id`, `relevance` (grade 0–4).
+Manifest yêu cầu `validated: true`, `no_inferred_labels: true`,
+`annotation_provenance`, `relevance_unit: "passage"`, `synthetic: false`,
+`unjudged_policy: "unjudged_as_nonrelevant"` và hashes `claims_sha256`,
+`passages_sha256`, `qrels_sha256` trỏ tới đúng artifacts của run.
+Không tự chuyển gold verdict, QA hoặc URL-match thành relevance grades.
+
+## 7. Gửi lại để phân tích
+
+- Git branch/commit, commands và model/corpus provenance.
+- `resources.json`, run `manifest.json`, `workload.json`, `summary.json`.
+- Evaluation `comparison.md` và `comparison.json`.
+- `leakage_scan.json`, relevant logs/failures.
+- Một số entries numerical/temporal/conflicting trong `manual_review_queue.jsonl`,
+  kèm evidence sources và nhận xét thủ công nếu có.
+
+Không cần gửi toàn bộ embedding matrix. Chưa chọn R4 hay bất kỳ method nào làm
+baseline M1.2. Chưa chạy Qwen3-8B và chưa tạo Historical Error Memory.

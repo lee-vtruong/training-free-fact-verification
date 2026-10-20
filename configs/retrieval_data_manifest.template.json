@@ -1,0 +1,18 @@
+{
+  "dataset": "AVeriTeC",
+  "ontology": ["SUPPORTED", "REFUTED", "NOT ENOUGH INFO", "CONFLICTING"],
+  "synthetic": false,
+  "claims_sha256": "REQUIRED_CANONICAL_CLAIMS_FILE_HASH",
+  "corpus_sha256": "REQUIRED_INDEPENDENT_DOCUMENT_FILE_HASH",
+  "split_counts": {},
+  "official_splits_preserved": false,
+  "corpus_origin_reviewed": false,
+  "no_gold_labels": false,
+  "no_gold_justifications": false,
+  "no_ground_truth_qa": false,
+  "acquisition_label_free": false,
+  "answer_leakage_reviewed": false,
+  "corpus_provenance": "REQUIRED: raw source paths/hashes, acquisition pipeline, filtering and answer-leakage review",
+  "claim_id_provenance": "REQUIRED: official release/split and exact original ID mapping",
+  "population_status": "REQUIRED: prior_inspected/exploratory status"
+}

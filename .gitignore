@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+.env
+configs/local*.json
+data/
+outputs/*
+!outputs/.gitkeep
+*.safetensors
+*.pt
+*.bin
+*.parquet
+*.sqlite*
