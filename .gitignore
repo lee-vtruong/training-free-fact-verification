@@ -5,7 +5,7 @@ __pycache__/
 .venv/
 .env
 configs/local*.json
-data/
+/data/
 outputs/*
 !outputs/.gitkeep
 *.safetensors

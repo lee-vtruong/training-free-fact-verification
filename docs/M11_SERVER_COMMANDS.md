@@ -105,7 +105,7 @@ Việc cài package có thể tải dependency lớn: kiểm tra dung lượng t
 ```bash
 test -d .venv || python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[dev,retrieval]'
+python -m pip install --no-cache-dir -e '.[dev]'
 python scripts/run_tests.py
 export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"
 python scripts/m11_smoke.py --output outputs/m11-synthetic-smoke-001
@@ -115,6 +115,40 @@ cat outputs/m11-synthetic-smoke-001/evaluation/comparison.md
 Smoke này dùng test doubles, **không phải Qwen hay AVeriTeC benchmark**. Không
 có checkpoint download. Không dùng synthetic metrics để chọn pipeline.
 Nếu môi trường độc lập đã tương thích, có thể dùng nó thay vì tạo lại.
+
+Synthetic smoke/tests chỉ cần standard library, numpy và pytest; chưa cần
+PyTorch/CUDA/transformers. **Không cài `.[dev,retrieval]` trong bước này.**
+Dependencies GPU chỉ cài riêng sau khi xác minh dung lượng, GPU/driver và các
+environment có sẵn. Không tự chọn bản torch/CUDA mới nhất hoặc cài lại một
+stack đã có trước khi kiểm tra khả năng tái sử dụng read-only.
+
+### Nếu cài đặt báo `No space left on device`
+
+Dừng chuỗi cài/test/smoke. Thiếu pytest sau đó là hậu quả của việc cài bị ngắt;
+file comparison không tồn tại vì chưa có smoke thành công. Kiểm tra trên terminal
+server, không xóa gì:
+
+```bash
+df -h . /tmp "$HOME"
+df -i . /tmp "$HOME"
+du -sh .venv "$HOME/.cache/pip" 2>/dev/null
+for env_python in \
+  "$HOME/whale/ERRORFlow/.venv/bin/python" \
+  "$HOME/whale/GraphCURE/.venv/bin/python"
+do
+  if [ -x "$env_python" ]; then
+    "$env_python" -c 'import sys, importlib.metadata as m; print(sys.executable); print({n: next((d.version for d in m.distributions() if d.metadata["Name"].lower() == n), None) for n in ["torch", "transformers", "numpy", "pytest"]})'
+  fi
+done
+```
+
+Gửi output để quyết định môi trường/path phù hợp. `--no-cache-dir` tránh tạo
+pip cache mới nhưng không giải quyết filesystem đã đầy. Không xóa checkpoints,
+old environments/caches hoặc `.venv` đang có để giải phóng chỗ khi chưa xác định
+phạm vi và được người dùng đồng ý. `.venv` mới cài dở chưa được coi là hợp lệ.
+
+Chỉ sau khi đủ dung lượng hoặc đã chọn environment tương thích mới chạy block
+cài nhẹ bên trên. Không tiếp tục benchmark khi tests/smoke còn lỗi.
 
 ## 3. Chuẩn bị inputs và snapshots đã được kiểm chứng
 

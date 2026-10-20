@@ -56,3 +56,16 @@
 - Validation local: **46 passed in 1.06s**, exit code 0. Cần người dùng chạy lại bằng tài khoản ASUS để xác nhận môi trường của họ.
 - Không thay đổi retrieval/scoring protocol, dataset, model hoặc ERRORFlow. Không SSH, commit/push/pull hoặc GPU inference.
 - Next step: người dùng chạy runner local; nếu pass, review/stage files, commit/push rồi pull server theo hướng dẫn. M1.1 thực nghiệm vẫn INCOMPLETE.
+
+## 2026-10-20 17:59 +07:00 — Fix omitted source package và dependency installation guidance
+
+- Mục tiêu: xử lý server log `No space left on device`, thiếu pytest và `ModuleNotFoundError: tffv.data` mà không tự thao tác server.
+- Quan sát từ log người dùng: pip build editable thành công nhưng cài dependency dừng ở NVIDIA/CUDA packages do Errno 28; environment cài dở không có pytest; smoke chưa chạy thành công nên comparison.md không tồn tại. Chưa xác minh filesystem cụ thể đầy hoặc lượng storage có thể thu hồi.
+- Root cause source package đã xác minh local: `.gitignore` dùng `data/` khiến cả `src/tffv/data/__init__.py` và `records.py` bị ignore; `git ls-files src/tffv/data` rỗng. Local tests trước đó dùng files đang có trên đĩa nên không phát hiện source bị thiếu khi bàn giao qua Git. Đây là lỗi cấu hình của codebase, không phải dữ liệu server.
+- Fix: đổi thành `/data/`; code package trở thành eligible untracked files để người dùng stage/push. Thêm `tests/test_repository_export.py` kiểm tra clean Git source export có thể import data/retrieval mà không dựa vào source ngoài export.
+- Hướng dẫn environment: synthetic smoke chỉ cài `.[dev]`, không cài cả retrieval GPU stack. `--no-cache-dir` tránh cache mới, không được xem là giải pháp cho disk đã đầy. Thu thập df/du và package versions của old environments read-only trước khi quyết định reuse/cài GPU dependencies; không sửa old venv, xóa caches hoặc checkpoints.
+- Files: `.gitignore`, `docs/M11_SERVER_COMMANDS.md`, `tests/test_repository_export.py`, nhật ký này; hai source files `src/tffv/data/{__init__,records}.py` được đưa trở lại phạm vi Git handoff, nội dung không đổi.
+- Commands local: đọc AGENTS/config; `git status --short --branch`, `git remote -v`, `git ls-files src/tffv/data`, `git check-ignore -v ...`; `python scripts/run_tests.py`; kiểm tra root data vẫn bị ignore còn source data không bị ignore.
+- Tests: **47 passed in 1.45s**, bao gồm clean-export import regression check. Không cài thêm dependencies hoặc chạy model.
+- Git: branch `main`, commit `45e5af6`, theo dõi `origin/main`, remote đúng repo; không tự stage/commit/push/pull.
+- Next step: người dùng test/stage/push local, pull server; gửi df/du output trước khi cài lại. Không tự chạy các bước tiếp theo sau pip failure. M1.1 thực nghiệm vẫn INCOMPLETE.
