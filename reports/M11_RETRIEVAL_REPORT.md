@@ -87,6 +87,14 @@ that metadata step. Bounded HTTP Range ZIP/ZIP64 inspection and source shape
 sampling are now implemented, with **67 local tests passed**. Live archive
 inspection, actual corpus admission and all real retrieval metrics remain pending.
 
+User Range inspection has now succeeded: 296,894 payload bytes inspected all
+train directories; declared raw size is 187.0848 GiB, compressed+raw 246.2468 GiB.
+After cleanup the user reports 125.03 GiB free, so full extraction remains
+infeasible. Source store schema is JSON records with claim_id/query/type/url/
+url2text; some rows have no text. A capped complete-member smoke acquisition
+tool is added, with **72 local tests passed**. This advances data preparation,
+not the full retrieval evaluation or corpus admission.
+
 ## M1.2 candidates
 
 Keep R1–R4 as candidates pending matched real evaluation. R1 supplies the lexical

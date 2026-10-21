@@ -110,3 +110,51 @@ read or alternate data format is silently inferred. Corpus admission stays false
 Local HTTP fixtures cover ZIP64, regular ZIP, byte-budget/cache behavior,
 refusal of ignored/mismatched ranges, pinned URL validation and shape-only
 sampling. Live HTTP Range behavior on the user's server remains untested.
+
+## Live ZIP inspection result and current disk decision
+
+User output `outputs/m11-zip-inspection-20261021-042533/zip_summary.json`
+confirms all three pinned archives support bounded Range inspection. Total
+range payload was 296,894 bytes. Declared uncompressed train bytes:
+200,880,771,274 (187.0848 GiB). Compressed + uncompressed:
+264,405,488,314 bytes (246.2468 GiB), excluding derived artifacts/headroom.
+All-archive extraction does not fit the subsequently reported 125.03 GiB free.
+Inodes are not the observed storage bottleneck (2% used).
+
+The directories contain 1000 / 1000 / 1068 files, with one additional directory
+entry in the third archive. Samples show JSON object records with `claim_id`,
+`query`, `type`, `url`, and `url2text` (list of strings). `1000.json` starts with
+an empty text list; do not assume every retrieved row provides evidence. Third
+archive member names include a `data_store/train/` prefix, so raw basenames alone
+must not be treated as output paths. No suspicious member flags appeared in this
+listing; this does not prove text-level absence of verdict leakage.
+
+For eventual complete processing, consider retained compressed archives and
+sequential per-store reading rather than materializing all 187 GiB at once.
+That is a storage strategy, not a reduced evaluation population or a method
+selection result. Per-claim eligible pools must still be documented identically
+for R1–R4; current benchmark does not silently change from global to scoped mode.
+Vector/cache sizing and schema/provenance admission remain pending.
+
+## Bounded complete-store acquisition for smoke
+
+`python -m tffv.retrieval.acquire_subset` acquires complete source stores for
+1–3 explicit source ordinals, chosen before labels. Default mode is preflight
+only. `--execute` explicitly enables member transfers using pinned Range URLs.
+Limits: 128 MiB total successful range payload, 512 MiB total raw output,
+256 MiB per store, and 1 GiB free-space reserve. It never downloads the full ZIP
+as a fallback. If limits are exceeded it fails and preserves an unsealed output.
+
+Raw member names are mapped to fixed safe local names under a fresh output;
+there is no extractall or use of remote paths as filesystem targets. A full
+member stream reaches EOF for zipfile CRC validation; its raw bytes are SHA256
+hashed. Whole-archive SHA256 is explicitly not claimed verified. Archive revision,
+expected archive hash, member CRC/name and all range hashes remain in provenance.
+
+The companion schema audit checks claim ID consistency, empty/invalid text lists,
+URL validity and verdict patterns without printing source passage content.
+Neither an official source nor a clean heuristic profile automatically admits
+the corpus. `query`/`type` remain in raw lineage and do not select stores or
+populate retrieval queries. Keep the claim→store mapping; no global union is
+constructed here. This subset is smoke-only, not a quality benchmark or M1.2
+selection set. No model loading, optimizer or inference occurs.

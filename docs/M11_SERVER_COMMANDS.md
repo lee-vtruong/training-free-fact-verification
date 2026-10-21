@@ -208,6 +208,31 @@ chạy download thay thế. Các `*.inventory.json` lưu full member lists nếu
 phân tích tiếp. Tổng declared extraction bytes không bao gồm filesystem overhead,
 corpus/vector cache hoặc headroom. Đây chưa phải chứng nhận đủ chỗ/không leakage.
 
+### Với 125.03 GiB trống: lấy complete store của claims 0/1/2 để smoke
+
+Không tải/giải nén toàn bộ: ZIP directory đã báo 187.08 GiB giải nén, hoặc
+246.25 GiB khi giữ cả ZIP. Bước sau chỉ lấy đủ raw store của 3 source claims,
+không chọn method trên subset này. Giới hạn **128 MiB range payload tổng**,
+**512 MiB raw tổng**, **256 MiB/member**; không model download/inference/GPU.
+
+Sau push/pull code mới:
+
+```bash
+SUBSET_OUT="outputs/m11-source-store-smoke-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.acquire_subset \
+  --plan outputs/m11-corpus-plan-20261021-042129/acquisition_plan.json \
+  --claim-ids 0 1 2 \
+  --output "$SUBSET_OUT" --execute &&
+cat "$SUBSET_OUT/subset_manifest.json"
+```
+
+Bỏ `--execute` nếu chỉ muốn xem preflight; dùng output name khác cho lần execute
+tiếp theo. Script kiểm tra metadata/caps trước transfer, ghi raw member mới,
+kiểm CRC đầy đủ và SHA256 từng file. Không xác minh SHA256 toàn ZIP vì không tải
+hết ZIP. Profile không in raw text; corpus_admitted vẫn false đến khi review
+lineage/filtering/mapping. `*.part` khi failure không phải complete artifact.
+Gửi manifest hoặc failure.json; không tự tăng cap hay xóa dữ liệu cũ.
+
 ## 2. Environment và synthetic smoke, sau khi kiểm tra tài nguyên
 
 Nếu cần môi trường mới, chỉ tạo trong repo mới. Không sửa ERRORFlow/GraphCURE venv.
