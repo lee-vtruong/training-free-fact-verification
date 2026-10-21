@@ -214,3 +214,32 @@
 - Updated report with actual restricted-scope results and corrected stale pending/cache statements; updated server commands with read-only full selected-evidence review command. Need 24 passages/provenance from existing manual_review_queue.jsonl; do not rerun inference, invent relevance labels or declare residual leakage resolved.
 - Local Git main tracking origin/main, HEAD 5056c6b, initially clean. Commands git status/rev-parse, read report, apply documentation edits. Documentation-only: no test rerun; previous local suite 87 passed retained. No SSH, server job, downloads, synchronization or old-resource writes by Codex. User receives doc commit/push/pull and existing-artifact read commands. M1.1 remains INCOMPLETE.
 
+## 2026-10-21 14:00 +07:00 — Evidence leakage review tool và claim-scoped retrieval runner R1–R4
+
+- Mục tiêu: Tiếp quản M1.1 từ Codex; hoàn thiện evidence leakage review tool và chuẩn bị claim-scoped retrieval runner cho R1–R4.
+- Hiện trạng tiếp nhận: R1–R4 có implementation và synthetic tests; CPU BM25 (R1) đã chạy thành công trên 3 claim-scoped knowledge stores (110.252 passages, 24 retrieved evidence passages); corpus unadmitted; Qwen3-Embedding-0.6B có snapshot candidate trên server, Qwen3-Reranker-0.6B chưa được xác nhận; venv server chưa có torch/transformers; Git local branch `main`, tracking `origin/main`, commit HEAD `b1269ec`.
+- Implementation:
+  1. `src/tffv/retrieval/leakage_review.py`: công cụ review evidence leakage có thể cấu hình (`configs/evidence_leakage_policy_v2.json`). Phát hiện:
+     - Verdict patterns mở rộng (rating, verdict:, we rate, claim is false/true/misleading, pinocchios, debunked).
+     - Known fact-check domains (14 domains) và URL path markers (`fact-check`, `reality-check`, `debunk`, `factcheck`).
+     - Scraping boilerplate noise (cookie policy, javascript disabled, 404, sign-in/paywall).
+     - Claim-verdict coupling (từ khóa claim xuất hiện cùng câu/window với verdict words).
+     - Irrelevant evidence (zero content-word lexical overlap).
+     - Xuất báo cáo cấu trúc: `review_report.json`, `review_report.md`, `flagged_evidence.jsonl`, và `quarantined_ledger.jsonl`.
+     - Giữ nguyên tắc label-free, cấm gold fields, không tự phong corpus sạch hay xóa domain tùy tiện.
+  2. `src/tffv/retrieval/store_retrieval.py`: claim-scoped multi-method retrieval runner (R1, R2, R3, R4) trên candidate stores tách biệt.
+     - Đảm bảo mỗi claim chỉ truy xuất trong candidate store riêng của claim đó, không gộp global corpus.
+     - Preflight (`plan`): tính toán workload (claims, documents, estimated passages), kiểm tra điều kiện tiên quyết (transformers >= 4.51, torch, CUDA, embedding/reranker checkpoints), báo rõ blockers nếu thiếu và xác định rõ corpus_admitted=False.
+     - Execution (`run`): hỗ trợ R1–R4, tuần tự hóa bộ nhớ GPU (giải phóng encoder trước khi load reranker), output schema chuẩn (`result_record`), seal manifest với status `complete_operational_smoke_not_admitted`.
+     - Bounded smoke & synthetic test doubles (`SyntheticEncoder`, `SyntheticReranker`) cho phép chạy test nhẹ local.
+  3. `src/tffv/retrieval/verify_store_smoke.py`: script replay kiểm tra tính toàn vẹn của cache operational smoke.
+  4. Template configs: `configs/evidence_leakage_policy_v2.json` và `configs/store_retrieval_m11.template.json`.
+- Files tạo mới: `src/tffv/retrieval/leakage_review.py`, `src/tffv/retrieval/store_retrieval.py`, `src/tffv/retrieval/verify_store_smoke.py`, `configs/evidence_leakage_policy_v2.json`, `configs/store_retrieval_m11.template.json`, `tests/test_leakage_review.py`, `tests/test_store_retrieval.py`.
+- Files sửa: `tests/test_prepare_store_candidates.py` (tích hợp replay tests), `docs/M11_SERVER_COMMANDS.md`, nhật ký này.
+- Validation local:
+  - `python scripts/run_tests.py` -> **98 passed in 5.75s**, exit code 0.
+  - `python -m compileall -q src scripts tests` -> 0 errors.
+  - CLI help checked: `python -m tffv.retrieval.leakage_review --help`, `python -m tffv.retrieval.store_retrieval --help`.
+- Blockers & Trạng thái: M1.1 empirical vẫn **INCOMPLETE** do corpus chưa admitted và server thiếu Qwen3-Reranker-0.6B + PyTorch/transformers trong active venv.
+- Next steps: người dùng review/commit/push local, pull server, chạy leakage review trên queue 24 retrieved passages hiện có và chạy preflight claim-scoped retrieval runner để kiểm tra blockers thực tế.
+

@@ -112,3 +112,35 @@ def test_operational_preflight_rejects_changed_corpus(prepared):
     (candidates / "train-0" / "corpus.jsonl").write_text("{}\n", encoding="utf-8")
     with pytest.raises(ValueError, match="hash mismatch"):
         plan(manifest)
+
+
+def test_operational_integrity_replay_and_mutated_review_rejection(prepared):
+    from tffv.retrieval.bm25_store_smoke import run
+    from tffv.retrieval.verify_store_smoke import verify
+    summary, claims, candidates, _ = prepared
+    manifest = prepare_candidates(summary, claims, candidates, POLICY)
+    output = run(manifest, candidates.parent / "smoke-replay")
+    replay = verify(output, manifest)
+    assert replay["evidence_verified"] == 2
+    assert replay["retrieval_rerun"] is False and replay["corpus_admitted"] is False
+    with (output / "manual_review_queue.jsonl").open("a") as stream: stream.write("{}\n")
+    with pytest.raises(ValueError, match="Run artifact hash mismatch"):
+        verify(output, manifest)
+
+
+def test_replay_catches_text_change_even_if_run_hashes_are_resealed(prepared):
+    from tffv.retrieval.bm25_store_smoke import run
+    from tffv.retrieval.verify_store_smoke import verify
+    summary, claims, candidates, _ = prepared
+    manifest = prepare_candidates(summary, claims, candidates, POLICY)
+    output = run(manifest, candidates.parent / "smoke-replay-changed")
+    path = output / "train-0" / "passages.jsonl"
+    rows = read_jsonl(path)
+    rows[0]["text"] += "changed"
+    path.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+    seal = output / "manifest.json"
+    metadata = json.loads(seal.read_text())
+    metadata["outputs_sha256"]["train-0/passages.jsonl"] = file_hash(path)
+    seal.write_text(json.dumps(metadata), encoding="utf-8")
+    with pytest.raises(ValueError, match="Passage replay mismatch"):
+        verify(output, manifest)

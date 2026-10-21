@@ -472,6 +472,111 @@ Do not map source verdict prose to gold or create qrels from it. Review only
 supports qualitative observations about these exposed source examples; it does
 not clear the remaining corpus or supply relevance annotations automatically.
 
+### Automated Evidence Leakage Review
+
+Run the dedicated evidence leakage review tool on the retrieved evidence queue.
+This evaluates passages and URLs against configurable verdict patterns, fact-check
+domains/paths, scraping boilerplate, and claim-verdict co-occurrences without accessing
+gold labels or QA:
+
+```bash
+REVIEW_OUT="outputs/m11-leakage-review-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.leakage_review \
+  --input outputs/m11-r1-operational-20261021-060217/manual_review_queue.jsonl \
+  --output "$REVIEW_OUT" &&
+cat "$REVIEW_OUT/review_report.md"
+```
+
+Send `review_report.md` and `review_report.json`. To inspect specific flagged records:
+
+```bash
+cat "$REVIEW_OUT/flagged_evidence.jsonl"
+```
+
+To audit candidate stores before retrieval:
+
+```bash
+CAND_REVIEW_OUT="outputs/m11-candidate-review-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.leakage_review \
+  --input outputs/m11-store-candidates-20261021-055753/candidate_manifest.json \
+  --output "$CAND_REVIEW_OUT" &&
+cat "$CAND_REVIEW_OUT/review_report.md"
+```
+
+## Claim-Scoped Retrieval for R1–R4 on Isolated Candidate Stores
+
+This runner guarantees that all four methods (R1 BM25, R2 Frozen Dense, R3 RRF Fusion,
+R4 Frozen Reranker) search strictly within the eligible candidate knowledge store for each
+claim, without merging stores into a global pool.
+
+### 1. Preflight workload and blocker check
+
+Run preflight (without `--execute`) to verify candidate store integrity, calculate
+passage workloads, and check environment/checkpoint readiness:
+
+```bash
+python -m tffv.retrieval.store_retrieval \
+  --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json \
+  --methods R1 R2 R3 R4 \
+  --config configs/store_retrieval_m11.template.json
+```
+
+Send the JSON preflight output. If blockers are reported (e.g. missing dependencies or checkpoints),
+they will be clearly listed under `"blockers"`.
+
+### 2. CPU-only execution (R1)
+
+To run R1 on CPU using the claim-scoped runner:
+
+```bash
+STORE_R1_OUT="outputs/m11-store-r1-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.store_retrieval \
+  --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json \
+  --methods R1 \
+  --output "$STORE_R1_OUT" --execute &&
+cat "$STORE_R1_OUT/summary.json"
+```
+
+### 3. GPU execution for R1–R4 (after resolving blockers)
+
+Prerequisites for real Qwen 0.6B models:
+1. Active environment must have `torch` and `transformers >= 4.51`.
+2. Checkpoint `Qwen/Qwen3-Embedding-0.6B` must be fingerprinted.
+3. Checkpoint `Qwen/Qwen3-Reranker-0.6B` must be verified and fingerprinted.
+
+Export environment variables:
+
+```bash
+export TFFV_EMBED_MODEL="/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Embedding-0.6B/snapshots/97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+export TFFV_EMBED_REVISION="97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+export TFFV_RERANK_MODEL="/absolute/path/to/Qwen3-Reranker-0.6B/snapshot"
+export TFFV_RERANK_REVISION="40_CHARACTER_REVISION"
+```
+
+Fingerprint snapshots:
+
+```bash
+python -m tffv.retrieval.cli fingerprint --model-dir "$TFFV_EMBED_MODEL" --output outputs/m11-embed-fingerprint
+export TFFV_EMBED_SHA256="$(python -c 'import json; print(json.load(open("outputs/m11-embed-fingerprint/snapshot.json"))["snapshot_sha256"])')"
+
+python -m tffv.retrieval.cli fingerprint --model-dir "$TFFV_RERANK_MODEL" --output outputs/m11-rerank-fingerprint
+export TFFV_RERANK_SHA256="$(python -c 'import json; print(json.load(open("outputs/m11-rerank-fingerprint/snapshot.json"))["snapshot_sha256"])')"
+```
+
+Execute claim-scoped R1–R4 benchmark:
+
+```bash
+STORE_R14_OUT="outputs/m11-store-r14-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.store_retrieval \
+  --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json \
+  --methods R1 R2 R3 R4 \
+  --config configs/store_retrieval_m11.template.json \
+  --output "$STORE_R14_OUT" --execute &&
+cat "$STORE_R14_OUT/summary.json"
+```
+
+Send `summary.json`, `manifest.json`, and preflight output.
+
 ## CPU-only R1 operational smoke on three unadmitted candidate stores
 
 The candidate corpus is still not approved for quality evaluation. This separate

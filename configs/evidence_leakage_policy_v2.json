@@ -1,0 +1,63 @@
+{
+  "policy_id": "evidence_leakage_review_v2",
+  "version": "2.0.0",
+  "action": "flag_for_review",
+  "verdict_patterns": [
+    "\\b(?:verdict|fact[ -]?check(?:ing)?(?:\\s+rating)?|gold[_ ]label)\\s*[:=]",
+    "\\b(?:our\\s+)?(?:rating|verdict)\\s*[:=]\\s*(?:false|true|mostly false|mostly true|half true|pants on fire|misleading|unproven|unsupported|correct|incorrect|debunked)",
+    "\\b(?:we\\s+rate|rated\\s+(?:this|the)\\s+claim|the\\s+claim\\s+is\\s+(?:false|true|mostly false|mostly true|debunked|misleading|unfounded|unsupported|untrue|bogus))\\b",
+    "\\b(?:claim|statement)\\s*:\\s*.{5,100}?\\s*(?:check|verdict|rating)\\s*:\\s*(?:false|true|misleading|untrue)",
+    "\\b(?:false|misleading|debunked|unsubstantiated|unfounded|bogus|fabricated)\\s+claim\\b",
+    "\\b(?:debunking|fact-checking|reality check)\\b",
+    "\\b(?:four pinocchios|pants on fire)\\b"
+  ],
+  "fact_check_domains": [
+    "politifact.com",
+    "snopes.com",
+    "fullfact.org",
+    "factcheck.org",
+    "africacheck.org",
+    "leadstories.com",
+    "checkyourfact.com",
+    "climatefeedback.org",
+    "healthfeedback.org",
+    "polygraph.info",
+    "rappler.com",
+    "boomlive.in",
+    "vishvasnews.com",
+    "thequint.com",
+    "newsmobile.in"
+  ],
+  "fact_check_url_paths": [
+    "fact-check",
+    "factcheck",
+    "reality-check",
+    "fact_check",
+    "debunk",
+    "fact-checker"
+  ],
+  "boilerplate_patterns": [
+    "\\b(?:cookie policy|terms of service|privacy policy|terms of use)\\b",
+    "\\b(?:enable javascript to view|javascript is disabled|please enable javascript)\\b",
+    "\\b(?:subscribe to continue reading|sign in to your account|access denied|page not found|404 not found)\\b"
+  ],
+  "claim_verdict_coupling": {
+    "enabled": true,
+    "verdict_terms": [
+      "false",
+      "untrue",
+      "debunked",
+      "misleading",
+      "hoax",
+      "fake",
+      "incorrect",
+      "unfounded",
+      "bogus"
+    ],
+    "window_words": 30
+  },
+  "irrelevance_detection": {
+    "enabled": true,
+    "min_claim_token_overlap": 1
+  }
+}
