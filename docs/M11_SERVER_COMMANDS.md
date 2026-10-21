@@ -457,6 +457,21 @@ Không cần gửi toàn bộ embedding matrix. Chưa chọn R4 hay bất kỳ m
 baseline M1.2. Chưa chạy Qwen3-8B và chưa tạo Historical Error Memory.
 # Source claim validation failure: read-only diagnostic
 
+## Review evidence from successful CPU R1 smoke
+
+User run `outputs/m11-r1-operational-20261021-060217` succeeded on three source
+claims with 110252 total passages and 24 selected evidence passages. Before any
+quality claim or GPU benchmark, send all selected evidence with its provenance:
+
+```bash
+cat outputs/m11-r1-operational-20261021-060217/manual_review_queue.jsonl
+```
+
+The queue contains no supplied gold labels and keeps human assessments null.
+Do not map source verdict prose to gold or create qrels from it. Review only
+supports qualitative observations about these exposed source examples; it does
+not clear the remaining corpus or supply relevance annotations automatically.
+
 ## CPU-only R1 operational smoke on three unadmitted candidate stores
 
 The candidate corpus is still not approved for quality evaluation. This separate

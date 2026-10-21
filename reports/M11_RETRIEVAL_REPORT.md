@@ -1,6 +1,6 @@
 # M1.1 — Retrieval pipeline implementation report
 
-Date: 2026-10-20, Asia/Saigon. **INCOMPLETE: empirical benchmark awaits user-run
+Updated: 2026-10-21, Asia/Saigon. **INCOMPLETE: empirical benchmark awaits user-run
 server commands and verified corpus/model inputs.** M0 is understood as setup
 and work-rule adoption, per the user's clarification.
 
@@ -13,7 +13,8 @@ Preflight, snapshot hashing, immutable corpus-vector reuse, sealed run caches,
 offline qrels evaluation, split-aware summaries, leakage flags and manual case
 review queue are available. Real Qwen adapters require server smoke validation.
 
-Local checks: **46 tests passed**; compilation and CLI help succeeded. Offline
+Latest local checks: **87 tests passed**. Initial implementation checks were
+46 tests passed; compilation and CLI help succeeded. Offline
 synthetic smoke used 3 explicit fixture claims and 64 synthetic documents,
 with non-neural test doubles. It produced four Top-8 caches and a comparison
 report under `outputs/m11-synthetic-smoke-001/`. No actual Qwen inference,
@@ -28,11 +29,40 @@ checkpoint download or server GPU job was performed.
 | R3 | not measured | not measured | not measured | not measured | not measured |
 | R4 | not measured | not measured | not measured | not measured | not measured |
 
-No real evidence caches, valid relevance annotations, error cases, or superiority
-claims exist yet. Synthetic caches are software validation and do not satisfy
+No admitted quality-benchmark evidence caches, valid relevance annotations, or
+superiority claims exist yet. An unadmitted real-source CPU R1 operational cache
+now exists as reported below. Synthetic caches are software validation and do not satisfy
 the empirical evidence-cache deliverable. Do not infer a best retrieval method.
 
-## Infrastructure and limits
+## User-confirmed CPU R1 operational result — 2026-10-21
+
+Run: `outputs/m11-r1-operational-20261021-060217`; scope
+operational_smoke_not_quality_benchmark, corpus_admitted=false. User-reported
+available RAM 98 GiB of 125 GiB; no swap, disk available 125G (df units).
+Candidate manifest SHA256 d1c42758ca4e2773f6921e781adf7c55c7c6291cc8a3de3af74d0dc12c66d397;
+configuration SHA256 95ef8b96a04df1b5dd5ed97f824297f250fbace9a2ac834d8a4ce6e06b3d37da.
+
+| Source claim | Documents | Passages | Segmentation s | Index s | Query ms |
+|---|---:|---:|---:|---:|---:|
+| train:0 | 424 | 27122 | 1.8521 | 2.3714 | 70.17 |
+| train:1 | 752 | 50151 | 3.0621 | 4.3967 | 104.73 |
+| train:2 | 423 | 32979 | 1.9123 | 2.8179 | 97.19 |
+
+Total 110252 passages; elapsed reported 18.9617 s, CPU-only, no GPU. The elapsed
+timer starts after input loading/validation, so is not shell end-to-end runtime.
+Query timing excludes segmentation/index/dedup/serialization. Peak CPU memory
+was not measured. All three claims received 8 passages (24 evidence slots total).
+Means: slot coverage 1.0, selected exact normalized text redundancy 0.0,
+pairwise token Jaccard 0.177099, unique domains 6.0, unique documents/URLs
+6.666667, domain entropy 1.711066. These are sample means of proxies, not proof
+of relevance, semantic sufficiency or absence of near-duplicates.
+
+Recall@5/8/10, MRR@10, nDCG@10 and semantic coverage remain null. Only R1 ran;
+no R2/R3/R4 comparison, verified quality gain or final baseline selection. Full
+24-passage source review remains pending. This exploratory three-claim run does
+not establish leakage clearance or complete the empirical milestone.
+
+## Initial infrastructure snapshot and limits (historical)
 
 Current local probe: RTX 3050 Laptop 6 GB; about 5.52 GiB free workspace disk;
 Python 3.13.11, torch 2.11.0, transformers 4.45.2, numpy 2.4.4. Local transformers
@@ -109,9 +139,9 @@ Qwen execution or retrieval-quality inference is performed on these observations
 Latest server candidate conversion succeeded: retained records 424/752/423
 for train:0/1/2 (1599 total), flagged quarantine 25, empty text 473. Corpus
 admission remains false; these are preprocessing counts, not retrieval quality.
-A CPU-only R1 operational runner now tests claim-scoped indexing and the shared
-output schema without relaxing admitted benchmark guards. Its execution is
-pending user server run; Recall/MRR/nDCG remain not measured. No R2-R4 runs or
+A CPU-only R1 operational runner tests claim-scoped indexing and the shared
+output schema without relaxing admitted benchmark guards. Its execution has
+succeeded as reported above; Recall/MRR/nDCG remain not measured. No R2-R4 runs or
 method recommendation can be inferred from this setup progress.
 
 Source claims export is now user-verified: 3067 valid claims, one quarantined
@@ -121,7 +151,8 @@ This is a valid-claim train subset, not full official-split coverage. A separate
 offline candidate converter now preserves per-claim pools and accounts for all
 records while optionally quarantining the existing heuristic flags. This policy
 has false positives and unknown residual leakage; no benchmark admission occurs.
-Server conversion and all R1-R4 real evidence caches remain pending.
+Server conversion and the operational R1 cache now exist. Admitted R1-R4
+quality-benchmark caches remain pending.
 
 Latest user-run full-record audit completed in 8.6962 seconds for source stores
 0/1/2: 2097 rows, 473 empty-text rows, 44 within-store exact duplicate rows,
@@ -131,7 +162,8 @@ passages before filtering: 127147. These are corpus diagnostics, not retrieval
 metrics or evidence that the full corpus is clean. Source 1 is now fully audited
 (948 rows); its previous parser-cap failure is resolved without raw-data changes.
 Excerpts contain both actual fact-check verdict prose and legal-verdict false
-alarms. Same-claim answer leakage remains unresolved pending claim-only context.
+alarms. Later claim-only context confirms same-claim BBC answer-bearing content
+for train:1 in the raw store; residual leakage after filtering remains unresolved.
 Corpus admission and empirical M1.1 remain INCOMPLETE.
 
 Keep R1–R4 as candidates pending matched real evaluation. R1 supplies the lexical
