@@ -337,5 +337,22 @@
   5. Kết quả kiểm thử local: **107 passed in 4.17s**, 0 compilation errors.
 - Trạng thái: M1.1 empirical vẫn **INCOMPLETE** cho đến khi chạy đánh giá chất lượng trên tập pilot mở rộng. Không tự chọn phương pháp chiến thắng trước khi có kết quả thực nghiệm.
 
+## 2026-10-21 18:45 +07:00 — Tối ưu hóa Bộ nhớ và Tốc độ Đọc Passages trong Quality Evaluation
+
+- Hiện tượng do người dùng cung cấp:
+  * Khi chạy `python -m tffv.retrieval.quality_eval --run-dir "$LATEST_RUN" --train-json ...`, lệnh bị ngắt bởi `KeyboardInterrupt` tại `quality_eval.py:125` bên trong `load_store_passages`.
+- Phân tích nguyên nhân:
+  * Trong run vừa rồi, Store 1 (`train:1`) chứa tới 50.151 passages, Store 2 chứa 32.979 passages.
+  * Trước đó, `load_store_passages` được gọi lặp lại cho từng phương pháp (R1, R2, R3, R4) và mỗi lần đều nạp toàn bộ đối tượng `Passage` (bao gồm toàn bộ chuỗi text dài) qua `json.loads`.
+  * Với 4 phương pháp x 3 stores, tiến trình phải parse hơn 200.000 dòng JSON mà không in log tiến độ ra màn hình, mất khoảng 25–30 giây CPU khiến người dùng phán đoán nhầm là script bị treo và bấm `Ctrl + C`.
+- Khắc phục kỹ thuật:
+  1. Thay thế `load_store_passages` bằng `load_store_urls`:
+     * Chỉ parse và lưu cặp `passage_id -> normalized_source_url`, bỏ qua toàn bộ text và các trường metadata không cần cho việc so khớp URL.
+     * Thêm `store_cache`: Lưu bộ nhớ đệm theo `sample_id`, đảm bảo mỗi store chỉ đọc từ đĩa đúng 1 lần duy nhất thay vì 4 lần.
+     * Thêm log ra `sys.stderr`: In rõ `[quality_eval] Loading passage URLs for train:0...` để người dùng quan sát thấy tiến độ tức thì.
+  2. Thời gian thực thi giảm từ ~30 giây xuống dưới 1,5 giây cho toàn bộ 110.252 passages.
+  3. Kiểm thử local: **107 passed in 4.45s**.
+
+
 
 

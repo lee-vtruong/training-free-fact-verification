@@ -107,29 +107,51 @@ def extract_gold_urls_from_source(train_json_path: Path) -> List[Dict[str, Any]]
     return extracted
 
 
-def load_store_passages(run_dir: Path, sample_id: str) -> Dict[str, Passage]:
-    """Load passage mapping for a claim from its store directory."""
-    # Try train-ordinal directory first
+def load_store_urls(
+    run_dir: Path,
+    sample_id: str,
+    cache: Optional[Dict[str, Tuple[Dict[str, str], Set[str]]]] = None
+) -> Tuple[Dict[str, str], Set[str]]:
+    """Load passage_id -> source_url mapping and store URLs with memory caching."""
+    if cache is not None and sample_id in cache:
+        return cache[sample_id]
+
     ordinal = sample_id.split(":")[-1] if ":" in sample_id else sample_id
     store_passages_path = run_dir / f"train-{ordinal}" / "passages.jsonl"
     if not store_passages_path.is_file():
-        # Fallback to run-level passages.jsonl
         store_passages_path = run_dir / "passages.jsonl"
 
     if not store_passages_path.is_file():
-        return {}
+        return {}, set()
 
-    passages = {}
-    for row in read_jsonl(store_passages_path):
-        p = Passage(**row)
-        passages[p.passage_id] = p
-    return passages
+    import sys
+    sys.stderr.write(f"[quality_eval] Loading passage URLs for {sample_id}...\n")
+    pid_to_url: Dict[str, str] = {}
+    store_urls: Set[str] = set()
+
+    with store_passages_path.open(encoding="utf-8") as stream:
+        for line in stream:
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            pid = row.get("passage_id")
+            raw_url = row.get("source_url")
+            if pid and raw_url:
+                norm = normalize_url(raw_url)
+                pid_to_url[pid] = norm
+                if norm:
+                    store_urls.add(norm)
+
+    res = (pid_to_url, store_urls)
+    if cache is not None:
+        cache[sample_id] = res
+    return res
 
 
 def evaluate_method_claim(
     claim_record: Dict[str, Any],
     gold_record: Dict[str, Any],
-    passage_map: Dict[str, Passage],
+    pid_to_url: Dict[str, str],
     store_urls: Set[str],
 ) -> Dict[str, Any]:
     """Compute retrieval metrics for one claim and one method."""
@@ -141,9 +163,9 @@ def evaluate_method_claim(
     candidate_urls = []
     for c in candidates:
         pid = c["passage_id"]
-        p = passage_map.get(pid)
-        if p and p.source_url:
-            candidate_urls.append((c["rank"], normalize_url(p.source_url), pid))
+        norm_url = pid_to_url.get(pid)
+        if norm_url:
+            candidate_urls.append((c["rank"], norm_url, pid))
 
     # Evidence URLs (selected Top-8)
     evidence_urls = []
@@ -235,6 +257,7 @@ def run_evaluation(
     r3_r4_comparison = None
 
     per_method_results: Dict[str, List[Dict[str, Any]]] = {}
+    store_cache: Dict[str, Tuple[Dict[str, str], Set[str]]] = {}
 
     for method in methods_evaluated:
         method_file = run_path / f"{method}.jsonl"
@@ -247,10 +270,9 @@ def run_evaluation(
         for row in claim_rows:
             sid = row["sample_id"]
             gold = gold_by_id.get(sid, {"sample_id": sid, "gold_evidence_urls": []})
-            passage_map = load_store_passages(run_path, sid)
-            store_urls = {normalize_url(p.source_url) for p in passage_map.values() if p.source_url}
+            pid_to_url, store_urls = load_store_urls(run_path, sid, cache=store_cache)
 
-            eval_res = evaluate_method_claim(row, gold, passage_map, store_urls)
+            eval_res = evaluate_method_claim(row, gold, pid_to_url, store_urls)
             results.append(eval_res)
             all_per_claim_results.append(eval_res)
 
