@@ -353,6 +353,23 @@
   2. Thời gian thực thi giảm từ ~30 giây xuống dưới 1,5 giây cho toàn bộ 110.252 passages.
   3. Kiểm thử local: **107 passed in 4.45s**.
 
+## 2026-10-21 19:05 +07:00 — Mở rộng Quy mô Đánh giá lên 100 Claims (Pilot 100)
+
+- Yêu cầu người dùng: Chạy quy mô 100 claims (`train:0` đến `train:99`) để số liệu đánh giá chuẩn xác và có ý nghĩa thống kê cao.
+- Đánh giá khả thi tài nguyên (Resource Feasibility Check):
+  * Tập `train.json` AVeriTeC có tổng cộng 3.068 claims, file zip nén 59,16 GB và giải nén toàn bộ ~187 GB.
+  * Ổ đĩa server `/dev/sda3` hiện còn trống ~125 GB, do đó không thể giải nén trọn vẹn toàn bộ 3.068 claims cùng lúc mà không gây tràn đĩa.
+  * Tập 100 claims tiêu tốn ~1,5 GB tải HTTP Range, ~4 GB lưu trữ văn bản trên đĩa, và dự kiến ~35–45 phút mã hóa GPU trên RTX 5090 với `batch_size: 16`. Hoàn toàn nằm trong ngưỡng an toàn của hệ thống.
+- Cập nhật mã nguồn:
+  * `src/tffv/retrieval/acquire_subset.py`: Mở rộng ngưỡng ordinal từ `1 <= len(claim_ids) <= 3` lên `1 <= len(claim_ids) <= 100`; nâng hạn mức tải từ 128 MiB lên 2.048 MiB và trần giải nén lên 8.192 MiB.
+  * `src/tffv/retrieval/prepare_store_candidates.py`: Mở rộng điều kiện kiểm tra inventory từ tối đa 3 lên tối đa 100 stores.
+  * `docs/M11_SERVER_COMMANDS.md`: Cập nhật toàn bộ Section 6 thành quy trình khép kín 5 bước cho 100 claims (`seq 0 99`).
+- Kiểm thử local:
+  * Chạy `python scripts/run_tests.py`: Toàn bộ **107 passed in 7.80s**, không có bất kỳ regression hay compile error nào.
+- Trạng thái: M1.1 empirical vẫn **INCOMPLETE** cho đến khi có báo cáo evaluation hoàn chỉnh từ server.
+- Tiếp theo: Hướng dẫn người dùng commit/push trên Windows và chạy tuần tự 5 bước trên Linux server.
+
+
 
 
 

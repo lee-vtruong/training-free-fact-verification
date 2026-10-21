@@ -12,9 +12,11 @@ from tffv.retrieval.remote_zip import HTTPRangeReader, RangeBudgetError, unsafe_
 
 
 MiB = 1024 * 1024
-NETWORK_CAP = 128 * MiB
-RAW_CAP = 512 * MiB
+DEFAULT_NETWORK_CAP = 2048 * MiB
+DEFAULT_RAW_CAP = 8192 * MiB
 MEMBER_CAP = 256 * MiB
+NETWORK_CAP = DEFAULT_NETWORK_CAP
+RAW_CAP = DEFAULT_RAW_CAP
 
 
 def archive_for(claim_id, archives):
@@ -70,8 +72,8 @@ def store_profile(path, expected_id):
 
 
 def acquire(plan_path, destination, claim_ids, execute=False):
-    if not 1 <= len(claim_ids) <= 3 or len(set(claim_ids)) != len(claim_ids) or any(type(i) is not int or not 0 <= i <= 3067 for i in claim_ids):
-        raise ValueError("Choose 1-3 unique source ordinals, smoke only")
+    if not 1 <= len(claim_ids) <= 100 or len(set(claim_ids)) != len(claim_ids) or any(type(i) is not int or not 0 <= i <= 3067 for i in claim_ids):
+        raise ValueError("Choose between 1 and 100 unique source ordinals")
     plan_path = Path(plan_path).expanduser().resolve()
     plan_hash = file_hash(plan_path)
     plan = json.loads(plan_path.read_text(encoding="utf-8"))

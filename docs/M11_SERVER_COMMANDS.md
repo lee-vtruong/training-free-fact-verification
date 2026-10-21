@@ -627,32 +627,63 @@ Files kết quả sinh ra trong `$EVAL_OUT`:
 - `metrics_table.csv`: Bảng số liệu dạng CSV.
 - `per_claim_metrics.csv`: Chi tiết metrics từng claim.
 
-### 6. Chạy Benchmark mở rộng Top-200 & Tăng tốc Batching (Pilot 10-20 claims)
+### 6. Pipeline Benchmark Quy mô 100 Claims (Top-200, Batch size 16 & Index Cache)
 
-Sau khi kiểm tra evaluation trên 3 claims, chạy pilot mở rộng lên 10–20 claims với độ sâu Top-200 và `batch_size: 16` để tối ưu tài nguyên GPU RTX 5090:
+Thực hiện quy trình khép kín để chạy đánh giá trên 100 claims (`train:0` đến `train:99`):
 
+#### Bước 6.1: Tải trọn vẹn 100 store của claims 0–99 qua HTTP Range:
 ```bash
-# 1. Chuẩn bị thư mục cache vector
-mkdir -p outputs/index_cache
+PILOT_ACQ_OUT="outputs/m11-store-pilot100-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.acquire_subset \
+  --plan outputs/m11-corpus-plan-20261021-042129/acquisition_plan.json \
+  --claim-ids $(seq 0 99) \
+  --output "$PILOT_ACQ_OUT" --execute &&
+cat "$PILOT_ACQ_OUT/subset_manifest.json"
+```
 
-# 2. Chạy với --max-claims 10 (hoặc 20) và batching GPU nhanh
-PILOT_OUT="outputs/m11-pilot20-$(date +%Y%m%d-%H%M%S)"
+#### Bước 6.2: Kiểm định (Audit) 100 stores offline:
+```bash
+PILOT_AUDIT_OUT="outputs/m11-audit-pilot100-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.audit_subset \
+  --subset-manifest "$PILOT_ACQ_OUT/subset_manifest.json" \
+  --max-record-mib 64 \
+  --output "$PILOT_AUDIT_OUT" &&
+cat "$PILOT_AUDIT_OUT/audit_summary.json"
+```
+
+#### Bước 6.3: Chuyển đổi thành candidate stores biệt lập (quarantine các flags nghi vấn):
+```bash
+CLAIMS_MANIFEST="$(find outputs -maxdepth 2 -type f -path 'outputs/m11-source-claims-*/claims_manifest.json' | sort | tail -n 1)"
+PILOT_CAND_OUT="outputs/m11-candidates-pilot100-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.prepare_store_candidates \
+  --audit-summary "$PILOT_AUDIT_OUT/audit_summary.json" \
+  --claims-manifest "$CLAIMS_MANIFEST" \
+  --policy quarantine_review_flags_v1 \
+  --output "$PILOT_CAND_OUT" &&
+cat "$PILOT_CAND_OUT/candidate_manifest.json"
+```
+
+#### Bước 6.4: Thực thi GPU Benchmark R1–R4 Top-200 (Batch size 16 & Caching trên RTX 5090):
+```bash
+mkdir -p outputs/index_cache
+PILOT_RUN_OUT="outputs/m11-store-r14-pilot100-$(date +%Y%m%d-%H%M%S)"
 python -m tffv.retrieval.store_retrieval \
-  --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json \
+  --candidate-manifest "$PILOT_CAND_OUT/candidate_manifest.json" \
   --methods R1 R2 R3 R4 \
   --config configs/store_retrieval_m11.template.json \
-  --max-claims 20 \
   --index-cache outputs/index_cache \
-  --output "$PILOT_OUT" --execute &&
-cat "$PILOT_OUT/summary.json"
+  --output "$PILOT_RUN_OUT" --execute &&
+cat "$PILOT_RUN_OUT/summary.json"
+```
 
-# 3. Đánh giá chất lượng tập pilot:
-PILOT_EVAL="outputs/m11-pilot20-eval-$(date +%Y%m%d-%H%M%S)"
+#### Bước 6.5: Đánh giá chất lượng Retrieval tập 100 claims:
+```bash
+PILOT_EVAL_OUT="outputs/m11-eval-pilot100-$(date +%Y%m%d-%H%M%S)"
 python -m tffv.retrieval.quality_eval \
-  --run-dir "$PILOT_OUT" \
+  --run-dir "$PILOT_RUN_OUT" \
   --train-json /home/stackops/whale/ERRORFlow/data/raw/averitec/train.json \
-  --output "$PILOT_EVAL" &&
-cat "$PILOT_EVAL/evaluation_report.md"
+  --output "$PILOT_EVAL_OUT" &&
+cat "$PILOT_EVAL_OUT/evaluation_report.md"
 ```
 
 
