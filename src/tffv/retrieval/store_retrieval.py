@@ -15,6 +15,7 @@ from pathlib import Path
 import platform
 import random
 import re
+import sys
 import time
 
 from tffv.data import read_jsonl
@@ -146,12 +147,19 @@ def plan(manifest_path, methods=METHODS, config=None, synthetic=False, max_claim
     if not valid_methods or len(set(valid_methods)) != len(valid_methods):
         raise ValueError(f"Methods must be a unique subset of {METHODS}")
 
+    import sys
+    sys.stderr.write(f"[store_retrieval] Loading and verifying candidate stores from {Path(manifest_path).name}...\n")
+    sys.stderr.flush()
     _, manifest_hash, loaded = load_candidates(manifest_path)
     if max_claims and max_claims > 0:
         loaded = loaded[:max_claims]
 
+    sys.stderr.write(f"[store_retrieval] Checking environment prerequisites for methods: {valid_methods}...\n")
+    sys.stderr.flush()
     blockers = check_prerequisites(config, valid_methods, synthetic=synthetic)
 
+    sys.stderr.write(f"[store_retrieval] Calculating workload across {len(loaded)} stores...\n")
+    sys.stderr.flush()
     stores = []
     total_docs = 0
     total_est_passages = 0
@@ -162,7 +170,7 @@ def plan(manifest_path, methods=METHODS, config=None, synthetic=False, max_claim
     for claim, documents, store, _ in loaded:
         n_passages = 0
         for doc in documents:
-            words = sum(1 for _ in re.finditer(r"\S+", doc["text"]))
+            words = len(doc["text"].split())
             n_passages += 1 + max(0, (words - words_cfg + step - 1) // step) if words else 0
         total_docs += len(documents)
         total_est_passages += n_passages
@@ -171,6 +179,8 @@ def plan(manifest_path, methods=METHODS, config=None, synthetic=False, max_claim
             documents=len(documents),
             estimated_passages=n_passages,
         ))
+    sys.stderr.write(f"[store_retrieval] Preflight complete ({total_docs} docs, ~{total_est_passages} passages). Emitting JSON.\n")
+    sys.stderr.flush()
 
     needs_dense = bool(set(valid_methods) & {"R2", "R3", "R4"})
     needs_rerank = "R4" in valid_methods
@@ -261,7 +271,9 @@ def run(manifest_path, output, methods=METHODS, config=None, synthetic=False, ma
                 )
 
         # 2. Iterate per claim: isolated segmentation, BM25, Dense, RRF
-        for claim, documents, store, input_dir in loaded:
+        for idx, (claim, documents, store, input_dir) in enumerate(loaded, 1):
+            sys.stderr.write(f"[store_retrieval] [{idx}/{len(loaded)}] Processing claim {claim['sample_id']} ({len(documents)} documents)...\n")
+            sys.stderr.flush()
             claims_list.append(claim)
             store_dir = destination / store["directory"]
             store_dir.mkdir(parents=True, exist_ok=True)

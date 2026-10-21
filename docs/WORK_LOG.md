@@ -243,3 +243,15 @@
 - Blockers & Trạng thái: M1.1 empirical vẫn **INCOMPLETE** do corpus chưa admitted và server thiếu Qwen3-Reranker-0.6B + PyTorch/transformers trong active venv.
 - Next steps: người dùng review/commit/push local, pull server, chạy leakage review trên queue 24 retrieved passages hiện có và chạy preflight claim-scoped retrieval runner để kiểm tra blockers thực tế.
 
+## 2026-10-21 14:08 +07:00 — Phân tích kết quả leakage review và bổ sung progress logging cho store_retrieval
+
+- Phân tích bằng chứng server người dùng gửi:
+  * `outputs/m11-leakage-review-20261021-070305/review_report.md`: chạy thành công trên 24 passages của CPU BM25 R1 trước đó.
+  * Kết quả: 5/24 passages (20.8%) bị flag: 3 fact-check URL paths (Detroit Free Press, ABC News, Forbes), 2 claim-verdict couplings (USA Today), 2 verdict patterns (USA Today, ABC News). Đây là bằng chứng thực tế chứng minh retrieved evidence từ web stores ban đầu bị rò rỉ kết quả fact-check bên thứ ba, khẳng định tính đúng đắn của việc giữ corpus `not_admitted`.
+  * `store_retrieval`: báo cáo `KeyboardInterrupt` do người dùng nhấn `Ctrl+C` khi chương trình đang chạy `load_candidates` kiểm tra tính toàn vẹn và quét regex an toàn trên ~130MB candidate stores (đặc biệt store 1 có tài liệu 12.16MB, 1.77 triệu từ).
+- Tối ưu:
+  * Thêm realtime progress logging ra `sys.stderr` trong `store_retrieval.py` (`[store_retrieval] Loading and verifying...`, `[store_retrieval] Checking environment...`, `[store_retrieval] Processing claim...`) để người dùng quan sát tiến độ trực tiếp.
+  * Chuyển phép đếm từ ước lượng passages trong `plan()` từ `re.finditer` sang `len(doc["text"].split())` để tăng tốc C-level, tránh cấp phát 1.77 triệu object `re.Match`.
+- Validation: `python scripts/run_tests.py` -> **98 passed in 5.20s**.
+- Git: branch `main`, commit remote `9047e5b`. Handoff gồm patch tối ưu `store_retrieval.py` và giải thích chi tiết hiện tượng cho người dùng.
+
