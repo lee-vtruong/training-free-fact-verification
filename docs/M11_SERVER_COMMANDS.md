@@ -455,3 +455,20 @@ Không tự chuyển gold verdict, QA hoặc URL-match thành relevance grades.
 
 Không cần gửi toàn bộ embedding matrix. Chưa chọn R4 hay bất kỳ method nào làm
 baseline M1.2. Chưa chạy Qwen3-8B và chưa tạo Historical Error Memory.
+# Source claim validation failure: read-only diagnostic
+
+If hash/count pass but claim validation fails, inspect all affected original IDs
+without exporting, skipping rows, reading annotation values, or repairing text:
+
+```bash
+python -m tffv.retrieval.prepare_claims \
+  --train-json /home/stackops/whale/ERRORFlow/data/raw/averitec/train.json \
+  --expected-sha256 ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c \
+  --expected-records 3068 --inspect
+```
+
+Send the diagnostic JSON. Invalid claims are reported as IDs/reasons, never filled
+from justification or QA. Ordinary export still rejects any invalid claim before
+writing artifacts. The first three valid claim fields are printed for source
+context review; invalid ones are null. Do not infer a missing claim from these.
+

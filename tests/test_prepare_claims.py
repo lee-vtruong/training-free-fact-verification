@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from tffv.data import read_jsonl
 from tffv.provenance import file_hash
-from tffv.retrieval.prepare_claims import prepare_source_claims
+from tffv.retrieval.prepare_claims import prepare_source_claims, inspect_source_claims
 
 
 @pytest.fixture
@@ -45,3 +45,23 @@ def test_hash_count_and_output_boundary_fail_closed(source, output, tmp_path):
     with pytest.raises(ValueError, match="count mismatch"): prepare_source_claims(source, output, file_hash(source), 3)
     with pytest.raises(ValueError, match="NEW project"): prepare_source_claims(source, tmp_path / "outside", file_hash(source), 2)
     assert not output.exists()
+
+
+def test_invalid_claim_diagnostics_preserve_population_and_hide_annotations(tmp_path, output):
+    path = tmp_path / "train.json"
+    rows = [dict(claim="Valid", label="SECRET"), dict(claim=" ", justification="SECRET"),
+            dict(claim=None), dict(claim=42), dict(questions="SECRET"), ["SECRET"]]
+    path.write_text(json.dumps(rows), encoding="utf-8")
+    original = file_hash(path)
+    result = inspect_source_claims(path, original, 6)
+    assert result["invalid_records"] == 5
+    assert result["reason_counts"] == dict(empty_claim=1, claim_not_string=2, missing_claim=1, row_not_object=1)
+    assert [r["sample_id"] for r in result["invalid_rows"]] == [f"train:{i}" for i in range(1, 6)]
+    assert result["first_three_claims"] == [dict(sample_id="train:0", claim="Valid"),
+                                          dict(sample_id="train:1", claim=None), dict(sample_id="train:2", claim=None)]
+    assert "SECRET" not in json.dumps(result)
+    assert result["export_executed"] is False and result["rows_skipped"] is False
+    with pytest.raises(ValueError, match="train:1: empty_claim"):
+        prepare_source_claims(path, output, original, 6)
+    assert not output.exists()
+    assert file_hash(path) == original

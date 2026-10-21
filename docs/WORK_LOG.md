@@ -172,3 +172,12 @@
 - Local commands: read attachment/AGENTS/audit/exporter/docs, git status --short --branch, git rev-parse --short HEAD. Git main tracking origin/main, HEAD 9e53e27, initially clean. Updated readiness/report/log only, including stale report Git/test instructions. No code changes; previous 76-test result retained, no new test run needed for documentation only.
 - No SSH, push/pull, server job, model download, network corpus access or ERRORFlow write by Codex. M1.1 remains INCOMPLETE; full source admission/model runtime/reranker/qrels/benchmark unresolved. Handoff includes user Windows sync and Linux pull plus claim projection commands.
 
+## 2026-10-21 12:52 +07:00 — Diagnose source claim projection failure without changing population
+
+- User reconfirmed raw source SHA256 ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c. Export now passes hash/count and fails nonempty-string claim validation. Actual affected IDs/reasons are not supplied yet; no claim repair, sample deletion or schema substitution inferred.
+- Prior handoff initially supplied an erroneous hash; corrected in the subsequent reply. Retain verified hash checks. This new failure is separate from the resolved command typo.
+- Added exporter `--inspect`, mutually exclusive with `--output`: hash/count-verified claim-only diagnostic JSON, all invalid source ordinal IDs/reasons, first three claim texts or null for invalid claims. No annotation values, alternate fields, row filtering, output corpus or retrieval. Export still fails closed, now identifies first invalid ID/reason before creating outputs.
+- Files: prepare_claims.py, test_prepare_claims.py, server commands, this log. Regression verifies empty/missing/non-string/non-object cases, unchanged source hash, no annotation leakage, no partial export and preserved original IDs.
+- Commands: git status --short --branch (initially clean), read exporter/tests, apply patches, python scripts/run_tests.py -> 77 passed in 1.49s; git rev-parse --short HEAD -> 5385c78, main tracking origin/main. No SSH, synchronization, downloads or server execution by Codex.
+- Next: user pushes/pulls, runs --inspect against the same verified train file and sends JSON. Diagnose whether source contains invalid claims before deciding a documented population policy. M1.1 remains INCOMPLETE; no real retrieval metrics or automatic exclusions.
+
