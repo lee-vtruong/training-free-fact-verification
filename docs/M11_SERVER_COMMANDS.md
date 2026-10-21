@@ -120,6 +120,72 @@ cat "$PROBE_OUT/input_probe.json"
 Gửi `input_probe.json`. Chưa tải checkpoint/corpus, cài GPU stack hoặc thay
 Qwen retrieval bằng model khác chỉ vì một model khác đã có sẵn.
 
+### Sau probe ngày 2026-10-21: chuẩn hóa source claims
+
+User probe đã xác nhận raw source train có 3068 records và SHA256 bên dưới.
+Sau khi đồng bộ code mới, trong project venv hiện tại chạy:
+
+```bash
+CLAIMS_OUT="outputs/m11-source-claims-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.prepare_claims \
+  --train-json "$HOME/whale/ERRORFlow/data/raw/averitec/train.json" \
+  --expected-sha256 ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c \
+  --expected-records 3068 \
+  --output "$CLAIMS_OUT" &&
+cat "$CLAIMS_OUT/claims_manifest.json"
+```
+
+Exporter chỉ dùng `claim`, giữ toàn bộ source rows theo đúng thứ tự, dùng ID
+`train:<array ordinal>` và lưu mapping/hash. Không dùng nhãn/QA/justification/
+annotation URLs, không deduplicate claims và không export dev/test. Đây là
+claims manifest riêng, chưa phải full retrieval data manifest và chưa có corpus.
+
+### Kiểm tra runtime cũ read-only, chưa load checkpoint
+
+Probe tìm thấy GraphCURE venv: Python 3.11.15, torch 2.13.0, transformers 5.15.0.
+Transformers này ngoài dải `<5` đang khai báo trong project; chưa coi là runtime
+đã hỗ trợ, không cài/downgrade vào môi trường cũ. Lệnh sau chỉ import libraries
+và nhân hai ma trận 8×8 trên GPU, không model inference hoặc optimizer:
+
+```bash
+OLD_PY="$HOME/whale/GraphCURE/.venv/bin/python"
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 "$OLD_PY" -B - <<'PY'
+import json
+import torch
+import transformers
+print(json.dumps({"torch": torch.__version__, "transformers": transformers.__version__,
+                  "cuda_runtime": torch.version.cuda, "cuda_available": torch.cuda.is_available()}))
+if not torch.cuda.is_available():
+    raise RuntimeError("CUDA unavailable in the inspected old environment")
+print(json.dumps({"gpu": torch.cuda.get_device_name(0), "capability": torch.cuda.get_device_capability(0)}))
+with torch.inference_mode():
+    x = torch.ones((8, 8), device="cuda")
+    print(json.dumps({"small_matmul_sum": (x @ x).sum().item()}))
+PY
+```
+
+Gửi cả claims manifest và runtime output. CUDA health thành công vẫn không chứng
+minh Qwen adapter tương thích transformers 5. Cần model-load smoke riêng trước
+khi thay đổi range khai báo hay dùng môi trường đó cho benchmark.
+
+### Knowledge store chưa tải: chỉ lấy metadata và dung lượng
+
+Người dùng đã xác nhận chưa tải knowledge store. Sau khi đồng bộ code mới, chạy
+lệnh sau trong project venv; không cần cài huggingface-hub, torch hay transformer:
+
+```bash
+PLAN_OUT="outputs/m11-corpus-plan-$(date +%Y%m%d-%H%M%S)"
+python scripts/m11_corpus_plan.py --output "$PLAN_OUT" &&
+cat "$PLAN_OUT/acquisition_plan.json"
+```
+
+Script chỉ đọc public API JSON tối đa 4 MiB để pin revision/size/SHA256 của ba
+archive train. Không tải corpus/model hoặc giải nén. Nếu API timeout/error hoặc
+không có LFS hashes, gửi nguyên lỗi; không tự thay endpoint hoặc tải cả repo.
+Gửi acquisition_plan.json để lập phương án bounded archive inspection/storage.
+`compressed_only_fits=true` chưa nghĩa là đủ chỗ cho archive + extraction +
+passage/vector cache. Các chi phí chưa đo giữ null và plan chưa cho bulk download.
+
 ## 2. Environment và synthetic smoke, sau khi kiểm tra tài nguyên
 
 Nếu cần môi trường mới, chỉ tạo trong repo mới. Không sửa ERRORFlow/GraphCURE venv.

@@ -47,6 +47,46 @@ candidate corpus/archive paths across formats, and existing environment package
 metadata. It avoids printing annotation values and does not inspect dev labels.
 No downloads, installs, inference, data conversion or old-repository writes.
 
+## Follow-up — source probe 2026-10-21
+
+User command output in attachment `f029df7d-5be7-41cf-b46f-9c5fcc512b2e`
+confirms the server fast-forwarded to commit `1314189`, then generated
+`outputs/m11-input-probe-20261021-041207/input_probe.json`.
+
+- Raw train: **3068 records**, SHA256
+  `ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c`.
+  Sampled source schema includes claim, label, questions, justification and
+  fact_checking_article. Only claim text is eligible for the claims-only export.
+- Processed train_all: **3068 records**, SHA256
+  `f5d4c48ecb17a4033f9fb4191fb24a4bde16898486484a9db846273abd570f3b`.
+  Sampled schema includes label, evidence and justification metadata; source
+  lineage must be inspected before treating any such evidence as independent.
+- A previously unscanned custom cache contains Qwen3-Embedding-0.6B at
+  `/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Embedding-0.6B/snapshots/97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3`.
+  Config/tokenizer and a 1,191,586,416-byte safetensors file are listed. This
+  establishes candidate snapshot existence, not successful load or fingerprints.
+  Do not download it again merely because the earlier default HF cache was empty.
+- Embedding-4B and Reranker-4B are also present under that custom cache; the
+  requested Reranker-0.6B was not found in the follow-up scan. No substitution.
+- `/home/stackops/whale/ERRORFlow/.venv/bin/python` does not exist. GraphCURE's
+  `/home/stackops/whale/GraphCURE/.venv/bin/python` exists: Python 3.11.15,
+  torch 2.13.0, transformers 5.15.0, numpy 2.4.6, pytest 9.1.1,
+  huggingface-hub 1.26.0. Metadata does not prove CUDA health. Transformers 5
+  falls outside the current project extra's `<5` range; compatibility is unresolved.
+- Searches inspected 181 files in ERRORFlow/data and 504 in whale/cache without
+  count truncation. No AVeriTeC independent knowledge store appeared; hidden,
+  deeper or differently located data remain possible. SciFact corpus is unrelated.
+
+Claims-only projection and a user-run small CUDA health check are next; neither
+establishes a full evidence pipeline. All old resources remain read-only.
+
+User clarification after the source probe: AVeriTeC knowledge store has not been
+downloaded previously. It is a required acquisition, not a cache already admitted
+for reuse. `scripts/m11_corpus_plan.py` prepares pinned public metadata and a disk
+plan only; no local/server corpus or checkpoint download has been performed by
+Codex. Actual API revision, exact archive bytes and free-space comparison await
+the user's command output. Rounded web listings are not used as those results.
+
 ## Verified local resources
 
 | Resource | Exact path / observation | Format and coverage | Reuse decision |

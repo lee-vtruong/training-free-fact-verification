@@ -69,6 +69,17 @@ old-environment reuse and any later GPU package installation require actual
 dependency/CUDA checks. No backbone substitution or new corpus choice is made.
 Empirical M1.1 remains INCOMPLETE.
 
+Follow-up source probe found an existing Qwen3-Embedding-0.6B snapshot in the
+custom whale/cache/huggingface tree, revision
+`97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3`. It also confirmed 3068 raw and
+processed source-train rows with file hashes. Reranker-0.6B and an independent
+AVeriTeC corpus remain unverified. GraphCURE has a torch/transformers environment,
+but its transformers 5.15.0 is outside the current project range and no runtime
+reuse is certified. A hash-checked source claims exporter is added; latest local
+suite including metadata-only corpus planning is **62 passed**. The user confirms
+the knowledge store has not been downloaded; exact acquisition metadata is the
+next user-run step. These are setup advances, not retrieval quality results.
+
 ## M1.2 candidates
 
 Keep R1–R4 as candidates pending matched real evaluation. R1 supplies the lexical
