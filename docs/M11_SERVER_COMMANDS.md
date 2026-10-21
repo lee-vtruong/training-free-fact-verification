@@ -457,6 +457,36 @@ Không cần gửi toàn bộ embedding matrix. Chưa chọn R4 hay bất kỳ m
 baseline M1.2. Chưa chạy Qwen3-8B và chưa tạo Historical Error Memory.
 # Source claim validation failure: read-only diagnostic
 
+## CPU-only R1 operational smoke on three unadmitted candidate stores
+
+The candidate corpus is still not approved for quality evaluation. This separate
+runner does not change that status. No torch/transformers/model download needed.
+All retained passages are used, without an arbitrary passage truncation. CPU RSS
+and runtime are not known before server execution; check available RAM/storage.
+
+```bash
+free -h
+df -h .
+python -m tffv.retrieval.bm25_store_smoke \
+  --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json
+```
+
+After reviewing the preflight workload, run CPU indexing/search explicitly:
+
+```bash
+R1_OUT="outputs/m11-r1-operational-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.bm25_store_smoke \
+  --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json \
+  --output "$R1_OUT" --execute &&
+cat "$R1_OUT/summary.json"
+```
+
+Send preflight and summary (or failure.json). R1.jsonl contains the shared
+Top8 evidence schema and ranked candidates; per-store passages.jsonl enables
+replay. manual_review_queue.jsonl preserves full selected evidence with unknown
+assessments. No relevance metrics, admission claims or R2-R4 comparison result
+are generated. Do not run the admitted quality evaluator on operational results.
+
 ## Convert audited stores to separate unadmitted candidates
 
 After successful claims export, run the following offline step. It reads the

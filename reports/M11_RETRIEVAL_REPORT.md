@@ -106,6 +106,14 @@ Qwen execution or retrieval-quality inference is performed on these observations
 
 ## M1.2 candidates
 
+Latest server candidate conversion succeeded: retained records 424/752/423
+for train:0/1/2 (1599 total), flagged quarantine 25, empty text 473. Corpus
+admission remains false; these are preprocessing counts, not retrieval quality.
+A CPU-only R1 operational runner now tests claim-scoped indexing and the shared
+output schema without relaxing admitted benchmark guards. Its execution is
+pending user server run; Recall/MRR/nDCG remain not measured. No R2-R4 runs or
+method recommendation can be inferred from this setup progress.
+
 Source claims export is now user-verified: 3067 valid claims, one quarantined
 empty claim train:1948, no renumbering. Claims hash is
 f1382c032a1c5746deae74fed4c6b870263754da0380c76b20f9e020bbaae52d.

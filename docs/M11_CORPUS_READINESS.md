@@ -284,3 +284,26 @@ raw hashes/CRC, recomputed audit profiles and claims hashes; outputs are fresh
 project directories. A failed conversion is unsealed. Success produces only
 candidate_manifest.json with corpus_admitted=false, never a benchmark admission
 manifest. No R1-R4 inference, model imports, network or new corpus download.
+
+## User-confirmed candidate conversion and CPU R1 operational step
+
+`outputs/m11-store-candidates-20261021-055753/candidate_manifest.json` completed
+without network/inference, still corpus_admitted=false. Retained counts by store
+0/1/2 are 424/752/423 (1599 total); quarantined flags 7/16/2 (25), empty records
+115/180/178 (473). Every original record is accounted for. Candidate hashes and
+ledgers are in the user-supplied manifest; raw files remain unchanged.
+
+`bm25_store_smoke` supports read-only preflight followed by explicit --execute.
+It verifies candidate/claim/corpus/ledger identities, processes one claim-scoped
+index at a time, uses unchanged 180-word/30-overlap segmentation and BM25
+k1=1.2,b=.75, and exports Top50 candidates, deduped Top10, and Top8 evidence in
+the shared schema. No passage cap is applied. Actual passage count, query/index/
+segmentation/dedup times, slot/diversity proxies and manual review entries are
+saved. Preflight does not index, load models, or create outputs. Peak CPU memory
+and runtime are unknown before execution; preflight loads the candidate text.
+
+This deliberately separate operational runner does not fabricate review
+attestations or relax the admitted benchmark guard. Its sealed manifest status
+is complete_operational_smoke_not_admitted, rejected by the standard benchmark
+evaluator. All relevance metrics are null. R2/R3/R4 remain unexecuted. These
+engineering outputs cannot establish retrieval quality or select M1.2 evidence.

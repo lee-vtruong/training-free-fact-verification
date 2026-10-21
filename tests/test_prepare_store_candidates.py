@@ -17,7 +17,7 @@ def prepared(tmp_path):
     root = Path(__file__).resolve().parents[1] / "outputs" / ("pytest-candidates-" + uuid.uuid4().hex)
     root.mkdir(parents=True)
     source = tmp_path / "train.json"
-    source.write_text(json.dumps([dict(claim="Claim zero", label="SECRET"), dict(claim="Claim one")]), encoding="utf-8")
+    source.write_text(json.dumps([dict(claim="Text zero", label="SECRET"), dict(claim="Text one")]), encoding="utf-8")
     prepare_source_claims(source, root / "claims", file_hash(source), 2)
     stores = []
     for ordinal in range(2):
@@ -77,3 +77,38 @@ def test_mutated_claims_and_implicit_policy_refused(prepared):
     with pytest.raises(ValueError, match="Claim export hash"):
         prepare_candidates(summary, claims, output, POLICY)
     assert not output.exists()
+
+
+def test_operational_bm25_keeps_claim_scopes_and_standard_result_schema(prepared):
+    from tffv.retrieval.bm25_store_smoke import plan, run
+    from tffv.retrieval.benchmark import validate_result
+    from tffv.retrieval.data import Passage
+    from tffv.retrieval.evaluate import verify_run
+    summary, claims, candidates, _ = prepared
+    manifest = prepare_candidates(summary, claims, candidates, POLICY)
+    work = plan(manifest)
+    assert work["n_claims"] == 2 and work["gpu_required"] is False
+    assert [r["passages"] for r in work["stores"]] == [1, 1]
+    output = run(manifest, candidates.parent / "bm25-smoke")
+    records = read_jsonl(output / "R1.jsonl")
+    assert len(records) == 2
+    for i, row in enumerate(records):
+        passages = {r["passage_id"]: Passage(**r) for r in read_jsonl(output / f"train-{i}" / "passages.jsonl")}
+        validate_result(row, passages)
+        assert row["sample_id"] == f"train:{i}"
+        assert row["evidence"][0]["text"] == f"Text {i}\nMore text"
+        assert row["shortfall"] == 7 and len(row["ranked_candidates"]) == 1
+    result = json.loads((output / "summary.json").read_text())
+    assert all(v is None for v in result["relevance_metrics"].values())
+    assert result["corpus_admitted"] is False
+    with pytest.raises(ValueError, match="Only sealed"):
+        verify_run(output)  # Operational results cannot masquerade as admitted benchmarks.
+
+
+def test_operational_preflight_rejects_changed_corpus(prepared):
+    from tffv.retrieval.bm25_store_smoke import plan
+    summary, claims, candidates, _ = prepared
+    manifest = prepare_candidates(summary, claims, candidates, POLICY)
+    (candidates / "train-0" / "corpus.jsonl").write_text("{}\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="hash mismatch"):
+        plan(manifest)
