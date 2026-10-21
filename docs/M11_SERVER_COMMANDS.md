@@ -97,6 +97,29 @@ kiểm tra corpus/schema riêng, gửi tên file, field names, kích thước v�
 không đưa secrets hoặc labels vào input retrieval. Không tự nhận model đã có
 chỉ vì tồn tại một thư mục tên tương tự.
 
+### Follow-up khi inventory chỉ có annotations và thiếu model retrieval
+
+Sau khi push/pull script mới theo bước 0, chạy probe sau. Script chỉ đọc schema
+source train (không in primitive values), tìm candidate paths cả archive formats,
+và lấy package metadata từ các venv cũ bằng Python `-I -B`. Nó không import
+torch/models, không sửa venv cũ, không đọc dev gold để thiết kế retrieval, và
+không chuyển QA thành corpus. Paths tìm được vẫn cần review provenance.
+
+```bash
+PROBE_OUT="outputs/m11-input-probe-$(date +%Y%m%d-%H%M%S)"
+python scripts/m11_probe_inputs.py \
+  --old-root "$HOME/whale/ERRORFlow" \
+  --search-root "$HOME/whale/ERRORFlow/data" \
+  --search-root "$HOME/whale/cache" \
+  --env-python "$HOME/whale/ERRORFlow/.venv/bin/python" \
+  --env-python "$HOME/whale/GraphCURE/.venv/bin/python" \
+  --output "$PROBE_OUT" &&
+cat "$PROBE_OUT/input_probe.json"
+```
+
+Gửi `input_probe.json`. Chưa tải checkpoint/corpus, cài GPU stack hoặc thay
+Qwen retrieval bằng model khác chỉ vì một model khác đã có sẵn.
+
 ## 2. Environment và synthetic smoke, sau khi kiểm tra tài nguyên
 
 Nếu cần môi trường mới, chỉ tạo trong repo mới. Không sửa ERRORFlow/GraphCURE venv.

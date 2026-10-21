@@ -4,6 +4,49 @@ Audit date: 2026-10-20, Asia/Saigon. Read-only observations in this session.
 Server paths quoted from old configuration are **unverified candidates**, not
 verified resources. No research dataset counts or metrics have been replayed.
 
+## Server update — 2026-10-21, user-supplied inventory
+
+Source: `resources.json` pasted in attachment
+`1fdc32a9-8ec3-490d-b03e-1d6728b6feff`. This is evidence from the user's server
+command, not direct Codex access. Earlier unknown-server statements below refer
+to the initial 2026-10-20 inspection.
+
+- Server Git: `main`, clean relative to `origin/main`, commit
+  `0f69d5251250a14578f7d016f3649cd2064b42ec`.
+- Active environment: Python 3.13.13, numpy 2.5.4, pytest 9.1.1. Torch,
+  transformers and huggingface-hub are not installed in this environment;
+  CUDA through PyTorch has not been verified.
+- GPU metadata: NVIDIA RTX 5090, total 32,607 MiB, free 32,107 MiB at probe,
+  driver 580.159.03. This is not a model-capacity or CUDA-compatibility test.
+- Filesystem free: 133,568,360,448 bytes, approximately 124.40 GiB at probe.
+- `/home/stackops/whale/ERRORFlow` exists. Bounded scan lists 280 files without
+  hitting its file-count limit. The scan excludes old outputs, hidden directories,
+  other file formats and paths beyond its depth limit.
+- Source candidates exist: `/home/stackops/whale/ERRORFlow/data/raw/averitec/train.json`
+  (10,184,813 bytes), `dev.json` in the same directory (1,785,475 bytes), and
+  `/home/stackops/whale/ERRORFlow/data/processed/v2/averitec/train_all.jsonl`
+  (5,050,424 bytes). Schema, record counts, raw ID mapping and content hashes
+  are not established by this metadata scan. Smaller development/screen subsets
+  also exist; they must not replace official splits silently.
+- `/home/stackops/whale/cache/models` contains Qwen3-4B-Instruct-2507 config,
+  tokenizer and three safetensors shards, plus bge-reranker-v2-m3 artifacts.
+  Content/revision completeness has not been verified. These are not the two
+  Qwen 0.6B retrieval checkpoints requested in M1.1.
+- The HF cache root `/home/stackops/.cache/huggingface/hub` contains other
+  embedding/image/Roberta models. Neither Qwen3-Embedding-0.6B nor
+  Qwen3-Reranker-0.6B appears in either scanned model root. This is a scoped
+  absence observation, not proof they are absent from the entire server.
+- AVeriTeC source annotations are available as candidate claim sources, but no
+  independent AVeriTeC web-document corpus has been established. The scan also
+  lists FEVER Wikipedia and SciFact corpus files; they cannot silently stand in
+  for the declared AVeriTeC corpus. Processed QA is not admitted as independent
+  evidence merely because it is cached.
+
+Next inspection is `scripts/m11_probe_inputs.py`: source-train schema/counts,
+candidate corpus/archive paths across formats, and existing environment package
+metadata. It avoids printing annotation values and does not inspect dev labels.
+No downloads, installs, inference, data conversion or old-repository writes.
+
 ## Verified local resources
 
 | Resource | Exact path / observation | Format and coverage | Reuse decision |

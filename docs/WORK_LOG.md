@@ -69,3 +69,38 @@
 - Tests: **47 passed in 1.45s**, bao gồm clean-export import regression check. Không cài thêm dependencies hoặc chạy model.
 - Git: branch `main`, commit `45e5af6`, theo dõi `origin/main`, remote đúng repo; không tự stage/commit/push/pull.
 - Next step: người dùng test/stage/push local, pull server; gửi df/du output trước khi cài lại. Không tự chạy các bước tiếp theo sau pip failure. M1.1 thực nghiệm vẫn INCOMPLETE.
+
+## 2026-10-21 11:04 +07:00 — Phân tích disk diagnostics do người dùng gửi
+
+- Quan sát từ terminal server: pull báo Already up to date; `/dev/sda3` có Size 938G, Used 773G, Avail 125G, Use 87%; các paths `.`, `/tmp`, `$HOME` cùng filesystem; inode sử dụng 2%; project `.venv` 1.8G. Không có số liệu pip cache trong output gửi lại.
+- Diễn giải: filesystem/inodes không đầy ở thời điểm đo. Chưa xác định nguyên nhân Errno 28 trước đó; không suy đoán đã xóa gì, quota hoặc trạng thái transient. `.venv` 1.8G không chứng minh cài dependencies đã hoàn tất.
+- Git local kiểm tra read-only: `main`, commit `0f69d52`, working tree sạch trước cập nhật log; hai source files `src/tffv/data/{__init__,records}.py` đã được Git track. Chưa xác minh commit trên server chỉ từ dòng Already up to date.
+- Commands local: `git status --short --branch`, `git rev-parse --short HEAD`, `git ls-files src/tffv/data`, đọc cuối work log. Không SSH/server execution.
+- Files sửa: chỉ `docs/WORK_LOG.md`. Tests không chạy lại vì không thay đổi code; kết quả gần nhất 47 passed local, chưa có kết quả tests server.
+- Next step hướng dẫn người dùng: xác nhận server commit và source package; activate project venv; chỉ cài `.[dev]` không cache; chạy isolated tests rồi synthetic smoke ở output mới, có chặn bước sau khi bước trước lỗi. Không cài GPU stack hoặc xóa môi trường/cache. Gửi lại output test/smoke hoặc lỗi để tiếp tục.
+- M1.1 vẫn INCOMPLETE: chưa chạy real-model retrieval benchmark hay có metrics AVeriTeC.
+
+## 2026-10-21 11:06 +07:00 — Server synthetic smoke thành công
+
+- Evidence do người dùng gửi: chạy `scripts/m11_smoke.py` trên server, output `/home/stackops/whale/training-free-fact-verification/outputs/m11-synthetic-20261021-040558`; tiếp theo `cat evaluation/comparison.md` thành công nhờ chuỗi `&&`.
+- Actual synthetic results: R1/R2/R3/R4 đều slot coverage 1.000000; mean query latency lần lượt 0.000141/0.000202/0.000448/0.000782 seconds. Recall@5/8/10, MRR@10, nDCG@10 đều not measured vì không có relevance annotations.
+- Interpretation: xác nhận wiring/cache export/offline comparison của fixture R1–R4 trên server. Đây là non-neural test doubles, không xác nhận Qwen model load, chất lượng AVeriTeC hoặc inference latency thực tế. Không suy luận R1 tốt hơn/R4 tệ hơn từ timing synthetic.
+- Chưa nhận dòng tổng kết unit tests server, không tự ghi là tests đã pass. Kết quả tests local gần nhất: 47 passed.
+- Git local kiểm tra: `main`, commit `0f69d52`; work log đang modified từ bước phân tích trước; chưa có commit server trong output smoke. Không stage/commit/push/pull, SSH hay server execution.
+- Files sửa: chỉ `docs/WORK_LOG.md`. Không chạy lại tests cho thay đổi nhật ký.
+- Next step: người dùng chạy metadata-only `scripts/m11_resources.py` với old root/model roots thực tế, gửi resources.json và tổng kết tests nếu đã có. Từ inventory mới xác định corpus label-free, model revisions/dependencies/GPU rồi hướng dẫn bounded real-model smoke. Chưa cài GPU stack hoặc benchmark đầy đủ.
+- M1.1 empirical vẫn INCOMPLETE; chưa có research evidence caches/relevance results và chưa chọn M1.2 baseline.
+
+## 2026-10-21 11:10 +07:00 — Phân tích server inventory và thêm source-input probe
+
+- Input người dùng: resources JSON trong attachment `1fdc32a9-8ec3-490d-b03e-1d6728b6feff`. Đã parse toàn bộ JSON, không chỉ dựa vào terminal output bị truncate.
+- Verified từ report: Python 3.13.13, numpy 2.5.4, pytest 9.1.1; torch/transformers/huggingface-hub null. NVIDIA RTX 5090, 32607 MiB total, 32107 MiB free, driver 580.159.03. Disk free 133568360448 bytes (~124.40 GiB). Đây là metadata, chưa kiểm thử model/CUDA.
+- Server Git: `main`, commit `0f69d5251250a14578f7d016f3649cd2064b42ec`, đúng remote, report working tree sạch. Local cùng commit trước các edits trong log/docs.
+- Old root tồn tại `/home/stackops/whale/ERRORFlow`; scan có 280 files, không chạm count limit nhưng vẫn bị giới hạn depth/formats và bỏ old outputs. Raw AVeriTeC train/dev và processed train_all tồn tại theo metadata. Chưa có schema/count/hash/official-ID mapping từ actual rows.
+- Model roots đã scan: whale/cache/models có Qwen3-4B và bge-reranker-v2-m3; HF hub có các model khác. Không thấy hai Qwen retrieval 0.6B trong phạm vi đã scan. Không kết luận absent toàn server, không thay backbone bằng model sẵn có.
+- Corpus blocker: chưa thấy bằng chứng AVeriTeC independent corpus; annotations/processed QA không được tự coi là corpus label-free. FEVER/SciFact không tự thay thế cho AVeriTeC.
+- Implementation: thêm `scripts/m11_probe_inputs.py` để người dùng chạy source-train schema/count/hash inspection không xuất primitive values, bounded candidate path search đa định dạng, và đọc package metadata từ old venv bằng `-I -B` không import neural models hoặc sửa venv. Không inspect dev labels. Source-schema file đọc bị giới hạn 64 MiB; scan giới hạn depth/files/results và công bố giới hạn.
+- Files tạo: script trên, `tests/test_input_probe.py`. Files cập nhật: inventory, M1.1 report, server commands, work log.
+- Tests: `python scripts/run_tests.py` → **50 passed in 2.43s**; `python scripts/m11_probe_inputs.py --help` và compilation thành công. New tests kiểm tra không export annotation values, đọc counts/field shapes, candidate archive search/size limits và metadata-only environment probe.
+- Commands local: đọc attachment; parse JSON để tổng hợp file/model counts; `git status --short --branch`, `git rev-parse --short HEAD`, `git remote -v`; đọc script resource hiện có; chạy tests/help/compile. Không SSH, model/package download, server command, push/pull hay inference.
+- Next step: người dùng review/commit/push script/tests/docs, pull server, chạy input probe và gửi JSON. Từ kết quả mới xác minh corpus và môi trường, quyết định việc chuẩn bị checkpoints/GPU stack. Chưa có unit-test summary server hoặc qrels; M1.1 empirical vẫn INCOMPLETE.

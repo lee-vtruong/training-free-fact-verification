@@ -48,6 +48,27 @@ numerical/temporal/conflicting case review remain pending. Slot coverage is not
 semantic sufficiency. Timing definitions and lexical leakage limitations are
 explicit in `docs/M11_RETRIEVAL_PROTOCOL.md`.
 
+## Server evidence update — 2026-10-21
+
+The user's synthetic smoke completed at
+`outputs/m11-synthetic-20261021-040558`, exporting all four configurations with
+slot coverage 1.0. These are non-neural test doubles, not Qwen results. Relevance
+metrics remain not measured. No unit-test summary from the server has been
+supplied yet; latest local suite after the follow-up probe is **50 passed**.
+
+User-supplied resource inventory now confirms RTX 5090 GPU metadata (32,607 MiB
+total), about 124.40 GiB free storage, and old AVeriTeC train/dev file paths.
+The active venv has numpy/pytest but no torch/transformers. Required Qwen 0.6B
+retrieval checkpoints were not found in the two scanned model roots; other
+models were found. No independent AVeriTeC corpus or valid passage qrels have
+been verified. The earlier infrastructure paragraph records the initial local
+snapshot, not the updated server findings.
+
+A source-schema/corpus/environment metadata probe is provided next. Read-only
+old-environment reuse and any later GPU package installation require actual
+dependency/CUDA checks. No backbone substitution or new corpus choice is made.
+Empirical M1.1 remains INCOMPLETE.
+
 ## M1.2 candidates
 
 Keep R1–R4 as candidates pending matched real evaluation. R1 supplies the lexical
