@@ -158,3 +158,40 @@ the corpus. `query`/`type` remain in raw lineage and do not select stores or
 populate retrieval queries. Keep the claim→store mapping; no global union is
 constructed here. This subset is smoke-only, not a quality benchmark or M1.2
 selection set. No model loading, optimizer or inference occurs.
+
+## Live three-store acquisition and offline audit follow-up
+
+User result: `outputs/m11-source-store-smoke-20261021-053505/subset_manifest.json`,
+server commit `5928a39`. Acquired source stores 0/1/2 at the pinned corpus
+revision: 130,960,407 raw bytes, 42,228,262 range payload bytes. Every selected
+member reached EOF/CRC verification and has a raw SHA256. Whole ZIP SHA256
+remains unverified, as explicitly recorded in the acquisition manifest.
+
+| Source store | Source rows audited initially | Empty text rows | Verdict-pattern rows |
+|---|---:|---:|---:|
+| 0 | 546 | 115 | 2 |
+| 1 | not measured | not measured | not measured |
+| 2 | 603 | 178 | 1 |
+
+Store 1's initial schema audit stopped because a source record exceeded its
+8 MiB parser bound. Acquisition itself completed and CRC passed; that audit
+status is not evidence of a corrupt store. The flags in other stores are
+observations, not proof of answer leakage. Preserve all raw files and review
+sources before final evidence filtering.
+
+`python -m tffv.retrieval.audit_subset` performs a separate offline audit with
+an **explicit** encoded-record limit up to 64 MiB. This changes no model context,
+tokenization or source text. It verifies source manifest/file identities first,
+recomputes raw SHA256 and CRC during full-record reading, and fails rather than
+truncating/skipping a record. Encoded-record size is not an RSS memory bound.
+
+The audit exports aggregate counts, large-record statistics, exact-text duplicate
+counts, domain frequencies and a pre-filter word-passage workload estimate.
+`review_queue.json` includes at most 20 flagged source records per store, with
+URL, line number, record hash and short excerpts. Only verdict-pattern and
+fact-check-domain heuristics are applied; no correctness labels or causes are
+inferred. Large unbroken strings can still make a word-based passage estimate
+misleading, so inspect the large-record report before indexing.
+
+No network, retransfers, raw-file rewriting, automatic exclusion, corpus admission
+or inference occur. A successful audit still leaves corpus_admitted=false.

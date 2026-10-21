@@ -233,6 +233,33 @@ hết ZIP. Profile không in raw text; corpus_admitted vẫn false đến khi re
 lineage/filtering/mapping. `*.part` khi failure không phải complete artifact.
 Gửi manifest hoặc failure.json; không tự tăng cap hay xóa dữ liệu cũ.
 
+### Complete stores đã tải: audit offline, không tải lại
+
+Acquisition `outputs/m11-source-store-smoke-20261021-053505` đã thành công.
+Initial profile của store 1 vượt 8 MiB/record; không cần tải lại. Chạy audit mới
+với encoded-record cap 64 MiB được ghi trong config. Không tăng model context,
+không truncate/skip data; nếu vẫn vượt cap, lệnh dừng và lưu failure.
+
+```bash
+AUDIT_OUT="outputs/m11-source-store-audit-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.audit_subset \
+  --subset-manifest outputs/m11-source-store-smoke-20261021-053505/subset_manifest.json \
+  --max-record-mib 64 \
+  --output "$AUDIT_OUT" &&
+cat "$AUDIT_OUT/audit_summary.json"
+```
+
+Sau khi audit thành công, xem review queue:
+
+```bash
+cat "$AUDIT_OUT/review_queue.json"
+```
+
+Gửi summary và review queue; không cần paste lại range_reads hoặc raw stores.
+Queue chứa nguồn/excerpts của source train, không phải target gold labels.
+Flags chỉ là nghi vấn cần xem evidence. Chưa tự drop các nguồn đó hoặc admit
+corpus, chưa model inference. Các raw file acquisition ban đầu không bị sửa.
+
 ## 2. Environment và synthetic smoke, sau khi kiểm tra tài nguyên
 
 Nếu cần môi trường mới, chỉ tạo trong repo mới. Không sửa ERRORFlow/GraphCURE venv.

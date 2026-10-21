@@ -95,6 +95,15 @@ url2text; some rows have no text. A capped complete-member smoke acquisition
 tool is added, with **72 local tests passed**. This advances data preparation,
 not the full retrieval evaluation or corpus admission.
 
+The user's complete-store smoke acquisition succeeded for train ordinals 0/1/2:
+130,960,407 raw bytes, 42,228,262 range payload bytes, selected-member CRC and
+raw hashes recorded. Initial audits found 546 rows/115 empty/2 verdict-pattern
+flags in store 0 and 603 rows/178 empty/1 flag in store 2. Store 1's audit is
+unavailable at the original 8 MiB record cap; no row counts are guessed.
+An explicit 64 MiB-record offline audit and bounded source review queue are
+added, with **76 local tests passed**. No source exclusion, corpus admission,
+Qwen execution or retrieval-quality inference is performed on these observations.
+
 ## M1.2 candidates
 
 Keep R1–R4 as candidates pending matched real evaluation. R1 supplies the lexical
