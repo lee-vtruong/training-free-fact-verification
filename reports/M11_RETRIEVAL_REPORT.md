@@ -106,6 +106,17 @@ Qwen execution or retrieval-quality inference is performed on these observations
 
 ## M1.2 candidates
 
+Latest user-run full-record audit completed in 8.6962 seconds for source stores
+0/1/2: 2097 rows, 473 empty-text rows, 44 within-store exact duplicate rows,
+8 verdict-pattern flags and 17 fact-check URL flags. All 25 flagged rows were
+exported; no ID/schema/URL/annotation-field failures were observed. Estimated
+passages before filtering: 127147. These are corpus diagnostics, not retrieval
+metrics or evidence that the full corpus is clean. Source 1 is now fully audited
+(948 rows); its previous parser-cap failure is resolved without raw-data changes.
+Excerpts contain both actual fact-check verdict prose and legal-verdict false
+alarms. Same-claim answer leakage remains unresolved pending claim-only context.
+Corpus admission and empirical M1.1 remain INCOMPLETE.
+
 Keep R1–R4 as candidates pending matched real evaluation. R1 supplies the lexical
 reference; R2 tests frozen semantic retrieval; R3 tests complementary rank fusion;
 R4 tests reranking beyond the same R3 candidate set. Recommend a shortlist only
@@ -114,8 +125,8 @@ R4 automatically. No verifier inference or historical error-memory work is done.
 
 ## Reproduce and hand off
 
-Run `python -m pytest -q` locally. User-run server commands are in
+Run `python scripts/run_tests.py` locally. User-run server commands are in
 `docs/M11_SERVER_COMMANDS.md`; start with metadata-only resource reconnaissance
 and send its output back. Full benchmark is not automatically launched.
-The repository currently has no commit or remote and remains on `master`;
-user review/commit/push and server synchronization are separate user actions.
+The repository is on `main` with GitHub origin; user review/commit/push and
+server synchronization remain separate user actions. Codex does not run them.

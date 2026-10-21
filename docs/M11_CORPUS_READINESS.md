@@ -195,3 +195,35 @@ misleading, so inspect the large-record report before indexing.
 
 No network, retransfers, raw-file rewriting, automatic exclusion, corpus admission
 or inference occur. A successful audit still leaves corpus_admitted=false.
+
+## Full-record server audit result (2026-10-21)
+
+Artifact: `outputs/m11-source-store-audit-20261021-054912/audit_summary.json`.
+Status `complete_audit_not_admitted`; elapsed 8.6962 seconds, no network/inference.
+All three raw hashes and CRCs matched the acquisition manifest.
+
+| Store | Rows | Empty text | Exact duplicate rows within store | Verdict flags | Fact-check URL flags | Estimated passages before filtering |
+|---|---:|---:|---:|---:|---:|---:|
+| train:0 | 546 | 115 | 15 | 2 | 5 | 31082 |
+| train:1 | 948 | 180 | 21 | 5 | 11 | 62197 |
+| train:2 | 603 | 178 | 8 | 1 | 1 | 33868 |
+| Total | 2097 | 473 | 44 | 8 | 17 | 127147 |
+
+Zero annotation-field, claim-ID mismatch, invalid URL and invalid text-shape rows
+were observed. This does not prove absence of answers in web text. Duplicate
+counts are within-store exact text, not a cross-split/near-duplicate clearance.
+Store 1's largest record is 12,164,567 encoded bytes (1,777,607 words); its
+previous 8 MiB audit failure was a parser cap, not acquisition corruption.
+Passage counts remain workload estimates, not a finalized passage index.
+
+All 25 heuristic-flagged rows were exported without review-queue truncation.
+Manual inspection of supplied excerpts confirms verdict-bearing fact-check prose
+(including BBC tax-cut coverage), but also legal-verdict contexts unrelated to
+fact-check rating language. Fact-check URL matches alone cannot establish a
+same-claim answer leak. Claims have not yet been supplied for contextual matching.
+Do not convert these snippets to gold labels, qrels or verification prompts.
+
+Next: export hash-checked claim-only train inputs and inspect claims 0/1/2 against
+these existing source excerpts. Preserve raw inputs. No automatic blanket domain
+exclusion, sentence deletion, text truncation, or corpus admission is authorized
+by the heuristic audit. Version any eventual shared evidence policy before R1-R4.

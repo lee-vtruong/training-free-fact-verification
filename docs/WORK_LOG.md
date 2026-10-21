@@ -163,3 +163,12 @@
 - Git inspected: main tracking origin/main, HEAD `5928a39`; initially clean. Changes remain local and uncommitted. No Codex SSH, push/pull, server job, package/model download or ERRORFlow write.
 - M1.1 empirical status: INCOMPLETE. No actual Qwen retrieval metrics, no valid relevance annotations, no selected M1.2 baseline. Pending source review, corpus adapter/storage sizing, model runtime validation and requested reranker availability.
 
+## 2026-10-21 12:50 +07:00 — Review user full-record source audit
+
+- Read user attachment `421651cc-657b-43c0-9899-6ec539067cde/Pasted text.txt`; actual server artifact `outputs/m11-source-store-audit-20261021-054912/audit_summary.json`, complete_audit_not_admitted, elapsed 8.6962 s, no network/inference. Raw hashes/CRCs match; source manifest SHA256 4b31f0a10feb21d530c9acdec379039c2a30525718397e31ff254a155466c525.
+- Counts across 0/1/2: 2097 rows, 473 empty, 1624 nonempty, 44 within-store exact duplicate rows, 8 verdict flags, 17 fact-check URL flags; all 25 review entries exported. No annotation-field/identity/URL/text-shape failures. Estimated pre-filter passages 127147. These are not retrieval quality metrics or near-duplicate/cross-split clearance.
+- Source 1 complete: 948 rows; largest encoded record 12164567 bytes. Original 8 MiB cap caused profiling failure, not corruption. No raw edits or parser truncation.
+- Reviewed excerpts only: explicit fact-check verdict prose exists; legal verdict contexts also produce false positives. Claim identity/context is needed before calling any excerpt a same-claim answer leak. No gold label inference, qrels construction, automatic domain removal or corpus admission. Next user command projects hash-checked claim-only source inputs and prints only claims 0/1/2 for review.
+- Local commands: read attachment/AGENTS/audit/exporter/docs, git status --short --branch, git rev-parse --short HEAD. Git main tracking origin/main, HEAD 9e53e27, initially clean. Updated readiness/report/log only, including stale report Git/test instructions. No code changes; previous 76-test result retained, no new test run needed for documentation only.
+- No SSH, push/pull, server job, model download, network corpus access or ERRORFlow write by Codex. M1.1 remains INCOMPLETE; full source admission/model runtime/reranker/qrels/benchmark unresolved. Handoff includes user Windows sync and Linux pull plus claim projection commands.
+
