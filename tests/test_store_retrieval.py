@@ -136,3 +136,15 @@ def test_refuse_execution_when_real_model_blocked(candidate_fixture):
     out_dir = root / "blocked_run"
     with pytest.raises(RuntimeError, match="Cannot execute claim-scoped retrieval due to blockers"):
         run(cand_manifest, out_dir, methods=["R2"], synthetic=False)
+
+
+def test_synthetic_encoder_handles_punctuation_and_empty():
+    import numpy as np
+    from tffv.retrieval.synthetic import SyntheticEncoder
+
+    enc = SyntheticEncoder()
+    res = enc.encode(["...", "   ", "???!!!", "Valid text"])
+    assert res.shape == (4, 1024)
+    assert np.all(np.isfinite(res))
+    assert np.allclose(np.linalg.norm(res, axis=1), 1.0)
+

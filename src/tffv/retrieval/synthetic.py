@@ -17,7 +17,14 @@ class SyntheticEncoder:
             for word in words:
                 vector[int(digest(word)[:8], 16) % 1024] += 1
             norm = np.linalg.norm(vector)
-            if not norm: raise ValueError("Empty synthetic text")
+            if not norm:
+                if text.strip():
+                    for ch in text.encode("utf-8"):
+                        vector[ch % 1024] += 1
+                    norm = np.linalg.norm(vector)
+                if not norm:
+                    vector[0] = 1.0
+                    norm = 1.0
             rows.append(vector / norm)
             self.token_count += len(words)
         self.forward_passes += 1

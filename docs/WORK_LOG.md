@@ -267,3 +267,44 @@
 - Kết luận: Runner claim-scoped hoạt động hoàn toàn chính xác trên môi trường Linux server, đảm bảo cách ly tuyệt đối từng candidate store mà không gộp thành global pool.
 - Next steps: Hướng dẫn người dùng chạy preflight `--methods R1 R2 R3 R4` để xuất danh sách blockers cụ thể cho R2–R4; xem chi tiết 5 bằng chứng rò rỉ đã phát hiện. M1.1 empirical vẫn INCOMPLETE cho R2–R4.
 
+## 2026-10-21 14:20 +07:00 — Server Preflight xác nhận 4 Blockers cho R2–R4
+
+- Bằng chứng thực tế do người dùng cung cấp:
+  * Lệnh: `python -m tffv.retrieval.store_retrieval --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json --methods R1 R2 R3 R4 --config configs/store_retrieval_m11.template.json`.
+  * Preflight hoàn thành xuất sắc trong vài giây, nạp đủ 3 stores (1.599 tài liệu, ước tính 110.252 passages), tính toán đúng workload: 110.252 corpus embedding rows, 3 query embedding rows, 120 reranker pairs upper bound.
+  * Báo cáo trạng thái: `ready_to_execute = false`, `corpus_admitted = false`, `quality_benchmark_permitted = false`.
+- 4 Blockers được phát hiện độc lập và chính xác:
+  1. `Missing transformers dependency`: Thiếu thư viện `transformers` (yêu cầu $\ge 4.51$) trong `.venv`.
+  2. `Missing PyTorch dependency`: Thiếu module `torch` trong `.venv`.
+  3. `Missing Qwen3-Embedding-0.6B checkpoint`: Biến môi trường `$TFFV_EMBED_MODEL` chưa được export vào shell.
+  4. `Missing Qwen3-Reranker-0.6B checkpoint`: Biến môi trường `$TFFV_RERANK_MODEL` chưa được export và model chưa được tải/xác nhận vị trí.
+- Quyết định kỹ thuật:
+  * Tuyệt đối không thay thế mô hình 0.6B bằng Qwen 4B hay bge-reranker có sẵn; không hạ bớt validation để ép chạy.
+  * Cung cấp giải pháp khắc phục có hệ thống: hướng dẫn kiểm tra/cài đặt dependencies trong `.venv`, fingerprint candidate embedding 0.6B có sẵn, và hướng dẫn tải/cấu hình reranker 0.6B.
+  * Hỗ trợ cờ `--synthetic` để kiểm thử toàn bộ đường ống 4 phương pháp R1–R4 trên server ngay lập tức mà không cần GPU/weights.
+- Trạng thái: M1.1 empirical vẫn **INCOMPLETE** cho R2–R4. Toàn bộ protocol và evidence guards được giữ vững.
+
+## 2026-10-21 14:40 +07:00 — Khắc phục lỗi cú pháp Pip trên Server & Xử lý Passages ký tự đặc biệt trong Synthetic Runner
+
+- Bằng chứng thực tế do người dùng cung cấp:
+  1. Lỗi khi chạy `--synthetic` trên candidate stores:
+     * Lệnh: `python -m tffv.retrieval.store_retrieval --candidate-manifest ... --methods R1 R2 R3 R4 --synthetic --output ... --execute`.
+     * Tiến trình xử lý thành công Store 0 (`train:0`, 424 docs), nhưng dừng ở Store 1 (`train:1`, 752 docs) với lỗi:
+       `ValueError: Empty synthetic text` tại `src/tffv/retrieval/synthetic.py:20`.
+     * Nguyên nhân: Trong 50.151 passages của Store 1, một số đoạn văn cào từ web chỉ chứa toàn dấu câu / khoảng trắng / ký tự đặc biệt, khiến regex `\w+` không trích xuất được từ nào, dẫn đến vector độ dài 0 và chuẩn L2 = 0.
+  2. Sự cố lệnh `pip install` của người dùng:
+     * Người dùng gõ: `pip install --no-cache-dir torch transformers>=4.51 huggingface-hub`.
+     * Hiện tượng: Trong shell bash của Linux, toán tử `>` trong `>=4.51` không có dấu quote (`'` hoặc `"`) bị bash diễn giải thành file redirection `> =4.51`. Toàn bộ log của pip bị âm thầm ghi vào file có tên `=4.51`, terminal trông như bị "đơ/treo", và pip tải gói bánh xe lớn mà người dùng không thấy tiến độ trên màn hình.
+- Khắc phục kỹ thuật:
+  1. Cập nhật `src/tffv/retrieval/synthetic.py`:
+     * Khi chuỗi không có từ ngữ hợp lệ theo regex `\w+`, fallback lặp qua các byte UTF-8 của chuỗi raw text để tạo hashing vector.
+     * Nếu chuỗi hoàn toàn rỗng, gán fallback vector đơn vị `vector[0] = 1.0` để bảo đảm chuẩn L2 luôn bằng 1.0 và không có giá trị NaN / vô hạn.
+     * Viết thêm unit test `test_synthetic_encoder_handles_punctuation_and_empty` trong `tests/test_store_retrieval.py`.
+     * Kết quả test local: **99 passed in 6.95s**.
+  2. Hướng dẫn lệnh cho server:
+     * Xóa file rác `=4.51` được tạo do chuyển hướng shell: `rm -f =4.51`.
+     * Bao dấu nháy đơn quanh package spec: `pip install --no-cache-dir torch 'transformers>=4.51' huggingface-hub`.
+     * Hướng dẫn tải `Qwen/Qwen3-Reranker-0.6B` bằng `huggingface_hub.snapshot_download` vào đúng cache path `~/whale/cache/huggingface/hub`.
+- Next steps: Hướng dẫn người dùng commit/push trên Windows, pull code mới trên server, chạy thử nghiệm `--synthetic` trọn vẹn 4 phương pháp R1–R4, và cấu hình biến môi trường cho real-model benchmark. M1.1 empirical vẫn **INCOMPLETE**.
+
+

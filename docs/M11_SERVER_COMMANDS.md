@@ -537,20 +537,45 @@ python -m tffv.retrieval.store_retrieval \
 cat "$STORE_R1_OUT/summary.json"
 ```
 
-### 3. GPU execution for R1–R4 (after resolving blockers)
+### 3. Full 4-Method Synthetic Pipeline Test (R1–R4 without GPU/weights)
+
+Test end-to-end claim-scoped indexing, dense candidate retrieval, RRF fusion, and reranker pass-through across all candidate stores without requiring weights or PyTorch:
+
+```bash
+STORE_SYN_OUT="outputs/m11-store-synthetic-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.store_retrieval \
+  --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json \
+  --methods R1 R2 R3 R4 \
+  --synthetic \
+  --output "$STORE_SYN_OUT" --execute &&
+cat "$STORE_SYN_OUT/summary.json"
+```
+
+### 4. GPU execution for R1–R4 (after resolving blockers)
 
 Prerequisites for real Qwen 0.6B models:
 1. Active environment must have `torch` and `transformers >= 4.51`.
+   *(Note: Remember to wrap package specs in quotes to prevent shell redirection)*:
+   ```bash
+   rm -f =4.51
+   pip install --no-cache-dir torch 'transformers>=4.51' huggingface-hub
+   ```
 2. Checkpoint `Qwen/Qwen3-Embedding-0.6B` must be fingerprinted.
-3. Checkpoint `Qwen/Qwen3-Reranker-0.6B` must be verified and fingerprinted.
+3. Checkpoint `Qwen/Qwen3-Reranker-0.6B` must be downloaded, verified, and fingerprinted.
 
-Export environment variables:
+Download and resolve checkpoint paths:
 
 ```bash
+# Export existing Embedding checkpoint path
 export TFFV_EMBED_MODEL="/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Embedding-0.6B/snapshots/97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
 export TFFV_EMBED_REVISION="97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
-export TFFV_RERANK_MODEL="/absolute/path/to/Qwen3-Reranker-0.6B/snapshot"
-export TFFV_RERANK_REVISION="40_CHARACTER_REVISION"
+
+# Download Qwen3-Reranker-0.6B into whale cache and export path
+python -c 'from huggingface_hub import snapshot_download; path = snapshot_download("Qwen/Qwen3-Reranker-0.6B", cache_dir="/home/stackops/whale/cache/huggingface/hub"); print("RERANKER_PATH=" + path)'
+
+# Set TFFV_RERANK_MODEL to the path printed above, for example:
+export TFFV_RERANK_MODEL="$(find /home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Reranker-0.6B/snapshots -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+export TFFV_RERANK_REVISION="$(basename "$TFFV_RERANK_MODEL")"
 ```
 
 Fingerprint snapshots:
@@ -562,6 +587,7 @@ export TFFV_EMBED_SHA256="$(python -c 'import json; print(json.load(open("output
 python -m tffv.retrieval.cli fingerprint --model-dir "$TFFV_RERANK_MODEL" --output outputs/m11-rerank-fingerprint
 export TFFV_RERANK_SHA256="$(python -c 'import json; print(json.load(open("outputs/m11-rerank-fingerprint/snapshot.json"))["snapshot_sha256"])')"
 ```
+
 
 Execute claim-scoped R1–R4 benchmark:
 
