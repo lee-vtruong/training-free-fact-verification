@@ -65,13 +65,23 @@ def test_range_identity_budget_and_cache():
         reader.seek(0)
         assert reader.read(4) == b"0123"
         assert fetched.call_count == 1
-        with pytest.raises(RangeBudgetError): reader.read(1)
+        with pytest.raises(RangeBudgetError, match="byte cap reached"): reader.read(1)
     with pytest.raises(ValueError): reader.seek(-1)
     response = Response(b"1234", headers={"Content-Range": "bytes 0-3/11"})
     with patch("tffv.retrieval.remote_zip.urlopen", return_value=response):
         with pytest.raises(ValueError, match="Content-Range"):
             HTTPRangeReader("https://example.org/file", 10).read(4)
     assert response.read_called is False
+
+
+def test_range_request_cap_exceeded_message():
+    data = b"0123456789"
+    reader = HTTPRangeReader("https://example.org/file", len(data), budget=100, max_requests=2)
+    with patch("tffv.retrieval.remote_zip.urlopen", side_effect=opener(data)):
+        reader.read(1)
+        reader.read(1)
+        with pytest.raises(RangeBudgetError, match="request cap reached"):
+            reader.read(1)
 
 
 def test_plan_rejects_unpinned_or_nonofficial_urls():

@@ -369,6 +369,33 @@
 - Trạng thái: M1.1 empirical vẫn **INCOMPLETE** cho đến khi có báo cáo evaluation hoàn chỉnh từ server.
 - Tiếp theo: Hướng dẫn người dùng commit/push trên Windows và chạy tuần tự 5 bước trên Linux server.
 
+## 2026-10-21 21:20 +07:00 — Chẩn đoán và Khắc phục Lỗi Request Cap trong Tải 100 Stores
+
+- Hiện tượng do người dùng cung cấp:
+  * Khi chạy `acquire_subset` với `--claim-ids $(seq 0 99) --execute`, bước preflight hoàn thành kiểm tra và in kế hoạch 100 stores thành công.
+  * Tuy nhiên, trong quá trình giải nén thành viên (tại `block = source.read(MiB)`), tiến trình bị ngắt với lỗi:
+    `tffv.retrieval.remote_zip.RangeBudgetError: Archive inspection byte/request cap reached; refusing full fetch`.
+- Nguyên nhân cốt lõi (Root Cause):
+  1. Trong `src/tffv/retrieval/acquire_subset.py:127`, thuộc tính `reader.max_requests` được gán cứng bằng **256**.
+  2. Giá trị 256 ban đầu được thiết kế cho tập khói chỉ 1–3 stores.
+  3. Khi giải nén 100 thành viên qua `zipfile`, mỗi file cần đọc local header và nhiều block nén liên tiếp.
+  4. Sau khi tải được khoảng 15–20 stores đầu tiên, tổng số yêu cầu HTTP Range trong `reader.requests` chạm mốc 256, kích hoạt điều kiện bảo vệ `len(self.requests) >= self.max_requests` trong `remote_zip.py:45`.
+  5. Thông báo lỗi cũ gộp chung cả byte cap và request cap khiến việc chẩn đoán ban đầu chưa trực quan.
+- Khắc phục kỹ thuật:
+  1. `src/tffv/retrieval/acquire_subset.py`:
+     * Đổi `reader.max_requests = max(2048, len(selected) * 512)`: Cho phép tới 51.200 requests cho 100 stores, mở rộng linh hoạt theo số lượng store.
+     * Tăng block đọc giải nén từ `MiB` (1 MiB) lên `4 * MiB` (4 MiB): Giảm 4 lần số lần gọi `read()` và tăng tốc độ giải nén dữ liệu mạng.
+     * Nâng trần mặc định: `DEFAULT_NETWORK_CAP = 4096 * MiB` (4 GiB), `DEFAULT_RAW_CAP = 16384 * MiB` (16 GiB).
+     * Bổ sung log tiến độ console: `[acquire_subset] Downloading store [idx/total] train:identity...` giúp người dùng theo dõi rõ tiến độ tải trực tiếp.
+  2. `src/tffv/retrieval/remote_zip.py`:
+     * Phân tách thông báo lỗi rõ ràng: Phân biệt `Archive inspection byte cap reached (needed ... B, remaining ... B)` và `Archive inspection request cap reached (... >= ...)`.
+  3. Bổ sung Unit Test:
+     * Thêm test `test_range_request_cap_exceeded_message` trong `tests/test_remote_zip.py`.
+     * Kiểm thử toàn bộ: **108 passed in 5.70s**.
+- Trạng thái: M1.1 empirical vẫn **INCOMPLETE** cho đến khi chạy xong toàn bộ pipeline 100 claims.
+- Tiếp theo: Hướng dẫn người dùng commit/push trên Windows, pull về Linux và chạy lại lệnh `acquire_subset`.
+
+
 
 
 

@@ -12,8 +12,8 @@ from tffv.retrieval.remote_zip import HTTPRangeReader, RangeBudgetError, unsafe_
 
 
 MiB = 1024 * 1024
-DEFAULT_NETWORK_CAP = 2048 * MiB
-DEFAULT_RAW_CAP = 8192 * MiB
+DEFAULT_NETWORK_CAP = 4096 * MiB
+DEFAULT_RAW_CAP = 16384 * MiB
 MEMBER_CAP = 256 * MiB
 NETWORK_CAP = DEFAULT_NETWORK_CAP
 RAW_CAP = DEFAULT_RAW_CAP
@@ -124,20 +124,24 @@ def acquire(plan_path, destination, claim_ids, execute=False):
         for key, zipped in opened.items():
             reader = readers[key]
             reader.budget = reader.bytes_read + remaining
-            reader.max_requests = 256
+            reader.max_requests = max(2048, len(selected) * 512)
             before = reader.bytes_read
-            for identity, archive, info in [item for item in selected if item[1]["path"] == key]:
+            members_in_archive = [item for item in selected if item[1]["path"] == key]
+            total_members = len(members_in_archive)
+            for idx, (identity, archive, info) in enumerate(members_in_archive, 1):
+                if idx % 10 == 0 or idx == 1 or idx == total_members:
+                    print(f"[acquire_subset] Downloading store [{idx}/{total_members}] train:{identity} ({info.compress_size / MiB:.1f} MiB compressed)...", flush=True)
                 target = destination / f"train-{identity}.json"
                 partial = destination / f"train-{identity}.json.part"
                 count = 0
                 fingerprint = hashlib.sha256()
                 with zipped.open(info) as source, partial.open("xb") as stream:
                     while True:
-                        block = source.read(MiB)
+                        block = source.read(4 * MiB)
                         if not block: break  # ZipExtFile verifies CRC at full EOF.
                         count += len(block)
                         if count > info.file_size or count > MEMBER_CAP:
-                            raise RangeBudgetError("Decompressed store exceeds declared size/cap")
+                            raise RangeBudgetError(f"Decompressed store exceeds declared size/cap ({count} > {info.file_size})")
                         fingerprint.update(block)
                         stream.write(block)
                 if count != info.file_size:
@@ -160,7 +164,7 @@ def acquire(plan_path, destination, claim_ids, execute=False):
             raw_bytes=sum(row["raw_bytes"] for row in records),
             range_reads={key: reader.requests for key, reader in readers.items()},
             corpus_admitted=False, labels_used=False, inference_executed=False,
-            limitations=["Only 1-3 source stores; not full-population quality results.",
+            limitations=["Subset of source stores; not full-population quality results.",
                          "CRC and SHA256 of consumed members verified; whole ZIP SHA256 not verified.",
                          "No flattening of claim-scoped pools or automatic corpus admission.",
                          "Query/type fields preserved raw for lineage but not used to select stores."])

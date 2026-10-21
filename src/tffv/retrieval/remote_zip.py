@@ -41,8 +41,16 @@ class HTTPRangeReader(io.RawIOBase):
         if not length: return b""
         key = (self.position, length)
         if key not in self.cache:
-            if length > self.budget - self.bytes_read or len(self.requests) >= self.max_requests:
-                raise RangeBudgetError("Archive inspection byte/request cap reached; refusing full fetch")
+            if length > self.budget - self.bytes_read:
+                raise RangeBudgetError(
+                    f"Archive inspection byte cap reached (needed {length} bytes, "
+                    f"remaining {self.budget - self.bytes_read} of {self.budget} bytes); refusing full fetch"
+                )
+            if len(self.requests) >= self.max_requests:
+                raise RangeBudgetError(
+                    f"Archive inspection request cap reached ({len(self.requests)} >= {self.max_requests}); "
+                    "refusing full fetch"
+                )
             start, end = self.position, self.position + length - 1
             request = Request(self.url, headers={"Range": f"bytes={start}-{end}", "Accept-Encoding": "identity",
                                                  "User-Agent": "tffv-zip-range-inspection/0.1"})
