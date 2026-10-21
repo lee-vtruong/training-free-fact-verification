@@ -69,3 +69,44 @@ extraction, passage/vector storage and headroom remain unmeasured. This is a
 readiness report, not an admission certificate or automatic download decision.
 After inspecting the plan, prepare a bounded archive-member/schema inspection
 and explicit acquisition commands; avoid indiscriminate full-repository cloning.
+
+## Metadata result supplied by the user — 2026-10-21
+
+Plan: `outputs/m11-corpus-plan-20261021-042129/acquisition_plan.json`.
+Resolved revision: `2ca9dee23a2a6fa64c5bd918e0cd28ed0aa09031`.
+
+| Train archive | Exact compressed bytes | SHA256 from repository metadata |
+|---|---:|---|
+| train_0_999.zip | 20,730,339,734 | 389d2284c5f25410205ec530c2101c3e6d575eae460731e1909ad19192dcb810 |
+| train_1000_1999.zip | 21,273,604,733 | e2bf5c1dccc855cf3474ccd3f14678fe60f21e6c69685a34d7bc884996fec446 |
+| train_2000_3067.zip | 21,520,772,573 | d3e27cc4072cd085dbac44272f1ea918dd3ff970b39d94f143e40c51bbde43d0 |
+
+Total compressed: 63,524,717,040 bytes (59.1620 GiB). Free at plan generation:
+133,567,811,584 bytes. These are actual metadata-plan results, not evidence that
+archives have been downloaded or that extraction/storage fits.
+
+## Bounded ZIP directory and source-schema inspection
+
+`python -m tffv.retrieval.remote_zip` consumes the pinned acquisition plan.
+It uses HTTP Range with a 4 MiB successful-payload budget and 64-request cap per
+archive (at most 12 MiB across three archives). The server must return matching
+206/Content-Range/identity-encoding headers; otherwise it stops before reading
+the file body. No fallback to full download. Connection/redirect/header overhead
+is separate from this payload budget.
+
+Python zipfile reads ZIP/ZIP64 central directories through the bounded seekable
+reader. Outputs list member names, compressed/declared uncompressed sizes,
+CRC metadata, compression methods and suspicious paths/links/encryption flags.
+No member is extracted to disk. Declared uncompressed sizes are not filesystem
+allocation measurements, and no whole-archive SHA256 is claimed verified.
+
+Optional `--sample-first-record` opens one eligible JSON/JSONL source member per
+train archive and reads at most a 256 KiB first-line prefix under the same range
+budget. It exports only shape/field names and a prefix hash, never primitive
+annotation/text values. It does not claim full-member CRC verification. If a
+record cannot be parsed within the cap, schema remains unavailable; no oversized
+read or alternate data format is silently inferred. Corpus admission stays false.
+
+Local HTTP fixtures cover ZIP64, regular ZIP, byte-budget/cache behavior,
+refusal of ignored/mismatched ranges, pinned URL validation and shape-only
+sampling. Live HTTP Range behavior on the user's server remains untested.

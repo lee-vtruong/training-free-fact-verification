@@ -186,6 +186,28 @@ Gửi acquisition_plan.json để lập phương án bounded archive inspection/
 `compressed_only_fits=true` chưa nghĩa là đủ chỗ cho archive + extraction +
 passage/vector cache. Các chi phí chưa đo giữ null và plan chưa cho bulk download.
 
+### Đã có acquisition plan: kiểm tra ZIP directory, không tải toàn archive
+
+Sau push/pull code mới, dùng đúng plan người dùng đã tạo. Chỉ lấy range payload
+tối đa 4 MiB/archive, tổng tối đa 12 MiB cho ba archive train; không giải nén ra
+disk. Tùy chọn sample chỉ xem field/type của dòng đầu một source member, không
+in nội dung text/annotations. HTTP server không hỗ trợ Range sẽ báo lỗi, không
+fallback tải 20 GB.
+
+```bash
+ZIP_OUT="outputs/m11-zip-inspection-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.remote_zip \
+  --plan outputs/m11-corpus-plan-20261021-042129/acquisition_plan.json \
+  --sample-first-record \
+  --output "$ZIP_OUT" &&
+cat "$ZIP_OUT/zip_summary.json"
+```
+
+Gửi `zip_summary.json`. Nếu lỗi, gửi failure.json/traceback; không tăng cap hoặc
+chạy download thay thế. Các `*.inventory.json` lưu full member lists nếu cần
+phân tích tiếp. Tổng declared extraction bytes không bao gồm filesystem overhead,
+corpus/vector cache hoặc headroom. Đây chưa phải chứng nhận đủ chỗ/không leakage.
+
 ## 2. Environment và synthetic smoke, sau khi kiểm tra tài nguyên
 
 Nếu cần môi trường mới, chỉ tạo trong repo mới. Không sửa ERRORFlow/GraphCURE venv.

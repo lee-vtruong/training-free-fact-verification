@@ -80,6 +80,13 @@ suite including metadata-only corpus planning is **62 passed**. The user confirm
 the knowledge store has not been downloaded; exact acquisition metadata is the
 next user-run step. These are setup advances, not retrieval quality results.
 
+The user's acquisition plan resolves corpus revision
+`2ca9dee23a2a6fa64c5bd918e0cd28ed0aa09031`, with 63,524,717,040 compressed
+train-archive bytes (59.1620 GiB). No archive transfer/extraction occurred in
+that metadata step. Bounded HTTP Range ZIP/ZIP64 inspection and source shape
+sampling are now implemented, with **67 local tests passed**. Live archive
+inspection, actual corpus admission and all real retrieval metrics remain pending.
+
 ## M1.2 candidates
 
 Keep R1–R4 as candidates pending matched real evaluation. R1 supplies the lexical
