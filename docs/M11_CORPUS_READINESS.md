@@ -251,3 +251,36 @@ quarantined ID. This is a disclosed valid-claim subset, not complete official
 split coverage. Any future R1-R4 comparison must use the same population and
 report 3067/3068 input eligibility; no metrics are available yet. No synthetic
 claim is substituted for train:1948 and no gold fields determine eligibility.
+
+## Successful source export and candidate-only conversion
+
+User export confirmed 3068 source rows, 3067 exported claims, one quarantined
+empty claim train:1948. Claims SHA256:
+`f1382c032a1c5746deae74fed4c6b870263754da0380c76b20f9e020bbaae52d`;
+ID ledger SHA256 `91962c602b4f19da813988052ad6e0b40bc6edc3b151efa1c5a7ad7cfa15c1e7`;
+quarantine ledger SHA256 `e3d24aa801cb457e4a87e7efe55eecd1321d9180dd4820a040e624ec0fb013e2`.
+Corpus is still absent from that claims export; no retrieval ran.
+
+`prepare_store_candidates` now implements an explicitly selected candidate
+policy `quarantine_review_flags_v1`: recompute all existing verdict/domain
+heuristic flags, quarantine each entire flagged record, account separately for
+empty records, and preserve all other source text. This is exploratory filtering
+for engineering review, not an official evidence protocol or evidence of no
+residual leakage. It may remove unrelated legal-verdict documents. No rules are
+selected using gold labels or retrieval performance.
+
+Every raw row appears in a per-claim record ledger, with original line/hash,
+URL, document ID and disposition. url2text strings are joined with newline;
+neither sentence deletion nor truncation is used. Query/type do not become
+retrieval inputs. Separate train-0/train-1/train-2 corpus files prevent silently
+converting claim-scoped knowledge stores into a global pool. Retrieval timestamp
+is explicitly unknown, not reconstructed. Duplicates are retained for later
+common deduplication; no claim/evidence relevance labels are created.
+
+Expected disposition from existing audit: 25 flagged records quarantined plus
+473 empty records and 1599 retained records across three stores. These counts
+are predictions to validate, not results of server conversion. The tool verifies
+raw hashes/CRC, recomputed audit profiles and claims hashes; outputs are fresh
+project directories. A failed conversion is unsealed. Success produces only
+candidate_manifest.json with corpus_admitted=false, never a benchmark admission
+manifest. No R1-R4 inference, model imports, network or new corpus download.

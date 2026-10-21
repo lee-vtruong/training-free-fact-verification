@@ -457,6 +457,30 @@ Không cần gửi toàn bộ embedding matrix. Chưa chọn R4 hay bất kỳ m
 baseline M1.2. Chưa chạy Qwen3-8B và chưa tạo Historical Error Memory.
 # Source claim validation failure: read-only diagnostic
 
+## Convert audited stores to separate unadmitted candidates
+
+After successful claims export, run the following offline step. It reads the
+existing approximately 125 MiB raw subset multiple times, writes at most a similar
+amount of text plus ledgers, uses no GPU/network, and does not index or admit a
+corpus. Runtime/RSS are not yet measured on server. Review the explicit policy
+limitations in M11_CORPUS_READINESS.md; this is not the final evidence protocol.
+
+```bash
+CLAIMS_MANIFEST="$(find outputs -maxdepth 2 -type f -path 'outputs/m11-source-claims-*/claims_manifest.json' | sort | tail -n 1)"
+CANDIDATE_OUT="outputs/m11-store-candidates-$(date +%Y%m%d-%H%M%S)"
+test -n "$CLAIMS_MANIFEST" &&
+python -m tffv.retrieval.prepare_store_candidates \
+  --audit-summary outputs/m11-source-store-audit-20261021-054912/audit_summary.json \
+  --claims-manifest "$CLAIMS_MANIFEST" \
+  --policy quarantine_review_flags_v1 \
+  --output "$CANDIDATE_OUT" &&
+cat "$CANDIDATE_OUT/candidate_manifest.json"
+```
+
+If there are multiple exports, verify the selected path is your successful
+source-train export. No benchmark `data_manifest.json` is generated. Send the
+candidate manifest; all real retrieval metrics remain not measured.
+
 User inspection confirmed one empty string at train:1948. Export remains strict
 by default. To explicitly quarantine empty strings only, add
 `--invalid-claim-policy quarantine_empty` to the normal `--output` export command

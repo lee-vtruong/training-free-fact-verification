@@ -106,6 +106,15 @@ Qwen execution or retrieval-quality inference is performed on these observations
 
 ## M1.2 candidates
 
+Source claims export is now user-verified: 3067 valid claims, one quarantined
+empty claim train:1948, no renumbering. Claims hash is
+f1382c032a1c5746deae74fed4c6b870263754da0380c76b20f9e020bbaae52d.
+This is a valid-claim train subset, not full official-split coverage. A separate
+offline candidate converter now preserves per-claim pools and accounts for all
+records while optionally quarantining the existing heuristic flags. This policy
+has false positives and unknown residual leakage; no benchmark admission occurs.
+Server conversion and all R1-R4 real evidence caches remain pending.
+
 Latest user-run full-record audit completed in 8.6962 seconds for source stores
 0/1/2: 2097 rows, 473 empty-text rows, 44 within-store exact duplicate rows,
 8 verdict-pattern flags and 17 fact-check URL flags. All 25 flagged rows were
