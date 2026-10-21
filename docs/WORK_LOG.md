@@ -255,3 +255,15 @@
 - Validation: `python scripts/run_tests.py` -> **98 passed in 5.20s**.
 - Git: branch `main`, commit remote `9047e5b`. Handoff gồm patch tối ưu `store_retrieval.py` và giải thích chi tiết hiện tượng cho người dùng.
 
+## 2026-10-21 14:15 +07:00 — Server chạy thành công claim-scoped R1 runner
+
+- Bằng chứng thực tế từ server:
+  * Người dùng chạy `python -m tffv.retrieval.store_retrieval --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json --methods R1 --output outputs/m11-store-r1-20261021-071247 --execute`.
+  * Tiến trình chạy mượt mà với log `sys.stderr` hiển thị từng store: `[store_retrieval] Loading and verifying...`, `[1/3] train:0 (424 docs)`, `[2/3] train:1 (752 docs)`, `[3/3] train:2 (423 docs)`.
+  * Hoàn thành thành công trong 20.66 giây, xử lý 1.599 documents và 110.252 passages.
+  * Query latency BM25: 74.32ms, 155.31ms, 143.86ms.
+  * Thu được đủ 24/24 evidence slots (Top-8 mỗi claim); slot_coverage = 1.0; exact_text_redundancy = 0.0; mean_pairwise_token_jaccard = 0.177099; unique_domains = 6.0/claim.
+  * Relevance metrics tiếp tục được bảo toàn ở giá trị null; corpus_admitted = false.
+- Kết luận: Runner claim-scoped hoạt động hoàn toàn chính xác trên môi trường Linux server, đảm bảo cách ly tuyệt đối từng candidate store mà không gộp thành global pool.
+- Next steps: Hướng dẫn người dùng chạy preflight `--methods R1 R2 R3 R4` để xuất danh sách blockers cụ thể cho R2–R4; xem chi tiết 5 bằng chứng rò rỉ đã phát hiện. M1.1 empirical vẫn INCOMPLETE cho R2–R4.
+

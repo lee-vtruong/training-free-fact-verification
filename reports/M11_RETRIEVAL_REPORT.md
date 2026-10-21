@@ -59,8 +59,46 @@ of relevance, semantic sufficiency or absence of near-duplicates.
 
 Recall@5/8/10, MRR@10, nDCG@10 and semantic coverage remain null. Only R1 ran;
 no R2/R3/R4 comparison, verified quality gain or final baseline selection. Full
-24-passage source review remains pending. This exploratory three-claim run does
+24-passage source review was performed below. This exploratory three-claim run does
 not establish leakage clearance or complete the empirical milestone.
+
+## Evidence Leakage Review on Retrieved Evidence — 2026-10-21
+
+Artifact: `outputs/m11-leakage-review-20261021-070305/review_report.json` and `review_report.md`.
+Policy: `evidence_leakage_review_v2` (v2.0.0).
+Input: 24 retrieved evidence passages from CPU R1 operational smoke.
+Status: `complete_evidence_leakage_review`, label-free audit.
+
+| Total items reviewed | Flagged items | Quarantined items | Flag percentage |
+|---:|---:|---:|---:|
+| 24 | 5 | 0 (flag_only mode) | 20.8% |
+
+Flag breakdown:
+- `fact_check_url_path`: 3 passages (`freep.com/.../rnc-2020-fact-check/...`, `abcnews.go.com/.../state-union-fact-check-...`, `forbes.com/.../fact-checking-trumps-recent-economic-tweets/...`)
+- `claim_verdict_coupling`: 2 passages (`usatoday.com/...what-pam-bondis-rnc-attacks-hunter-biden-got-right-and-wrong/...`)
+- `verdict_pattern`: 2 passages (`usatoday.com/...` quoting *"Bondi also re-aired a false claim..."*, and ABC News State of the Union fact-check).
+
+These findings provide direct empirical evidence that approximately 20.8% of retrieved
+passages in raw web-scraped stores contain third-party verdict contamination.
+Corpus remains strictly `not_admitted`.
+
+## Generalized Claim-Scoped Retrieval Runner (R1 Execution) — 2026-10-21
+
+Run: `outputs/m11-store-r1-20261021-071247`; scope `claim_scoped_operational_smoke_not_admitted`.
+Candidate manifest: `outputs/m11-store-candidates-20261021-055753/candidate_manifest.json`.
+Execution mode: CPU R1, strictly isolated per-claim retrieval across 3 candidate stores.
+Total documents: 1599; total segmented passages: 110252; total elapsed: 20.6621 seconds.
+
+| Store | Documents | Passages | Segmentation s | BM25 Index s | Query ms |
+|---|---:|---:|---:|---:|---:|
+| train:0 | 424 | 27122 | 1.8832 | 2.3189 | 74.32 |
+| train:1 | 752 | 50151 | 3.6378 | 4.7987 | 155.31 |
+| train:2 | 423 | 32979 | 2.3749 | 3.0953 | 143.86 |
+
+All 3 claims received 8 evidence passages (24 evidence slots total).
+Means: slot coverage 1.0, exact text redundancy 0.0, mean pairwise token Jaccard 0.177099,
+unique domains 6.0, unique URLs 6.666667, domain entropy 1.711066.
+Relevance metrics remain null. R2-R4 await checkpoint and environment readiness.
 
 ## Initial infrastructure snapshot and limits (historical)
 
