@@ -46,18 +46,28 @@ def inspect_source_claims(train_json, expected_sha256, expected_records):
                     for i, row in enumerate(payload[:3])])
 
 
-def prepare_source_claims(train_json, output, expected_sha256, expected_records):
+def prepare_source_claims(train_json, output, expected_sha256, expected_records, invalid_claim_policy="error"):
+    if invalid_claim_policy not in {"error", "quarantine_empty"}:
+        raise ValueError("Unknown invalid claim policy")
     source, payload = load_verified_source(train_json, expected_sha256, expected_records)
-    claims, mapping = [], []
+    claims, mapping, quarantined = [], [], []
     for index, row in enumerate(payload):
         reason = invalid_claim_reason(row)
         if reason:
+            if invalid_claim_policy == "quarantine_empty" and reason == "empty_claim":
+                entry = dict(sample_id=f"train:{index}", source_array_index=index,
+                             claim_sha256=digest(row["claim"]), status="quarantined", reason=reason)
+                mapping.append(entry)
+                quarantined.append(entry)
+                continue
             raise ValueError(f"Invalid source claim train:{index}: {reason}; no export. Run --inspect for all affected IDs")
         # Access only claim text. Gold/QA/justification/annotation URLs are never
         # used to filter, order, classify, select sources, or populate output.
         sid = f"train:{index}"
         claims.append(dict(sample_id=sid, dataset="AVeriTeC", split="train", claim=row["claim"]))
-        mapping.append(dict(sample_id=sid, source_array_index=index, claim_sha256=digest(row["claim"])))
+        mapping.append(dict(sample_id=sid, source_array_index=index, claim_sha256=digest(row["claim"]), status="exported"))
+    if not claims:
+        raise ValueError("No valid claims; no export")
     if file_hash(source) != expected_sha256:
         raise ValueError("Source changed during projection")
     destination = Path(output).expanduser().resolve()
@@ -65,20 +75,26 @@ def prepare_source_claims(train_json, output, expected_sha256, expected_records)
     if destination == allowed.resolve() or not destination.is_relative_to(allowed.resolve()):
         raise ValueError("Use a fresh subdirectory of NEW project outputs/")
     destination.mkdir(parents=True, exist_ok=False)
-    for name, rows in (("claims.jsonl", claims), ("id_mapping.jsonl", mapping)):
+    for name, rows in (("claims.jsonl", claims), ("id_mapping.jsonl", mapping), ("quarantined_claims.jsonl", quarantined)):
         with (destination / name).open("x", encoding="utf-8", newline="\n") as stream:
             for row in rows:
                 stream.write(json.dumps(row, ensure_ascii=False, sort_keys=True, allow_nan=False) + "\n")
     manifest = dict(schema_version=1, source_role="source_train", dataset="AVeriTeC", split="train",
         source_path=str(source), source_sha256=expected_sha256, records=len(claims),
+        source_records=len(payload), quarantined_records=len(quarantined), invalid_claim_policy=invalid_claim_policy,
+        source_split_counts={"train": len(payload)},
+        evaluation_population="valid_claim_subset" if quarantined else "complete_source_split",
         id_protocol="train:<zero-based source-array ordinal>; exact source order preserved; not a native ID field",
         split_counts={"train": len(claims)}, population_status="previously_inspected_source",
         claims_sha256=file_hash(destination / "claims.jsonl"), id_mapping_sha256=file_hash(destination / "id_mapping.jsonl"),
+        quarantined_claims_sha256=file_hash(destination / "quarantined_claims.jsonl"),
         converter_sha256=file_hash(__file__), annotation_values_used=False,
         excluded_fields="all input fields except claim", corpus_provided=False,
         limitations=["Claim export only; not a complete retrieval data manifest.",
                      "Caller supplies verified source train file identity; no dev/test input is projected.",
-                     "No deduplication, selection, ontology remapping, qrels or evidence construction."])
+                     "Only explicit quarantine_empty may exclude empty strings; all source ordinals remain in ID mapping.",
+                     "Subset metrics must disclose quarantine and cannot claim complete official-split coverage.",
+                     "No deduplication, label selection, ontology remapping, qrels or evidence construction."])
     write_json(destination / "claims_manifest.json", manifest)
     return manifest
 
@@ -91,12 +107,15 @@ def main():
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--output")
     action.add_argument("--inspect", action="store_true", help="Print claim-only diagnostics; no export, filtering or repairs")
+    parser.add_argument("--invalid-claim-policy", choices=("error", "quarantine_empty"), default="error")
     args = parser.parse_args()
     if args.inspect:
+        if args.invalid_claim_policy != "error":
+            parser.error("--inspect does not apply a quarantine policy")
         print(json.dumps(inspect_source_claims(args.train_json, args.expected_sha256, args.expected_records), ensure_ascii=False, indent=2))
         return
-    manifest = prepare_source_claims(args.train_json, args.output, args.expected_sha256, args.expected_records)
-    print(json.dumps({key: manifest[key] for key in ("records", "source_sha256", "claims_sha256", "corpus_provided")}))
+    manifest = prepare_source_claims(args.train_json, args.output, args.expected_sha256, args.expected_records, args.invalid_claim_policy)
+    print(json.dumps({key: manifest[key] for key in ("source_records", "records", "quarantined_records", "evaluation_population", "source_sha256", "claims_sha256", "corpus_provided")}))
 
 
 if __name__ == "__main__": main()

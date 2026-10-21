@@ -457,6 +457,14 @@ Không cần gửi toàn bộ embedding matrix. Chưa chọn R4 hay bất kỳ m
 baseline M1.2. Chưa chạy Qwen3-8B và chưa tạo Historical Error Memory.
 # Source claim validation failure: read-only diagnostic
 
+User inspection confirmed one empty string at train:1948. Export remains strict
+by default. To explicitly quarantine empty strings only, add
+`--invalid-claim-policy quarantine_empty` to the normal `--output` export command
+(not `--inspect`). This writes claims, a full source ID mapping and a hashed
+quarantine ledger. Expected counts: source 3068, exported 3067, quarantined 1.
+Original IDs and split membership remain unchanged. This is a valid-claim subset,
+not full official-split coverage. It does not admit evidence or clear leakage.
+
 If hash/count pass but claim validation fails, inspect all affected original IDs
 without exporting, skipping rows, reading annotation values, or repairing text:
 

@@ -65,3 +65,30 @@ def test_invalid_claim_diagnostics_preserve_population_and_hide_annotations(tmp_
         prepare_source_claims(path, output, original, 6)
     assert not output.exists()
     assert file_hash(path) == original
+
+
+def test_explicit_empty_quarantine_keeps_original_ids_and_full_mapping(tmp_path, output):
+    path = tmp_path / "train.json"
+    path.write_text(json.dumps([dict(claim="First"), dict(claim=" ", label="SECRET"), dict(claim="Last")]), encoding="utf-8")
+    original = file_hash(path)
+    with pytest.raises(ValueError, match="empty_claim"):
+        prepare_source_claims(path, output, original, 3)
+    manifest = prepare_source_claims(path, output, original, 3, "quarantine_empty")
+    assert [r["sample_id"] for r in read_jsonl(output / "claims.jsonl")] == ["train:0", "train:2"]
+    mapping = read_jsonl(output / "id_mapping.jsonl")
+    assert [r["source_array_index"] for r in mapping] == [0, 1, 2]
+    assert mapping[1]["status"] == "quarantined"
+    assert read_jsonl(output / "quarantined_claims.jsonl") == [mapping[1]]
+    assert (manifest["source_records"], manifest["records"], manifest["quarantined_records"]) == (3, 2, 1)
+    assert manifest["evaluation_population"] == "valid_claim_subset"
+    assert "SECRET" not in "".join(p.read_text(encoding="utf-8") for p in output.iterdir())
+    assert file_hash(path) == original
+
+
+@pytest.mark.parametrize("row", [{}, {"claim": None}, {"claim": 42}, []])
+def test_quarantine_does_not_hide_other_schema_errors(tmp_path, output, row):
+    path = tmp_path / "train.json"
+    path.write_text(json.dumps([dict(claim="Good"), row]), encoding="utf-8")
+    with pytest.raises(ValueError, match="Invalid source claim"):
+        prepare_source_claims(path, output, file_hash(path), 2, "quarantine_empty")
+    assert not output.exists()

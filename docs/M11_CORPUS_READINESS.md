@@ -227,3 +227,27 @@ Next: export hash-checked claim-only train inputs and inspect claims 0/1/2 again
 these existing source excerpts. Preserve raw inputs. No automatic blanket domain
 exclusion, sentence deletion, text truncation, or corpus admission is authorized
 by the heuristic audit. Version any eventual shared evidence policy before R1-R4.
+
+## Claim-only context and empty source claim (user result)
+
+Hash-verified inspection of all 3068 train rows found exactly one empty-string
+claim, `train:1948`. Other rows passed claim schema validation. Source claims
+0/1/2 concern Hunter Biden's experience, Trump's largest tax cuts, and Nigerian
+local-government revenue share respectively. These inspected source examples
+are exploratory, not untouched holdouts.
+
+Claim 1 directly matches the topic and proposition answered by the BBC verdict
+excerpt at store 1 lines 7/82. This is observed same-claim answer-bearing web
+content, not proof of injected dataset gold or a ground-truth QA copy. Legal
+verdict snippets remain false alarms for fact-check language. Do not admit the
+corpus as answer-leakage-cleared; no filter is implemented or applied here.
+
+The exporter retains strict failure by default. Explicit `quarantine_empty`
+allows only empty string claims to be separated into a hash-sealed ledger;
+missing/non-string claim fields still fail. All 3068 original ordinals stay in
+the ID mapping, exported valid IDs are never renumbered, and the source file
+is unchanged. Expected user-run population is 3067 valid train claims plus one
+quarantined ID. This is a disclosed valid-claim subset, not complete official
+split coverage. Any future R1-R4 comparison must use the same population and
+report 3067/3068 input eligibility; no metrics are available yet. No synthetic
+claim is substituted for train:1948 and no gold fields determine eligibility.
