@@ -96,11 +96,13 @@ def result_record(claim, method, hits, passages, config, timing, gpu_peak=None):
     evidence = [dict(passages[h.passage_id].to_dict(), rank=i, score=h.score,
                      score_type={"R1": "bm25", "R2": "cosine", "R3": "rrf", "R4": "yes_probability"}[method],
                      component_scores=h.component_scores) for i, h in enumerate(selected, 1)]
+    store_depth = config.get("ranking_store_depth", 100)
+    saved_hits = hits[:store_depth] if store_depth else hits
     result = dict(schema_version=1, sample_id=claim["sample_id"], dataset=claim["dataset"], split=claim["split"],
                   claim_sha256=digest(claim["claim"]), method=method, requested_evidence=8,
                   evidence=evidence, shortfall=max(0, 8 - len(evidence)),
                   ranked_candidates=[dict(passage_id=h.passage_id, rank=i, score=h.score, component_scores=h.component_scores)
-                                     for i, h in enumerate(hits, 1)],
+                                     for i, h in enumerate(saved_hits, 1)],
                   evaluation_ranking_top10=[dict(passage_id=h.passage_id, rank=i, score=h.score) for i, h in enumerate(final_top10, 1)],
                   dedup_suppressed=suppressed, latency_seconds=timing,
                   peak_gpu_memory_bytes=gpu_peak, gold_accessed=False)
@@ -130,7 +132,7 @@ def validate_result(row, passages):
     ids = [r["passage_id"] for r in ranking]
     if len(set(ids)) != len(ids) or any(pid not in passages for pid in ids):
         raise ValueError("Unknown/duplicate candidate IDs")
-    maximum = 50 if row["method"] in {"R1", "R2"} else 40
+    maximum = 200
     if len(ids) > maximum or [r["rank"] for r in ranking] != list(range(1, len(ranking) + 1)):
         raise ValueError("Invalid candidate depth/order")
     if any(not math.isfinite(r["score"]) for r in ranking) or any(a["score"] < b["score"] for a, b in zip(ranking, ranking[1:])):

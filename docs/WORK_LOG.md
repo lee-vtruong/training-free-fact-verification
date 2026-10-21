@@ -307,4 +307,35 @@
      * Hướng dẫn tải `Qwen/Qwen3-Reranker-0.6B` bằng `huggingface_hub.snapshot_download` vào đúng cache path `~/whale/cache/huggingface/hub`.
 - Next steps: Hướng dẫn người dùng commit/push trên Windows, pull code mới trên server, chạy thử nghiệm `--synthetic` trọn vẹn 4 phương pháp R1–R4, và cấu hình biến môi trường cho real-model benchmark. M1.1 empirical vẫn **INCOMPLETE**.
 
+## 2026-10-21 18:25 +07:00 — Phân tích Benchmark GPU R1–R4 thực tế, Mở rộng Depth Top-200 & Xây dựng Evaluation Suite
+
+- Bằng chứng thực nghiệm do người dùng cung cấp:
+  * Thư mục run: `outputs/m11-store-r14-20261021-080538`.
+  * Thiết bị phần cứng: NVIDIA GeForce RTX 5090 (31.35 GiB VRAM, CUDA runtime 13.0).
+  * Quy mô: 3 candidate stores (`train:0`, `train:1`, `train:2`), 1.599 documents, 110.252 passages.
+  * Tổng thời gian thực thi: 3.017,84 giây (~50,3 phút).
+  * Toàn bộ 4 phương pháp R1, R2, R3, R4 hoàn thành đầy đủ, 24/24 evidence slots được lấp đầy (slot coverage 1.0).
+  * Peak GPU VRAM: Đạt chính xác **1,40 GiB** (1.500.765.184 bytes), chứng minh chiến lược nạp/giải phóng mô hình tuần tự (sequential VRAM management) hoàn toàn loại trừ nguy cơ OOM.
+  * Chỉ số proxy quan sát được:
+    - R1 (BM25): Latency 0,0810s, token redundancy 0,1771, unique domains 6,00, unique URLs 6,67.
+    - R2 (Dense Semantic): Latency 992,64s, token redundancy 0,1525 (ngữ nghĩa giảm trùng lặp từ khóa tốt hơn BM25).
+    - R3 (RRF Hybrid): Latency 992,72s (thuật toán RRF chỉ mất 0,22ms), kết hợp hai nguồn thứ hạng.
+    - R4 (Frozen Reranker): Latency 993,84s (mô hình reranker chỉ mất ~1,12s cho Top-40), đạt độ đa dạng cao nhất (unique domains: 6,33, unique URLs: 7,00).
+- Tiếp nhận nhiệm vụ mới từ người dùng:
+  1. Mở rộng depth: R1/R2 lên Top-200; R3 RRF Top-200; R4 rerank R3 Top-200; lưu ranking Top-100, giữ Top-8 evidence.
+  2. Nâng cấp tốc độ: Cấu hình `batch_size: 16` (thay vì 1) và hỗ trợ `--index-cache` để GPU RTX 5090 mã hóa nhanh hơn gấp 10-15 lần.
+  3. Xây dựng công cụ đánh giá chất lượng Retrieval:
+     - Đo Source Hit@5/10/20/50/100, Source Recall@5/10/20/50/100, Source MRR@100.
+     - Đo Candidate Store Gold Coverage (Oracle Ceiling).
+     - Phân tích dịch chuyển thứ hạng Reranker (R3 vs R4 rank shifts, promotions/demotions vào Top-10).
+     - Phát hiện các ca Hit@100 nhưng Miss@10.
+- Khắc phục & Triển khai kỹ thuật:
+  1. `src/tffv/retrieval/url_norm.py`: Chuẩn hóa URL triệt để (scheme https, loại www/trailing slashes, loại tracking params utm_*, lowercase domain/path, sort params).
+  2. `src/tffv/retrieval/quality_eval.py`: Công cụ evaluation hậu truy xuất độc lập; chỉ đọc nhãn vàng AVeriTeC sau khi run đã được materialize và seal hash. Tuyệt đối không dùng nhãn trong truy xuất.
+  3. Cập nhật `src/tffv/retrieval/benchmark.py` và `store_retrieval.py`: Cho phép candidate depth đến 200, lưu Top-100 vào `ranked_candidates`, bổ sung `--index-cache`.
+  4. Unit test toàn diện: Viết `tests/test_url_norm.py` và `tests/test_quality_eval.py`.
+  5. Kết quả kiểm thử local: **107 passed in 4.17s**, 0 compilation errors.
+- Trạng thái: M1.1 empirical vẫn **INCOMPLETE** cho đến khi chạy đánh giá chất lượng trên tập pilot mở rộng. Không tự chọn phương pháp chiến thắng trước khi có kết quả thực nghiệm.
+
+
 

@@ -36,14 +36,17 @@ DEFAULT_CONFIG = dict(
     bm25=dict(k1=1.2, b=0.75),
     rrf_constant=60,
     dedup_threshold=0.95,
-    candidate_depth=50,
+    candidate_depth=200,
+    fusion_depth=200,
+    rerank_depth=200,
+    ranking_store_depth=100,
     evidence_depth=8,
     evaluation_depth=10,
     seed=42,
     device="cpu",
     dtype="float32",
     max_length=1024,
-    batch_size=4,
+    batch_size=16,
     corpus_scope="per_claim",
     protocol="claim_scoped_retrieval_v1",
     embedding=dict(
@@ -214,7 +217,7 @@ def plan(manifest_path, methods=METHODS, config=None, synthetic=False, max_claim
     )
 
 
-def run(manifest_path, output, methods=METHODS, config=None, synthetic=False, max_claims=None):
+def run(manifest_path, output, methods=METHODS, config=None, synthetic=False, max_claims=None, index_cache=None):
     """Execute claim-scoped retrieval for requested methods across all candidate stores."""
     config = checked_config(config)
     valid_methods = [m for m in methods if m in METHODS]
@@ -315,7 +318,23 @@ def run(manifest_path, output, methods=METHODS, config=None, synthetic=False, ma
                 if encoder:
                     encoder.reset_peak()
                 doc_texts = [p.text for p in passages]
-                corpus_matrix = encoder.encode(doc_texts)
+
+                corpus_matrix = None
+                cache_file = None
+                if index_cache and not synthetic:
+                    import numpy as np
+                    p_hash = digest([p.passage_id for p in passages])[:16]
+                    cache_dir = Path(index_cache).expanduser().resolve()
+                    cache_dir.mkdir(parents=True, exist_ok=True)
+                    cache_file = cache_dir / f"{claim['sample_id'].replace(':', '_')}_{p_hash}.npy"
+                    if cache_file.is_file():
+                        corpus_matrix = np.load(cache_file)
+
+                if corpus_matrix is None:
+                    corpus_matrix = encoder.encode(doc_texts)
+                    if cache_file:
+                        np.save(cache_file, corpus_matrix)
+
                 query_vec = encoder.encode([claim["claim"]], query=True)[0]
                 dense_peak = encoder.peak_bytes() if encoder else None
                 p_ids = [p.passage_id for p in passages]
@@ -332,7 +351,8 @@ def run(manifest_path, output, methods=METHODS, config=None, synthetic=False, ma
             f_time = 0.0
             if "R3" in valid_methods or needs_rerank:
                 t0 = time.perf_counter()
-                fused_hits = rrf({"bm25": b_hits, "dense": d_hits}, 40, config["rrf_constant"])
+                fusion_depth = config.get("fusion_depth", config.get("candidate_depth", 200))
+                fused_hits = rrf({"bm25": b_hits, "dense": d_hits}, fusion_depth, config["rrf_constant"])
                 f_time = time.perf_counter() - t0
                 timing_entry["rrf_fusion_seconds"] = f_time
 
@@ -374,10 +394,11 @@ def run(manifest_path, output, methods=METHODS, config=None, synthetic=False, ma
                 r_time = time.perf_counter() - t0
                 if len(scores) != len(fused_hits):
                     raise ValueError("Reranker score count mismatch")
+                rerank_depth = config.get("rerank_depth", len(fused_hits))
                 r4_hits = ordered(
                     [Hit(h.passage_id, float(s), dict(h.component_scores, reranker_yes_probability=float(s)))
                      for h, s in zip(fused_hits, scores)],
-                    40,
+                    rerank_depth,
                 )
                 peaks = [p for p in (dense_peak, reranker.peak_bytes()) if p is not None]
                 r4_peak = max(peaks) if peaks else None
@@ -492,6 +513,7 @@ def main():
     parser.add_argument("--max-claims", type=int, help="Optional bound on number of claims to process")
     parser.add_argument("--synthetic", action="store_true", help="Use non-neural synthetic test doubles")
     parser.add_argument("--execute", action="store_true", help="Execute retrieval; otherwise prints preflight plan only")
+    parser.add_argument("--index-cache", help="Optional directory to cache and reuse dense corpus vectors")
     parser.add_argument("--output", help="Fresh output directory under outputs/ (required with --execute)")
     args = parser.parse_args()
 
@@ -503,7 +525,7 @@ def main():
         if not args.output:
             parser.error("--execute requires --output")
         out = run(args.candidate_manifest, args.output, methods=args.methods, config=cfg,
-                  synthetic=args.synthetic, max_claims=args.max_claims)
+                  synthetic=args.synthetic, max_claims=args.max_claims, index_cache=args.index_cache)
         print(f"Run completed successfully: {out}")
     else:
         if args.output:

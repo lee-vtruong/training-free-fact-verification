@@ -100,6 +100,38 @@ Means: slot coverage 1.0, exact text redundancy 0.0, mean pairwise token Jaccard
 unique domains 6.0, unique URLs 6.666667, domain entropy 1.711066.
 Relevance metrics remain null. R2-R4 await checkpoint and environment readiness.
 
+## User-Confirmed GPU Claim-Scoped R1–R4 Real Model Benchmark — 2026-10-21
+
+Run: `outputs/m11-store-r14-20261021-080538`; scope `claim_scoped_operational_smoke_not_admitted`.
+GPU: NVIDIA GeForce RTX 5090 (33,668,857,856 bytes = 31.35 GiB memory, CUDA runtime 13.0).
+Total runtime: 3,017.84 seconds (~50.3 minutes).
+Candidate manifest: `outputs/m11-store-candidates-20261021-055753/candidate_manifest.json`.
+Scope: 3 candidate stores (`train:0`, `train:1`, `train:2`), 1,599 documents, 110,252 passages.
+Execution: Fully frozen real Qwen 0.6B models (`Qwen3-Embedding-0.6B` and `Qwen3-Reranker-0.6B`), sequential VRAM residency.
+
+| Store | Documents | Passages | BM25 Index s | BM25 Query ms | Dense Query s | RRF Fusion ms | Peak GPU VRAM |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `train:0` | 424 | 27,122 | 2.50 s | 68.69 ms | 700.22 s | 0.22 ms | 1.40 GiB (1,500,818,432 B) |
+| `train:1` | 752 | 50,151 | 4.68 s | 97.98 ms | 1,371.30 s | 0.21 ms | 1.40 GiB (1,501,078,528 B) |
+| `train:2` | 423 | 32,979 | 3.27 s | 76.20 ms | 906.40 s | 0.50 ms | 1.40 GiB (1,500,398,592 B) |
+
+Method comparison across 110,252 candidate passages:
+
+| Method | Mean Latency | Peak VRAM | Evidence Slots | Token Jaccard Redundancy | Unique Domains | Unique URLs |
+|---|---:|---:|---:|---:|---:|---:|
+| **R1** (BM25) | 0.0810 s | None (CPU) | 8.0 (100%) | 0.1771 | 6.00 | 6.67 |
+| **R2** (Frozen Dense) | 992.64 s | 1.40 GiB | 8.0 (100%) | 0.1525 | 5.67 | 6.33 |
+| **R3** (RRF Hybrid) | 992.72 s | 1.40 GiB | 8.0 (100%) | 0.1559 | 6.00 | 6.33 |
+| **R4** (Frozen Rerank) | 993.84 s | 1.40 GiB | 8.0 (100%) | 0.1694 | 6.33 | 7.00 |
+
+Observations:
+1. Sequential model unloading guaranteed safe memory usage: Peak allocated VRAM was strictly capped at ~1.40 GiB on RTX 5090.
+2. R2 dense semantic retrieval achieved the lowest pairwise token redundancy (0.1525 vs 0.1771 for BM25).
+3. R4 reranker promoted highest domain and URL diversity (unique domains: 6.33, unique URLs: 7.00). Reranker inference time over Top-40 was ~1.12 seconds per claim.
+4. With batch size 1, encoding 110,252 passages sequentially required 3,017 seconds. Batch size is now upgraded to 16 in the updated template, and vector caching (`--index-cache`) is implemented.
+5. Quality evaluation against official AVeriTeC train annotations is implemented in `src/tffv/retrieval/quality_eval.py`.
+
+
 ## Initial infrastructure snapshot and limits (historical)
 
 Current local probe: RTX 3050 Laptop 6 GB; about 5.52 GiB free workspace disk;

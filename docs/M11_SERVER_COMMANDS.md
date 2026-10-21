@@ -603,6 +603,59 @@ cat "$STORE_R14_OUT/summary.json"
 
 Send `summary.json`, `manifest.json`, and preflight output.
 
+### 5. Đánh giá chất lượng Retrieval (Retrieval Quality Evaluation)
+
+Chạy đánh giá chất lượng truy xuất trên run đã hoàn thành đối chiếu với nhãn vàng AVeriTeC (`train.json`).
+Lưu ý: Script chỉ đọc annotations sau khi retrieval run đã được materialize và seal hash.
+
+```bash
+# 1. Tìm thư mục run GPU gần nhất (hoặc chỉ định outputs/m11-store-r14-20261021-080538)
+LATEST_RUN="$(find outputs -maxdepth 1 -type d -name 'm11-store-r14-*' | sort | tail -n 1)"
+EVAL_OUT="outputs/m11-eval-$(date +%Y%m%d-%H%M%S)"
+
+# 2. Thực thi evaluation
+python -m tffv.retrieval.quality_eval \
+  --run-dir "$LATEST_RUN" \
+  --train-json /home/stackops/whale/ERRORFlow/data/raw/averitec/train.json \
+  --output "$EVAL_OUT" &&
+cat "$EVAL_OUT/evaluation_report.md"
+```
+
+Files kết quả sinh ra trong `$EVAL_OUT`:
+- `evaluation_report.md`: Báo cáo chi tiết dạng Markdown.
+- `evaluation_summary.json`: File JSON tóm tắt toàn bộ chỉ số.
+- `metrics_table.csv`: Bảng số liệu dạng CSV.
+- `per_claim_metrics.csv`: Chi tiết metrics từng claim.
+
+### 6. Chạy Benchmark mở rộng Top-200 & Tăng tốc Batching (Pilot 10-20 claims)
+
+Sau khi kiểm tra evaluation trên 3 claims, chạy pilot mở rộng lên 10–20 claims với độ sâu Top-200 và `batch_size: 16` để tối ưu tài nguyên GPU RTX 5090:
+
+```bash
+# 1. Chuẩn bị thư mục cache vector
+mkdir -p outputs/index_cache
+
+# 2. Chạy với --max-claims 10 (hoặc 20) và batching GPU nhanh
+PILOT_OUT="outputs/m11-pilot20-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.store_retrieval \
+  --candidate-manifest outputs/m11-store-candidates-20261021-055753/candidate_manifest.json \
+  --methods R1 R2 R3 R4 \
+  --config configs/store_retrieval_m11.template.json \
+  --max-claims 20 \
+  --index-cache outputs/index_cache \
+  --output "$PILOT_OUT" --execute &&
+cat "$PILOT_OUT/summary.json"
+
+# 3. Đánh giá chất lượng tập pilot:
+PILOT_EVAL="outputs/m11-pilot20-eval-$(date +%Y%m%d-%H%M%S)"
+python -m tffv.retrieval.quality_eval \
+  --run-dir "$PILOT_OUT" \
+  --train-json /home/stackops/whale/ERRORFlow/data/raw/averitec/train.json \
+  --output "$PILOT_EVAL" &&
+cat "$PILOT_EVAL/evaluation_report.md"
+```
+
+
 ## CPU-only R1 operational smoke on three unadmitted candidate stores
 
 The candidate corpus is still not approved for quality evaluation. This separate
