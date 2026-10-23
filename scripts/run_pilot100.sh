@@ -26,16 +26,21 @@ echo ">>> Using Claims Manifest: $CLAIMS_MANIFEST"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 
 # 3. Candidate Preparation (Quarantine Policy)
-PILOT_CAND_OUT="outputs/m11-candidates-pilot100-$TIMESTAMP"
-echo ">>> [1/3] Preparing candidate stores in $PILOT_CAND_OUT..."
-python -m tffv.retrieval.prepare_store_candidates \
-  --audit-summary "$AUDIT_SUMMARY" \
-  --claims-manifest "$CLAIMS_MANIFEST" \
-  --policy quarantine_review_flags_v1 \
-  --output "$PILOT_CAND_OUT"
-
-CANDIDATE_MANIFEST="$PILOT_CAND_OUT/candidate_manifest.json"
-echo ">>> Candidate stores prepared: $(grep '"n_claims"' "$CANDIDATE_MANIFEST" || true)"
+EXISTING_CAND_MANIFEST="$(find outputs -maxdepth 2 -type f -path 'outputs/m11-candidates-pilot100-*/candidate_manifest.json' | sort | tail -n 1)"
+if [[ -n "$EXISTING_CAND_MANIFEST" && -f "$EXISTING_CAND_MANIFEST" ]]; then
+    echo ">>> Found existing candidate manifest: $EXISTING_CAND_MANIFEST"
+    CANDIDATE_MANIFEST="$EXISTING_CAND_MANIFEST"
+else
+    PILOT_CAND_OUT="outputs/m11-candidates-pilot100-$TIMESTAMP"
+    echo ">>> [1/3] Preparing candidate stores in $PILOT_CAND_OUT..."
+    python -m tffv.retrieval.prepare_store_candidates \
+      --audit-summary "$AUDIT_SUMMARY" \
+      --claims-manifest "$CLAIMS_MANIFEST" \
+      --policy quarantine_review_flags_v1 \
+      --output "$PILOT_CAND_OUT"
+    CANDIDATE_MANIFEST="$PILOT_CAND_OUT/candidate_manifest.json"
+fi
+echo ">>> Candidate stores ready: $CANDIDATE_MANIFEST"
 
 # 4. GPU Retrieval Benchmark (R1-R4 Top-200 with batch_size 16 & index caching)
 export TFFV_EMBED_MODEL="/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Embedding-0.6B/snapshots/97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
