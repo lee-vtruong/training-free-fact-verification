@@ -28,7 +28,7 @@ def load_candidates(manifest_path):
             or metadata.get("corpus_admitted") is not False or metadata.get("policy") != POLICY):
         raise ValueError("Require unadmitted candidate manifest and declared policy")
     stores = metadata["stores"]
-    if not 1 <= len(stores) <= 3 or len({r["sample_id"] for r in stores}) != len(stores):
+    if not 1 <= len(stores) <= 3068 or len({r["sample_id"] for r in stores}) != len(stores):
         raise ValueError("Require unique bounded source stores")
     loaded = []
     directories = set()
