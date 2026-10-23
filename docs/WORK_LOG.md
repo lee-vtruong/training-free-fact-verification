@@ -395,6 +395,25 @@
 - Trạng thái: M1.1 empirical vẫn **INCOMPLETE** cho đến khi chạy xong toàn bộ pipeline 100 claims.
 - Tiếp theo: Hướng dẫn người dùng commit/push trên Windows, pull về Linux và chạy lại lệnh `acquire_subset`.
 
+## 2026-10-23 22:50 +07:00 — Xác nhận Dung lượng 390 GB & Chuyển sang Chế độ Thực thi Server Trực tiếp
+
+- Yêu cầu người dùng:
+  * Thông báo dung lượng trống trên server hiện đã tăng lên gần 400 GB (~390 GB).
+  * Đổi rule làm việc: Người dùng cho phép Codex kết nối trực tiếp qua SSH (`hvtham-server`) để chạy code, quản lý tiến trình và xuất kết quả gửi người dùng xem xét.
+- Đánh giá khả thi tài nguyên (Resource Feasibility Check):
+  * Kiểm tra qua SSH: `/dev/sda3` có Size 938 GB, Used 508 GB, **Avail 390 GB (57% used)**.
+  * Toàn bộ 3 archives ZIP: 59,16 GiB (63,5 GB).
+  * Toàn bộ 3.068 stores giải nén thô: 187,08 GiB (200,9 GB).
+  * Candidate stores + artifacts: ~50–80 GB.
+  * Tổng dung lượng tối đa cần cho FULL dataset: ~260–280 GB.
+  * Kết luận: **390 GB là HOÀN TOÀN ĐỦ DÙNG** (dư hơn 110–130 GB dự phòng an toàn).
+- Hiện trạng server đã xác minh:
+  * Git repo server đã ở commit `e6a9c06` sạch sẽ.
+  * GPU NVIDIA GeForce RTX 5090 (32 GiB VRAM) đang rảnh rỗi (0% util, 3 MiB used, 28°C).
+  * Bước tải 100 stores đã hoàn thành thành công trong `outputs/m11-store-pilot100-20261021-142310/` (đầy đủ 100 files `train-0.json` đến `train-99.json` và `subset_manifest.json` đã seal).
+- Trạng thái milestone: M1.1 empirical vẫn **INCOMPLETE**.
+
+
 
 
 

@@ -1,14 +1,8 @@
 # Project working rules
 
-- Codex works locally: implement code, run lightweight local tests, document
-  actual results and provide commands for the user to execute on their server.
-  Do not initiate SSH, server jobs, remote push/pull or checkpoint downloads.
-  The user executes server commands and sends logs/artifacts for analysis.
-- Every code handoff must include the Windows commands for the user to
-  review/commit/push to GitHub and the Linux commands to pull that code onto
-  the server before execution. Provide first-clone instructions if needed.
-  Check local Git state before drafting commands; never force-push or overwrite
-  remote history. Codex does not execute those synchronization commands.
+- Direct server execution authorized by user: Codex connects directly to
+  `hvtham-server` via SSH to execute commands, launch pipelines, monitor jobs,
+  and inspect outputs. Results and artifacts are reported back to the user for review.
 - Accuracy and Macro-F1 are primary. All models/features remain frozen; no
   parameter fitting, optimizers, neural routers or learned rerankers.
 - ERRORFlow and its environments/data/caches are read-only references. New
