@@ -16,7 +16,7 @@ def main():
             found += 1
             sid = s.get('sample_id')
             print(f"Store {sid}: {bad}")
-            ordinal = s.get("source_ordinal")
+            ordinal = s.get("source_ordinal") or s.get("sample_id", "").split(":")[-1]
             store_file = raw_dir / f"train-{ordinal}.json"
             if store_file.exists():
                 with store_file.open("rb") as sf:
