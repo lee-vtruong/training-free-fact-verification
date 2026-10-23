@@ -4,6 +4,7 @@ from collections import Counter
 import hashlib
 import json
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from tffv.provenance import canonical, digest, file_hash, write_json
 from tffv.retrieval.audit_subset import MiB, audit_store
@@ -75,7 +76,7 @@ def prepare_candidates(audit_summary, claims_manifest, output, policy):
                 raise ValueError("Full audit changed; regenerate/review audit")
         if profile["raw_sha256"] != store["raw_sha256"] or profile["raw_crc32"] != store["member_crc32"]:
             raise ValueError("Raw hash/CRC mismatch")
-        if any(profile[k] for k in ("annotation_field_rows", "claim_id_mismatch_rows", "invalid_source_url_rows", "invalid_text_shape_rows")):
+        if any(profile[k] for k in ("annotation_field_rows", "claim_id_mismatch_rows", "invalid_text_shape_rows")):
             raise ValueError("Source schema/identity failures require review")
         if profile["review_queue_truncated"]:
             raise ValueError("Incomplete review inventory")
@@ -100,8 +101,21 @@ def prepare_candidates(audit_summary, claims_manifest, output, policy):
                     if not line.strip(): continue
                     row = json.loads(line.decode("utf-8-sig"))
                     text = "\n".join(row["url2text"])
+                    url = row.get("url")
+                    try:
+                        parsed = urlsplit(url) if isinstance(url, str) else None
+                        valid_url = bool(parsed and parsed.scheme in {"http", "https"} and parsed.hostname and not parsed.username and not parsed.password)
+                    except ValueError:
+                        valid_url = False
                     flags = flagged.get(line_number, {}).get("flags", [])
-                    status = "quarantined_review_flag" if flags else ("retained" if text.strip() else "empty_text")
+                    if not valid_url:
+                        status = "quarantined_invalid_url" if text.strip() else "empty_text"
+                    elif flags:
+                        status = "quarantined_review_flag"
+                    elif text.strip():
+                        status = "retained"
+                    else:
+                        status = "empty_text"
                     counts[status] += 1
                     identity = dict(sample_id=sid, raw_sha256=store["raw_sha256"], line_number=line_number)
                     document_id = digest(identity)

@@ -413,6 +413,23 @@
   * Bước tải 100 stores đã hoàn thành thành công trong `outputs/m11-store-pilot100-20261021-142310/` (đầy đủ 100 files `train-0.json` đến `train-99.json` và `subset_manifest.json` đã seal).
 - Trạng thái milestone: M1.1 empirical vẫn **INCOMPLETE**.
 
+## 2026-10-23 23:14 +07:00 — Cách ly Hàng chứa URL Không Hợp lệ trong Candidate Preparation
+
+- Hiện tượng:
+  * Khi chạy `prepare_store_candidates` cho 100 stores, lệnh báo lỗi:
+    `ValueError: Source schema/identity failures require review` tại dòng 79.
+- Nguyên nhân:
+  * Trong 100 stores thực tế được cào từ web bởi nhóm tác giả AVeriTeC, có 10 stores chứa đúng 1 hàng có `url='Metadata'` (dòng header metadata của crawler với `url2text=[]`) hoặc URL không hợp lệ (như `ftp://...`, `ttps://...`).
+  * Kiểm tra qua `scripts/check_audit.py`: Cả 10 dòng này đều có `text_len = 0`.
+  * Bộ lọc `prepare_store_candidates.py` trước đây kiểm tra cứng `invalid_source_url_rows > 0` và dừng toàn bộ tiến trình.
+- Khắc phục:
+  * Cập nhật `src/tffv/retrieval/prepare_store_candidates.py`:
+    - Loại bỏ `invalid_source_url_rows` khỏi danh sách gây dừng tiến trình (vẫn giữ nguyên `annotation_field_rows`, `claim_id_mismatch_rows`, `invalid_text_shape_rows` để chống rò rỉ nhãn và sai lệch định danh).
+    - Phân loại trạng thái hàng URL không hợp lệ: Nếu `text.strip() == ""`, gán `status = "empty_text"`; nếu có text, gán `status = "quarantined_invalid_url"`. Tuyệt đối không đưa vào `corpus.jsonl`.
+  * Thêm unit test `test_invalid_url_row_quarantined_or_marked_empty_text` trong `tests/test_prepare_store_candidates.py`.
+  * Kiểm thử local: **109 passed in 4.38s**.
+
+
 
 
 

@@ -61,6 +61,35 @@ def test_candidate_export_preserves_claim_scope_and_accounts_for_every_record(pr
     assert "SECRET" not in "".join(p.read_text(encoding="utf-8") for p in output.rglob("*.jsonl"))
 
 
+def test_invalid_url_row_quarantined_or_marked_empty_text(tmp_path):
+    root = Path(__file__).resolve().parents[1] / "outputs" / ("pytest-invalid-url-" + uuid.uuid4().hex)
+    root.mkdir(parents=True)
+    source = tmp_path / "train.json"
+    source.write_text(json.dumps([dict(claim="Test invalid URL claim")]), encoding="utf-8")
+    prepare_source_claims(source, root / "claims", file_hash(source), 1)
+    rows = [
+        dict(claim_id="0", url="https://valid.example/a", url2text=["Valid text passage"]),
+        dict(claim_id="0", url="Metadata", url2text=[]),
+        dict(claim_id="0", url="ftp://invalid.scheme/file", url2text=["Nonempty text with invalid scheme"]),
+    ]
+    raw = tmp_path / "train-0.json"
+    raw.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+    manifest = tmp_path / "subset_manifest.json"
+    manifest.write_text(json.dumps(dict(status="complete_raw_subset_not_admitted", labels_used=False, stores=[
+        dict(source_ordinal=0, file=raw.name, full_member_crc_verified=True, raw_bytes=raw.stat().st_size,
+             raw_sha256=file_hash(raw), member_crc32=f"{binascii.crc32(raw.read_bytes()) & 0xffffffff:08x}")
+    ])), encoding="utf-8")
+    summary = audit(manifest, root / "audit", 64)
+    result = json.loads(prepare_candidates(summary, root / "claims" / "claims_manifest.json", root / "candidates", POLICY).read_text())
+    store = result["stores"][0]
+    assert store["counts"]["retained"] == 1
+    assert store["counts"]["empty_text"] == 1
+    assert store["counts"]["quarantined_invalid_url"] == 1
+    corpus = read_jsonl(root / "candidates" / store["directory"] / "corpus.jsonl")
+    assert len(corpus) == 1 and corpus[0]["source_url"] == "https://valid.example/a"
+    shutil.rmtree(root)
+
+
 def test_mutated_raw_store_refused_before_export(prepared):
     summary, claims, output, raw_root = prepared
     with (raw_root / "train-0.json").open("a") as stream: stream.write("{}\n")
