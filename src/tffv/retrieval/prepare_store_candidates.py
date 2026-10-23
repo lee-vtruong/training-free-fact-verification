@@ -47,7 +47,7 @@ def prepare_candidates(audit_summary, claims_manifest, output, policy):
     if len(claims) != cm["records"]:
         raise ValueError("Claim count mismatch")
     inventory = acquisition["stores"]
-    if not 1 <= len(inventory) <= 100 or len({r["source_ordinal"] for r in inventory}) != len(inventory):
+    if not 1 <= len(inventory) <= 3068 or len({r["source_ordinal"] for r in inventory}) != len(inventory):
         raise ValueError("Require unique bounded store inventory")
     profiles = {row["sample_id"]: row for row in summary["stores"]}
     if len(profiles) != len(inventory):

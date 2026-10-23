@@ -72,8 +72,8 @@ def store_profile(path, expected_id):
 
 
 def acquire(plan_path, destination, claim_ids, execute=False):
-    if not 1 <= len(claim_ids) <= 100 or len(set(claim_ids)) != len(claim_ids) or any(type(i) is not int or not 0 <= i <= 3067 for i in claim_ids):
-        raise ValueError("Choose between 1 and 100 unique source ordinals")
+    if not 1 <= len(claim_ids) <= 3068 or len(set(claim_ids)) != len(claim_ids) or any(type(i) is not int or not 0 <= i <= 3067 for i in claim_ids):
+        raise ValueError("Choose between 1 and 3068 unique source ordinals")
     plan_path = Path(plan_path).expanduser().resolve()
     plan_hash = file_hash(plan_path)
     plan = json.loads(plan_path.read_text(encoding="utf-8"))

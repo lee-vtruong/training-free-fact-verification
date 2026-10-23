@@ -111,7 +111,7 @@ def audit(manifest_path, output, max_record_mib=64):
     if metadata.get("status") != "complete_raw_subset_not_admitted" or metadata.get("labels_used") is not False:
         raise ValueError("Require a complete label-free source-subset acquisition")
     stores = metadata.get("stores", [])
-    if not 1 <= len(stores) <= 3 or len({r["source_ordinal"] for r in stores}) != len(stores):
+    if not 1 <= len(stores) <= 3068 or len({r["source_ordinal"] for r in stores}) != len(stores):
         raise ValueError("Invalid source-store inventory")
     for row in stores:
         name = row["file"]
