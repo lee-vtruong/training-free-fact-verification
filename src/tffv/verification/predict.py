@@ -34,7 +34,6 @@ def load_evidence_by_claim(r4_path: Path) -> Dict[str, List[Dict[str, Any]]]:
     evidence_map = {}
     for row in read_jsonl(r4_path):
         sid = row["sample_id"]
-        # row["evidence"] is the Top-8 evidence selected after deduplication
         evidence_map[sid] = row.get("evidence", [])
     return evidence_map
 
@@ -61,6 +60,9 @@ def run_prediction(
     device: str = "cuda",
     dtype: str = "bfloat16",
     max_claims: Optional[int] = None,
+    max_new_tokens: int = 512,
+    enable_thinking: Optional[bool] = None,
+    experiment_id: str = "B0",
 ) -> Path:
     """Execute label-free frozen base verification and seal output predictions."""
     destination = Path(output_dir).expanduser().resolve()
@@ -88,8 +90,13 @@ def run_prediction(
     started_total = time.perf_counter()
 
     import sys
-    sys.stderr.write(f"[verification.predict] Starting frozen verification for {len(target_sids)} claims...\n")
+    sys.stderr.write(
+        f"[verification.predict] [{experiment_id}] Starting frozen verification: "
+        f"claims={len(target_sids)}, max_new_tokens={max_new_tokens}, enable_thinking={enable_thinking}\n"
+    )
     sys.stderr.flush()
+
+    valid_verdict_count = 0
 
     for idx, sid in enumerate(target_sids, 1):
         claim_data = claims_map.get(sid)
@@ -103,10 +110,18 @@ def run_prediction(
         
         t0 = time.perf_counter()
         backbone.reset_peak()
-        gen_res = backbone.generate(prompt_info["messages"], max_new_tokens=512)
+        gen_res = backbone.generate(
+            prompt_info["messages"],
+            max_new_tokens=max_new_tokens,
+            enable_thinking=enable_thinking,
+        )
         latency = time.perf_counter() - t0
 
         predicted_verdict = normalize_verdict(gen_res["generated_text"])
+        is_valid = bool(predicted_verdict and predicted_verdict in VERDICTS)
+        if is_valid:
+            valid_verdict_count += 1
+
         peak_mem = backbone.peak_bytes()
 
         evidence_pids = [ev.get("passage_id") for ev in evidence if "passage_id" in ev]
@@ -114,11 +129,15 @@ def run_prediction(
 
         pred_record = {
             "sample_id": sid,
+            "experiment_id": experiment_id,
             "claim_sha256": digest(claim_text),
             "predicted_verdict": predicted_verdict,
+            "valid_verdict": is_valid,
             "raw_generation": gen_res["generated_text"],
             "prompt_tokens": gen_res["prompt_tokens"],
             "generated_tokens": gen_res["generated_tokens"],
+            "max_new_tokens": max_new_tokens,
+            "enable_thinking": enable_thinking,
             "latency_seconds": latency,
             "peak_gpu_memory_bytes": peak_mem,
             "evidence_count": len(evidence),
@@ -130,7 +149,8 @@ def run_prediction(
         predictions.append(pred_record)
 
         if idx % 10 == 0 or idx == len(target_sids):
-            sys.stderr.write(f"[verification.predict] [{idx}/{len(target_sids)}] {sid} -> {predicted_verdict} ({latency:.2f}s)\n")
+            status_str = predicted_verdict if is_valid else "[UNPARSED/TRUNCATED]"
+            sys.stderr.write(f"[verification.predict] [{idx}/{len(target_sids)}] {sid} -> {status_str} ({latency:.2f}s)\n")
             sys.stderr.flush()
 
     elapsed = time.perf_counter() - started_total
@@ -142,11 +162,23 @@ def run_prediction(
 
     # Persist manifest.json
     manifest = {
-        "milestone": "M1.2",
-        "phase": "frozen_base_verification",
+        "milestone": "M1.2.1",
+        "phase": "frozen_base_stabilization",
+        "experiment_id": experiment_id,
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime()),
         "synthetic": synthetic,
         "n_claims": len(predictions),
+        "valid_verdict_count": valid_verdict_count,
+        "unparsed_count": len(predictions) - valid_verdict_count,
+        "valid_verdict_rate": valid_verdict_count / len(predictions) if predictions else 0.0,
+        "generation_config": {
+            "max_new_tokens": max_new_tokens,
+            "enable_thinking": enable_thinking,
+            "temperature": 0.0,
+            "do_sample": False,
+            "device": device,
+            "dtype": dtype,
+        },
         "elapsed_seconds": elapsed,
         "r4_evidence_path": str(r4_p),
         "r4_evidence_sha256": file_hash(r4_p),
@@ -159,13 +191,16 @@ def run_prediction(
     }
     write_json(destination / "manifest.json", manifest)
 
-    sys.stderr.write(f"[verification.predict] Completed {len(predictions)} predictions in {elapsed:.1f}s -> {destination}\n")
+    sys.stderr.write(
+        f"[verification.predict] Completed {len(predictions)} predictions ({valid_verdict_count} valid, "
+        f"{len(predictions) - valid_verdict_count} unparsed) in {elapsed:.1f}s -> {destination}\n"
+    )
     sys.stderr.flush()
     return destination
 
 
 def main():
-    parser = argparse.ArgumentParser(description="M1.2 Frozen Base Verification Predictor")
+    parser = argparse.ArgumentParser(description="M1.2.1 Frozen Base Verification Predictor")
     parser.add_argument("--r4-path", required=True, help="Path to R4.jsonl retrieval output")
     parser.add_argument("--claims-path", required=True, help="Path to claims.jsonl")
     parser.add_argument("--output", required=True, help="Output directory for predictions")
@@ -175,7 +210,25 @@ def main():
     parser.add_argument("--dtype", default="bfloat16", help="Torch data type")
     parser.add_argument("--synthetic", action="store_true", help="Run with synthetic test double")
     parser.add_argument("--max-claims", type=int, default=None, help="Limit number of claims")
+    parser.add_argument("--max-new-tokens", type=int, default=512, help="Max generated tokens")
+    parser.add_argument("--enable-thinking", dest="enable_thinking", action="store_true", default=None, help="Enable native reasoning")
+    parser.add_argument("--no-thinking", dest="enable_thinking", action="store_false", help="Disable native reasoning")
+    parser.add_argument("--experiment-id", default="B0", help="Identifier for experiment (B0, B1, B2)")
+    parser.add_argument("--config", default=None, help="Optional JSON config file to load settings")
     args = parser.parse_args()
+
+    # Load from config if provided
+    max_new_tokens = args.max_new_tokens
+    enable_thinking = args.enable_thinking
+    experiment_id = args.experiment_id
+
+    if args.config:
+        cfg_p = Path(args.config).expanduser().resolve()
+        if cfg_p.is_file():
+            cfg = json.loads(cfg_p.read_text(encoding="utf-8"))
+            max_new_tokens = cfg.get("max_new_tokens", max_new_tokens)
+            enable_thinking = cfg.get("enable_thinking", enable_thinking)
+            experiment_id = cfg.get("experiment_id", experiment_id)
 
     spec = None
     if not args.synthetic:
@@ -194,6 +247,9 @@ def main():
         device=args.device,
         dtype=args.dtype,
         max_claims=args.max_claims,
+        max_new_tokens=max_new_tokens,
+        enable_thinking=enable_thinking,
+        experiment_id=experiment_id,
     )
 
 

@@ -595,3 +595,31 @@
   * Local: 115 passed in 11.87s.
   * Server: 115 passed in 2.18s.
 - **Trạng thái Milestone:** Milestone M1.2 **COMPLETE**.
+
+
+## 2026-10-24 22:25 +07:00 — M1.2.1 Triển khai Ổn định Hóa Frozen Base (Inference Audit & B0/B1/B2 Scaffold)
+
+- **Mục tiêu:** Thực hiện kiểm toán kỹ thuật chuyên sâu (*Inference Audit*) về nguyên nhân 35 outputs bị truncated trong M1.2; triển khai cơ chế bật/tắt thinking hợp lệ theo chuẩn Qwen3 và thư viện Transformers; thiết lập khung thực nghiệm đối chứng 3 cấu hình B0 (Thinking, 512), B1 (Non-thinking, 512), B2 (Thinking, 1024); xây dựng bộ so sánh chuyển dịch phán quyết từng cặp (*Paired Verdict Transitions*); kiểm thử local 100% đạt; đóng gói tài liệu và chuẩn bị lệnh chạy server cho người dùng.
+- **Tuân thủ Tuyệt đối Quy tắc Nghiên cứu (AGENTS.md & User Mandate):**
+  * **Strictly Training-Free:** Giữ nguyên mô hình đóng băng 100%, không fine-tune, không gradient, không optimizer, không learned router.
+  * **Không tự ý chạy GPU jobs:** Hoàn thành toàn bộ code, configs, tests, tài liệu trên local và push GitHub; cung cấp lệnh bash chuẩn xác để người dùng tự chạy trên server.
+  * **Không rò rỉ nhãn vàng:** Giữ nguyên quy trình seal manifest predictions trước khi nạp `train.json` để chấm điểm.
+  * **Báo cáo trung thực:** Kết quả GPU của B1/B2 được ghi rõ `PENDING SERVER EXECUTION` trong `docs/M1_2_1_BASE_STABILIZATION.md`.
+- **Kết quả Audit Kỹ thuật Chi tiết (Inference Audit Findings):**
+  1. *Khám phá Cơ chế Thinking trong Chat Template:* Kiểm tra `tokenizer_config.json` của `Qwen/Qwen3-8B` phát hiện hàm `apply_chat_template` có tham số bản địa `enable_thinking`. Khi `enable_thinking=False`, template tự động chèn `<think>\n\n</think>\n\n` vào tiền tố trợ lý (`<|im_start|>assistant\n`), báo hiệu cho mô hình rằng suy luận đã kết thúc và buộc mô hình sinh trực tiếp câu trả lời mà không tốn token suy luận. Khi `enable_thinking=True` (mặc định), tiền tố chỉ là `<|im_start|>assistant\n`, kích hoạt sinh khối `<think>...</think>`.
+  2. *Cơ chế Cạn Token (512 Budget Exhaustion):* Với 8 đoạn trích dài (~2.300 prompt tokens), mô hình tuần tự phân tích từng đoạn bên trong `<think>`, dẫn đến cạn kiệt 512 token ở đoạn 5–8 trước khi kịp xuất dòng `Verdict: <Class>`.
+  3. *Nâng cấp Bộ phân giải Verdict Hai tầng (Two-Tier Parser):* Ưu tiên quét phân đoạn sau thẻ `</think>` trước để loại bỏ nhiễu thảo luận đa chiều bên trong suy luận; nếu không có thẻ `</think>` mới phân giải toàn bộ văn bản.
+- **Mã Nguồn & Cấu Hình Triển Khai Mới:**
+  * `configs/m121_b0_thinking_512.json`: Tái sử dụng cache M1.2.
+  * `configs/m121_b1_nonthinking_512.json`: Chế độ non-thinking (`enable_thinking=False`), `max_new_tokens=512`.
+  * `configs/m121_b2_thinking_1024.json`: Chế độ thinking (`enable_thinking=True`), `max_new_tokens=1024`.
+  * `src/tffv/verification/ontology.py`: Nâng cấp `normalize_verdict` với post-think priority.
+  * `src/tffv/verification/backbone.py`: Hỗ trợ `enable_thinking` và `max_new_tokens` trên cả causal LM và synthetic double.
+  * `src/tffv/verification/predict.py`: Hỗ trợ cờ CLI `--enable-thinking`, `--no-thinking`, `--max-new-tokens`, `--config`.
+  * `src/tffv/verification/stabilization.py`: Module tính toán ma trận chuyển dịch cặp (improved, regressed, unparsed resolution) và xuất bảng so sánh 3 cấu hình.
+  * `scripts/run_m121_stabilization.sh`: Script điều phối tự động chạy B1, B2, tái sử dụng B0 và xuất báo cáo so sánh.
+  * `tests/test_base_stabilization.py`: Bộ kiểm thử tự động cho thinking toggle, parser và paired transitions.
+  * `docs/M1_2_1_BASE_STABILIZATION.md`: Tài liệu đặc tả giao thức và bảng so sánh (chờ kết quả server).
+- **Kiểm Thử Phần Mềm Local:**
+  * Chạy `pytest --basetemp=temp_pytest -p no:cacheprovider`: **119/119 passed in 9.64s** (100% pass, gồm 4 tests mới cho M1.2.1).
+- **Trạng thái Milestone:** M1.2.1 Implementation & Local Verification **COMPLETE**. Sẵn sàng thực thi trên GPU server.

@@ -1,0 +1,12 @@
+{
+  "experiment_id": "B0",
+  "description": "Baseline M1.2: Thinking enabled, max_new_tokens=512 (reused from M1.2)",
+  "model_id": "Qwen/Qwen3-8B",
+  "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+  "enable_thinking": true,
+  "max_new_tokens": 512,
+  "temperature": 0.0,
+  "do_sample": false,
+  "device": "cuda",
+  "dtype": "bfloat16"
+}

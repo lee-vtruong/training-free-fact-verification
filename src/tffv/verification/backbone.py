@@ -88,12 +88,26 @@ class Qwen3FrozenBackbone:
         self,
         messages: List[Dict[str, str]],
         max_new_tokens: int = 512,
+        enable_thinking: Optional[bool] = None,
     ) -> Dict[str, Any]:
-        """Execute deterministic greedy generation on structured messages."""
+        """Execute deterministic greedy generation on structured messages.
+        
+        Args:
+            messages: List of role-content message dictionaries.
+            max_new_tokens: Maximum tokens allowed for generation.
+            enable_thinking: If False, appends pre-closed empty thinking block
+                             to skip native Qwen3 reasoning traces. If True or None,
+                             preserves native thinking mode.
+        """
+        chat_template_kwargs = {}
+        if enable_thinking is not None:
+            chat_template_kwargs["enable_thinking"] = enable_thinking
+
         prompt_text = self.tokenizer.apply_chat_template(
             messages,
             tokenize=False,
             add_generation_prompt=True,
+            **chat_template_kwargs,
         )
 
         inputs = self.tokenizer(
@@ -126,6 +140,8 @@ class Qwen3FrozenBackbone:
             "generated_text": output_text,
             "prompt_tokens": input_len,
             "generated_tokens": len(gen_tokens),
+            "enable_thinking": enable_thinking,
+            "max_new_tokens": max_new_tokens,
         }
 
     def close(self) -> None:
@@ -149,13 +165,23 @@ class SyntheticBackbone:
     def peak_bytes(self) -> Optional[int]:
         return 0
 
-    def generate(self, messages: List[Dict[str, str]], max_new_tokens: int = 512) -> Dict[str, Any]:
+    def generate(
+        self,
+        messages: List[Dict[str, str]],
+        max_new_tokens: int = 512,
+        enable_thinking: Optional[bool] = None,
+    ) -> Dict[str, Any]:
         user_text = messages[-1]["content"] if messages else ""
         h = digest(user_text)
         val = int(h[:4], 16) % 4
         verdicts = ["Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking"]
         chosen = verdicts[val]
-        text = f"Synthetic analysis based on passages provided.\nVerdict: {chosen}"
+        
+        if enable_thinking is False:
+            text = f"Direct verification analysis.\nVerdict: {chosen}"
+        else:
+            text = f"<think>\nDetailed reasoning over evidence.\n</think>\n\nVerdict: {chosen}"
+
         self.forward_passes += 1
         self.total_generated_tokens += len(text.split())
         return {
@@ -163,6 +189,8 @@ class SyntheticBackbone:
             "generated_text": text,
             "prompt_tokens": len(user_text.split()),
             "generated_tokens": len(text.split()),
+            "enable_thinking": enable_thinking,
+            "max_new_tokens": max_new_tokens,
         }
 
     def close(self) -> None:

@@ -15,6 +15,7 @@ CANONICAL_MAP = {
     "not enough evidence": "Not Enough Evidence",
     "not enough info": "Not Enough Evidence",
     "not enough information": "Not Enough Evidence",
+    "insufficient evidence": "Not Enough Evidence",
     "conflicting evidence/cherrypicking": "Conflicting Evidence/Cherrypicking",
     "conflicting evidence": "Conflicting Evidence/Cherrypicking",
     "cherrypicking": "Conflicting Evidence/Cherrypicking",
@@ -23,20 +24,17 @@ CANONICAL_MAP = {
 }
 
 
-def normalize_verdict(raw_text: str) -> Optional[str]:
-    """Extract and normalize canonical verdict from model generation text.
-    
-    Returns one of the four canonical VERDICTS, or None if unparseable.
-    """
-    if not isinstance(raw_text, str) or not raw_text.strip():
+def _parse_verdict_from_segment(segment: str) -> Optional[str]:
+    """Parse verdict from a single text segment using high-to-low confidence heuristics."""
+    if not segment or not segment.strip():
         return None
 
-    cleaned = raw_text.strip()
+    cleaned = segment.strip()
 
     # 1. Look for explicit 'Verdict:' or 'Final Verdict:' pattern
     verdict_patterns = [
         r"(?:final\s+)?verdict\s*:\s*[\*\_]*([A-Za-z\s\/\-]+?)[\*\_]*(?:\.|\n|$)",
-        r"(?:the\s+claim\s+is\s+)?[\*\_]*([A-Za-z\s\/\-]+?)[\*\_]*(?:\.|\n|$)",
+        r"(?:the\s+claim\s+is\s+|claim\s+is\s+|conclusion\s*:\s*)[\*\_]*([A-Za-z\s\/\-]+?)[\*\_]*(?:\.|\n|$)",
     ]
 
     for pat in verdict_patterns:
@@ -49,11 +47,10 @@ def normalize_verdict(raw_text: str) -> Optional[str]:
     # 2. Check line by line from bottom to top
     lines = [line.strip() for line in cleaned.splitlines() if line.strip()]
     for line in reversed(lines):
-        # strip punctuation and markdown
         l_clean = re.sub(r"[\*\_\#\:\-\.]", " ", line).strip().lower()
         words = " ".join(l_clean.split())
         for key, canonical in CANONICAL_MAP.items():
-            if words == key or words.endswith(key) or words.startswith(key):
+            if words == key or words.endswith(" " + key) or words.startswith(key + " "):
                 return canonical
 
     # 3. Whole-string scan for unambiguous presence of exactly one category
@@ -67,3 +64,25 @@ def normalize_verdict(raw_text: str) -> Optional[str]:
         return found.pop()
 
     return None
+
+
+def normalize_verdict(raw_text: str) -> Optional[str]:
+    """Extract and normalize canonical verdict from model generation text.
+    
+    Checks post-think text first (after </think>) to prioritize the final verdict.
+    Falls back to whole-generation parsing if unparsed or no </think> tag exists.
+    Returns one of the four canonical VERDICTS, or None if unparseable.
+    """
+    if not isinstance(raw_text, str) or not raw_text.strip():
+        return None
+
+    # Step 1: If thinking trace is closed, parse post-think section first
+    if "</think>" in raw_text:
+        post_think = raw_text.split("</think>")[-1].strip()
+        if post_think:
+            parsed = _parse_verdict_from_segment(post_think)
+            if parsed is not None:
+                return parsed
+
+    # Step 2: Parse entire raw generation (for non-thinking or unclosed think traces)
+    return _parse_verdict_from_segment(raw_text)

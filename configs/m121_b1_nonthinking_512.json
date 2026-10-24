@@ -1,0 +1,12 @@
+{
+  "experiment_id": "B1",
+  "description": "Frozen Base Stabilization: Non-thinking mode, max_new_tokens=512",
+  "model_id": "Qwen/Qwen3-8B",
+  "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+  "enable_thinking": false,
+  "max_new_tokens": 512,
+  "temperature": 0.0,
+  "do_sample": false,
+  "device": "cuda",
+  "dtype": "bfloat16"
+}
