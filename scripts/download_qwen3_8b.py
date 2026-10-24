@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 os.environ["HF_HOME"] = "/home/stackops/whale/cache/huggingface"
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
 
 from huggingface_hub import snapshot_download
 
