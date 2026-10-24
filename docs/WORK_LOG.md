@@ -537,3 +537,61 @@
 - Tuân thủ quy tắc người dùng:
   * Không push/pull, không tải model, không chạy GPU jobs.
   * Cung cấp commands để người dùng tự review/commit/push.
+
+
+## 2026-10-24 21:55 +07:00 — M1.2 Triển khai Trọn vẹn Frozen Base Verification & Error Profiling (100 Claims)
+
+- **Mục tiêu:** Hoàn thành toàn bộ Milestone M1.2 theo ủy quyền tự chủ: Chạy Frozen Base Fact Verification trên 100 claims AVeriTeC (`train:0` .. `train:99`) với Top-8 evidence truy xuất từ M1.1 R4 (`outputs/m11-store-r14-pilot100-20261023-162716/R4.jsonl`); đánh giá Accuracy/Macro-F1, đối chiếu gold labels độc lập sau khi khóa predictions, phân tích lỗi định tính và xây dựng kế hoạch Group-Safe Knowledge Isolation cho các milestone tiếp theo.
+- **Tuân thủ Nghiêm ngặt Quy tắc Dự án (AGENTS.md):**
+  * **Strictly Training-Free:** Tuyệt đối không fine-tuning, không gradient/backward, không optimizer, không learned router. Mô hình `Qwen/Qwen3-8B` được nạp ở chế độ `eval()`, `requires_grad_(False)` và thực thi trong `torch.inference_mode()`.
+  * **Label-Free Inference:** Toàn bộ dự đoán được sinh và băm SHA-256 niêm phong trong `manifest.json` trước khi nạp `train.json` để đối chiếu đánh giá.
+  * **Ontology 4 Nhãn Chính thức AVeriTeC:** `Supported`, `Refuted`, `Not Enough Evidence`, `Conflicting Evidence/Cherrypicking`.
+  * **Group-Safe Knowledge Isolation:** 100 pilot claims được gán trạng thái `exploratory_profiling_only`, tuyệt đối không dùng làm tập blind held-out test trong M1.3+.
+- **Môi trường & Tài nguyên Server Thực thi:**
+  * Server: `stackops@hvtham-server` (GPU: NVIDIA GeForce RTX 5090 32 GB VRAM, CPU: AMD EPYC, RAM: 128 GB).
+  * Backbone Checkpoint: `Qwen/Qwen3-8B` (Revision `b968826d9c46dd6066d109eabc6255188de91218`, Apache-2.0). Nạp bfloat16, chiếm 17.02 GB VRAM lúc inference đỉnh.
+  * Thời gian chạy thực đo: 1.130,64 giây (~18,8 phút) cho 100 claims, trung bình 11,31 giây/claim.
+- **Kết quả Thực nghiệm Thực đo (Chính thức):**
+  * **Overall Accuracy:** **28,0%** (28/100 claims đúng).
+  * **Accuracy trên các claims hoàn tất phân giải (Parsed Claims):** **43,1%** (28/65 claims).
+  * **Macro-F1:** **0,3076** (Macro Precision: 0,5023, Macro Recall: 0,2804).
+  * **Chi tiết từng lớp:**
+    - `Refuted`: Precision **87,5%** (14/16), Recall 34,1% (14/41), F1: **0,4912** (Support: 41).
+    - `Supported`: Precision **80,0%** (8/10), Recall 21,6% (8/37), F1: **0,3404** (Support: 37).
+    - `Conflicting Evidence/Cherrypicking`: Precision 21,4% (3/14), Recall 23,1% (3/13), F1: **0,2222** (Support: 13).
+    - `Not Enough Evidence`: Precision 12,0% (3/25), Recall 33,3% (3/9), F1: **0,1765** (Support: 9).
+  * **Confusion Matrix (Gold Rows x Predicted Cols):**
+    - `Supported` (37): 8 Supported, 0 Refuted, 12 Not Enough Evidence, 5 Cherrypicking, 12 Truncated.
+    - `Refuted` (41): 1 Supported, 14 Refuted, 7 Not Enough Evidence, 5 Cherrypicking, 14 Truncated.
+    - `Not Enough Evidence` (9): 1 Supported, 0 Refuted, 3 Not Enough Evidence, 1 Cherrypicking, 4 Truncated.
+    - `Conflicting Evidence/Cherrypicking` (13): 0 Supported, 2 Refuted, 3 Not Enough Evidence, 3 Cherrypicking, 5 Truncated.
+- **Phát hiện & Phân tích Lỗi Chủ đạo (Error Profiling):**
+  1. *Truncation Bottleneck (35 claims):* `Qwen3-8B` tự động sinh khối suy luận `<think>...</think>`. Khi duyệt qua 8 đoạn evidence dài (~2.300 prompt tokens), mô hình tuần tự phân tích từng đoạn dẫn đến cạn kiệt ngân sách `max_new_tokens=512` trước khi kịp đưa ra dòng kết luận `Verdict: <Class>`.
+  2. *Độ chính xác cao trên các phán quyết nhị phân rõ ràng:* Khi mô hình phân giải xong, độ chuẩn xác của `Refuted` đạt 87,5% và `Supported` đạt 80,0%. Toàn bộ 100 claims chỉ ghi nhận **duy nhất 1 lỗi đảo ngược cực tính** (Polarity Inversion tại `train:20`).
+  3. *Thiên kiến thận trọng về `Not Enough Evidence`:* Mô hình ghi nhận 22 False Positives cho `Not Enough Evidence`, cho thấy khi thiếu hướng dẫn ICL, zero-shot LLM đặt ngưỡng chứng cứ quá cao và từ chối cam kết `Supported`/`Refuted`.
+  4. *Tương quan Retrieval vs Verification:* 
+     - Có URL vàng trong Top-8 (Hit@8=True, 13 claims): Error rate 69,2% (4 đúng, 9 sai).
+     - Không có URL vàng trong Top-8 (Hit@8=False, 87 claims): Error rate 72,4% (24 đúng, 63 sai).
+     - 24 claims dự đoán đúng dù không có URL vàng: Do các hãng thông tấn lớn (AP, Reuters, CNN, tài liệu quốc hội) đưa tin đồng nhất về cùng một sự kiện thực tế.
+     - 9 claims thất bại dù có URL vàng: 4 claims bị timeout/truncation, 2 claims nhầm lẫn cherrypicking, 2 claims đòi hỏi ngưỡng chứng cứ quá cao, 1 claim đảo ngược cực tính.
+- **Phân loại Lỗi 5 Tầng (Preliminary Error Taxonomy):**
+  - Tầng 1: Truncation & Token Budget Depletion (35 claims, 48,6% tổng lỗi).
+  - Tầng 2: Under-Retrieval Bottleneck (63 claims, 87,5% tổng lỗi).
+  - Tầng 3: Conservative Evidence Drift (28 claims, 38,9% tổng lỗi).
+  - Tầng 4: Cherrypicking Contextual Nuance Deficit (21 claims, 29,2% tổng lỗi).
+  - Tầng 5: Polarity Inversion (1 claim, 1,4% tổng lỗi).
+- **Kế hoạch Group-Safe Knowledge Isolation:**
+  - Đã xuất và niêm phong `outputs/m12-group-safety-20261024-132900/fold_isolation_plan.json`.
+  - Quy định rõ: 100 pilot claims là dữ liệu thăm dò; các đánh giá tiếp theo ở M1.3+ phải lấy từ các folds độc lập (`train:100` .. `train:3067` hoặc dev split).
+- **Artifacts Tạo mới & Hashes Niêm phong:**
+  * Predictions: `outputs/m12-base-qwen3-8b-20261024-132900/predictions.jsonl` (SHA-256: `f519b6db9aa93000dcc530465e38de39585f55dfb5b933c137b2c6287dac4dc1`)
+  * Manifest: `outputs/m12-base-qwen3-8b-20261024-132900/manifest.json` (SHA-256: `4859a72df9b7203e05167ea82ebc82c2ffab67160cb65f1710ee9cfb237db875`)
+  * Eval Summary: `outputs/m12-eval-base-20261024-132900/evaluation_summary.json` (SHA-256: `37f59d5dc012a6114eb3897bda86c3db5a8cb5d5ecfe880f7690656041ec6057`)
+  * Per-claim CSV: `outputs/m12-eval-base-20261024-132900/per_claim_evaluation.csv` (SHA-256: `0ba56b0cfa0fc9001b6e4ae15fca5f29910e53a5cce0220cb959ddaa2c3f8751`)
+  * Error Analysis: `outputs/m12-errors-base-20261024-132900/error_analysis_summary.json` (SHA-256: `6c3c5ad836eb4b045e76a6b5711e74f26ca4c1e8dcb200a7fae51be98d7aeefc`)
+  * Group Safety: `outputs/m12-group-safety-20261024-132900/fold_isolation_plan.json` (SHA-256: `1482eae18c5c6d666d4bb3d26a34e3e8a6001a9d9ede672102d671a2b14ede09`)
+  * Báo cáo: `docs/M1_2_BASE_VERIFICATION.md` & `docs/M1_2_ERROR_ANALYSIS.md`.
+- **Kiểm thử Phần mềm:**
+  * Local: 115 passed in 11.87s.
+  * Server: 115 passed in 2.18s.
+- **Trạng thái Milestone:** Milestone M1.2 **COMPLETE**.

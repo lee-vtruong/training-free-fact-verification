@@ -13,3 +13,5 @@ outputs/*
 *.bin
 *.parquet
 *.sqlite*
+
+temp_pytest/
