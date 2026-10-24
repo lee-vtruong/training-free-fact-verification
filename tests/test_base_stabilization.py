@@ -1,4 +1,4 @@
-"""Unit tests for M1.2.1 Frozen Base Stabilization (B0, B1, B2)."""
+"""Unit and regression tests for M1.2.1 Frozen Base Stabilization (B0, B1, B2)."""
 import json
 import pytest
 from pathlib import Path
@@ -10,6 +10,8 @@ from tffv.verification.evaluate import run_evaluation
 from tffv.verification.stabilization import (
     analyze_paired_transitions,
     build_comparison_report,
+    exact_mcnemar_test_twosided,
+    paired_bootstrap_ci,
     run_stabilization_comparison,
 )
 
@@ -25,7 +27,6 @@ def test_post_think_verdict_extraction():
 
     # Case 3: Truncated inside thinking (unclosed think tag)
     raw3 = "<think>\nPassage 1 says something. Passage 2 says another thing. But neither is enough to prove"
-    # Fallback to whole text: does it have clear verdict? No -> None
     assert normalize_verdict(raw3) is None
 
     # Case 4: Non-thinking output (direct text without <think>)
@@ -50,37 +51,101 @@ def test_synthetic_backbone_thinking_toggle():
     assert res_b2["enable_thinking"] is True
 
 
-def test_paired_transitions_logic():
+def test_paired_transitions_string_bool_regression():
+    """Regression test: Ensure CSV string 'False' is not coerced to True via bool('False')."""
     b0_eval = [
-        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "", "is_correct": False},
-        {"sample_id": "2", "gold_label": "Refuted", "predicted_verdict": "Refuted", "is_correct": True},
-        {"sample_id": "3", "gold_label": "Not Enough Evidence", "predicted_verdict": "Refuted", "is_correct": False},
-        {"sample_id": "4", "gold_label": "Supported", "predicted_verdict": "Supported", "is_correct": True},
+        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "", "is_correct": "False"},
+        {"sample_id": "2", "gold_label": "Refuted", "predicted_verdict": "Refuted", "is_correct": "True"},
+        {"sample_id": "3", "gold_label": "Not Enough Evidence", "predicted_verdict": "Refuted", "is_correct": "False"},
+        {"sample_id": "4", "gold_label": "Supported", "predicted_verdict": "Supported", "is_correct": "True"},
     ]
 
     target_eval = [
-        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "Supported", "is_correct": True},   # improved (unparsed -> correct)
-        {"sample_id": "2", "gold_label": "Refuted", "predicted_verdict": "Supported", "is_correct": False},  # regressed (correct -> wrong)
-        {"sample_id": "3", "gold_label": "Not Enough Evidence", "predicted_verdict": "Not Enough Evidence", "is_correct": True},  # improved (wrong -> correct)
-        {"sample_id": "4", "gold_label": "Supported", "predicted_verdict": "Supported", "is_correct": True},   # unchanged correct
+        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "Supported", "is_correct": "True"},   # improved (unparsed -> correct)
+        {"sample_id": "2", "gold_label": "Refuted", "predicted_verdict": "Supported", "is_correct": "False"},  # regressed (correct -> wrong)
+        {"sample_id": "3", "gold_label": "Not Enough Evidence", "predicted_verdict": "Not Enough Evidence", "is_correct": "True"},  # improved (wrong -> correct)
+        {"sample_id": "4", "gold_label": "Supported", "predicted_verdict": "Supported", "is_correct": "True"},   # unchanged correct
     ]
 
-    res = analyze_paired_transitions(b0_eval, target_eval, "TestTarget")
+    res = analyze_paired_transitions(b0_eval, target_eval, "TestTarget", baseline_name="B0")
     assert res["evaluated_claims"] == 4
+    assert res["baseline_correct"] == 2
+    assert res["target_correct"] == 3
     assert res["improved_count"] == 2
-    assert "1" in res["improved_claims"]
-    assert "3" in res["improved_claims"]
     assert res["regressed_count"] == 1
-    assert "2" in res["regressed_claims"]
-    assert res["net_gain"] == 1  # 2 - 1 = +1
+    assert res["net_gain"] == +1  # 3 - 2 = +1
     assert res["transition_counts"]["unparsed_to_correct"] == 1
     assert res["transition_counts"]["wrong_to_correct"] == 1
     assert res["transition_counts"]["correct_to_wrong"] == 1
     assert res["transition_counts"]["unchanged_correct"] == 1
+    assert sum(res["transition_counts"].values()) == 4
+
+
+def test_paired_transitions_self_comparison():
+    """Self-comparison invariance: Comparing any run to itself must yield 0 improved and 0 regressed."""
+    eval_rows = [
+        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "Supported", "is_correct": "True"},
+        {"sample_id": "2", "gold_label": "Refuted", "predicted_verdict": "Supported", "is_correct": "False"},
+        {"sample_id": "3", "gold_label": "Not Enough Evidence", "predicted_verdict": "", "is_correct": "False"},
+    ]
+    res = analyze_paired_transitions(eval_rows, eval_rows, "Self", baseline_name="Self")
+    assert res["improved_count"] == 0
+    assert res["regressed_count"] == 0
+    assert res["net_gain"] == 0
+    assert res["unchanged_correct_count"] == 1
+    assert res["unchanged_wrong_count"] == 1
+    assert res["unchanged_unparsed_count"] == 1
+    assert sum(res["transition_counts"].values()) == 3
+
+
+def test_paired_transitions_id_alignment_and_duplicates():
+    """Defensive tests: Raise ValueError on duplicate IDs or ID alignment mismatches."""
+    # Duplicate ID
+    dup_rows = [
+        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "Supported"},
+        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "Refuted"},
+    ]
+    tgt_rows = [
+        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "Supported"},
+        {"sample_id": "2", "gold_label": "Supported", "predicted_verdict": "Supported"},
+    ]
+    with pytest.raises(ValueError, match="Duplicate sample_id"):
+        analyze_paired_transitions(dup_rows, tgt_rows, "Tgt")
+
+    # Mismatched ID sets
+    base_rows = [
+        {"sample_id": "1", "gold_label": "Supported", "predicted_verdict": "Supported"},
+        {"sample_id": "2", "gold_label": "Supported", "predicted_verdict": "Supported"},
+    ]
+    tgt_mismatch = [
+        {"sample_id": "2", "gold_label": "Supported", "predicted_verdict": "Supported"},
+        {"sample_id": "3", "gold_label": "Supported", "predicted_verdict": "Supported"},
+    ]
+    with pytest.raises(ValueError, match="ID alignment mismatch"):
+        analyze_paired_transitions(base_rows, tgt_mismatch, "Tgt")
+
+
+def test_exact_mcnemar_and_bootstrap():
+    # Symmetric discordant pairs: p-value must be 1.0
+    p_sym = exact_mcnemar_test_twosided(10, 10)
+    assert p_sym == 1.0
+
+    # Highly asymmetric discordant pairs: p-value must be very small
+    p_asym = exact_mcnemar_test_twosided(1, 20)
+    assert p_asym < 0.001
+
+    # Zero discordant pairs
+    assert exact_mcnemar_test_twosided(0, 0) == 1.0
+
+    # Paired bootstrap CI
+    y1 = [1] * 20 + [0] * 80
+    y2 = [1] * 50 + [0] * 50
+    ci_low, ci_high = paired_bootstrap_ci(y1, y2, n_boot=2000, seed=42)
+    assert ci_low > 0.15
+    assert ci_high > ci_low
 
 
 def test_end_to_end_stabilization_synthetic_pipeline(tmp_path):
-    # Setup test files
     claims_file = tmp_path / "claims.jsonl"
     claims_file.write_text(
         json.dumps({"sample_id": "train:0", "claim": "Water boils at 100C."}) + "\n" +
@@ -138,5 +203,6 @@ def test_end_to_end_stabilization_synthetic_pipeline(tmp_path):
     assert "B0" in summary["summaries"]
     assert "B1" in summary["summaries"]
     assert "B2" in summary["summaries"]
-    assert "B1" in summary["transitions"]
-    assert "B2" in summary["transitions"]
+    assert "B0_to_B1" in summary["transitions"]
+    assert "B0_to_B2" in summary["transitions"]
+    assert "B1_to_B2" in summary["transitions"]

@@ -623,3 +623,54 @@
 - **Kiểm Thử Phần Mềm Local:**
   * Chạy `pytest --basetemp=temp_pytest -p no:cacheprovider`: **119/119 passed in 9.64s** (100% pass, gồm 4 tests mới cho M1.2.1).
 - **Trạng thái Milestone:** M1.2.1 Implementation & Local Verification **COMPLETE**. Sẵn sàng thực thi trên GPU server.
+
+
+## 2026-10-24 23:20 +07:00 — M1.2.1 Sửa Lỗi Nghiêm Trọng Paired Evaluation (P0) & Hoàn Thiện Báo Cáo Đối Chứng B0/B1/B2
+
+- **Mục tiêu:** Xử lý triệt để lỗi P0 trong báo cáo M1.2.1: B0 (28 đúng), B1 (54 đúng), B2 (53 đúng) nhưng paired transitions báo 0 improved, 0 regressed, 100 unchanged correct; kiểm toán toàn diện artifacts, claim IDs và mã nguồn chuyển dịch; tái tính toán các chỉ số thống kê (McNemar test, Paired Bootstrap 95% CI); tái phân tích Error Taxonomy trên kết quả thực tế của B1/B2; chuẩn bị kế hoạch nghiên cứu M1.3 Readiness.
+- **Root Cause Analysis (Nguyên Nhân Gốc Rễ):**
+  * Tệp `per_claim_evaluation.csv` được nạp bằng `csv.DictReader`, trường `row["is_correct"]` trả về chuỗi `"True"` hoặc `"False"`.
+  * Đoạn mã `b0_correct = bool(b0_r.get("is_correct", False))` trong Python gặp lỗi ép kiểu: `bool("False") == True` (mọi chuỗi ký tự khác rỗng đều là Truthy).
+  * Do đó, toàn bộ 100 claims đều bị ép thành `b0_correct = True` và `tgt_correct = True`, dẫn đến 100 claims rơi vào `unchanged_correct`.
+- **Hành Động Khắc Phục & Gia Cố (Hardening):**
+  * Tái tính toán tính đúng sai trực tiếp từ phán quyết: `is_correct = bool(predicted_verdict and predicted_verdict in VERDICTS and predicted_verdict == gold_label)`. Tuyệt đối không tin cậy cờ boolean chưa kiểm chứng.
+  * Tích hợp kiểm tra phòng thủ: Phát hiện trùng lặp sample_id (`ValueError`), kiểm tra căn chỉnh tập sample_id giữa 2 cấu hình (`ValueError`), kiểm tra bất biến tổng số lượng chuyển dịch bằng đúng số claims đánh giá ($= 100$), kiểm tra bất biến $\text{Net Gain} = \sum y_{\text{target}} - \sum y_{\text{base}}$.
+  * Thêm kiểm tra tự so sánh (*Self-comparison check*): B0 vs B0 bảo đảm 0 improved, 0 regressed, 0 net gain, 100% unchanged.
+  * Tích hợp tính toán kiểm định chính xác McNemar (hai phía) và Paired Bootstrap 95% CI ($10.000$ resamples) bằng thư viện chuẩn `math.comb` và `random`.
+- **Kết Quả Chuyển Dịch Phán Quyết Sau Sửa Lỗi (Đã Xác Minh Khớp Tuyệt Đối):**
+  * **B0 $\to$ B1 (Non-thinking, 512):**
+    - Net Gain: **+26 claims** (28/100 $\to$ 54/100).
+    - Improved: **33 claims** (Unparsed $\to$ Correct: 15, Wrong $\to$ Correct: 18).
+    - Regressed: **7 claims** (Correct $\to$ Wrong: 7, Correct $\to$ Unparsed: 0).
+    - Unchanged: Correct = 21, Wrong = 19, Unparsed = 0.
+    - Tổng danh mục: $15 + 20 + 18 + 7 + 0 + 21 + 19 + 0 = 100$.
+    - McNemar p-value: **$4,23 \times 10^{-5}$ ($p = 0,00004$)** $\implies$ Ý nghĩa thống kê vượt trội ($p < 0,05$).
+    - Paired Bootstrap 95% CI ($\Delta$ Acc): **[+15,00%, +37,00%]**.
+  * **B0 $\to$ B2 (Thinking, 1024):**
+    - Net Gain: **+25 claims** (28/100 $\to$ 53/100).
+    - Improved: **27 claims** (Unparsed $\to$ Correct: 15, Wrong $\to$ Correct: 12).
+    - Regressed: **2 claims** (Correct $\to$ Wrong: 2, Correct $\to$ Unparsed: 0).
+    - Unchanged: Correct = 26, Wrong = 25, Unparsed = 4.
+    - Tổng danh mục: $15 + 16 + 12 + 2 + 0 + 26 + 25 + 4 = 100$.
+    - McNemar p-value: **$1,62 \times 10^{-6}$ ($p = 0,000002$)** $\implies$ Ý nghĩa thống kê vượt trội ($p < 0,05$).
+    - Paired Bootstrap 95% CI ($\Delta$ Acc): **[+16,00%, +34,00%]**.
+  * **B1 $\to$ B2:**
+    - Net Gain: **-1 claim** (54/100 $\to$ 53/100).
+    - Improved: **14 claims** (Wrong $\to$ Correct: 14).
+    - Regressed: **15 claims** (Correct $\to$ Wrong: 15).
+    - Unchanged: Correct = 39, Wrong = 28, Unparsed = 0.
+    - Wrong $\to$ Unparsed: **4 claims** (`train:11, train:31, train:48, train:51`).
+    - Tổng danh mục: $14 + 15 + 39 + 28 + 4 = 100$.
+    - McNemar p-value: **1,00000** $\implies$ Không có sự khác biệt có ý nghĩa thống kê giữa B1 và B2.
+    - Paired Bootstrap 95% CI ($\Delta$ Acc): **[-12,00%, +10,00%]** (chứa giá trị 0).
+- **Thiết Lập Baseline Protocol v1.0:**
+  * Chọn **B1 (Non-thinking, 512 tokens)** làm **Base Protocol v1.0**: Độ chính xác cao nhất (54,0%), 100% phán quyết hợp lệ (0 unparsed), độ trễ cực thấp (5,10s/claim - nhanh gấp 3,36 lần B2), tiết kiệm 3,52 lần token.
+  * Giữ **B2 (Extended Thinking, 1024 tokens)** làm đối chứng suy luận đa bước (Accuracy 53,0%, Macro-F1 0,4527, độ trễ 17,15s).
+- **Tái Phân Tích Error Taxonomy (B1 & B2):**
+  * Tách biệt rõ lỗi tính hợp lệ (B1: 0, B2: 4) và lỗi nhầm lẫn ngữ nghĩa (B1: 46, B2: 43).
+  * Tỷ lệ lỗi khi có URL vàng (46,2%) tương đương khi không có URL vàng (46,0%), chứng minh sự hiện diện của các nguồn tin tương đương (syndicated news) và nút thắt chính nằm ở khả năng hiệu chuẩn ngữ nghĩa của mô hình.
+  * Hai nhóm nhầm lẫn chủ đạo: `Refuted` bị chuyển thành `Not Enough Evidence` (17,4% tổng lỗi ở B1) và `Supported` bị chuyển thành `Cherrypicking` (15,2% tổng lỗi ở B1) do mô hình nhầm lẫn giữa sự bất đồng quan điểm chính trị trong bài báo với mâu thuẫn về sự kiện thực tế.
+- **Kiểm Thử Phần Mềm:**
+  * Bổ sung 3 bài kiểm thử hồi quy trong `tests/test_base_stabilization.py`: `test_paired_transitions_string_bool_regression`, `test_paired_transitions_self_comparison`, `test_paired_transitions_id_alignment_and_duplicates`, `test_exact_mcnemar_and_bootstrap`.
+  * Chạy `pytest`: **122/122 passed in 8.25s** (100% pass).
+- **Trạng Thái Milestone:** M1.2.1 P0 Repair **COMPLETE & VERIFIED**. Sẵn sàng cho M1.3.
