@@ -156,6 +156,10 @@ class SyntheticBackbone:
 
     def __init__(self, spec: Optional[Dict[str, Any]] = None, **kwargs):
         self.device = "cpu"
+        self.spec = spec or {
+            "model_id": "synthetic/frozen-qwen3-8b",
+            "revision": "0000000000000000000000000000000000000000",
+        }
         self.forward_passes = 0
         self.total_generated_tokens = 0
 

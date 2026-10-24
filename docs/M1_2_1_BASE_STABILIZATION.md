@@ -56,14 +56,21 @@ In the initial run of `scripts/run_m121_stabilization.sh`, overall accuracies we
 
 ### A. Baseline B0 $\to$ B1 (Non-Thinking, 512 tokens)
 - **Net Gain:** **+26 claims** (Baseline: 28/100 $\to$ B1: 54/100)
-- **Total Improved:** **33 claims**
-  - Unparsed $\to$ Correct: **15 claims** (`train:4, train:7, train:13, train:16, train:23, ...`)
-  - Wrong $\to$ Correct: **18 claims** (`train:5, train:10, train:22, train:28, train:30, ...`)
-- **Total Regressed:** **7 claims**
-  - Correct $\to$ Wrong: **7 claims** (`train:8, train:12, train:14, train:24, train:25, train:27, train:76`)
-  - Correct $\to$ Unparsed: **0 claims**
-- **Unchanged:** Correct = **21**, Wrong = **19**, Unparsed = **0**
-- **Category Sum:** $15 + 20 + 18 + 7 + 0 + 21 + 19 + 0 = 100$
+- **Mutually Exclusive Transition Breakdown (Total = 100 claims):**
+  1. **Unchanged Correct:** **21 claims**
+  2. **Unchanged Wrong:** **19 claims**
+  3. **Unchanged Unparsed:** **0 claims**
+  4. **Unparsed $\to$ Correct (Improved):** **15 claims** (`train:4, train:7, train:13, train:16, train:23, ...`)
+  5. **Wrong $\to$ Correct (Improved):** **18 claims** (`train:5, train:10, train:22, train:28, train:30, ...`)
+  6. **Unparsed $\to$ Wrong:** **20 claims**
+  7. **Correct $\to$ Wrong (Regressed):** **7 claims** (`train:8, train:12, train:14, train:24, train:25, train:27, train:76`)
+  8. **Correct $\to$ Unparsed (Regressed):** **0 claims**
+  9. **Wrong $\to$ Unparsed:** **0 claims**
+- **Category Invariants:**
+  - Total Improved = $15 + 18 = 33$
+  - Total Regressed = $7 + 0 = 7$
+  - Net Gain = Improved ($33$) $-$ Regressed ($7$) = $+26$
+  - Mutually Exclusive Sum = $21 + 19 + 0 + 15 + 18 + 20 + 7 + 0 + 0 = 100$
 - **Statistical Significance:**
   - Discordant pairs: $b = 7$ (B0=1, B1=0), $c = 33$ (B0=0, B1=1)
   - **Exact McNemar p-value:** **$4.23 \times 10^{-5}$ ($p = 0.00004$)** $\implies$ **Statistically highly significant**
@@ -71,14 +78,21 @@ In the initial run of `scripts/run_m121_stabilization.sh`, overall accuracies we
 
 ### B. Baseline B0 $\to$ B2 (Extended Thinking, 1024 tokens)
 - **Net Gain:** **+25 claims** (Baseline: 28/100 $\to$ B2: 53/100)
-- **Total Improved:** **27 claims**
-  - Unparsed $\to$ Correct: **15 claims** (`train:4, train:7, train:17, train:23, train:44, ...`)
-  - Wrong $\to$ Correct: **12 claims** (`train:6, train:32, train:36, train:41, train:42, ...`)
-- **Total Regressed:** **2 claims**
-  - Correct $\to$ Wrong: **2 claims** (`train:14, train:27`)
-  - Correct $\to$ Unparsed: **0 claims**
-- **Unchanged:** Correct = **26**, Wrong = **25**, Unparsed = **4** (`train:11, train:31, train:48, train:51`)
-- **Category Sum:** $15 + 16 + 12 + 2 + 0 + 26 + 25 + 4 = 100$
+- **Mutually Exclusive Transition Breakdown (Total = 100 claims):**
+  1. **Unchanged Correct:** **26 claims**
+  2. **Unchanged Wrong:** **25 claims**
+  3. **Unchanged Unparsed:** **4 claims** (`train:11, train:31, train:48, train:51`)
+  4. **Unparsed $\to$ Correct (Improved):** **15 claims** (`train:4, train:7, train:17, train:23, train:44, ...`)
+  5. **Wrong $\to$ Correct (Improved):** **12 claims** (`train:6, train:32, train:36, train:41, train:42, ...`)
+  6. **Unparsed $\to$ Wrong:** **16 claims**
+  7. **Correct $\to$ Wrong (Regressed):** **2 claims** (`train:14, train:27`)
+  8. **Correct $\to$ Unparsed (Regressed):** **0 claims**
+  9. **Wrong $\to$ Unparsed:** **0 claims**
+- **Category Invariants:**
+  - Total Improved = $15 + 12 = 27$
+  - Total Regressed = $2 + 0 = 2$
+  - Net Gain = Improved ($27$) $-$ Regressed ($2$) = $+25$
+  - Mutually Exclusive Sum = $26 + 25 + 4 + 15 + 12 + 16 + 2 + 0 + 0 = 100$
 - **Statistical Significance:**
   - Discordant pairs: $b = 2$ (B0=1, B2=0), $c = 27$ (B0=0, B2=1)
   - **Exact McNemar p-value:** **$1.62 \times 10^{-6}$ ($p = 0.000002$)** $\implies$ **Statistically highly significant**
@@ -86,12 +100,21 @@ In the initial run of `scripts/run_m121_stabilization.sh`, overall accuracies we
 
 ### C. B1 (Non-Thinking) $\to$ B2 (Extended Thinking)
 - **Net Gain:** **-1 claim** (B1: 54/100 $\to$ B2: 53/100)
-- **Total Improved:** **14 claims** (`train:6, train:8, train:12, train:17, train:24, ...`)
-- **Total Regressed:** **15 claims** (`train:5, train:10, train:13, train:16, train:22, ...`)
-- **Unchanged Correct:** **39 claims**
-- **Unchanged Wrong:** **28 claims**
-- **Wrong in B1 $\to$ Unparsed in B2:** **4 claims** (`train:11, train:31, train:48, train:51`)
-- **Category Sum:** $14 + 15 + 39 + 28 + 4 = 100$
+- **Mutually Exclusive Transition Breakdown (Total = 100 claims):**
+  1. **Unchanged Correct:** **39 claims**
+  2. **Unchanged Wrong:** **28 claims**
+  3. **Unchanged Unparsed:** **0 claims**
+  4. **Unparsed $\to$ Correct (Improved):** **0 claims**
+  5. **Wrong $\to$ Correct (Improved):** **14 claims** (`train:6, train:8, train:12, train:17, train:24, ...`)
+  6. **Unparsed $\to$ Wrong:** **0 claims**
+  7. **Correct $\to$ Wrong (Regressed):** **15 claims** (`train:5, train:10, train:13, train:16, train:22, ...`)
+  8. **Correct $\to$ Unparsed (Regressed):** **0 claims**
+  9. **Wrong $\to$ Unparsed:** **4 claims** (`train:11, train:31, train:48, train:51`)
+- **Category Invariants:**
+  - Total Improved = $14$
+  - Total Regressed = $15$
+  - Net Gain = Improved ($14$) $-$ Regressed ($15$) = $-1$
+  - Mutually Exclusive Sum = $39 + 28 + 0 + 0 + 14 + 0 + 15 + 0 + 4 = 100$
 - **Statistical Significance:**
   - Discordant pairs: $b = 15$ (B1=1, B2=0), $c = 14$ (B1=0, B2=1)
   - **Exact McNemar p-value:** **$1.00000$ ($p = 1.0$)** $\implies$ **No statistically significant difference**
@@ -139,14 +162,17 @@ flowchart TD
 - **B1 (Non-thinking):** **0 claims (0.0%)**. Completely solved.
 - **B2 (Thinking 1024):** **4 claims (4.0%)** (`train:11, train:31, train:48, train:51`). In these 4 claims, the model spent all 1,024 tokens analyzing dense tables and multiple regulatory passages without concluding.
 
-### 2. Under-Retrieval Bottleneck vs Verification Success
+### 2. Gold URL Presence vs Verification Performance (Exploratory Observation)
 - **Errors with Gold URL in Top-8 (Hit@8 = True, 13 claims):**
   - B1 Error Rate: **46.2%** (6 errors / 13 claims). Correct: 7 claims.
   - B2 Error Rate: **53.8%** (7 errors / 13 claims). Correct: 6 claims.
 - **Errors without Gold URL in Top-8 (Hit@8 = False, 87 claims):**
   - B1 Error Rate: **46.0%** (40 errors / 87 claims). Correct: 47 claims.
   - B2 Error Rate: **46.0%** (40 errors / 87 claims). Correct: 47 claims.
-- **Key Empirical Finding:** The error rate when the annotator's exact gold URL was present (46.2%) was virtually identical to when it was missing (46.0%). This confirms that **auxiliary and syndicated sources frequently supply equivalent factual evidence**, and the verification bottleneck is primarily semantic calibration rather than lexical URL overlap.
+- **Nuanced Scientific Interpretation:**
+  - *Metric Limitation:* AVeriTeC gold URLs represent the specific sources annotated by human fact-checkers, but web knowledge is heavily syndicated and mirrored across multiple reputable news and reference domains. Missing the exact gold URL does not necessarily imply the absence of factual evidence in retrieved passages.
+  - *Conversely:* The presence of a gold URL in the candidate pool does not guarantee that the top-ranked passages contain the crucial evidentiary sentences.
+  - *Exploratory Takeaway:* The observed error rates (46.2% vs 46.0%) indicate that surface-level gold URL hit is not a direct predictor of downstream verification outcome in this exploratory sample. Verification failures arise from a combination of retrieval passage selection and LLM semantic classification challenges, rather than an isolated single cause.
 
 ### 3. Dominant Semantic Confusion Categories (B1)
 1. **Refuted $\to$ Not Enough Evidence (8 claims, 17.4% of errors):**

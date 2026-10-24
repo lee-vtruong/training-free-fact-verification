@@ -674,3 +674,38 @@
   * Bổ sung 3 bài kiểm thử hồi quy trong `tests/test_base_stabilization.py`: `test_paired_transitions_string_bool_regression`, `test_paired_transitions_self_comparison`, `test_paired_transitions_id_alignment_and_duplicates`, `test_exact_mcnemar_and_bootstrap`.
   * Chạy `pytest`: **122/122 passed in 8.25s** (100% pass).
 - **Trạng Thái Milestone:** M1.2.1 P0 Repair **COMPLETE & VERIFIED**. Sẵn sàng cho M1.3.
+
+## 2026-10-24 23:45 +07:00 — M1.3 Triển khai Toàn diện Error-Informed Fact Verification (C0–C6) & Leakage Guards
+
+- **Mục tiêu:** Hoàn thành thiết kế và hiện thực hóa Milestone M1.3 (*Error-Informed Training-Free Fact Verification*); kiểm tra giả thuyết khoa học liệu tri thức từ các lỗi quá khứ (error memory, exemplars, corrected errors, contrastive pairs, error rules) có cải thiện độ chính xác và Macro-F1 trên mô hình frozen `Qwen/Qwen3-8B` so với Base Protocol v1.0 (B1 Non-Thinking, 512 tokens); xây dựng hệ thống phòng chống rò rỉ dữ liệu (*Leakage & Quarantine Guards*); hoàn thành 100% tests local và sẵn sàng chạy GPU trên server.
+- **Tuân thủ Nghiêm ngặt Quy tắc Nghiên cứu (AGENTS.md & User Mandate):**
+  * **Strictly Training-Free, Quality-First:** Không fine-tune, không gradient, không optimizer, không learned neural routers, không tối ưu routing có chọn lọc (selective routing). Toàn bộ trọng số mô hình đóng băng 100%.
+  * **Không rò rỉ nhãn vàng:** Dữ liệu quá khứ chỉ được xây dựng từ tập source (Fold A hoặc exploratory set); các exemplars tuyệt đối không chứa claims thuộc tập đánh giá. Nhãn vàng của tập đánh giá chỉ được mở sau khi tệp phán đoán đã được materialize và seal sha256.
+  * **Phân định ranh giới thực thi:** Codex chuẩn bị mã nguồn, cấu hình, kiểm thử CPU local, đẩy lên GitHub; cung cấp lệnh terminal chuẩn xác không placeholder để người dùng trực tiếp thực thi trên GPU server `hvtham-server`.
+- **Cấu Trúc Hệ Thống & Các Module Triển Khai Mới:**
+  1. `src/tffv/verification/leakage.py`:
+     - Đo lường độ tương đồng từ vựng bằng Jaccard và containment 3-gram.
+     - Phát hiện và cách ly các near-duplicates giữa tập source và tập candidate (`find_near_duplicates`, `quarantine_near_duplicates`).
+     - Bắt buộc tính rời rạc tuyệt đối giữa các fold (`assert_fold_disjointness`), chặn đứng mọi nguy cơ rò rỉ ID.
+  2. `src/tffv/verification/error_memory.py`:
+     - Xây dựng `ErrorMemoryBank` từ phán đoán của Base Protocol v1.0 và nhãn vàng chính thức.
+     - Lập chỉ mục đa chiều: theo lớp nhãn vàng (`by_class`), theo cặp nhầm lẫn thực tế (`by_confusion`), theo tập đúng/sai (`correct_sids`, `wrong_sids`).
+     - Hỗ trợ lấy mẫu cân bằng cho C2 (random source), C3 (correct-only), C4 (error-only kèm phân tích bẫy sai lầm và sửa đổi nhãn vàng), C5 (cặp đối chứng tương phản correct vs corrected error trên ranh giới Supported và Refuted).
+     - Tạo danh mục kiểm tra 4 điểm (*4-point verification checklist*) đúc kết từ các lỗi thường gặp trong $\mathcal{D}_{\text{error}}$ (media debate vs factual contradiction, evidence sufficiency threshold, cherrypicking precision, polarity check).
+  3. `src/tffv/verification/m13_prompting.py`:
+     - Bộ sinh prompt chuyên biệt cho 7 điều kiện C0–C6 tuân thủ định dạng system prompt, evidence block, context budget (< 3.500 tokens).
+  4. `src/tffv/verification/m13_runner.py`:
+     - Trình điều phối thực nghiệm toàn diện từ inference, sealing manifest, chấm điểm với `evaluate.py`, so sánh cặp đối chứng với C0.
+     - Tự động tính toán số claims cải thiện (improved), suy giảm (regressed), không đổi (unchanged); kiểm định chính xác McNemar (hai phía); khoảng tin cậy Paired Bootstrap 95% CI.
+     - Thu thập chỉ số tài nguyên: thời gian trễ trung bình mỗi claim, số lượng token đầu vào (prompt) và đầu ra (generation).
+     - Tự động sinh báo cáo khoa học Markdown `M1_3_EVALUATION_REPORT.md` và `comparison_summary.json`.
+  5. `scripts/run_m13_error_informed.sh`:
+     - Script bash hoàn chỉnh cho GPU server `hvtham-server`, tự động phát hiện snapshot Qwen3-8B, R4 evidence, claims và B1 predictions.
+  6. `tests/test_m13_error_memory.py`:
+     - Bộ kiểm thử tự động toàn diện kiểm tra tính đúng đắn của leakage detection, memory bank sampling, prompt builders và pipeline synthetic end-to-end.
+  7. `docs/M1_3_ERROR_INFORMED_PROTOCOL.md`:
+     - Tài liệu đặc tả giao thức thực nghiệm, ma trận C0–C6, giả thuyết nghiên cứu và hướng dẫn thực thi.
+- **Kết Quả Kiểm Thử Phần Mềm Local:**
+  * Chạy `pytest -v --basetemp=temp_pytest -p no:cacheprovider`: **127/127 passed in 5.72s** (100% tests đạt chuẩn).
+- **Trạng Thái Git:**
+  * Sẵn sàng commit và push lên nhánh `main` GitHub repository `lee-vtruong/training-free-fact-verification`.
