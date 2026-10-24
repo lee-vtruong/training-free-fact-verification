@@ -508,3 +508,32 @@
   * R4 thể hiện sức mạnh vượt bậc cả về độ chính xác và khả năng gom bằng chứng Top-8 cho mô hình suy luận.
   * Tuân thủ quy tắc: Không tự ý crown winner hoặc chọn R4 làm baseline M1.2 trước khi người dùng phê duyệt.
 - Trạng thái milestone: Milestone M1.1 Retrieval Pilot 100 Claims **COMPLETE**.
+
+## 2026-10-24 17:20 +07:00 — Audit Nghiêm ngặt M1.1 Retrieval (100 Claims) & Làm rõ Cơ chế Reranking
+
+- Mục tiêu: Thực hiện lượt audit nhẹ, KHÔNG chạy lại GPU experiments, xác minh toàn bộ công thức, mẫu số, frozen status, rank shifts và tạo báo cáo chi tiết docs/M1_1_RETRIEVAL_AUDIT.md.
+- Phát hiện & Giải quyết Discrepancy R3 Hit@100 (27%) vs R4 Hit@100 (30%):
+  * Nguyên nhân kiến trúc: Cấu hình fusion_depth = 200, rerank_depth = 200, nhưng ranking_store_depth = 100.
+  * Tệp R3.jsonl chỉ lưu trữ Top-100 (cắt bỏ thứ hạng 101-200 của RRF fusion).
+  * Mô hình R4 nhận toàn bộ danh sách 200 candidates từ bước fusion và rerank lại cả 200 candidates.
+  * Xác minh per-claim: Có đúng 5 claims chứa URL vàng nằm ở thứ hạng 101-200 của RRF (bị R3 bỏ sót trong Top-100) được R4 đánh giá điểm cao và kéo vào Top-100 (train:0 lên rank 83, train:6 lên rank 31, train:34 lên rank 18, train:59 lên rank 81, train:62 lên rank 23). Đồng thời 2 claims bị R4 đẩy ra ngoài Top-100 (train:49 và train:95).
+  * Phép tính khớp tuyệt đối: 27 + 5 - 2 = 30 claims (30,0%).
+- Xác minh Frozen State của Qwen3-Reranker-0.6B:
+  * Checkpoint băm SHA-256: 5219a20fa423e1054c34b93a5a8c0ffa640ca52320181603be32d7afe26de353.
+  * Mã nguồn thực thi: model.eval(), requires_grad_(False), kiểm tra assertion không có gradient, chạy trong torch.inference_mode().
+  * Không có bất kỳ optimizer, loss function, hay weight mutation nào trong toàn bộ repo.
+- Xác minh Chi tiết Rank Shifts từ Per-Claim CSV:
+  * So sánh trên toàn bộ 100 claims: 22 claims cải thiện, 10 claims tụt hạng, 68 claims giữ nguyên.
+  * 3 claims bị rơi khỏi Top-10: train:19 (rank 7 -> 27), train:35 (rank 9 -> 65), train:93 (rank 5 -> 20).
+  * 8 claims được đẩy vào Top-10: train:12, train:20, train:23, train:56, train:63, train:74, train:75, train:79.
+  * Tổng net rank shift: +392 (tổng dương) - 171 (tổng âm) = +221 thứ hạng.
+- Phân biệt Rõ ràng Hai Chỉ số Oracle:
+  * URL-level Store Coverage (38,6%): Tỷ lệ phần trăm URL vàng trung bình có mặt trong candidate store. Mẫu số: Tổng số URL vàng của claim.
+  * Claim-level Oracle Hit Ceiling (54,0%): Tỷ lệ claims có ít nhất 1 URL vàng trong candidate store (54/100 claims). 46 claims còn lại hoàn toàn không có URL vàng trong store. R4 đạt Hit@100 trên 30 claims, tương đương đạt 55,56% trần tối đa Oracle (30/54).
+- Artifacts & Tài liệu Tạo mới:
+  * Tạo tệp: docs/M1_1_RETRIEVAL_AUDIT.md với đầy đủ công thức, bảng SHA-256, và phân tích chi tiết.
+- Kiểm thử:
+  * Chạy test suite: 109 passed in 25.15s (--basetemp=temp_pytest -p no:cacheprovider).
+- Tuân thủ quy tắc người dùng:
+  * Không push/pull, không tải model, không chạy GPU jobs.
+  * Cung cấp commands để người dùng tự review/commit/push.
