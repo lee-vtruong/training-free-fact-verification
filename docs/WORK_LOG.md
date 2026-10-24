@@ -436,3 +436,75 @@
 
 
 
+
+## 2026-10-23 23:45 +07:00 — Thực thi GPU Benchmark Pilot 100 Claims trên RTX 5090 & Định lượng Khối lượng Công việc Thực tế
+
+- Tiến hành thực thi:
+  * Khởi chạy scripts/run_pilot100.sh trên server hvtham-server (PID 531897).
+  * Hoàn thành chuẩn bị 100 candidate stores tại outputs/m11-candidates-pilot100-20261023-161557/candidate_manifest.json theo cơ chế cách ly quarantine_review_flags_v1.
+- Đặc tính khối lượng công việc thực tế (Empirical Workload Profiling):
+  * Tổng số web pages trong 100 stores: 74.748 tài liệu (Min: 358, Max: 1.454, Trung bình: 747,5 tài liệu/claim).
+  * Tổng số passages ước tính sau khi cắt đoạn (180 từ, overlap 30 từ): ~6.309.816 passages (hơn 6,3 triệu đoạn văn).
+  * Quy mô dữ liệu thực tế lớn hơn nhiều so với dự tính ban đầu do mỗi claim của AVeriTeC lưu trữ toàn bộ nội dung các trang web được crawler tải về.
+- Giám sát phần cứng và tốc độ mã hóa:
+  * Phần cứng: NVIDIA GeForce RTX 5090 (32 GiB VRAM), công suất tiêu thụ 480W–490W / 575W, GPU Util 76%–83%, bộ nhớ VRAM chiếm dụng ~8.175 MiB.
+  * Tốc độ xử lý: ~170 passages/giây với batch size 16.
+  * Các claims đã hoàn thành: train:0 (27.136 passages, ma trận 106 MB), train:1 (50.176 passages, ma trận 196 MB), train:2 (ma trận 129 MB).
+  * Thời gian trung bình: ~2,5 – 4 phút/claim.
+- Nhận định & Hạn chế:
+  * Với 100 claims (~6,3 triệu passages), thời gian chạy hoàn tất ước tính ~5–7 giờ.
+  * Với full 3.068 claims (~150 triệu passages), thời gian ước tính ở cấu hình hiện tại sẽ là ~7–8 ngày. Để tối ưu hóa cho full run sau này, cần tăng batch_size (từ 16 lên 64 hoặc 128) để khai thác tối đa 32 GB VRAM và tensor cores của RTX 5090.
+- Trạng thái milestone: M1.1 empirical vẫn INCOMPLETE (đang chạy benchmark trên server).
+- Bước tiếp theo: Tiếp tục theo dõi quá trình chạy benchmark trên server, thu thập báo cáo đánh giá chất lượng quality_eval khi hoàn tất.
+
+## 2026-10-24 05:15 +07:00 (22:15 UTC) — Cập nhật Tiến độ Pilot 100 Claims: Vượt mốc 57%
+
+- Trạng thái tiến trình:
+  * Tiến trình nohup PID 531878 (runner) và PID 531897 (store_retrieval) vẫn đang chạy bền bỉ trên server hvtham-server.
+  * Đã hoàn thành và lưu cache embedding cho 56/100 stores (từ train:0 đến train:55).
+  * Hiện đang xử lý claim thứ 57 (train:56, 856 web pages).
+- Giám sát phần cứng và tài nguyên:
+  * GPU RTX 5090 duy trì ổn định: 491W / 575W, nhiệt độ 73°C, 66% GPU Util, 8.175 MiB VRAM.
+  * Bộ nhớ cache embedding tích lũy: 15 GB.
+  * Dung lượng đĩa trống trên /dev/sda3: 363 GB (rất an toàn).
+- Quản lý tiến trình:
+  * Đã kích hoạt task theo dõi phản ứng (reactive watcher task-1239) gắn với PID 531878; hệ thống sẽ tự động nhận diện và thông báo ngay khi toàn bộ 100 claims và báo cáo quality_eval hoàn thành.
+- Trạng thái milestone: M1.1 empirical vẫn INCOMPLETE (đang tiếp tục chạy).
+
+## 2026-10-24 14:00 +07:00 (07:00 UTC) — Hoàn thành Toàn diện Pilot 100 Claims (R1–R4 & Quality Eval) trên Server
+
+- Trạng thái: Hoàn thành 100% pipeline thực nghiệm 100 claims (PID 531878 & 531897 đã kết thúc thành công).
+- Thư mục kết quả:
+  * Retrieval Store: outputs/m11-store-r14-pilot100-20261023-162716
+  * Quality Evaluation: outputs/m11-eval-pilot100-20261023-162716
+  * Tổng thời gian thực thi: 33.156,9 giây (~9,2 giờ).
+- Kết quả Đánh giá Chất lượng Truy xuất (Quality Evaluation Report trên 100 claims):
+  * Oracle Ceiling (Store Gold Coverage): 38,6% (chỉ 38,6% URL vàng thực sự tồn tại trong candidate stores).
+  * Hit@10:
+    - R1 (BM25): 5,0%
+    - R2 (Dense Qwen3-0.6B): 8,0%
+    - R3 (RRF Hybrid): 9,0%
+    - R4 (Frozen Reranker Qwen3-0.6B): 14,0% (vượt trội gần gấp 3 lần BM25).
+  * Recall@10:
+    - R1: 0,035
+    - R2: 0,051
+    - R3: 0,051
+    - R4: 0,091 (+78% so với R3).
+  * MRR@100:
+    - R1: 0,0147
+    - R2: 0,0316
+    - R3: 0,0265
+    - R4: 0,0478 (+80% so với R3).
+  * Hit@100:
+    - R1: 26,0% | R2: 25,0% | R3: 27,0% | R4: 30,0% (tiếp cận 78% trần Oracle).
+  * Evidence Recall@8:
+    - R1: 0,023 | R2: 0,051 | R3: 0,046 | R4: 0,081.
+- Hiệu quả Reranker R4 (so với R3):
+  * 22 claims được cải thiện thứ hạng; 10 claims tụt thứ hạng; 68 claims giữ nguyên.
+  * 8 claims được đẩy từ ngoài vào Top-10; 3 claims bị rơi khỏi Top-10.
+  * Tổng net rank shift: +221 thứ hạng.
+- Nhận định chuyên môn theo quy tắc dự án (AGENTS.md):
+  * Kết quả này là thực nghiệm trên candidate stores thô (exploratory, corpus_admitted = false).
+  * R4 thể hiện sức mạnh vượt bậc cả về độ chính xác và khả năng gom bằng chứng Top-8 cho mô hình suy luận.
+  * Tuân thủ quy tắc: Không tự ý crown winner hoặc chọn R4 làm baseline M1.2 trước khi người dùng phê duyệt.
+- Trạng thái milestone: Milestone M1.1 Retrieval Pilot 100 Claims **COMPLETE**.
