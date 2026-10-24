@@ -53,7 +53,7 @@ fi
 echo ">>> Using Frozen Backbone: $MODEL_PATH"
 
 # Locate latest B1 predictions (from M1.2.1 stabilization)
-B1_PREDICTIONS="$(find outputs -type f -path '*/B1/predictions.jsonl' | sort | tail -n 1)"
+B1_PREDICTIONS="$(find outputs -type f \( -path '*/B1/predictions.jsonl' -o -path '*b1*preds*/predictions.jsonl' -o -path '*b1*/predictions.jsonl' \) | sort | tail -n 1)"
 if [[ -z "$B1_PREDICTIONS" || ! -f "$B1_PREDICTIONS" ]]; then
     echo "ERROR: B1 predictions not found for historical error memory construction!"
     exit 1
