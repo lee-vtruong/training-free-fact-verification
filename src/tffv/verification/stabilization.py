@@ -429,7 +429,10 @@ def run_stabilization_comparison(
             for k, v in transitions.items()
         },
     }
-    write_json(dest / "comparison_summary.json", summary_out)
+    json_path = dest / "comparison_summary.json"
+    if json_path.is_file():
+        json_path.unlink()
+    write_json(json_path, summary_out)
 
     return dest
 
