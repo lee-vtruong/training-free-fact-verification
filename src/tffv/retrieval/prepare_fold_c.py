@@ -182,7 +182,14 @@ def prepare_fold_c_pipeline(
     os.environ.setdefault("TFFV_RERANK_SHA256", DEFAULT_RERANK_SHA256)
 
     # Step 2: Stage 1 — Acquire Raw Stores from train_0_999.zip
-    acq_dir = project_root / "outputs" / f"m141-store-foldc-{timestamp}"
+    existing_store_dirs = sorted(
+        [d for d in project_root.glob("outputs/m141-store-foldc*") if d.is_dir() and any(d.glob("train-*.json"))]
+    )
+    if existing_store_dirs:
+        acq_dir = existing_store_dirs[-1]
+        sys.stderr.write(f"[Fold C Preparation] Reusing existing store directory to resume: {acq_dir}\n")
+    else:
+        acq_dir = project_root / "outputs" / f"m141-store-foldc-{timestamp}"
     sys.stderr.write(f"[Fold C Preparation] [1/5] Acquiring raw stores into: {acq_dir}\n")
     sys.stderr.flush()
 

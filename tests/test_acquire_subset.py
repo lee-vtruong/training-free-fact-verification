@@ -67,6 +67,28 @@ def test_full_members_crc_hash_and_mapping(fixture):
     assert "DO_NOT_USE_QUERY_FOR_SELECTION" not in result.read_text(encoding="utf-8")
 
 
+def test_acquire_resumes_existing_store_without_redownload(fixture):
+    plan, output, fetch = fixture
+    # First acquire claims 0 and 1
+    with patch("tffv.retrieval.remote_zip.urlopen", side_effect=fetch):
+        acquire(plan, output, [0, 1], execute=True)
+    assert (output / "train-0.json").is_file()
+    assert (output / "train-1.json").is_file()
+
+    # Now acquire claims 0, 1, and 2. Claim 0 and 1 should be reused without error
+    call_count = [0]
+    def counting_fetch(request, timeout):
+        call_count[0] += 1
+        return fetch(request, timeout)
+
+    with patch("tffv.retrieval.remote_zip.urlopen", side_effect=counting_fetch):
+        result = acquire(plan, output, [0, 1, 2], execute=True)
+    assert result.is_file()
+    report = json.loads(result.read_text(encoding="utf-8"))
+    assert len(report["stores"]) == 3
+    assert (output / "train-2.json").is_file()
+
+
 def test_store_caps_fail_before_member_transfer(fixture):
     plan, output, fetch = fixture
     with patch("tffv.retrieval.remote_zip.urlopen", side_effect=fetch), patch("tffv.retrieval.acquire_subset.RAW_CAP", 1):

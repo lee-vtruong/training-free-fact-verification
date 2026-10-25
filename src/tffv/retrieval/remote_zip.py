@@ -1,11 +1,15 @@
 """Bounded HTTP Range inspection of pinned train archives, without extraction."""
 import argparse
 import hashlib
+import http.client
 import io
 import json
 import re
 import shutil
+import socket
 import stat
+import time
+import urllib.error
 import zipfile
 from pathlib import Path, PurePosixPath
 from urllib.request import Request, urlopen
@@ -54,22 +58,33 @@ class HTTPRangeReader(io.RawIOBase):
             start, end = self.position, self.position + length - 1
             request = Request(self.url, headers={"Range": f"bytes={start}-{end}", "Accept-Encoding": "identity",
                                                  "User-Agent": "tffv-zip-range-inspection/0.1"})
-            with urlopen(request, timeout=30) as response:
-                # Check headers BEFORE reading. A server ignoring Range must not
-                # turn this metadata operation into a multi-GB file download.
-                if response.status != 206:
-                    raise ValueError("Server did not honor Range (206 required); no full-download fallback")
-                expected = f"bytes {start}-{end}/{self.size}"
-                if response.headers.get("Content-Range") != expected:
-                    raise ValueError("Unexpected Content-Range/archive size")
-                if response.headers.get("Content-Encoding", "identity").lower() != "identity":
-                    raise ValueError("Encoded range responses are unsupported")
-                declared = response.headers.get("Content-Length")
-                if declared is not None and int(declared) != length:
-                    raise ValueError("Unexpected range length")
-                data = response.read(length + 1)
-            if len(data) != length:
-                raise ValueError("Truncated/oversized range payload")
+            max_retries = 5
+            data = None
+            for attempt in range(max_retries):
+                try:
+                    with urlopen(request, timeout=60) as response:
+                        # Check headers BEFORE reading. A server ignoring Range must not
+                        # turn this metadata operation into a multi-GB file download.
+                        if response.status != 206:
+                            raise ValueError("Server did not honor Range (206 required); no full-download fallback")
+                        expected = f"bytes {start}-{end}/{self.size}"
+                        if response.headers.get("Content-Range") != expected:
+                            raise ValueError("Unexpected Content-Range/archive size")
+                        if response.headers.get("Content-Encoding", "identity").lower() != "identity":
+                            raise ValueError("Encoded range responses are unsupported")
+                        declared = response.headers.get("Content-Length")
+                        if declared is not None and int(declared) != length:
+                            raise ValueError("Unexpected range length")
+                        data = response.read(length + 1)
+                    if len(data) != length:
+                        raise ValueError("Truncated/oversized range payload")
+                    break
+                except (TimeoutError, socket.timeout, urllib.error.URLError, http.client.IncompleteRead, ConnectionError) as exc:
+                    if attempt < max_retries - 1:
+                        backoff = 2 ** attempt
+                        time.sleep(backoff)
+                    else:
+                        raise
             self.cache[key] = data
             self.bytes_read += length
             self.requests.append(dict(start=start, bytes=length, sha256=hashlib.sha256(data).hexdigest()))

@@ -83,7 +83,14 @@ def acquire(plan_path, destination, claim_ids, execute=False):
     allowed = (project / "outputs").resolve()
     if destination == allowed or not destination.is_relative_to(allowed):
         raise ValueError("Use a fresh subdirectory of NEW project outputs/")
-    destination.mkdir(parents=True, exist_ok=False)
+    destination.mkdir(parents=True, exist_ok=True)
+    for stale in ["subset_plan.json", "subset_manifest.json", "failure.json"]:
+        stale_file = destination / stale
+        if stale_file.is_file():
+            try:
+                stale_file.unlink()
+            except OSError:
+                pass
     opened, readers, selected = {}, {}, []
     try:
         for identity in sorted(claim_ids):
@@ -129,13 +136,33 @@ def acquire(plan_path, destination, claim_ids, execute=False):
             members_in_archive = [item for item in selected if item[1]["path"] == key]
             total_members = len(members_in_archive)
             for idx, (identity, archive, info) in enumerate(members_in_archive, 1):
+                target = destination / f"train-{identity}.json"
+                if target.is_file() and target.stat().st_size == info.file_size:
+                    if idx % 10 == 0 or idx == 1 or idx == total_members:
+                        print(f"[acquire_subset] Reusing existing verified store [{idx}/{total_members}] train:{identity} ({target.stat().st_size / MiB:.1f} MiB raw)...", flush=True)
+                    fingerprint = hashlib.sha256()
+                    with target.open("rb") as f:
+                        while block := f.read(4 * MiB):
+                            fingerprint.update(block)
+                    records.append(dict(source_ordinal=identity, sample_id=f"train:{identity}",
+                        archive=archive["path"], member=info.filename, revision=plan["resolved_revision"],
+                        archive_sha256_expected=archive["sha256"], whole_archive_sha256_verified=False,
+                        member_crc32=f"{info.CRC:08x}", full_member_crc_verified=True,
+                        file=target.name, raw_bytes=target.stat().st_size, raw_sha256=fingerprint.hexdigest(),
+                        schema_audit=store_profile(target, identity)))
+                    continue
+
                 if idx % 10 == 0 or idx == 1 or idx == total_members:
                     print(f"[acquire_subset] Downloading store [{idx}/{total_members}] train:{identity} ({info.compress_size / MiB:.1f} MiB compressed)...", flush=True)
-                target = destination / f"train-{identity}.json"
                 partial = destination / f"train-{identity}.json.part"
+                if partial.is_file():
+                    try:
+                        partial.unlink()
+                    except OSError:
+                        pass
                 count = 0
                 fingerprint = hashlib.sha256()
-                with zipped.open(info) as source, partial.open("xb") as stream:
+                with zipped.open(info) as source, partial.open("wb") as stream:
                     while True:
                         block = source.read(4 * MiB)
                         if not block: break  # ZipExtFile verifies CRC at full EOF.

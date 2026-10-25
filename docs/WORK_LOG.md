@@ -888,3 +888,19 @@
   - Chạy python scripts/run_tests.py: 143/143 passed in 21.31s (100% pass, 0 skipped, 0 failures).
 - **Trạng Thái Milestone:** M1.4.1 Evidence Preparation & Confirmatory Suite **READY FOR SERVER EXECUTION**.
 
+## 2026-10-25 12:40 +07:00 — M1.4.1 Bounded Range Download Resilience & Store Resume Mechanism
+
+- **Mục tiêu:** Xử lý triệt để lỗi TimeoutError từ Hugging Face CDN trong quá trình tải HTTP Range; bổ sung cơ chế retry lũy thừa và phục hồi/tái sử dụng (resume) các stores đã tải thành công.
+- **Nguyên nhân Timeout:**
+  - HTTPRangeReader trước đây thiết lập cứng timeout=30 và không có cơ chế retry khi mạng trễ/nghẽn.
+  - Khi tải store thứ 44/50 (train:144), mạng Hugging Face phản hồi chậm gây ra TimeoutError: The read operation timed out.
+  - Toàn bộ 44 candidate stores (train:100 đến train:143, dung lượng 2.3 GB) đã hoàn thành và nằm sẵn trên đĩa nhưng không được tái sử dụng nếu chạy lại thư mục mới.
+- **Khắc phục Kỹ thuật:**
+  1. src/tffv/retrieval/remote_zip.py: Nâng timeout lên 60 giây và bổ sung vòng lặp retry 5 lần với exponential backoff (2 ** attempt) đối với (TimeoutError, socket.timeout, urllib.error.URLError, http.client.IncompleteRead, ConnectionError).
+  2. src/tffv/retrieval/acquire_subset.py: Hỗ trợ destination.mkdir(parents=True, exist_ok=True); tự động kiểm tra nếu train-{identity}.json đã tồn tại trên đĩa và khớp kích thước file dự kiến, hàm sẽ đọc trực tiếp từ đĩa, tính sha256 và profile mà không tải lại qua mạng.
+  3. src/tffv/retrieval/prepare_fold_c.py: Tự động tìm kiếm thư mục store trước đó (m141-store-foldc*) để resume tiếp tục 6 claims còn lại (train:144..149) thay vì tải lại từ đầu 44 claims trước.
+  4. Bổ sung bài test test_acquire_resumes_existing_store_without_redownload trong tests/test_acquire_subset.py.
+- **Kiểm thử Phần mềm:**
+  - Chạy python scripts/run_tests.py: 144/144 passed in 33.86s (100% pass, 0 failures).
+- **Trạng Thái Milestone:** Resilient Range Retrieval & Fast Resumption **DEPLOYED**.
+
