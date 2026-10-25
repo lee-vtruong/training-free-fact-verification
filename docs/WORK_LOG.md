@@ -1000,3 +1000,17 @@
   - `python scripts/run_tests.py`: **150 passed in 17.67s (100% pass, 0 failures)**.
 - **Trạng thái Milestone:** M1.4.2 Audit & Preparation **COMPLETED & READY FOR SERVER EXECUTION**.
 
+## 2026-10-26 06:33 +07:00 — M1.4.2 Fix Model Spec Dictionary Packaging in Runner & Defensive Backbone Init
+
+- **Hiện tượng:**
+  * Quá trình chuẩn bị bằng chứng Fold D (100 claims) đã hoàn thành xuất sắc, xuất đầy đủ `outputs/m142-foldd-r4/R4.jsonl` (49e322bc210c6a50...) và `claims.jsonl` (b1056cd128e129c0...).
+  * Khi bước sang giai đoạn chạy kiểm định suy luận mô hình `m142_runner.py`, hệ thống báo lỗi: `AttributeError: 'str' object has no attribute 'get'` tại `backbone.py:15` (`validate_backbone_spec`).
+- **Nguyên nhân:**
+  * `m142_runner.py` chuyển chuỗi đường dẫn model dạng `str(p)` vào `Qwen3FrozenBackbone(spec=model_spec)` thay vì đóng gói thành từ điển `spec = {"model_id": EXPECTED_QWEN3_8B_ID, "revision": EXPECTED_QWEN3_8B_REVISION, "local_path": args.model_path}`.
+- **Khắc phục:**
+  1. `src/tffv/verification/m142_runner.py`: Đóng gói tường minh `spec` thành từ điển đầy đủ `model_id`, `revision`, `local_path` khi khởi tạo `Qwen3FrozenBackbone`.
+  2. `src/tffv/verification/backbone.py`: Nâng cấp lập trình phòng thủ trong `validate_backbone_spec` và `Qwen3FrozenBackbone.__init__`: Tự động nhận diện nếu người gọi truyền vào chuỗi hoặc `Path`, tự động bọc thành dictionary hợp lệ, ngăn chặn tuyệt đối lỗi runtime nếu có component nào truyền string path.
+- **Kiểm thử Phần mềm:**
+  * `python scripts/run_tests.py`: **150/150 passed in 28.32s (100% pass, 0 failures)**.
+- **Trạng thái:** Mã nguồn đã vá, commit và push lên GitHub. Sẵn sàng thực thi tiếp tục giai đoạn suy luận kiểm định ngay trên server mà không cần chạy lại bước chuẩn bị bằng chứng Fold D.
+

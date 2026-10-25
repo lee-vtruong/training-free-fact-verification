@@ -10,8 +10,17 @@ EXPECTED_QWEN3_8B_ID = "Qwen/Qwen3-8B"
 EXPECTED_QWEN3_8B_REVISION = "b968826d9c46dd6066d109eabc6255188de91218"
 
 
-def validate_backbone_spec(spec: Dict[str, Any], expected_id: str = EXPECTED_QWEN3_8B_ID) -> Path:
+def validate_backbone_spec(spec: Any, expected_id: str = EXPECTED_QWEN3_8B_ID) -> Path:
     """Validate snapshot directory and identity for frozen verification backbone."""
+    if isinstance(spec, (str, Path)):
+        spec = {
+            "model_id": expected_id,
+            "revision": EXPECTED_QWEN3_8B_REVISION,
+            "local_path": str(spec),
+        }
+    elif not isinstance(spec, dict):
+        raise TypeError(f"Backbone spec must be a dictionary or path string, got {type(spec).__name__}")
+
     if spec.get("model_id") != expected_id:
         raise ValueError(f"Expected model_id {expected_id}; got {spec.get('model_id')}")
     
@@ -35,7 +44,7 @@ class Qwen3FrozenBackbone:
 
     def __init__(
         self,
-        spec: Dict[str, Any],
+        spec: Any,
         device: str = "cuda",
         dtype: str = "bfloat16",
         max_context_length: int = 8192,
@@ -43,7 +52,16 @@ class Qwen3FrozenBackbone:
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
+        if isinstance(spec, (str, Path)):
+            spec = {
+                "model_id": EXPECTED_QWEN3_8B_ID,
+                "revision": EXPECTED_QWEN3_8B_REVISION,
+                "local_path": str(spec),
+            }
+
         path = validate_backbone_spec(spec)
+        self.spec = spec
+        self.model_id = spec.get("model_id", EXPECTED_QWEN3_8B_ID)
         if device not in {"cuda", "cpu"}:
             raise ValueError("Device must be 'cuda' or 'cpu'")
         if device == "cuda" and not torch.cuda.is_available():

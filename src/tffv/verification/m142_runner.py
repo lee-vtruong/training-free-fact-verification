@@ -647,13 +647,13 @@ def main():
     if args.use_synthetic:
         backbone = SyntheticBackbone()
     else:
-        model_spec = EXPECTED_QWEN3_8B_ID
-        if args.model_path:
-            p = Path(args.model_path).expanduser().resolve()
-            if p.is_dir():
-                model_spec = str(p)
+        spec = {
+            "model_id": EXPECTED_QWEN3_8B_ID,
+            "revision": EXPECTED_QWEN3_8B_REVISION,
+            "local_path": args.model_path or EXPECTED_QWEN3_8B_ID,
+        }
         backbone = Qwen3FrozenBackbone(
-            spec=model_spec,
+            spec=spec,
             device="cuda",
             dtype="bfloat16",
         )
