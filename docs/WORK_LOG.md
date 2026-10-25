@@ -744,3 +744,40 @@
   - Toàn bộ **129/129 tests passed in 14.67s**.
 - **Trạng Thái Milestone:** M1.3 P0 Audit & Repair **COMPLETE & VERIFIED**.
 
+## 2026-10-25 08:30 +07:00 — M1.3 Final Consistency Audit & Chuẩn Bị Thực Nghiệm M1.4 Pilot (D0–D6)
+
+- **Mục tiêu:**
+  1. *Part A — Hoàn thiện tính nhất quán báo cáo M1.3:* Sửa nguồn số Macro-F1 của C6 (khớp chính xác 0.3508 giữa bảng và phần phân tích narrative); tái thiết kế bảng chuyển đổi cặp thể hiện tường minh 9 danh mục độc lập loại trừ lẫn nhau ($C \to C, C \to W, C \to U, W \to C, W \to W, W \to U, U \to C, U \to W, U \to U$), mỗi claim thuộc đúng 1 category và tổng bằng 46; bóc tách suy giảm của C6 thành 2 phần độc lập: tổn thất do truncation (6 claims) và tổn thất phân loại ngữ nghĩa trên tập parsed (6 claims); loại bỏ mọi nhận định tâm lý/nhân quả chưa được kiểm chứng.
+  2. *Part B — Chuẩn bị toàn diện Pilot M1.4 (Training-Free, Quality-First):* Thiết kế giao thức thử nghiệm có kiểm soát D0–D6 với context budget nghiêm ngặt (< 3.200 tokens), k=2 compact demonstrations, retrieval tương đồng từ vựng 3-gram, luật kiểm định ngắn gọn (ngăn chặn cạn kiệt ngân sách sinh).
+- **Chi Tiết Khắc Phục Part A (M1.3 Final Consistency):**
+  - Đã đối soát mã nguồn và dữ liệu JSON: C6 Macro-F1 thực tế là **0.3508** (trung bình F1 4 lớp: Supported 0.5517, Refuted 0.4516, Not Enough Evidence 0.4000, Cherrypicking 0.0000). Giá trị 0.2867 trong phần phân tích văn bản là lỗi typo từ bản thảo sớm, đã được sửa chuẩn hóa trong `src/tffv/verification/m13_audit.py` và `docs/M1_3_REPAIRED_EVALUATION_REPORT.md`.
+  - Bảng so sánh cặp được tổ chức lại với 9 cột độc lập, không gộp lẫn nhóm cha và nhóm con:
+    * C1: 23 $C \to C$, 4 $C \to W$, 1 $C \to U$, 3 $W \to C$, 15 $W \to W$, 0 $W \to U$, 0 $U \to C$, 0 $U \to W$, 0 $U \to U$. Tổng = 46. Net = -2.
+    * C2: 18 $C \to C$, 10 $C \to W$, 0 $C \to U$, 1 $W \to C$, 17 $W \to W$, 0 $W \to U$. Tổng = 46. Net = -9.
+    * C3: 20 $C \to C$, 8 $C \to W$, 0 $C \to U$, 4 $W \to C$, 14 $W \to W$, 0 $W \to U$. Tổng = 46. Net = -4.
+    * C4: 19 $C \to C$, 8 $C \to W$, 1 $C \to U$, 1 $W \to C$, 15 $W \to W$, 2 $W \to U$. Tổng = 46. Net = -8.
+    * C5: 19 $C \to C$, 8 $C \to W$, 1 $C \to U$, 4 $W \to C$, 13 $W \to W$, 1 $W \to U$. Tổng = 46. Net = -5.
+    * C6: 15 $C \to C$, 7 $C \to W$, 6 $C \to U$, 1 $W \to C$, 11 $W \to W$, 6 $W \to U$. Tổng = 46. Net = -12.
+  - Phân tích bóc tách C6: Trong 12 claims bị unparsed, có 6 claims trước đó đã đoán đúng ở C0 ($C \to U = 6$). Trên 34 claims parsed, mô hình đúng 16 claims (độ chính xác có điều kiện 47.1% so với 64.7% của C0 trên chính 34 claims này, net loss = 6 claims). Như vậy 50% mức suy giảm là do truncation cơ học của token budget, 50% là do phân loại ngữ nghĩa.
+- **Triển Khai M1.4 Controlled Pilot (Part B):**
+  - **7 Điều kiện thực nghiệm:**
+    * `D0`: Frozen Base Protocol v1.0 (Zero-shot B1, R4 Top-8, 512 tokens).
+    * `D1`: Concise generic verification rules (chỉ thị ngắn gọn 2 câu, ép lý giải 1 câu để không vượt 512 tokens).
+    * `D2`: Concise source-derived error rules (luật đúc kết từ lỗi Fold A về media debate và missing context).
+    * `D3`: Random error demonstrations ($k=2$, trích xuất Top-1 passage $\le 250$ ký tự từ Fold A).
+    * `D4`: Similarity-retrieved error demonstrations ($k=2$, truy xuất lỗi tương đồng từ vựng 3-gram từ Fold A).
+    * `D5`: Similarity-retrieved error demonstrations with verified corrections ($k=2$, kèm Base mistake và Gold correction).
+    * `D6`: Correct/wrong contrastive demonstrations ($k=2$: 1 nearest correct + 1 nearest error từ Fold A).
+  - **Modules triển khai mới:**
+    * `src/tffv/verification/m14_prompting.py`: Bộ sinh prompt cho D0–D6, hàm tính độ tương đồng 3-gram và bộ chọn top-k tương đồng xác định.
+    * `src/tffv/verification/m14_runner.py`: Runner thực nghiệm toàn diện, tự động seal hash, tính toán chuyển đổi cặp 9 danh mục, kiểm định McNemar và Bootstrap CI.
+    * `scripts/run_m14_pilot.sh`: Script bash thực thi trên server GPU RTX 5090.
+    * `tests/test_m14_pilot.py`: Bộ kiểm thử 4 bài test độ tương đồng, sinh prompt và synthetic end-to-end runner.
+    * `docs/M1_4_PILOT_PROTOCOL.md`: Đặc tả chi tiết giao thức, giả thuyết và hướng dẫn vận hành.
+  - **Chỉ định pilot:** Toàn bộ thực nghiệm M1.4 trên 46 claims Fold B được đánh dấu rõ là **EXPLORATORY DEBUG PILOT** để phát hiện cơ chế; bất kỳ tín hiệu khả quan nào cũng phải được kiểm chứng lại trên tập held-out độc lập.
+- **Kết Quả Kiểm Thử Phần Mềm:**
+  * Chạy `pytest -v --basetemp=temp_pytest -p no:cacheprovider`: **133/133 passed in 20.29s** (100% đạt chuẩn).
+- **Trạng Thái Git:**
+  * Sẵn sàng commit và push lên nhánh `main`.
+
+

@@ -430,54 +430,63 @@ def run_comprehensive_audit_and_repair(
         "## 4. Full Mutually Exclusive Paired Transitions (All 9 Categories vs C0)",
         "",
         "All comparisons are paired claim-for-claim against Baseline **C0** ($N=46$ claims, C0 Correct = 28, C0 Wrong = 18, C0 Unparsed = 0).",
+        "Every claim belongs to exactly one category, and the 9 mutually exclusive categories sum identically to $46$ for every condition.",
         "",
-        "| Condition vs C0 | Net Gain | Improved ($c$) | Regressed ($b$) | Unchanged (Corr / Wrong / Unp) | Transitions to Unparsed (Corr / Wrong) | Sum of Categories | McNemar $p$ (Unadj) | Holm-Bonf $p$ | Paired Bootstrap 95% CI | Sig ($\\alpha=0.05$)? |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---:|",
+        "| Condition vs C0 | C→C | C→W | C→U | W→C | W→W | W→U | U→C | U→W | U→U | Sum | Net Gain | McNemar $p$ (Unadj) | Holm-Bonf $p$ | Paired Bootstrap 95% CI | Sig ($\\alpha=0.05$)? |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---:|",
     ])
 
     for cond in ALL_CONDITIONS[1:]:
         p = paired_comparisons[cond]
         cats = p["categories"]
+        c_c = cats["unchanged_correct"]
+        c_w = cats["correct_to_wrong"]
+        c_u = cats["correct_to_unparsed"]
+        w_c = cats["wrong_to_correct"]
+        w_w = cats["unchanged_wrong"]
+        w_u = cats["wrong_to_unparsed"]
+        u_c = cats["unparsed_to_correct"]
+        u_w = cats["unparsed_to_wrong"]
+        u_u = cats["unchanged_unparsed"]
+        cat_sum = c_c + c_w + c_u + w_c + w_w + w_u + u_c + u_w + u_u
         net = f"{p['net_gain']:+d}"
-        imp = f"{p['improved_total']} ({cats['wrong_to_correct']}+{cats['unparsed_to_correct']})"
-        reg = f"{p['regressed_total']} ({cats['correct_to_wrong']}+{cats['correct_to_unparsed']})"
-        unch = f"{cats['unchanged_correct']} / {cats['unchanged_wrong']} / {cats['unchanged_unparsed']}"
-        to_unp = f"{cats['correct_to_unparsed']} / {cats['wrong_to_unparsed']}"
-        total_sum = f"**{cats['unchanged_correct'] + cats['unchanged_wrong'] + cats['unchanged_unparsed'] + cats['wrong_to_correct'] + cats['unparsed_to_correct'] + cats['correct_to_wrong'] + cats['correct_to_unparsed'] + cats['wrong_to_unparsed'] + cats['unparsed_to_wrong']}/46**"
         p_unadj_str = f"{p['p_unadjusted']:.4f}"
         p_holm_str = f"{p['p_holm']:.4f}"
         ci_str = f"[{p['ci_95'][0]*100:+.1f}%, {p['ci_95'][1]*100:+.1f}%]"
         sig_str = "Yes (Unadj)" if (p["sig_unadj"] and not p["sig_holm"]) else ("**Yes (Robust)**" if p["sig_holm"] else "No")
-        lines.append(f"| **{cond} vs C0** | **{net}** | {imp} | {reg} | {unch} | {to_unp} | {total_sum} | {p_unadj_str} | {p_holm_str} | {ci_str} | {sig_str} |")
+        lines.append(f"| **{cond} vs C0** | {c_c} | {c_w} | {c_u} | {w_c} | {w_w} | {w_u} | {u_c} | {u_w} | {u_u} | **{cat_sum}** | **{net}** | {p_unadj_str} | {p_holm_str} | {ci_str} | {sig_str} |")
 
     lines.extend([
         "",
         "---",
         "",
-        "## 5. Scientific Failure Analysis: Why Error Memory and Rules Did Not Help",
+        "## 5. Empirical Failure Analysis: Controlled Diagnostic Observations",
         "",
-        "The corrected data confirms a **conclusive, statistically robust empirical finding**: error memory, generic instructions, few-shot demonstrations, and explicit error rules **consistently failed to improve verification accuracy over zero-shot Base Protocol v1.0 (C0)**, and in multiple conditions caused statistically significant degradation.",
+        "The canonical data demonstrates that none of the tested error-informed or demonstration-augmented protocols (C1–C6) outperformed the frozen zero-shot Base Protocol v1.0 (C0: 60.9% accuracy, 0.4883 Macro-F1). Below are the empirical observations and structural error breakdowns:",
         "",
-        "### Key Failure Modes and Diagnostic Findings",
+        "### Key Observations and Breakdown of Degradation",
         "",
-        "1. **The Negative Transfer of Random Demonstrations (C2 vs C0: Net Gain -9 claims, $p = 0.0117$, Holm $p = 0.0586$):**",
-        "   - Accuracy dropped sharply from **60.9% (C0)** to **41.3% (C2)**.",
-        "   - Supplying arbitrary few-shot exemplars ($k=4$) from source claims expanded prompt length from 2,483 to 4,664 tokens. The model frequently latched onto stylistic formatting idiosyncrasies and topical cues from the exemplars rather than grounding its judgment strictly in the retrieved evidence of the target claim.",
+        "1. **Random Source Demonstrations (C2 vs C0: Net Gain -9 claims, $p = 0.0117$, Holm $p = 0.0586$):**",
+        "   - Accuracy dropped from **60.9% (C0)** to **41.3% (C2)**.",
+        "   - Adding $k=4$ source demonstrations increased prompt length from 2,483 to 4,664 tokens. Observational accuracy regressed across both Supported (F1 0.6923 $\\to$ 0.5000) and Refuted (F1 0.7442 $\\to$ 0.5625) classes.",
         "",
-        "2. **Correct-Only Demonstrations Produce Zero Benefit (C3 vs C0: Net Gain -4 claims, $p = 0.3877$):**",
-        "   - Even when demonstrations were filtered strictly to cases where the base model had previously predicted correctly (C3), accuracy was **52.2%** (vs 60.9% for C0), with 8 regressions and only 4 improvements.",
-        "   - Exemplars increased prompt tokens to 4,882 while reducing reasoning precision on subtle classes (`Cherrypicking` F1 dropped from 0.2667 in C0 to 0.1818 in C3).",
+        "2. **Correct-Only Demonstrations (C3 vs C0: Net Gain -4 claims, $p = 0.3877$):**",
+        "   - Restricting demonstrations to cases where the base model previously predicted correctly on source claims yielded **52.2% accuracy** (24/46), with 8 regressions ($C \\to W$) and 4 improvements ($W \\to C$).",
+        "   - The difference vs C0 is not statistically significant ($p = 0.3877$), showing no measurable benefit over zero-shot inference under this prompt structure.",
         "",
-        "3. **Error Demonstrations Induce Over-Caution and Misguided Skepticism (C4 vs C0: Net Gain -8 claims, $p = 0.0215$, Holm $p = 0.0859$):**",
-        "   - Showing the model historical failure modes and pitfall explanations (C4) led to severe conservatism. Instead of avoiding errors, the model over-generalized the warnings: Refuted recall collapsed from 69.6% (C0) to 43.5% (C4), as the model second-guessed clear contradictions and reclassified them into `Conflicting Evidence` or `Not Enough Evidence`.",
+        "3. **Error Demonstrations with Gold Corrections (C4 vs C0: Net Gain -8 claims, $p = 0.0215$, Holm $p = 0.0859$):**",
+        "   - Including error demonstrations and correction notes shifted the predicted label distribution: predictions of `Not Enough Evidence` rose from 7 in C0 to 14 in C4, while Refuted recall dropped from 69.6% (16/23) to 43.5% (10/23).",
+        "   - Total correct claims fell from 28 to 20 ($8 C \\to W$, $1 C \\to U$, against $1 W \\to C$).",
         "",
-        "4. **Contrastive Demonstrations Fail to Resolve Boundary Ambiguity (C5 vs C0: Net Gain -5 claims, $p = 0.2668$):**",
-        "   - Pairwise contrastive demonstrations achieved **50.0% accuracy** (23/46). While C5 gained 4 improvements on Supported claims, it lost 9 previously correct claims, indicating that few-shot boundary pairs cannot substitute for calibrated parametric representations.",
+        "4. **Contrastive Demonstrations (C5 vs C0: Net Gain -5 claims, $p = 0.2668$):**",
+        "   - Pairwise contrastive demonstrations achieved **50.0% accuracy** (23/46). While 4 claims improved from wrong to correct, 9 claims regressed (8 $C \\to W$, 1 $C \\to U$), yielding no overall advantage over C0.",
         "",
-        "5. **Rule Distillation Triggers Generation Budget Collapse (C6 vs C0: Net Gain -12 claims, $p = 0.0018$, Holm $p = 0.0110$ — Highly Significant):**",
-        "   - C6 suffered the most catastrophic collapse, achieving only **34.8% accuracy** (16/46) and **0.2867 Macro-F1**.",
-        "   - **Root Cause:** When prompted to *'Explicitly apply the 4-point checklist to the claim and evidence'*, the model complied by generating lengthy multi-paragraph analyses assessing each checklist point sequentially. Under the Base Protocol budget of `max_new_tokens=512`, the generation was truncated before emitting `Verdict: ...` in **12 out of 46 claims (26.1% unparsed rate)**.",
-        "   - This mirrors the truncation phenomenon observed in B0 during M1.2, proving that prompting for structured multi-point verification requires either extended token budgets (e.g. 1,024 tokens) or concise non-verbose rule application.",
+        "5. **Distilled Error Rules (C6 vs C0: Net Gain -12 claims, $p = 0.0018$, Holm $p = 0.0110$):**",
+        "   - C6 reached **34.8% accuracy** (16/46) and **0.3508 Macro-F1**.",
+        "   - **Decomposition of C6 Degradation (Truncation vs Semantic Classification):**",
+        "     * **Output Truncation (6 claims lost):** Instructing the model to *'Explicitly apply the 4-point checklist to the claim and evidence'* prompted verbose multi-point reasoning traces. Under `max_new_tokens=512`, generation was truncated before emitting a verdict in **12 out of 46 claims (26.1% unparsed rate)**. Crucially, 6 of these 12 unparsed claims were previously correct in C0 ($C \\to U = 6$), directly accounting for half of the net 12-claim deficit.",
+        "     * **Semantic Classification on Parsed Subset (6 claims lost):** On the 34 claims where the model successfully emitted a parsed verdict, 16 were correct ($16/34 = 47.1\\%$ conditional accuracy, compared to $22/34 = 64.7\\%$ in C0 on the exact same 34 claims). Specifically, 7 claims regressed from correct to wrong ($C \\to W = 7$) while only 1 improved ($W \\to C = 1$), representing a net loss of 6 claims.",
+        "     * **Conclusion:** The degradation in C6 was a compound effect of roughly equal parts generation truncation budget exhaustion (50%) and semantic classification shift (50%), rather than being attributable solely to error knowledge content.",
         "",
         "---",
         "",
