@@ -775,12 +775,18 @@
     * `tests/test_m14_pilot.py`: Bộ kiểm thử 4 bài test độ tương đồng, sinh prompt và synthetic end-to-end runner.
     * `docs/M1_4_PILOT_PROTOCOL.md`: Đặc tả chi tiết giao thức, giả thuyết và hướng dẫn vận hành.
   - **Chỉ định pilot:** Toàn bộ thực nghiệm M1.4 trên 46 claims Fold B được đánh dấu rõ là **EXPLORATORY DEBUG PILOT** để phát hiện cơ chế; bất kỳ tín hiệu khả quan nào cũng phải được kiểm chứng lại trên tập held-out độc lập.
-- **Kết Quả Kiểm Thử Phần Mềm:**
-  * Sửa lỗi chữ ký gọi hàm `quarantine_near_duplicates` và `build_error_memory_bank` trong `src/tffv/verification/m14_runner.py`.
-  * Bổ sung bài test tích hợp CLI `test_m14_cli_runner_synthetic` trong `tests/test_m14_pilot.py`.
-  * Chạy `pytest -v --basetemp=temp_pytest -p no:cacheprovider`: **134/134 passed in 14.42s** (100% đạt chuẩn).
+- **Kết Quả Kiểm Thử Phần Mềm & Xác Minh Server:**
+  * Sửa lỗi chữ ký gọi hàm `Qwen3FrozenBackbone(spec=spec, device=args.device, dtype=args.dtype)` trong `src/tffv/verification/m14_runner.py`.
+  * Giới hạn chặt chẽ `candidate_sids` trong Fold B (`50 <= id < 100`) ngăn chặn việc nạp quá 3.000 claims từ toàn bộ corpus.
+  * Bổ sung cơ chế chống tràn số `OverflowError` trong `exact_mcnemar_test_twosided` (`src/tffv/verification/stabilization.py`) với xấp xỉ phân phối chuẩn hiệu chỉnh tính liên tục cho $N > 1000$.
+  * Bổ sung script tiền kiểm tra thực tế trên server GPU: `scripts/test_m14_server_preflight.py`.
+  * **Xác minh trực tiếp trên server `hvtham-server` qua SSH:**
+    1. Tải thành công `Qwen3FrozenBackbone` trên GPU CUDA trong 7.31s.
+    2. Chạy thử 1 forward pass thành công trong 1.25s.
+    3. Chạy thử toàn bộ pipeline `m14_runner.py` trên các tệp dữ liệu thật của server (`R4.jsonl`, `claims.jsonl`, `train.json`, `b1_preds`) hoàn thành 100% không có lỗi, sinh đầy đủ báo cáo Markdown.
+  * Toàn bộ **134/134 unit tests** đạt 100% pass trên cả máy local và server.
 - **Trạng Thái Git:**
-  * Đã push commit `4ced024` lên nhánh `main`. Sẵn sàng cho người dùng thực thi trên server.
+  * Đã push commit `75f88d1` lên nhánh `main`. Pipeline đã được tiền kiểm tra và sẵn sàng 100% để người dùng bấm lệnh chạy.
 
 
 
