@@ -87,7 +87,11 @@ def run_condition_inference_m14(
         if sid in used_exemplars:
             raise ValueError(f"CRITICAL LEAKAGE: Evaluation claim {sid} was sampled as an in-context exemplar!")
 
-        response = backbone.generate(prompt_data["messages"])
+        response = backbone.generate(
+            prompt_data["messages"],
+            max_new_tokens=max_new_tokens,
+            enable_thinking=False,
+        )
         lat = time.perf_counter() - t0
 
         raw_gen = response.get("generated_text", "")
@@ -439,6 +443,9 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--synthetic", action="store_true", help="Run with deterministic SyntheticBackbone for CPU testing")
     parser.add_argument("--conditions", nargs="+", default=ALL_CONDITIONS_M14, help="Conditions to run")
+    parser.add_argument("--revision", default=EXPECTED_QWEN3_8B_REVISION, help="Pinned 40-char commit hash")
+    parser.add_argument("--device", default="cuda", help="Inference device: cuda or cpu")
+    parser.add_argument("--dtype", default="bfloat16", help="Torch dtype: bfloat16 or float32")
     args = parser.parse_args()
 
     output_dir = Path(args.output).expanduser().resolve()
@@ -498,12 +505,15 @@ def main() -> None:
         backbone = SyntheticBackbone(seed=args.seed)
     else:
         sys.stderr.write(f"[M1.4] Loading Qwen3FrozenBackbone from: {args.model_path}\n")
+        spec = {
+            "model_id": EXPECTED_QWEN3_8B_ID,
+            "revision": args.revision or EXPECTED_QWEN3_8B_REVISION,
+            "local_path": args.model_path,
+        }
         backbone = Qwen3FrozenBackbone(
-            model_path=args.model_path,
-            enable_thinking=False,
-            max_new_tokens=args.max_new_tokens,
-            do_sample=False,
-            device_map="auto",
+            spec=spec,
+            device=args.device,
+            dtype=args.dtype,
         )
 
     # 5. Execute inference across requested conditions
