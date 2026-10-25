@@ -709,3 +709,37 @@
   * Chạy `pytest -v --basetemp=temp_pytest -p no:cacheprovider`: **127/127 passed in 5.72s** (100% tests đạt chuẩn).
 - **Trạng Thái Git:**
   * Sẵn sàng commit và push lên nhánh `main` GitHub repository `lee-vtruong/training-free-fact-verification`.
+
+## 2026-10-25 08:00 +07:00 — M1.3 P0 Audit & Sửa Chữa Toàn Diện Báo Cáo Thực Nghiệm C0–C6 (Negative Results)
+
+- **Mục tiêu:** Thực hiện audit toàn diện P0 cho Milestone M1.3 (*Error-Informed Fact Verification*); tìm và khắc phục tận gốc các lỗi báo cáo trong `M1_3_EVALUATION_REPORT.md` (Valid verdicts = 0/0, Acc = 0.0%, Macro-F1 = 0, Output tokens = 0, tổng số transitions bị thiếu ở C4, C5, C6); chuẩn hóa bảng dự đoán canonical; tính toán lại toàn bộ chỉ số thực nghiệm, ma trận nhầm lẫn, kiểm định McNemar hiệu chỉnh Holm và Paired Bootstrap 95% CI; phân tích nguyên nhân khoa học của kết quả phủ định (negative results).
+- **Nguyên Nhân Gốc Rễ Đã Xác Minh (Root Cause Analysis):**
+  1. *Lỗi cấu trúc lồng nhau trong báo cáo (Metrics 0.0% & Valid 0/0):* Trong `m13_runner.py`, biến `condition_summaries[cond]` lưu trữ dictionary có key `'metrics'`, trong khi giá trị của key đó lại chính là kết quả của `evaluate.py` (vốn đã chứa sub-key `'metrics'`). Hàm `generate_m13_markdown_report()` truy vấn trực tiếp `metrics.get('accuracy', 0.0)` ở root level dẫn đến không tìm thấy và fallback về `0.0`. Tương tự, lookup `per_class_f1` thay vì `per_class` khiến toàn bộ F1 lớp bị 0.
+  2. *Lỗi đếm số lượng token đầu ra (Output tokens = 0):* Trong `backbone.py`, hàm `generate()` trả về dict với key `"generated_tokens"`. Tuy nhiên, trong `m13_runner.py` dòng 101 lại truy vấn key `"generation_tokens"`. Sai lệch tên key khiến giá trị lưu vào `predictions.jsonl` luôn là `None` (null) và tổng hợp thành `0`.
+  3. *Lỗi ẩn danh mục chuyển đổi (Tổng transition không bằng 46):* Logic tính toán chuyển đổi trong `stabilization.py` phân loại chính xác 9 danh mục phân biệt loại trừ lẫn nhau. Tuy nhiên, bảng Markdown trong `m13_runner.py` chỉ render 4 cột tóm tắt (`Improved`, `Regressed`, `Unchanged Correct`, `Unchanged Wrong`), hoàn toàn bỏ qua các chuyển đổi liên quan đến `unparsed` (cụ thể là `wrong_to_unparsed`: 2 ở C4, 1 ở C5, 6 ở C6), tạo cảm giác tổng số claim bị thiếu.
+- **Hiện Thực Hóa Canonical Prediction Table & Khắc Phục:**
+  - Xây dựng module audit chuyên biệt `src/tffv/verification/m13_audit.py` và CLI `scripts/audit_and_repair_m13.py`.
+  - Xuất bảng canonical chuẩn hóa: `outputs/m13-repaired-audit/canonical_per_claim_predictions.csv` gồm đúng 322 dòng (46 claims $\times$ 7 điều kiện C0–C6) với đầy đủ 10 trường: `claim_id`, `gold_label`, `condition`, `predicted_label`, `parse_status`, `is_correct`, `input_tokens`, `output_tokens`, `latency`, `prediction_source_path`.
+  - Tính toán lại số lượng token đầu ra chính xác bằng `AutoTokenizer.from_pretrained('cache/qwen3_tokenizer')` trực tiếp trên text output thô (`raw_generation`).
+  - Kiểm tra tính rời rạc và ngăn chặn rò rỉ: 100% exemplars cho C2–C5 được rút từ Fold A (`train:0..49`). Toàn bộ 46 claims đánh giá thuộc Fold B (`train:50..99`) sau khi đã cách ly 4 near-duplicates (`train:67, train:70, train:77, train:95`). Tỷ lệ rò rỉ ID là 0.0%.
+- **Kết Quả Thực Nghiệm Đã Sửa Chữa Toàn Diện:**
+  * **C0 (Frozen Zero-Shot Base Protocol v1.0):** Accuracy **60.9%** (28/46), Macro-F1 **0.4883**, Valid rate: **100.0%** (46/46), Mean Latency: **4.47s**, Tokens: 2,483 in / 192.3 out.
+  * **C1 (Generic Task Instruction):** Accuracy **56.5%** (26/46), Macro-F1 **0.4664**, Valid rate: **97.8%** (45/46), Net Gain: **-2**, McNemar $p = 0.7266$, Bootstrap 95% CI: `[-17.4%, +6.5%]`.
+  * **C2 (Random Source ICL):** Accuracy **41.3%** (19/46), Macro-F1 **0.3578**, Valid rate: **100.0%** (46/46), Net Gain: **-9**, McNemar $p = 0.0117$, Holm-adjusted $p = 0.0586$, Bootstrap 95% CI: `[-32.6%, -6.5%]`.
+  * **C3 (Correct-Only ICL):** Accuracy **52.2%** (24/46), Macro-F1 **0.4185**, Valid rate: **100.0%** (46/46), Net Gain: **-4**, McNemar $p = 0.3877$, Holm-adjusted $p = 0.7754$, Bootstrap 95% CI: `[-23.9%, +6.5%]`.
+  * **C4 (Error-Only ICL with Corrections):** Accuracy **43.5%** (20/46), Macro-F1 **0.3689**, Valid rate: **93.5%** (43/46), Net Gain: **-8**, McNemar $p = 0.0215$, Holm-adjusted $p = 0.0859$, Bootstrap 95% CI: `[-30.4%, -4.3%]`.
+  * **C5 (Contrastive Correct/Wrong ICL):** Accuracy **50.0%** (23/46), Macro-F1 **0.3581**, Valid rate: **95.7%** (44/46), Net Gain: **-5**, McNemar $p = 0.2668$, Holm-adjusted $p = 0.8005$, Bootstrap 95% CI: `[-26.1%, +4.3%]`.
+  * **C6 (Distilled Error Rules):** Accuracy **34.8%** (16/46), Macro-F1 **0.3508**, Valid rate: **73.9%** (34/46), Net Gain: **-12**, McNemar $p = 0.0018$, Holm-adjusted $p = 0.0110$ (**suy giảm có ý nghĩa thống kê**), Bootstrap 95% CI: `[-41.3%, -13.0%]`.
+- **Bảo Đảm Tính Toàn Vẹn Ma Trận Chuyển Đổi:**
+  - 100% các điều kiện C1–C6 khi so sánh cặp với C0 đều có tổng số claims chuyển đổi chính xác bằng $46$ ($46/46$).
+  - Không có mẫu nào bị bỏ sót hay đếm trùng; công thức $\text{Improved} - \text{Regressed} = \text{Correct}_{\text{cond}} - \text{Correct}_{C0}$ nghiệm đúng trên tất cả các điều kiện.
+- **Phân Tích Thất Bại Khoa Học (Scientific Failure Analysis):**
+  1. *Prompt Bloat & Distraction trong Few-Shot ICL:* Việc đưa 4 ví dụ vào prompt đẩy context length lên 4,700–4,950 tokens, làm loãng sự tập trung của cơ chế self-attention vào 8 bằng chứng của claim mục tiêu.
+  2. *Negative Transfer từ Cảnh Báo Lỗi (Error Oversensitivity):* Cảnh báo lỗi trong C4 khiến mô hình trở nên quá thận trọng, khiến độ bao phủ nhãn `Refuted` giảm sút nghiêm trọng từ 69.6% (C0) xuống còn 43.5% (C4), mô hình thiên lệch chuyển sang `Not Enough Evidence`.
+  3. *Checklist Exhaustion trong C6:* Hướng dẫn áp dụng "4-point verification checklist" khiến mô hình sinh lời giải thích dài dòng cho từng điểm kiểm tra, dẫn đến việc cạn kiệt ngân sách `max_new_tokens=512` trước khi kịp phát ra token `Verdict: ...` ở 12/46 claims (26.1% unparsed).
+- **Tài Liệu & Báo Cáo:**
+  - Đã lập báo cáo khoa học hoàn chỉnh tại `docs/M1_3_REPAIRED_EVALUATION_REPORT.md`.
+  - Cập nhật test suite với `test_generate_m13_markdown_report_unwraps_metrics` và `test_canonical_m13_audit_integrity`.
+  - Toàn bộ **129/129 tests passed in 14.85s**.
+- **Trạng Thái Milestone:** M1.3 P0 Audit & Repair **COMPLETE & VERIFIED**.
+

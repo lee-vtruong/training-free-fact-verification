@@ -268,3 +268,73 @@ def test_end_to_end_synthetic_runner(
     assert "net_gain" in comp
     assert "mcnemar_p_value" in comp
     assert "bootstrap_95_ci_lower" in comp
+
+
+def test_generate_m13_markdown_report_unwraps_metrics(tmp_path: Path):
+    from tffv.verification.m13_runner import generate_m13_markdown_report
+
+    cond_summaries = {
+        "C0": {
+            "metrics": {
+                "accuracy": 0.6087,
+                "macro_f1": 0.4883,
+                "macro_precision": 0.5028,
+                "macro_recall": 0.6453,
+                "total_claims": 46,
+                "correct_claims": 28,
+                "confusion_matrix": {
+                    "Supported": {"Supported": 9, "Unparseable": 0},
+                },
+                "per_class": {
+                    "Supported": {"f1": 0.6923},
+                    "Refuted": {"f1": 0.7442},
+                    "Not Enough Evidence": {"f1": 0.2500},
+                    "Conflicting Evidence/Cherrypicking": {"f1": 0.2667},
+                },
+            },
+            "timing": {
+                "mean_latency_seconds": 4.47,
+                "mean_prompt_tokens": 2483,
+                "mean_generation_tokens": 192.3,
+            },
+        }
+    }
+    paired = {}
+    part_manifest = {"total_source_claims": 50, "admitted_claims_count": 46}
+
+    report_p = generate_m13_markdown_report(
+        condition_summaries=cond_summaries,
+        paired_comparisons=paired,
+        output_dir=tmp_path,
+        partition_manifest=part_manifest,
+    )
+    content = report_p.read_text(encoding="utf-8")
+    assert "60.9%" in content
+    assert "0.4883" in content
+    assert "46/46" in content
+    assert "0.6923" in content
+    assert "0/0" not in content
+
+
+def test_canonical_m13_audit_integrity():
+    from tffv.verification.m13_audit import run_comprehensive_audit_and_repair
+    summary = run_comprehensive_audit_and_repair()
+    
+    assert summary["total_evaluation_claims"] == 46
+    metrics = summary["metrics_by_condition"]
+    paired = summary["paired_comparisons"]
+
+    assert len(metrics) == 7
+    for cond in ["C0", "C1", "C2", "C3", "C4", "C5", "C6"]:
+        assert metrics[cond]["total_claims"] == 46
+        assert metrics[cond]["valid_verdicts"] + metrics[cond]["unparsed_claims"] == 46
+        assert metrics[cond]["mean_output_tokens"] > 100.0  # Token accounting verified nonzero!
+
+    # Paired transition assertions
+    for cond in ["C1", "C2", "C3", "C4", "C5", "C6"]:
+        p = paired[cond]
+        assert p["net_gain"] == p["delta_correct"]
+        assert p["improved_total"] - p["regressed_total"] == p["net_gain"]
+        cats = p["categories"]
+        assert sum(cats.values()) == 46  # All 9 categories sum to 46
+

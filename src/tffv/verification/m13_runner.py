@@ -98,7 +98,7 @@ def run_condition_inference(
             "predicted_verdict": parsed_verdict,
             "valid_verdict": bool(parsed_verdict in VERDICTS),
             "prompt_tokens": response.get("prompt_tokens"),
-            "generation_tokens": response.get("generation_tokens"),
+            "generation_tokens": response.get("generated_tokens") or response.get("generation_tokens"),
             "latency_seconds": round(latency, 4),
             "prompt_sha256": prompt_data.get("prompt_sha256"),
             "exemplar_sample_ids": used_exemplars,
@@ -248,13 +248,18 @@ def generate_m13_markdown_report(
         if cond not in condition_summaries:
             continue
         s = condition_summaries[cond]
-        metrics = s.get("metrics", {})
+        raw_m = s.get("metrics", {})
+        metrics = raw_m.get("metrics", raw_m)
         timing = s.get("timing", {})
         acc = metrics.get("accuracy", 0.0) * 100
         mf1 = metrics.get("macro_f1", 0.0)
         mprec = metrics.get("macro_precision", 0.0)
         mrec = metrics.get("macro_recall", 0.0)
-        valid = f"{metrics.get('valid_verdicts', 0)}/{metrics.get('total_claims', 0)}"
+        total_claims = metrics.get("total_claims", 0)
+        conf_mat = metrics.get("confusion_matrix", {})
+        unparsed_claims = sum(preds.get("Unparseable", 0) for preds in conf_mat.values())
+        valid_claims = total_claims - unparsed_claims
+        valid = f"{valid_claims}/{total_claims}" if total_claims > 0 else "0/0"
         lat = f"{timing.get('mean_latency_seconds', 0.0):.2f}s"
         toks = f"{timing.get('mean_prompt_tokens', 0):.0f} / {timing.get('mean_generation_tokens', 0):.0f}"
         desc = cond_descriptions.get(cond, "")
@@ -273,11 +278,17 @@ def generate_m13_markdown_report(
     for cond in ALL_CONDITIONS:
         if cond not in condition_summaries:
             continue
-        per_class = condition_summaries[cond].get("metrics", {}).get("per_class_f1", {})
-        s_f1 = per_class.get("Supported", 0.0)
-        r_f1 = per_class.get("Refuted", 0.0)
-        n_f1 = per_class.get("Not Enough Evidence", 0.0)
-        c_f1 = per_class.get("Conflicting Evidence/Cherrypicking", 0.0)
+        s = condition_summaries[cond]
+        raw_m = s.get("metrics", {})
+        metrics = raw_m.get("metrics", raw_m)
+        pc = metrics.get("per_class", {})
+        def _get_f1(c_name):
+            val = pc.get(c_name, {})
+            return val.get("f1", 0.0) if isinstance(val, dict) else (val if isinstance(val, (int, float)) else 0.0)
+        s_f1 = _get_f1("Supported")
+        r_f1 = _get_f1("Refuted")
+        n_f1 = _get_f1("Not Enough Evidence")
+        c_f1 = _get_f1("Conflicting Evidence/Cherrypicking")
         lines.append(f"| **{cond}** | {s_f1:.4f} | {r_f1:.4f} | {n_f1:.4f} | {c_f1:.4f} |")
 
     lines.extend([
@@ -290,8 +301,8 @@ def generate_m13_markdown_report(
         "- **Exact McNemar p-value:** Two-sided binomial test on discordant pairs ($b$ regressed vs $c$ improved).",
         r"- **Paired Bootstrap 95% CI:** 10,000 bootstrap resamples of paired accuracy differences ($\Delta = y_{\text{cond}} - y_{\text{C0}}$).",
         "",
-        r"| Condition vs C0 | Net Gain | Improved | Regressed | Unchanged (Corr/Wrong) | McNemar Discordant ($b/c$) | McNemar $p$-value | Bootstrap 95% CI ($\Delta$ Acc) | Stat. Sig ($p < 0.05$)? |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|:---:|",
+        r"| Condition vs C0 | Net Gain | Improved | Regressed | Unchanged (Corr/Wrong/Unp) | Transitions to Unparsed (Corr/Wrong) | Sum of Categories | McNemar Discordant ($b/c$) | McNemar $p$-value | Bootstrap 95% CI ($\Delta$ Acc) | Stat. Sig ($p < 0.05$)? |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---:|",
     ])
 
     for cond in ALL_CONDITIONS[1:]:
@@ -301,13 +312,29 @@ def generate_m13_markdown_report(
         net = f"{comp['net_gain']:+d}"
         imp = comp["improved_total"]
         reg = comp["regressed_total"]
-        unch = f"{comp['unchanged_correct']} / {comp['unchanged_wrong']}"
+        unch = f"{comp['unchanged_correct']} / {comp['unchanged_wrong']} / {comp.get('unchanged_unparsed', 0)}"
+        to_unp = f"{comp.get('correct_to_unparsed', 0)} / {comp.get('wrong_to_unparsed', 0)}"
+        
+        # Calculate full 9-category sum
+        cat_sum = (
+            comp.get('unchanged_correct', 0)
+            + comp.get('unchanged_wrong', 0)
+            + comp.get('unchanged_unparsed', 0)
+            + comp.get('wrong_to_correct', 0)
+            + comp.get('unparsed_to_correct', 0)
+            + comp.get('correct_to_wrong', 0)
+            + comp.get('correct_to_unparsed', 0)
+            + comp.get('wrong_to_unparsed', 0)
+            + comp.get('unparsed_to_wrong', 0)
+        )
+        total_str = f"{cat_sum}/{comp['total_claims']}"
+
         disc = f"{comp['mcnemar_b']} / {comp['mcnemar_c']}"
         p_val = comp["mcnemar_p_value"]
         p_str = f"{p_val:.4f}" if p_val >= 0.0001 else f"{p_val:.2e}"
         ci_str = f"[{comp['bootstrap_95_ci_lower']*100:+.1f}%, {comp['bootstrap_95_ci_upper']*100:+.1f}%]"
         sig = "Yes" if p_val < 0.05 else "No"
-        lines.append(f"| **{cond} vs C0** | **{net}** | {imp} | {reg} | {unch} | {disc} | {p_str} | {ci_str} | {sig} |")
+        lines.append(f"| **{cond} vs C0** | **{net}** | {imp} | {reg} | {unch} | {to_unp} | **{total_str}** | {disc} | {p_str} | {ci_str} | {sig} |")
 
     lines.extend([
         "",
@@ -481,7 +508,7 @@ def main() -> None:
         lats = [r.get("latency_seconds") or 0.0 for r in preds_rows]
 
         condition_summaries[cond] = {
-            "metrics": eval_summary,
+            "metrics": eval_summary.get("metrics", eval_summary),
             "timing": {
                 "total_latency_seconds": cond_manifest.get("total_latency_seconds", 0.0),
                 "mean_latency_seconds": round(sum(lats) / len(lats), 4) if lats else 0.0,
