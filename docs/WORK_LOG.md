@@ -858,48 +858,33 @@
 - **Kiểm Thử Phần Mềm:**
   * Local: `python scripts/run_tests.py` -> **138/138 passed in 23.80s** (100% pass rate).
 - **Trạng Thái Milestone:** M1.4.1 Mechanism Audit & Confirmatory Setup **COMPLETE & VERIFIED**.
+## 2026-10-25 12:00 +07:00 — M1.4.1 Chuẩn Bị Bằng Chứng R4 Fold C & Tích Hợp Confirmatory Execution
 
 - **Mục tiêu:**
-  1. *Part A — Hoàn thiện tính nhất quán báo cáo M1.3:* Sửa nguồn số Macro-F1 của C6 (khớp chính xác 0.3508 giữa bảng và phần phân tích narrative); tái thiết kế bảng chuyển đổi cặp thể hiện tường minh 9 danh mục độc lập loại trừ lẫn nhau ($C \to C, C \to W, C \to U, W \to C, W \to W, W \to U, U \to C, U \to W, U \to U$), mỗi claim thuộc đúng 1 category và tổng bằng 46; bóc tách suy giảm của C6 thành 2 phần độc lập: tổn thất do truncation (6 claims) và tổn thất phân loại ngữ nghĩa trên tập parsed (6 claims); loại bỏ mọi nhận định tâm lý/nhân quả chưa được kiểm chứng.
-  2. *Part B — Chuẩn bị toàn diện Pilot M1.4 (Training-Free, Quality-First):* Thiết kế giao thức thử nghiệm có kiểm soát D0–D6 với context budget nghiêm ngặt (< 3.200 tokens), k=2 compact demonstrations, retrieval tương đồng từ vựng 3-gram, luật kiểm định ngắn gọn (ngăn chặn cạn kiệt ngân sách sinh).
-- **Chi Tiết Khắc Phục Part A (M1.3 Final Consistency):**
-  - Đã đối soát mã nguồn và dữ liệu JSON: C6 Macro-F1 thực tế là **0.3508** (trung bình F1 4 lớp: Supported 0.5517, Refuted 0.4516, Not Enough Evidence 0.4000, Cherrypicking 0.0000). Giá trị 0.2867 trong phần phân tích văn bản là lỗi typo từ bản thảo sớm, đã được sửa chuẩn hóa trong `src/tffv/verification/m13_audit.py` và `docs/M1_3_REPAIRED_EVALUATION_REPORT.md`.
-  - Bảng so sánh cặp được tổ chức lại với 9 cột độc lập, không gộp lẫn nhóm cha và nhóm con:
-    * C1: 23 $C \to C$, 4 $C \to W$, 1 $C \to U$, 3 $W \to C$, 15 $W \to W$, 0 $W \to U$, 0 $U \to C$, 0 $U \to W$, 0 $U \to U$. Tổng = 46. Net = -2.
-    * C2: 18 $C \to C$, 10 $C \to W$, 0 $C \to U$, 1 $W \to C$, 17 $W \to W$, 0 $W \to U$. Tổng = 46. Net = -9.
-    * C3: 20 $C \to C$, 8 $C \to W$, 0 $C \to U$, 4 $W \to C$, 14 $W \to W$, 0 $W \to U$. Tổng = 46. Net = -4.
-    * C4: 19 $C \to C$, 8 $C \to W$, 1 $C \to U$, 1 $W \to C$, 15 $W \to W$, 2 $W \to U$. Tổng = 46. Net = -8.
-    * C5: 19 $C \to C$, 8 $C \to W$, 1 $C \to U$, 4 $W \to C$, 13 $W \to W$, 1 $W \to U$. Tổng = 46. Net = -5.
-    * C6: 15 $C \to C$, 7 $C \to W$, 6 $C \to U$, 1 $W \to C$, 11 $W \to W$, 6 $W \to U$. Tổng = 46. Net = -12.
-  - Phân tích bóc tách C6: Trong 12 claims bị unparsed, có 6 claims trước đó đã đoán đúng ở C0 ($C \to U = 6$). Trên 34 claims parsed, mô hình đúng 16 claims (độ chính xác có điều kiện 47.1% so với 64.7% của C0 trên chính 34 claims này, net loss = 6 claims). Như vậy 50% mức suy giảm là do truncation cơ học của token budget, 50% là do phân loại ngữ nghĩa.
-- **Triển Khai M1.4 Controlled Pilot (Part B):**
-  - **7 Điều kiện thực nghiệm:**
-    * `D0`: Frozen Base Protocol v1.0 (Zero-shot B1, R4 Top-8, 512 tokens).
-    * `D1`: Concise generic verification rules (chỉ thị ngắn gọn 2 câu, ép lý giải 1 câu để không vượt 512 tokens).
-    * `D2`: Concise source-derived error rules (luật đúc kết từ lỗi Fold A về media debate và missing context).
-    * `D3`: Random error demonstrations ($k=2$, trích xuất Top-1 passage $\le 250$ ký tự từ Fold A).
-    * `D4`: Similarity-retrieved error demonstrations ($k=2$, truy xuất lỗi tương đồng từ vựng 3-gram từ Fold A).
-    * `D5`: Similarity-retrieved error demonstrations with verified corrections ($k=2$, kèm Base mistake và Gold correction).
-    * `D6`: Correct/wrong contrastive demonstrations ($k=2$: 1 nearest correct + 1 nearest error từ Fold A).
-  - **Modules triển khai mới:**
-    * `src/tffv/verification/m14_prompting.py`: Bộ sinh prompt cho D0–D6, hàm tính độ tương đồng 3-gram và bộ chọn top-k tương đồng xác định.
-    * `src/tffv/verification/m14_runner.py`: Runner thực nghiệm toàn diện, tự động seal hash, tính toán chuyển đổi cặp 9 danh mục, kiểm định McNemar và Bootstrap CI.
-    * `scripts/run_m14_pilot.sh`: Script bash thực thi trên server GPU RTX 5090.
-    * `tests/test_m14_pilot.py`: Bộ kiểm thử 4 bài test độ tương đồng, sinh prompt và synthetic end-to-end runner.
-    * `docs/M1_4_PILOT_PROTOCOL.md`: Đặc tả chi tiết giao thức, giả thuyết và hướng dẫn vận hành.
-  - **Chỉ định pilot:** Toàn bộ thực nghiệm M1.4 trên 46 claims Fold B được đánh dấu rõ là **EXPLORATORY DEBUG PILOT** để phát hiện cơ chế; bất kỳ tín hiệu khả quan nào cũng phải được kiểm chứng lại trên tập held-out độc lập.
-- **Kết Quả Kiểm Thử Phần Mềm & Xác Minh Server:**
-  * Sửa lỗi chữ ký gọi hàm `Qwen3FrozenBackbone(spec=spec, device=args.device, dtype=args.dtype)` trong `src/tffv/verification/m14_runner.py`.
-  * Giới hạn chặt chẽ `candidate_sids` trong Fold B (`50 <= id < 100`) ngăn chặn việc nạp quá 3.000 claims từ toàn bộ corpus.
-  * Bổ sung cơ chế chống tràn số `OverflowError` trong `exact_mcnemar_test_twosided` (`src/tffv/verification/stabilization.py`) với xấp xỉ phân phối chuẩn hiệu chỉnh tính liên tục cho $N > 1000$.
-  * Bổ sung script tiền kiểm tra thực tế trên server GPU: `scripts/test_m14_server_preflight.py`.
-  * **Xác minh trực tiếp trên server `hvtham-server` qua SSH:**
-    1. Tải thành công `Qwen3FrozenBackbone` trên GPU CUDA trong 7.31s.
-    2. Chạy thử 1 forward pass thành công trong 1.25s.
-    3. Chạy thử toàn bộ pipeline `m14_runner.py` trên các tệp dữ liệu thật của server (`R4.jsonl`, `claims.jsonl`, `train.json`, `b1_preds`) hoàn thành 100% không có lỗi, sinh đầy đủ báo cáo Markdown.
-  * Toàn bộ **134/134 unit tests** đạt 100% pass trên cả máy local và server.
-- **Trạng Thái Git:**
-  * Đã push commit `75f88d1` lên nhánh `main`. Pipeline đã được tiền kiểm tra và sẵn sàng 100% để người dùng bấm lệnh chạy.
-
-
+  1. Kiểm toán toàn diện pipeline truy xuất M1.1, configs, schemas và script trích xuất candidate stores; kiểm tra trực tiếp nguồn train_0_999.zip và cấu trúc các thành viên cho 50 claims train:100..149.
+  2. Xây dựng pipeline end-to-end src/tffv/retrieval/prepare_fold_c.py và script điều phối scripts/prepare_fold_c_evidence.sh thực thi đầy đủ 5 công đoạn M1.1: acquire -> audit -> prepare_candidates -> store_retrieval (R1 BM25, R2 Dense, R3 RRF, R4 Reranker) -> contract verification.
+  3. Hiện thực hóa bộ kiểm tra tính toàn vẹn (verifier contract integrity): đảm bảo đúng 50 unique claim IDs train:100..149, 50 aligned Top-8 evidence records, kiểm tra schema và niêm phong evidence_manifest.json.
+  4. Tích hợp liền mạch với scripts/run_m141_confirmatory.sh qua cờ --prepare-evidence hoặc tự động điều hướng, cho phép người dùng chạy tuần tự retrieval và verification mà không phải sửa tay đường dẫn.
+  5. Xử lý triệt để nguyên nhân test test_fold_c_quarantine bị skipped trên server: trước đó kiểm tra hardcoded data/raw/averitec/train.json (vốn chỉ có trên local), đã nâng cấp dùng find_train_json() tự động nhận diện /home/stackops/whale/ERRORFlow/data/raw/averitec/train.json trên server; toàn bộ test suite đạt 143 passed, 0 skipped.
+- **Kết Quả Kiểm Toán Nguồn ZIP train_0_999.zip:**
+  - Kho tri thức data_store/knowledge_store/train/train_0_999.zip trên Hugging Face (chenxwh/AVeriTeC, revision 2ca9dee23a2a6fa64c5bd918e0cd28ed0aa09031, dung lượng nén 20.730.339.734 bytes) bao trùm toàn bộ các claims từ 0 đến 999.
+  - Đã chạy probe thực nghiệm qua HTTP Range đọc Central Directory: thành viên 100.json tồn tại chính xác, kích thước nén 17.644.897 bytes, kích thước giải nén 50.509.610 bytes, CRC32 5eb5d360. Cấu trúc định danh khớp tuyệt đối với quy ước M1.1 {identity}.json.
+- **Thiết Kế & Triển Khai Module prepare_fold_c.py:**
+  - **Stage 1 (Acquire):** Sử dụng HTTPRangeReader tải đúng 50 candidate stores (train-100.json .. train-149.json) theo ngân sách tải nén đã định.
+  - **Stage 2 (Audit):** Chạy audit_store kiểm tra tính toàn vẹn CRC, sha256 và quét cờ URL/verdict, xuất audit_summary.json.
+  - **Stage 3 (Candidate Preparation):** Áp dụng chính sách quarantine_review_flags_v1 loại bỏ các hàng rò rỉ fact-check và URL rỗng, xuất candidate_manifest.json.
+  - **Stage 4 (GPU Retrieval R1–R4):** Thực thi BM25 (R1), Qwen3-Embedding-0.6B (R2), RRF fusion (R3), và Qwen3-Reranker-0.6B (R4) với candidate depth = 200, lưu Top-100, trích xuất Top-8 evidence.
+  - **Stage 5 (Verifier Contract & Integrity Verification):**
+    * Xác minh tồn tại và hợp lệ của R4.jsonl và claims.jsonl.
+    * Kiểm tra đúng 50 records aligned, sample_ids khớp chính xác train:100 .. train:149.
+    * Không có bản ghi nào bị thiếu, trùng lặp hay rỗng.
+    * Đóng gói niêm phong evidence_manifest.json chứa sha256 và provenance.
+- **Tích Hợp Script Điều Phối:**
+  - scripts/prepare_fold_c_evidence.sh: Nạp environment và mô hình Qwen3, tự động tìm kiếm acquisition_plan.json và claims_manifest.json, chạy pipeline và xuất ra outputs/m141-confirmatory-r4/.
+  - scripts/run_m141_confirmatory.sh: Hỗ trợ cờ --prepare-evidence. Khi bằng chứng R4 chưa có, script tự động gợi ý hoặc kích hoạt preparation trước khi bước vào đánh giá mô hình ngôn ngữ D0/D3/D4/D5/D2.
+- **Kiểm Thử Phần Mềm:**
+  - Thêm 5 bài test trong tests/test_prepare_fold_c.py: kiểm tra contract hợp lệ, kiểm tra phát hiện thiếu records, kiểm tra sai lệch sample_ids, kiểm tra bằng chứng rỗng, kiểm tra auto-resolver đường dẫn.
+  - Sửa tests/test_m141_confirmatory.py để dùng find_train_json() giải quyết dứt điểm tình trạng skipped test trên server.
+  - Chạy python scripts/run_tests.py: 143/143 passed in 21.31s (100% pass, 0 skipped, 0 failures).
+- **Trạng Thái Milestone:** M1.4.1 Evidence Preparation & Confirmatory Suite **READY FOR SERVER EXECUTION**.
 

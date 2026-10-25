@@ -50,8 +50,22 @@ if [[ ! -f "$R4_SOURCE_EVIDENCE" ]]; then
 fi
 
 # 4. Check Fold C R4 Evidence Availability
+PREPARE_EVIDENCE=false
+if [[ "${1:-}" == "--prepare-evidence" ]]; then
+    PREPARE_EVIDENCE=true
+    shift
+fi
+
 FOLD_C_R4="${1:-outputs/m141-confirmatory-r4/R4.jsonl}"
 FOLD_C_CLAIMS="${2:-outputs/m141-confirmatory-r4/claims.jsonl}"
+
+if [[ "$PREPARE_EVIDENCE" == "true" || (! -f "$FOLD_C_R4" && -z "${1:-}") ]]; then
+    if [[ "$PREPARE_EVIDENCE" == "true" || -t 0 ]]; then
+        echo ">>> Fold C R4 evidence missing. Triggering automated preparation pipeline..."
+        chmod +x scripts/prepare_fold_c_evidence.sh
+        bash scripts/prepare_fold_c_evidence.sh "outputs/m141-confirmatory-r4"
+    fi
+fi
 
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 OUTPUT_DIR="outputs/m141-confirmatory-$TIMESTAMP"
@@ -62,11 +76,9 @@ if [[ ! -f "$FOLD_C_R4" || ! -f "$FOLD_C_CLAIMS" ]]; then
     echo "Target R4 path checked: $FOLD_C_R4"
     echo "Target claims path checked: $FOLD_C_CLAIMS"
     echo "--------------------------------------------------------------------------------"
-    echo "To produce frozen R4 evidence for Fold C before running verification:"
-    echo "  1) Extract knowledge stores for train-100 to train-149 from train_0_999.zip."
-    echo "  2) Execute frozen R1-R4 retrieval with Qwen3-Embedding & Qwen3-Reranker."
-    echo "  3) Provide the resulting R4.jsonl and claims.jsonl as arguments to this script:"
-    echo "     bash scripts/run_m141_confirmatory.sh <path_to_R4.jsonl> <path_to_claims.jsonl>"
+    echo "Run the preparation script first, or pass --prepare-evidence:"
+    echo "  bash scripts/prepare_fold_c_evidence.sh"
+    echo "  bash scripts/run_m141_confirmatory.sh --prepare-evidence"
     echo "--------------------------------------------------------------------------------"
     exit 2
 fi

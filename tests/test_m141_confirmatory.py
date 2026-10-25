@@ -8,6 +8,7 @@ import pytest
 
 from tffv.verification.evaluate import compute_metrics, load_gold_labels
 from tffv.verification.leakage import quarantine_near_duplicates
+from tffv.verification.m13_audit import find_train_json
 from tffv.verification.m141_confirmatory import (
     fast_macro_f1_from_indices,
     paired_bootstrap_macro_f1_ci,
@@ -59,9 +60,9 @@ def test_paired_bootstrap_macro_f1_ci():
 def test_fold_c_quarantine():
     """Verify near-duplicate quarantine between Fold A and Fold C."""
     root = Path(__file__).resolve().parent.parent
-    train_json_p = root / "data" / "raw" / "averitec" / "train.json"
-    if not train_json_p.is_file():
-        pytest.skip("train.json not found")
+    train_json_p = find_train_json(project_root=root)
+    if not train_json_p or not train_json_p.is_file():
+        pytest.skip(f"train.json not found (searched project root and server paths)")
 
     gold_map = load_gold_labels(train_json_p)
     source_claims = [gold_map[f"train:{i}"] for i in range(50)]
