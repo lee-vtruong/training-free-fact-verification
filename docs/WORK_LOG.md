@@ -925,3 +925,26 @@
   - Chạy python scripts/run_tests.py: 145/145 passed in 23.97s (100% pass, 0 failures).
 - **Trạng Thái Milestone:** Confirmatory Runner Fix Verified & **READY FOR EXECUTION**.
 
+## 2026-10-25 17:35 +07:00 — M1.4.1 Confirmatory Experiment Execution & Scientific Findings on Fold C
+
+- **Mục tiêu:** Thực thi đánh giá kiểm định độc lập hoàn chỉnh trên Fold C (train:100..149, 50 claims) chưa từng quan sát trong quá trình khám phá D4; đối chiếu hiệu năng giữa các điều kiện D0, D3, D4, D5, D2 trên mô hình đông băng Qwen3-8B.
+- **Vị trí Artifacts & Báo Cáo:**
+  * Báo cáo khoa học chính thức: docs/M1_4_1_CONFIRMATORY_REPORT.md (và outputs/m141-confirmatory-20261025-101555/M1_4_1_CONFIRMATORY_REPORT.md).
+  * Chi tiết số liệu: outputs/m141-confirmatory-20261025-101555/metrics_summary.json & paired_comparisons.json.
+  * Tập bằng chứng R4 đông băng: outputs/m141-confirmatory-r4/R4.jsonl & evidence_manifest.json.
+- **Kết Quả Thực Nghiệm & Phát Hiện Khoa Học Cốt Lõi:**
+  1. D4 (Similarity-Retrieved Error Demonstrations) KHÔNG giữ được ưu thế trên tập độc lập:
+     - Trên Fold B (pilot), D4 từng đạt Macro-F1 0.5562 do may mắn đoán đúng 1 claim lớp thiểu số.
+     - Trên Fold C độc lập, Macro-F1 của D4 rớt xuống 0.3333 (thấp hơn cả baseline D0 là 0.3801 và D3 là 0.3739).
+     - So sánh cặp D4 vs D0: Accuracy 62.0% vs 54.0% (Net Gain: +4 claims, exact McNemar p = 0.2891, không có ý nghĩa thống kê).
+     - So sánh cặp D4 vs D3: Net Gain: -3 claims (p = 0.4531, D4 kém hơn cả chọn mẫu ngẫu nhiên D3).
+     => Kết luận khoa học: Cơ chế truy xuất lỗi theo độ tương đồng từ vựng 3-gram không mang lại lợi thế tổng quát hóa đáng tin cậy.
+  2. D2 (Concise Source-Derived Error Rules) LÀ ĐIỀU KIỆN DUY NHẤT VƯỢT TRỘI CÓ Ý NGHĨA THỐNG KÊ:
+     - Đạt Accuracy cao nhất: 68.0% (34/50 đúng) so với 54.0% (27/50 đúng) của Base D0.
+     - Đạt Macro-F1 cao nhất: 0.4365 so với 0.3801 của Base D0.
+     - So sánh cặp D2 vs D0: Net Gain: +7 claims (8 improved, 1 regressed, 26 unchanged correct).
+     - Kiểm định chính xác McNemar (hai phía): p = 0.0156 (CÓ Ý NGHĨA THỐNG KÊ ở mức alpha = 0.05).
+     - Paired Bootstrap 95% CI trên Delta Accuracy: [+0.0600, +0.2400] (hoàn toàn dương, không chứa 0).
+     - Hiệu năng cực cao: Latency chỉ 1.62s/claim, tokens sinh ra chỉ 64.2 tokens.
+- **Trạng Thái Milestone:** M1.4.1 Confirmatory Fact Verification **OFFICIALLY COMPLETED & VALIDATED**.
+
