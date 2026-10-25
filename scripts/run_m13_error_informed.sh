@@ -72,6 +72,7 @@ python -m tffv.verification.m13_runner \
   --r4-path "$R4_PATH" \
   --claims-path "$CLAIMS_PATH" \
   --train-json "$TRAIN_JSON" \
+  --model-path "$MODEL_PATH" \
   --b1-predictions "$B1_PREDICTIONS" \
   --output-dir "$OUT_DIR" \
   --condition ALL \

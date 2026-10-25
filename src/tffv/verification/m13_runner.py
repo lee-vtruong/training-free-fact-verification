@@ -351,6 +351,8 @@ def main() -> None:
     parser.add_argument("--source-sids", default=None, help="Comma-separated list or text file of source sample_ids")
     parser.add_argument("--max-claims", type=int, default=None, help="Max evaluation claims (for smoke testing)")
     parser.add_argument("--synthetic", action="store_true", help="Run with synthetic backbone for local validation")
+    parser.add_argument("--model-path", default=None, help="Local path to Qwen3-8B checkpoint")
+    parser.add_argument("--revision", default=EXPECTED_QWEN3_8B_REVISION, help="Pinned model commit SHA")
     parser.add_argument("--device", default="cuda", help="PyTorch device for live model")
     parser.add_argument("--dtype", default="bfloat16", help="Precision for live model")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for sampling exemplars")
@@ -438,7 +440,8 @@ def main() -> None:
     else:
         spec = {
             "model_id": EXPECTED_QWEN3_8B_ID,
-            "revision": EXPECTED_QWEN3_8B_REVISION,
+            "revision": args.revision or EXPECTED_QWEN3_8B_REVISION,
+            "local_path": args.model_path,
         }
         backbone = Qwen3FrozenBackbone(spec=spec, device=args.device, dtype=args.dtype)
 
