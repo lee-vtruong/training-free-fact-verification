@@ -25,8 +25,8 @@ def dump_jsonl(path: Path, rows: List[Dict[str, Any]]) -> None:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
 
-def load_evidence_by_claim(r4_path: Path) -> Dict[str, List[Dict[str, Any]]]:
-    """Load Top-8 evidence passages per claim from sealed R4 retrieval output."""
+def load_evidence_by_claim(r4_path: Path, depth: Optional[int] = None) -> Dict[str, List[Dict[str, Any]]]:
+    """Load Top-N evidence passages per claim from sealed R4 retrieval output."""
     r4_path = Path(r4_path).expanduser().resolve()
     if not r4_path.is_file():
         raise ValueError(f"R4 retrieval output not found: {r4_path}")
@@ -34,7 +34,8 @@ def load_evidence_by_claim(r4_path: Path) -> Dict[str, List[Dict[str, Any]]]:
     evidence_map = {}
     for row in read_jsonl(r4_path):
         sid = row["sample_id"]
-        evidence_map[sid] = row.get("evidence", [])
+        ev = row.get("evidence", [])
+        evidence_map[sid] = ev[:depth] if depth is not None else ev
     return evidence_map
 
 

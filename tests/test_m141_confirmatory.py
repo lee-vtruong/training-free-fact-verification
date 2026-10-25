@@ -93,3 +93,63 @@ def test_exact_mcnemar_properties():
     # Highly asymmetric
     p_asym = exact_mcnemar_test_twosided(0, 10)
     assert p_asym < 0.01
+
+
+def test_m141_cli_runner_synthetic(tmp_path: Path, monkeypatch):
+    """End-to-end synthetic CLI runner test for m141_confirmatory.main."""
+    from tffv.verification.m141_confirmatory import main
+    from tffv.verification.predict import dump_jsonl
+
+    # Mock Fold A (0..49) and Fold C (100..105)
+    all_indices = list(range(106))
+    claims_rows = [
+        {"sample_id": f"train:{i}", "claim": f"Claim statement {i}"}
+        for i in all_indices
+    ]
+    claims_p = tmp_path / "claims.jsonl"
+    dump_jsonl(claims_p, claims_rows)
+
+    evidence_rows = [
+        {"sample_id": f"train:{i}", "evidence": [{"text": f"Evidence {i}", "source_url": f"https://example.com/{i}"}]}
+        for i in all_indices
+    ]
+    evidence_p = tmp_path / "R4.jsonl"
+    dump_jsonl(evidence_p, evidence_rows)
+
+    train_json_data = [
+        {"claim_id": i, "label": "Supported" if i % 2 == 0 else "Refuted", "claim": f"Claim statement {i}"}
+        for i in all_indices
+    ]
+    train_json_p = tmp_path / "train.json"
+    train_json_p.write_text(json.dumps(train_json_data), encoding="utf-8")
+
+    b1_preds_rows = [
+        {"sample_id": f"train:{i}", "predicted_verdict": "Supported" if i % 2 == 0 else "Refuted", "raw_generation": "Verdict: Supported"}
+        for i in range(50)
+    ]
+    b1_preds_p = tmp_path / "b1_preds.jsonl"
+    dump_jsonl(b1_preds_p, b1_preds_rows)
+
+    out_dir = tmp_path / "confirmatory_out"
+    test_args = [
+        "m141_confirmatory.py",
+        "--r4-evidence", str(evidence_p),
+        "--claims-jsonl", str(claims_p),
+        "--train-json", str(train_json_p),
+        "--b1-predictions", str(b1_preds_p),
+        "--r4-source-evidence", str(evidence_p),
+        "--output-dir", str(out_dir),
+        "--use-synthetic",
+        "--conditions", "D0", "D3", "D4",
+        "--eval-start", "100",
+        "--eval-end", "105",
+    ]
+    monkeypatch.setattr("sys.argv", test_args)
+    main()
+
+    assert (out_dir / "partition_manifest.json").is_file()
+    assert (out_dir / "D0" / "predictions.jsonl").is_file()
+    assert (out_dir / "D4" / "predictions.jsonl").is_file()
+    assert (out_dir / "M1_4_1_CONFIRMATORY_REPORT.md").is_file()
+    assert (out_dir / "metrics_summary.json").is_file()
+    assert (out_dir / "paired_comparisons.json").is_file()

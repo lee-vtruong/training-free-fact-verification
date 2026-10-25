@@ -913,3 +913,15 @@
 - **Kiểm thử Phần mềm:**
   - Chạy python scripts/run_tests.py tests/test_m141_confirmatory.py tests/test_prepare_fold_c.py tests/test_acquire_subset.py tests/test_remote_zip.py: 21/21 passed in 14.96s (100% pass).
 
+## 2026-10-25 17:15 +07:00 — M1.4.1 Fix Depth Parameter in Evidence Loading & Confirmatory CLI Robustness
+
+- **Mục tiêu:** Khắc phục lỗi TypeError: load_evidence_by_claim() got an unexpected keyword argument 'depth' và loại bỏ device_map='auto' khi khởi tạo Qwen3FrozenBackbone.
+- **Khắc phục:**
+  1. src/tffv/verification/predict.py: Bổ sung tham số depth: Optional[int] = None cho load_evidence_by_claim để cho phép cắt lát top-N bằng chứng một cách linh hoạt mà vẫn tương thích ngược tuyệt đối.
+  2. src/tffv/verification/m141_confirmatory.py: Loại bỏ device_map='auto' khi khởi tạo Qwen3FrozenBackbone (chỉ dùng spec, device='cuda', dtype='bfloat16' đúng đặc tả module); đồng thời xuất bổ sung metrics_summary.json và paired_comparisons.json vào thư mục đầu ra.
+  3. src/tffv/verification/evaluate.py: Cải thiện compute_metrics trả về cấu trúc chỉ số đầy đủ khi danh sách đánh giá rỗng (tránh phát sinh KeyError: 'confusion_matrix').
+  4. Bổ sung bài test tích hợp test_m141_cli_runner_synthetic trong tests/test_m141_confirmatory.py.
+- **Kiểm thử Phần mềm:**
+  - Chạy python scripts/run_tests.py: 145/145 passed in 23.97s (100% pass, 0 failures).
+- **Trạng Thái Milestone:** Confirmatory Runner Fix Verified & **READY FOR EXECUTION**.
+

@@ -37,15 +37,24 @@ def compute_metrics(
 ) -> Dict[str, Any]:
     """Compute Accuracy, Macro-F1, per-class P/R/F1, and 4x4 Confusion Matrix."""
     total = len(eval_rows)
+    all_pred_classes = list(VERDICTS) + ["Unparseable"]
     if total == 0:
-        return {}
+        return {
+            "total_evaluated": 0,
+            "correct_verdicts": 0,
+            "accuracy": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0,
+            "confusion_matrix": {g: {p: 0 for p in all_pred_classes} for g in VERDICTS},
+            "per_class": {g: {"precision": 0.0, "recall": 0.0, "f1": 0.0, "support": 0} for g in VERDICTS},
+        }
 
     correct = sum(1 for r in eval_rows if r["is_correct"])
     accuracy = correct / total
 
     # Confusion matrix: rows = Gold, cols = Predicted
     # Include an 'Unparseable' column if any
-    all_pred_classes = list(VERDICTS) + ["Unparseable"]
     matrix = {g: {p: 0 for p in all_pred_classes} for g in VERDICTS}
 
     per_class = {}

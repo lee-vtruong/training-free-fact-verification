@@ -557,7 +557,6 @@ def main():
             spec=spec,
             device="cuda",
             dtype="bfloat16",
-            device_map="auto",
         )
 
     # 5. Execute inference and evaluation for each condition
@@ -593,6 +592,9 @@ def main():
                 train_json_path=train_json_p,
             )
             paired_comparisons[f"{target_c}_vs_{base_c}"] = cmp
+
+    write_json(output_dir / "metrics_summary.json", condition_summaries)
+    write_json(output_dir / "paired_comparisons.json", paired_comparisons)
 
     # 7. Generate final confirmatory report
     report_p = generate_confirmatory_markdown_report(
