@@ -776,8 +776,11 @@
     * `docs/M1_4_PILOT_PROTOCOL.md`: Đặc tả chi tiết giao thức, giả thuyết và hướng dẫn vận hành.
   - **Chỉ định pilot:** Toàn bộ thực nghiệm M1.4 trên 46 claims Fold B được đánh dấu rõ là **EXPLORATORY DEBUG PILOT** để phát hiện cơ chế; bất kỳ tín hiệu khả quan nào cũng phải được kiểm chứng lại trên tập held-out độc lập.
 - **Kết Quả Kiểm Thử Phần Mềm:**
-  * Chạy `pytest -v --basetemp=temp_pytest -p no:cacheprovider`: **133/133 passed in 20.29s** (100% đạt chuẩn).
+  * Sửa lỗi chữ ký gọi hàm `quarantine_near_duplicates` và `build_error_memory_bank` trong `src/tffv/verification/m14_runner.py`.
+  * Bổ sung bài test tích hợp CLI `test_m14_cli_runner_synthetic` trong `tests/test_m14_pilot.py`.
+  * Chạy `pytest -v --basetemp=temp_pytest -p no:cacheprovider`: **134/134 passed in 14.42s** (100% đạt chuẩn).
 - **Trạng Thái Git:**
-  * Sẵn sàng commit và push lên nhánh `main`.
+  * Đã push commit `4ced024` lên nhánh `main`. Sẵn sàng cho người dùng thực thi trên server.
+
 
 
