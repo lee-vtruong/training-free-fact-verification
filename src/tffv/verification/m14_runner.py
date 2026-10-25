@@ -463,7 +463,7 @@ def main() -> None:
     # 2. Partition claims into Fold A (source) and Fold B (candidate evaluation)
     all_sids = sorted(list(claims_map.keys()))
     fold_a_sids = [sid for sid in all_sids if sid.startswith("train:") and int(sid.split(":")[1]) < 50]
-    candidate_sids = [sid for sid in all_sids if sid.startswith("train:") and int(sid.split(":")[1]) >= 50]
+    candidate_sids = [sid for sid in all_sids if sid.startswith("train:") and 50 <= int(sid.split(":")[1]) < 100]
 
     source_claims_objs = [claims_map[sid] for sid in fold_a_sids if sid in claims_map]
     candidate_claims_objs = [claims_map[sid] for sid in candidate_sids if sid in claims_map]

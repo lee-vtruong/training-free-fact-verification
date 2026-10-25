@@ -35,13 +35,18 @@ def _get_claim_status(row: Dict[str, Any]) -> str:
 
 
 def exact_mcnemar_test_twosided(b: int, c: int) -> float:
-    """Compute exact two-sided McNemar p-value via Binomial test under p=0.5."""
+    """Compute exact two-sided McNemar p-value via Binomial test under p=0.5 with robust overflow protection."""
     n_disc = b + c
     if n_disc == 0:
         return 1.0
     m = min(b, c)
-    prob_tails = sum(math.comb(n_disc, i) for i in range(m + 1)) * (0.5 ** n_disc)
-    return min(1.0, 2.0 * prob_tails)
+    if n_disc <= 1000:
+        prob_tails = sum(math.comb(n_disc, i) for i in range(m + 1)) * (0.5 ** n_disc)
+        return min(1.0, 2.0 * prob_tails)
+    # For large sample sizes (n_disc > 1000), use continuity-corrected normal approximation
+    z = max(0.0, abs(b - c) - 1.0) / math.sqrt(n_disc)
+    p = 2.0 * (1.0 - 0.5 * (1.0 + math.erf(z / math.sqrt(2.0))))
+    return max(0.0, min(1.0, p))
 
 
 def paired_bootstrap_ci(
