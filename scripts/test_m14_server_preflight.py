@@ -51,6 +51,7 @@ def test_m14_pipeline_dry_run():
         "CLAIMS_PATH=$(find outputs -maxdepth 2 -type f -path 'outputs/m11-source-claims-*/claims.jsonl' | sort | tail -n 1) && "
         "TRAIN_JSON='/home/stackops/whale/ERRORFlow/data/raw/averitec/train.json' && "
         "B1_PREDICTIONS=$(find outputs -type f \\( -path '*/B1/predictions.jsonl' -o -path '*b1*preds*/predictions.jsonl' -o -path '*b1*/predictions.jsonl' \\) | sort | tail -n 1) && "
+        "rm -rf outputs/m14-preflight-test && "
         "python -m tffv.verification.m14_runner "
         "--claims \"$CLAIMS_PATH\" --evidence \"$R4_PATH\" --train-json \"$TRAIN_JSON\" "
         "--b1-predictions \"$B1_PREDICTIONS\" --synthetic --output outputs/m14-preflight-test "
