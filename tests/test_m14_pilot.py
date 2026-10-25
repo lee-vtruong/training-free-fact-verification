@@ -194,3 +194,55 @@ def test_m14_synthetic_end_to_end_runner(tmp_path: Path, mock_memory_bank: Error
     assert "M1.4 — Controlled Fact Verification Pilot Report" in content
     assert "D0" in content
     assert "D1" in content
+
+
+def test_m14_cli_runner_synthetic(monkeypatch, tmp_path: Path):
+    from tffv.verification.m14_runner import main
+
+    claims_rows = [
+        {"sample_id": f"train:{i}", "claim": f"Claim statement {i}"}
+        for i in range(55)
+    ]
+    claims_p = tmp_path / "claims.jsonl"
+    dump_jsonl(claims_p, claims_rows)
+
+    evidence_rows = [
+        {"sample_id": f"train:{i}", "evidence": [{"text": f"Evidence {i}", "source_url": f"https://example.com/{i}"}]}
+        for i in range(55)
+    ]
+    evidence_p = tmp_path / "R4.jsonl"
+    dump_jsonl(evidence_p, evidence_rows)
+
+    train_json_data = [
+        {"claim_id": i, "label": "Supported", "claim": f"Claim statement {i}"}
+        for i in range(55)
+    ]
+    train_json_p = tmp_path / "train.json"
+    train_json_p.write_text(json.dumps(train_json_data), encoding="utf-8")
+
+    b1_preds_rows = [
+        {"sample_id": f"train:{i}", "predicted_verdict": "Supported" if i % 2 == 0 else "Refuted", "raw_generation": "Verdict: Supported"}
+        for i in range(50)
+    ]
+    b1_preds_p = tmp_path / "b1_preds.jsonl"
+    dump_jsonl(b1_preds_p, b1_preds_rows)
+
+    out_dir = tmp_path / "cli_out"
+    test_args = [
+        "m14_runner.py",
+        "--claims", str(claims_p),
+        "--evidence", str(evidence_p),
+        "--train-json", str(train_json_p),
+        "--b1-predictions", str(b1_preds_p),
+        "--output", str(out_dir),
+        "--synthetic",
+        "--conditions", "D0", "D1", "D4",
+    ]
+    monkeypatch.setattr("sys.argv", test_args)
+    main()
+
+    assert (out_dir / "partition_manifest.json").is_file()
+    assert (out_dir / "D0" / "predictions.jsonl").is_file()
+    assert (out_dir / "D1" / "predictions.jsonl").is_file()
+    assert (out_dir / "M1_4_PILOT_REPORT.md").is_file()
+

@@ -458,14 +458,18 @@ def main() -> None:
     fold_a_sids = [sid for sid in all_sids if sid.startswith("train:") and int(sid.split(":")[1]) < 50]
     candidate_sids = [sid for sid in all_sids if sid.startswith("train:") and int(sid.split(":")[1]) >= 50]
 
+    source_claims_objs = [claims_map[sid] for sid in fold_a_sids if sid in claims_map]
+    candidate_claims_objs = [claims_map[sid] for sid in candidate_sids if sid in claims_map]
+
     # Quarantine near-duplicates
-    admitted_eval_sids, quarantined_ids = quarantine_near_duplicates(
-        source_sids=fold_a_sids,
-        candidate_sids=candidate_sids,
-        claims_map=claims_map,
-        similarity_threshold=0.80,
+    admitted_eval, quarantined, manifest_path = quarantine_near_duplicates(
+        source_claims=source_claims_objs,
+        candidate_claims=candidate_claims_objs,
+        output_dir=output_dir,
     )
-    assert_fold_disjointness(fold_a_sids, admitted_eval_sids)
+    admitted_eval_sids = [c["sample_id"] for c in admitted_eval]
+    quarantined_ids = [c["sample_id"] for c in quarantined]
+    assert_fold_disjointness(set(fold_a_sids), set(admitted_eval_sids))
 
     partition_manifest = {
         "milestone": "M1.4",
@@ -479,13 +483,13 @@ def main() -> None:
 
     # 3. Build Error Memory Bank strictly from Fold A
     sys.stderr.write(f"\n[M1.4] Building Fold A Error Memory Bank from {len(fold_a_sids)} source claims...\n")
+    mem_out = output_dir / "error_memory_bank.json"
     memory_bank = build_error_memory_bank(
-        source_sids=fold_a_sids,
-        b1_predictions_path=b1_preds_p,
         train_json_path=train_json_p,
-        evidence_map=evidence_map,
-        claims_map=claims_map,
-        output_dir=output_dir / "error_memory_bank",
+        b1_predictions_path=b1_preds_p,
+        r4_evidence_path=evidence_p,
+        output_path=mem_out,
+        allowed_sample_ids=set(fold_a_sids),
     )
 
     # 4. Initialize Backbone
