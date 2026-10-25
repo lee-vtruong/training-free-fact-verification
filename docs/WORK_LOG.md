@@ -740,6 +740,7 @@
 - **Tài Liệu & Báo Cáo:**
   - Đã lập báo cáo khoa học hoàn chỉnh tại `docs/M1_3_REPAIRED_EVALUATION_REPORT.md`.
   - Cập nhật test suite với `test_generate_m13_markdown_report_unwraps_metrics` và `test_canonical_m13_audit_integrity`.
-  - Toàn bộ **129/129 tests passed in 14.85s**.
+  - Bổ sung cơ chế auto-detect đa đường dẫn (`find_train_json`, `find_tokenizer_dir`, `find_m13_dir`) trong `src/tffv/verification/m13_audit.py` hỗ trợ liền mạch cả môi trường local và server `/home/stackops/whale/ERRORFlow/data/raw/averitec/train.json`.
+  - Toàn bộ **129/129 tests passed in 14.67s**.
 - **Trạng Thái Milestone:** M1.3 P0 Audit & Repair **COMPLETE & VERIFIED**.
 

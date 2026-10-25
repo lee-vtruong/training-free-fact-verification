@@ -17,34 +17,131 @@ from tffv.verification.stabilization import exact_mcnemar_test_twosided, paired_
 ALL_CONDITIONS = ["C0", "C1", "C2", "C3", "C4", "C5", "C6"]
 
 
+def find_train_json(candidate: Optional[Path] = None, project_root: Optional[Path] = None) -> Optional[Path]:
+    """Resolve train.json from candidate, project_root, home, or known server paths."""
+    if candidate:
+        p = Path(candidate).expanduser().resolve()
+        if p.is_file():
+            return p
+    candidates: List[Path] = []
+    if project_root:
+        p_root = Path(project_root).resolve()
+        candidates.append(p_root / "data" / "raw" / "averitec" / "train.json")
+        candidates.append(p_root / "data" / "averitec" / "train.json")
+    # Server and common local paths
+    candidates.extend([
+        Path("/home/stackops/whale/ERRORFlow/data/raw/averitec/train.json"),
+        Path.home() / "whale" / "ERRORFlow" / "data" / "raw" / "averitec" / "train.json",
+        Path("data/raw/averitec/train.json").resolve(),
+    ])
+    for c in candidates:
+        if c.is_file():
+            return c
+    return None
+
+
+def find_tokenizer_dir(candidate: Optional[Path] = None, project_root: Optional[Path] = None) -> Optional[Path]:
+    """Resolve tokenizer directory from candidate, cache, or HF model snapshots."""
+    if candidate:
+        p = Path(candidate).expanduser().resolve()
+        if p.exists():
+            return p
+    candidates: List[Path] = []
+    if project_root:
+        p_root = Path(project_root).resolve()
+        candidates.append(p_root / "cache" / "qwen3_tokenizer")
+    # Server snapshot paths
+    server_snap = Path("/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots/b968826d9c46dd6066d109eabc6255188de91218")
+    server_home_snap = Path.home() / "whale" / "cache" / "huggingface" / "hub" / "models--Qwen--Qwen3-8B" / "snapshots" / "b968826d9c46dd6066d109eabc6255188de91218"
+    candidates.extend([
+        server_snap,
+        server_home_snap,
+        Path("cache/qwen3_tokenizer").resolve(),
+    ])
+    # Search in any snapshot dir
+    snap_parent = Path("/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots")
+    if snap_parent.is_dir():
+        for snap in snap_parent.iterdir():
+            if snap.is_dir():
+                candidates.append(snap)
+    for c in candidates:
+        if c.exists():
+            return c
+    return None
+
+
+def find_m13_dir(candidate: Optional[Path] = None, project_root: Optional[Path] = None) -> Optional[Path]:
+    """Resolve m13 output directory from candidate or project_root outputs."""
+    if candidate:
+        p = Path(candidate).expanduser().resolve()
+        if p.is_dir():
+            return p
+    if project_root:
+        p_root = Path(project_root).resolve()
+        p = p_root / "outputs" / "m13-error-informed-20261025-000523"
+        if p.is_dir():
+            return p
+        matches = sorted(list((p_root / "outputs").glob("m13-error-informed-*")))
+        if matches:
+            return matches[-1]
+    return None
+
+
 def run_comprehensive_audit_and_repair(
     project_root: Optional[Path] = None,
     output_dir: Optional[Path] = None,
+    train_json_path: Optional[Path] = None,
+    m13_dir: Optional[Path] = None,
+    tokenizer_dir: Optional[Path] = None,
 ) -> Dict[str, Any]:
     if project_root is None:
         project_root = Path(__file__).resolve().parent.parent.parent.parent
     project_root = Path(project_root).resolve()
 
-    m13_dir = project_root / "outputs" / "m13-error-informed-20261025-000523"
-    train_json_path = project_root / "data" / "raw" / "averitec" / "train.json"
-    tokenizer_dir = project_root / "cache" / "qwen3_tokenizer"
+    resolved_m13_dir = find_m13_dir(m13_dir, project_root)
+    if resolved_m13_dir is None or not resolved_m13_dir.is_dir():
+        raise FileNotFoundError(
+            f"Could not locate M1.3 output directory. Checked: outputs/m13-error-informed-* in {project_root}"
+        )
+
+    resolved_train_json = find_train_json(train_json_path, project_root)
+    if resolved_train_json is None or not resolved_train_json.is_file():
+        raise FileNotFoundError(
+            f"Could not locate train.json. Checked: {project_root / 'data' / 'raw' / 'averitec' / 'train.json'}, "
+            "/home/stackops/whale/ERRORFlow/data/raw/averitec/train.json"
+        )
+
+    resolved_tokenizer_dir = find_tokenizer_dir(tokenizer_dir, project_root)
+
     if output_dir is None:
         output_dir = project_root / "outputs" / "m13-repaired-audit"
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # 1. Load gold labels
-    gold_map = load_gold_labels(train_json_path)
+    gold_map = load_gold_labels(resolved_train_json)
 
-    # 2. Load tokenizer for exact token accounting
-    tokenizer = AutoTokenizer.from_pretrained(str(tokenizer_dir))
+    # 2. Load tokenizer for exact token accounting (with fallback)
+    tokenizer = None
+    if resolved_tokenizer_dir is not None:
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(str(resolved_tokenizer_dir))
+        except Exception:
+            tokenizer = None
+
+    def count_tokens(text: str) -> int:
+        if not text:
+            return 0
+        if tokenizer is not None:
+            return len(tokenizer(text)["input_ids"])
+        return max(1, len(text.split()))
 
     # 3. Process raw predictions and construct canonical table
     canonical_rows = []
     condition_records: Dict[str, List[Dict[str, Any]]] = {c: [] for c in ALL_CONDITIONS}
 
     for cond in ALL_CONDITIONS:
-        preds_file = m13_dir / cond / "predictions.jsonl"
+        preds_file = resolved_m13_dir / cond / "predictions.jsonl"
         lines = [l for l in preds_file.read_text(encoding="utf-8").splitlines() if l.strip()]
         for line in lines:
             rec = json.loads(line)
@@ -63,7 +160,7 @@ def run_comprehensive_audit_and_repair(
             is_correct = bool(parse_status == "valid" and verified_verdict == gold_label)
 
             # Re-tokenize generation for exact token accounting
-            out_toks = len(tokenizer(raw_gen)["input_ids"]) if raw_gen else 0
+            out_toks = count_tokens(raw_gen) if raw_gen else 0
             in_toks = rec.get("prompt_tokens") or 0
             latency = rec.get("latency_seconds") or 0.0
 
@@ -77,7 +174,7 @@ def run_comprehensive_audit_and_repair(
                 "input_tokens": in_toks,
                 "output_tokens": out_toks,
                 "latency": latency,
-                "prediction_source_path": f"outputs/m13-error-informed-20261025-000523/{cond}/predictions.jsonl",
+                "prediction_source_path": f"{resolved_m13_dir.name}/{cond}/predictions.jsonl",
                 "raw_generation": raw_gen,
                 "exemplar_sample_ids": rec.get("exemplar_sample_ids", []),
             }

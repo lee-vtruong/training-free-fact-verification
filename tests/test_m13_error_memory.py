@@ -317,8 +317,19 @@ def test_generate_m13_markdown_report_unwraps_metrics(tmp_path: Path):
 
 
 def test_canonical_m13_audit_integrity():
-    from tffv.verification.m13_audit import run_comprehensive_audit_and_repair
-    summary = run_comprehensive_audit_and_repair()
+    from tffv.verification.m13_audit import (
+        run_comprehensive_audit_and_repair,
+        find_train_json,
+        find_m13_dir,
+    )
+    project_root = Path(__file__).resolve().parent.parent
+    train_json = find_train_json(project_root=project_root)
+    m13_dir = find_m13_dir(project_root=project_root)
+
+    if not train_json or not m13_dir:
+        pytest.skip(f"M1.3 audit artifacts not present on disk (train_json={train_json}, m13_dir={m13_dir})")
+
+    summary = run_comprehensive_audit_and_repair(project_root=project_root)
     
     assert summary["total_evaluation_claims"] == 46
     metrics = summary["metrics_by_condition"]
@@ -337,4 +348,5 @@ def test_canonical_m13_audit_integrity():
         assert p["improved_total"] - p["regressed_total"] == p["net_gain"]
         cats = p["categories"]
         assert sum(cats.values()) == 46  # All 9 categories sum to 46
+
 
