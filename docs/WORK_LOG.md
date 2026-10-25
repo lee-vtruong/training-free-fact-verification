@@ -948,3 +948,55 @@
      - Hiệu năng cực cao: Latency chỉ 1.62s/claim, tokens sinh ra chỉ 64.2 tokens.
 - **Trạng Thái Milestone:** M1.4.1 Confirmatory Fact Verification **OFFICIALLY COMPLETED & VALIDATED**.
 
+## 2026-10-25 18:00 +07:00 — M1.4.2 Mechanism Audit, Prompt Controls & Fold D Confirmatory Preparation
+
+- **Mục tiêu:**
+  * Thực hiện kiểm định thống kê và audit toàn diện tín hiệu tích cực của D2 trên Fold C ($N=50$).
+  * Điều chỉnh FWER (Family-Wise Error Rate) bằng phương pháp Holm-Bonferroni trên toàn bộ họ 5 so sánh cặp; phân biệt giả thuyết chính (D4 confirmatory đã thất bại) với quan sát hậu nghiệm (D2 secondary finding).
+  * Nghiên cứu cơ chế quy tắc lỗi (Error-Rule Mechanism): trích xuất nguồn gốc 4 quy tắc thực nghiệm từ 25 lỗi của Fold A; giải tỏa yếu tố gây nhiễu (confound) giữa độ cô đọng (output brevity / 1-sentence constraint) và tri thức lỗi miền (empirical error heuristics).
+  * Thiết kế và kiểm thử điều khiển đối chứng tương đương `D1_matched` (cùng ngân sách ký tự, cấu trúc 2 điều lệnh, không chứa tri thức lỗi), các biến thể ablation bóc tách (`D2_minus_r1`, `D2_minus_r2`) và diễn đạt tương đương (`D2_para1`, `D2_para2`).
+  * Chuẩn bị giao thức kiểm định độc lập trên quần thể mới chưa từng quan sát: **Fold D (`train:150..249`, 100 claims)**.
+- **Báo cáo Khoa học Chính thức:**
+  * `docs/M1_4_2_D2_MECHANISM_AUDIT.md`.
+- **Phát hiện Kiểm định Thống kê & Cơ chế (Part A & Part B):**
+  1. *Hiệu chỉnh Multiplicity làm mất ý nghĩa thống kê của D2 trên Fold C:*
+     - So sánh cặp D2 vs D0 ban đầu cho raw exact McNemar $p = 0.0156$ ($< 0.05$).
+     - Khi kiểm soát tỷ lệ sai số gia đình (FWER) theo quy trình Holm-Bonferroni qua 5 kiểm định cặp (D2 vs D0, D4 vs D5, D4 vs D0, D4 vs D3, D2 vs D3), giá trị $p$ hiệu chỉnh là **$p_{\text{adj}} = \mathbf{0.0781} > 0.05$**.
+     - Khoảng tin cậy 95% Bootstrap của $\Delta \text{Macro-F1}$ giữa D2 và D0 là `[-0.0145, +0.1361]`, bao trùm giá trị 0.
+     - D2 là quan sát hậu nghiệm (secondary finding), không phải giả thuyết đăng ký trước (primary hypothesis) của Fold C. Theo chuẩn mực thống kê khắt khe, **D2 CHƯA ĐƯỢC XÁC NHẬN THỐNG KÊ** nếu chưa có kiểm định độc lập đăng ký trước.
+  2. *Cơ chế Cải thiện của D2 thực chất là gì:*
+     - Phân tích chuyển dịch 7 claims được cải thiện trong D2 vs D0 (`train:107`, `train:109`, `train:116`, `train:119`, `train:124`, `train:140`, `train:145`): Có tới 6 claims nhãn gốc là `Refuted` mà D0 đoán sai thành `Conflicting Evidence` (3 claims) hoặc `Not Enough Evidence` (3 claims).
+     - D0 sinh trung bình 179.1 tokens lý luận dài, dẫn đến xu hướng suy diễn quá mức các tiểu tiết thành bất đồng hoặc thiếu thông tin.
+     - D2 vừa đưa ra chỉ dẫn phủ định ("Media debate is not factual contradiction", "Missing context is not Cherrypicking"), vừa cưỡng chế độ dài 1 câu (trung bình 64.2 tokens), giúp giảm số ca đoán `Conflicting` từ 12 xuống 6 và `NEI` từ 7 xuống 3.
+  3. *Thiết kế Đối chứng và Khử Nhiễu (Matched Control & Ablations):*
+     - `D1_matched`: Khớp chuẩn xác 436 ký tự như D2, cùng cấu trúc 2 điều lệnh và câu lệnh kết 1 câu, nhưng chỉ dùng nguyên tắc xác thực tổng quát, không chứa gợi ý lỗi từ Fold A.
+     - `D2_minus_r1`: Bóc tách bỏ Quy tắc 1 (chỉ giữ Quy tắc 2: Thiếu ngữ cảnh không phải Cherrypicking).
+     - `D2_minus_r2`: Bóc tách bỏ Quy tắc 2 (chỉ giữ Quy tắc 1: Tranh luận truyền thông không phải Mâu thuẫn).
+     - `D2_para1` & `D2_para2`: Hai cách diễn đạt văn phong tương đương nhằm kiểm tra tính bất biến cú pháp.
+- **Triển khai Mã nguồn & Runner Đánh giá (Part C):**
+  1. `src/tffv/verification/m14_prompting.py`:
+     - Bổ sung `ALL_CONDITIONS_M142` (12 điều kiện).
+     - Định nghĩa `CONCISE_MATCHED_GENERIC_RULES`, `CONCISE_ERROR_RULES_MINUS_R1`, `CONCISE_ERROR_RULES_MINUS_R2`, `CONCISE_SOURCE_ERROR_RULES_PARA1`, `CONCISE_SOURCE_ERROR_RULES_PARA2`.
+     - Cập nhật bộ định tuyến `build_prompt_for_condition_m14`.
+  2. `src/tffv/verification/m142_runner.py`:
+     - Runner đánh giá thực nghiệm hoàn chỉnh trên Fold D (`train:150..249`).
+     - Đăng ký trước giả thuyết chính: **D2 vs D1_matched**.
+     - Giả thuyết phụ: D2 vs D0, D2 vs D2_minus_r1, D2 vs D2_minus_r2, D2 vs D2_para1, D3 vs D0, D4 vs D3.
+     - Tự động chạy kiểm định chính xác McNemar hai phía, 10.000 paired bootstrap resamples cho Acc và Macro-F1 deltas, và điều chỉnh Holm-Bonferroni FWER.
+     - Xuất báo cáo Markdown `M1_4_2_EVALUATION_REPORT.md` cùng các tệp JSON tổng hợp.
+  3. `src/tffv/retrieval/prepare_fold_evidence.py`:
+     - Pipeline tổng quát hóa để chuẩn bị bằng chứng R4 cho bất kỳ fold nào (Fold D, tag `foldd`, `150..250`).
+     - Thực hiện đầy đủ 5 công đoạn M1.1: Bounded HTTP Range acquire, schema audit, quarantine review flags v1, frozen R1-R4 retrieval, contract verification.
+  4. Scripts tự động hóa server:
+     - `scripts/prepare_fold_d_evidence.sh`: Tải và tạo bằng chứng R4 Fold D.
+     - `scripts/run_m142_eval.sh`: Thực thi bộ kiểm định xác nhận M1.4.2 trên GPU server.
+  5. Kiểm thử phần mềm mới (`tests/test_m142_mechanism.py`):
+     - Kiểm tra cân bằng ký tự giữa D2 và D1_matched.
+     - Kiểm tra sinh prompt cho toàn bộ 12 điều kiện.
+     - Kiểm tra thuật toán Holm-Bonferroni.
+     - Kiểm tra cách ly chống rò rỉ Fold D vs Fold A (phát hiện và cách ly chính xác 9 claims near-duplicate, còn lại 91 claims hợp lệ).
+     - Kiểm thử tích hợp CLI end-to-end với `SyntheticBackbone`.
+- **Kết quả Kiểm thử Phần mềm:**
+  - `python scripts/run_tests.py`: **150 passed in 17.67s (100% pass, 0 failures)**.
+- **Trạng thái Milestone:** M1.4.2 Audit & Preparation **COMPLETED & READY FOR SERVER EXECUTION**.
+

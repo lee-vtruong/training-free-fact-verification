@@ -23,6 +23,20 @@ from tffv.verification.prompting import (
 )
 
 ALL_CONDITIONS_M14 = ["D0", "D1", "D2", "D3", "D4", "D5", "D6"]
+ALL_CONDITIONS_M142 = [
+    "D0",
+    "D1",
+    "D1_matched",
+    "D2",
+    "D2_minus_r1",
+    "D2_minus_r2",
+    "D2_para1",
+    "D2_para2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+]
 
 CONCISE_GENERIC_RULES = (
     "Core Verification Directives:\n"
@@ -33,10 +47,43 @@ CONCISE_GENERIC_RULES = (
     "State a concise 1-sentence factual reason, then output Verdict: <Label>."
 )
 
+CONCISE_MATCHED_GENERIC_RULES = (
+    "Standard Verification Directives (applicable to general empirical claims):\n"
+    "1. Primary assertion evaluation: Assess whether the central factual proposition is directly confirmed or denied by the provided sources.\n"
+    "2. Substantive content focus: Base the final determination on the primary factual statement rather than on peripheral commentary or stylistic phrasing.\n"
+    "State a concise 1-sentence factual reason, then output Verdict: <Label>."
+)
+
 CONCISE_SOURCE_ERROR_RULES = (
     "Empirical Error Directives (derived from observed verification pitfalls):\n"
     "1. Media debate is not factual contradiction: An article describing a political disagreement does not constitute Refutation of a verifiable fact.\n"
     "2. Missing context is not Cherrypicking: Absence of secondary details does not warrant Cherrypicking if the primary assertion is substantiated.\n"
+    "State a concise 1-sentence factual reason, then output Verdict: <Label>."
+)
+
+CONCISE_ERROR_RULES_MINUS_R1 = (
+    "Empirical Error Directives (derived from observed verification pitfalls):\n"
+    "1. Missing context is not Cherrypicking: Absence of secondary details does not warrant Cherrypicking if the primary assertion is substantiated.\n"
+    "State a concise 1-sentence factual reason, then output Verdict: <Label>."
+)
+
+CONCISE_ERROR_RULES_MINUS_R2 = (
+    "Empirical Error Directives (derived from observed verification pitfalls):\n"
+    "1. Media debate is not factual contradiction: An article describing a political disagreement does not constitute Refutation of a verifiable fact.\n"
+    "State a concise 1-sentence factual reason, then output Verdict: <Label>."
+)
+
+CONCISE_SOURCE_ERROR_RULES_PARA1 = (
+    "Empirical Verification Guidelines (derived from past error analysis):\n"
+    "1. Distinguish reporting from refutation: When news outlets quote opposing political arguments, verify the underlying factual claim rather than treating political dispute as refutation.\n"
+    "2. Separate context omission from selective framing: Do not mark a claim as cherrypicked solely because peripheral context is absent, provided the main factual claim holds.\n"
+    "State a concise 1-sentence factual reason, then output Verdict: <Label>."
+)
+
+CONCISE_SOURCE_ERROR_RULES_PARA2 = (
+    "Empirical Error Guidelines (based on observed verification pitfalls):\n"
+    "1. Disagreement does not equal contradiction: Quotes showing political figures arguing about a statement do not disprove verified factual records.\n"
+    "2. Unmentioned details do not equal cherrypicking: Missing non-essential facts do not justify a cherrypicking label when the core assertion is accurate.\n"
     "State a concise 1-sentence factual reason, then output Verdict: <Label>."
 )
 
@@ -115,7 +162,10 @@ def format_compact_corrected_error_demonstration(record: Dict[str, Any], example
 
 def build_d0_prompt(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
     """D0: Frozen Base Protocol v1.0 (Zero-shot B1)."""
-    return build_verification_prompt(claim, evidence)
+    p = build_verification_prompt(claim, evidence)
+    p["condition"] = "D0"
+    p["exemplar_sample_ids"] = []
+    return p
 
 
 def build_d1_prompt(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -158,6 +208,121 @@ def build_d2_prompt(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any
         ],
         "user": user_content,
         "condition": "D2",
+        "exemplar_sample_ids": [],
+    }
+    prompt_obj["prompt_sha256"] = digest(canonical(prompt_obj["messages"]))
+    return prompt_obj
+
+
+def build_d1_matched_prompt(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """D1_matched: Matched concise generic rules (no error knowledge)."""
+    user_content = (
+        f"Claim: \"{claim}\"\n\n"
+        f"Retrieved Evidence:\n{format_evidence_block(evidence)}\n\n"
+        f"{CONCISE_MATCHED_GENERIC_RULES}\n\n"
+        f"{VERDICT_DEFINITIONS}\n\n"
+        "State your 1-sentence reasoning and output your verdict in the format:\n"
+        "Verdict: <Supported|Refuted|Not Enough Evidence|Conflicting Evidence/Cherrypicking>"
+    )
+    prompt_obj = {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_content},
+        ],
+        "user": user_content,
+        "condition": "D1_matched",
+        "exemplar_sample_ids": [],
+    }
+    prompt_obj["prompt_sha256"] = digest(canonical(prompt_obj["messages"]))
+    return prompt_obj
+
+
+def build_d2_minus_r1_prompt(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """D2_minus_r1: Leave-one-out ablation removing Rule 1 (Media debate). Keeps Rule 2 only."""
+    user_content = (
+        f"Claim: \"{claim}\"\n\n"
+        f"Retrieved Evidence:\n{format_evidence_block(evidence)}\n\n"
+        f"{CONCISE_ERROR_RULES_MINUS_R1}\n\n"
+        f"{VERDICT_DEFINITIONS}\n\n"
+        "State your 1-sentence reasoning and output your verdict in the format:\n"
+        "Verdict: <Supported|Refuted|Not Enough Evidence|Conflicting Evidence/Cherrypicking>"
+    )
+    prompt_obj = {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_content},
+        ],
+        "user": user_content,
+        "condition": "D2_minus_r1",
+        "exemplar_sample_ids": [],
+    }
+    prompt_obj["prompt_sha256"] = digest(canonical(prompt_obj["messages"]))
+    return prompt_obj
+
+
+def build_d2_minus_r2_prompt(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """D2_minus_r2: Leave-one-out ablation removing Rule 2 (Missing context). Keeps Rule 1 only."""
+    user_content = (
+        f"Claim: \"{claim}\"\n\n"
+        f"Retrieved Evidence:\n{format_evidence_block(evidence)}\n\n"
+        f"{CONCISE_ERROR_RULES_MINUS_R2}\n\n"
+        f"{VERDICT_DEFINITIONS}\n\n"
+        "State your 1-sentence reasoning and output your verdict in the format:\n"
+        "Verdict: <Supported|Refuted|Not Enough Evidence|Conflicting Evidence/Cherrypicking>"
+    )
+    prompt_obj = {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_content},
+        ],
+        "user": user_content,
+        "condition": "D2_minus_r2",
+        "exemplar_sample_ids": [],
+    }
+    prompt_obj["prompt_sha256"] = digest(canonical(prompt_obj["messages"]))
+    return prompt_obj
+
+
+def build_d2_para1_prompt(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """D2_para1: Paraphrase robustness variant 1 (guideline style)."""
+    user_content = (
+        f"Claim: \"{claim}\"\n\n"
+        f"Retrieved Evidence:\n{format_evidence_block(evidence)}\n\n"
+        f"{CONCISE_SOURCE_ERROR_RULES_PARA1}\n\n"
+        f"{VERDICT_DEFINITIONS}\n\n"
+        "State your 1-sentence reasoning and output your verdict in the format:\n"
+        "Verdict: <Supported|Refuted|Not Enough Evidence|Conflicting Evidence/Cherrypicking>"
+    )
+    prompt_obj = {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_content},
+        ],
+        "user": user_content,
+        "condition": "D2_para1",
+        "exemplar_sample_ids": [],
+    }
+    prompt_obj["prompt_sha256"] = digest(canonical(prompt_obj["messages"]))
+    return prompt_obj
+
+
+def build_d2_para2_prompt(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """D2_para2: Paraphrase robustness variant 2 (formal criteria style)."""
+    user_content = (
+        f"Claim: \"{claim}\"\n\n"
+        f"Retrieved Evidence:\n{format_evidence_block(evidence)}\n\n"
+        f"{CONCISE_SOURCE_ERROR_RULES_PARA2}\n\n"
+        f"{VERDICT_DEFINITIONS}\n\n"
+        "State your 1-sentence reasoning and output your verdict in the format:\n"
+        "Verdict: <Supported|Refuted|Not Enough Evidence|Conflicting Evidence/Cherrypicking>"
+    )
+    prompt_obj = {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_content},
+        ],
+        "user": user_content,
+        "condition": "D2_para2",
         "exemplar_sample_ids": [],
     }
     prompt_obj["prompt_sha256"] = digest(canonical(prompt_obj["messages"]))
@@ -344,13 +509,23 @@ def build_prompt_for_condition_m14(
     memory_bank: Optional[ErrorMemoryBank] = None,
     seed: int = 42,
 ) -> Dict[str, Any]:
-    """Unified dispatcher for M1.4 prompt building."""
+    """Unified dispatcher for M1.4 / M1.4.2 prompt building."""
     if condition == "D0":
         return build_d0_prompt(claim, evidence)
     elif condition == "D1":
         return build_d1_prompt(claim, evidence)
+    elif condition == "D1_matched":
+        return build_d1_matched_prompt(claim, evidence)
     elif condition == "D2":
         return build_d2_prompt(claim, evidence)
+    elif condition == "D2_minus_r1":
+        return build_d2_minus_r1_prompt(claim, evidence)
+    elif condition == "D2_minus_r2":
+        return build_d2_minus_r2_prompt(claim, evidence)
+    elif condition == "D2_para1":
+        return build_d2_para1_prompt(claim, evidence)
+    elif condition == "D2_para2":
+        return build_d2_para2_prompt(claim, evidence)
     elif condition == "D3":
         if memory_bank is None:
             raise ValueError("memory_bank required for D3")
@@ -368,4 +543,6 @@ def build_prompt_for_condition_m14(
             raise ValueError("memory_bank required for D6")
         return build_d6_prompt(claim, evidence, memory_bank)
     else:
-        raise ValueError(f"Unknown condition for M1.4: {condition}. Expected one of {ALL_CONDITIONS_M14}")
+        raise ValueError(
+            f"Unknown condition: {condition}. Expected one of {ALL_CONDITIONS_M142}"
+        )
