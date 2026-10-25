@@ -904,3 +904,12 @@
   - Chạy python scripts/run_tests.py: 144/144 passed in 33.86s (100% pass, 0 failures).
 - **Trạng Thái Milestone:** Resilient Range Retrieval & Fast Resumption **DEPLOYED**.
 
+## 2026-10-25 12:55 +07:00 — M1.4.1 Fix Audit Parameter & Fast Manifest Reuse
+
+- **Mục tiêu:** Sửa lỗi TypeError: audit() got an unexpected keyword argument 'subset_manifest' và tái sử dụng ngay bản kê subset_manifest.json đã hoàn thành 50/50 stores.
+- **Khắc phục:**
+  1. src/tffv/retrieval/prepare_fold_c.py: Chuyển tham số gọi hàm sang manifest_path=acq_manifest đúng chữ ký hàm audit(manifest_path, output, max_record_mib=64).
+  2. Bổ sung cơ chế tái sử dụng tức thì: Nếu acq_dir / 'subset_manifest.json' đã tồn tại và đủ 50 stores, pipeline bỏ qua hoàn toàn công đoạn acquire (0.01s) và đi thẳng vào Stage 2 (Audit).
+- **Kiểm thử Phần mềm:**
+  - Chạy python scripts/run_tests.py tests/test_m141_confirmatory.py tests/test_prepare_fold_c.py tests/test_acquire_subset.py tests/test_remote_zip.py: 21/21 passed in 14.96s (100% pass).
+

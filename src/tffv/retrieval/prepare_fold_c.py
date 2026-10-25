@@ -193,12 +193,27 @@ def prepare_fold_c_pipeline(
     sys.stderr.write(f"[Fold C Preparation] [1/5] Acquiring raw stores into: {acq_dir}\n")
     sys.stderr.flush()
 
-    acq_manifest = acquire(
-        plan_path=plan_path,
-        destination=acq_dir,
-        claim_ids=claim_ids,
-        execute=execute,
-    )
+    manifest_p = acq_dir / "subset_manifest.json"
+    if manifest_p.is_file():
+        try:
+            m_data = json.loads(manifest_p.read_text(encoding="utf-8"))
+            if m_data.get("status") == "complete_raw_subset_not_admitted" and len(m_data.get("stores", [])) == len(claim_ids):
+                sys.stderr.write(f"[Fold C Preparation] Reusing sealed subset_manifest.json from: {acq_dir}\n")
+                acq_manifest = manifest_p
+            else:
+                acq_manifest = None
+        except Exception:
+            acq_manifest = None
+    else:
+        acq_manifest = None
+
+    if acq_manifest is None:
+        acq_manifest = acquire(
+            plan_path=plan_path,
+            destination=acq_dir,
+            claim_ids=claim_ids,
+            execute=execute,
+        )
     if not execute:
         sys.stderr.write(f"[Fold C Preparation] Preflight plan created: {acq_manifest}\n")
         return acq_manifest
@@ -209,7 +224,7 @@ def prepare_fold_c_pipeline(
     sys.stderr.flush()
 
     audit_summary_path = audit(
-        subset_manifest=acq_manifest,
+        manifest_path=acq_manifest,
         output=audit_dir,
         max_record_mib=64,
     )
