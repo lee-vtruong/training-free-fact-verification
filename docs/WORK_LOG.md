@@ -788,5 +788,118 @@
 - **Trạng Thái Git:**
   * Đã push commit `75f88d1` lên nhánh `main`. Pipeline đã được tiền kiểm tra và sẵn sàng 100% để người dùng bấm lệnh chạy.
 
+## 2026-10-25 11:30 +07:00 — M1.4.1 D4 Mechanism Audit & Confirmatory Experiment Preparation
+
+- **Mục tiêu:**
+  1. *Part A — Mechanism Audit D4:* Kiểm toán tín hiệu tích cực của D4 (Similarity-Retrieved Error Demonstrations, $k=2$) trong kết quả Pilot M1.4 (`outputs/m14-pilot-20261025-014111`); tái tính toán và đối chiếu độc lập với `scikit-learn` toàn bộ metrics của D0–D6; tính toán so sánh cặp (D4 vs D0, D4 vs D3, D4 vs D5, D2 vs D1) với kiểm định chính xác McNemar (hai phía) và Paired Bootstrap 95% CI ($10.000$ resamples); bóc tách cơ chế lựa chọn exemplar và biểu diễn sửa lỗi; trích xuất ca điển hình (case studies); kiểm tra an toàn rò rỉ (leakage & quarantine).
+  2. *Part B — Chuẩn bị Thực nghiệm Xác nhận (Confirmatory Experiment):* Thiết lập tập đánh giá độc lập hoàn toàn chưa từng dùng để chọn D4 hay tune prompt (Fold C `train:100..149`); đóng băng toàn bộ tham số (Qwen3-8B snapshot, B1 greedy non-thinking, $k=2$, độ tương đồng từ vựng 3-gram); thu hẹp bộ điều kiện confirmatory (D0, D3, D4, D5, D2); kiểm toán tính sẵn sàng của bằng chứng R4 và candidate stores; xây dựng runner, tests và script thực thi server.
+- **Tuân thủ Nghiêm ngặt Quy tắc Dự án (AGENTS.md & User Mandate):**
+  * **Strictly Training-Free, Quality-First:** Không fine-tuning, không cập nhật trọng số, không neural router, không tối ưu tham số.
+  * **Trung thực & Thận trọng Thống kê:** Tuyệt đối không tuyên bố D4 vượt trội khi chưa có bằng chứng kiểm định thống kê trực tiếp. Số liệu chưa đo để null.
+  * **Ranh giới Thực thi:** Tự động đọc code, sửa code/tests, chạy kiểm tra CPU nhẹ local, cập nhật Markdown, commit và push GitHub. GPU inference trên server do người dùng tự chạy bằng lệnh terminal được cung cấp.
+- **Kết Quả Kiểm Toán Thực Nghiệm Part A (D0–D6 Audit):**
+  1. *Khớp Tuyệt Đối với Scikit-Learn:* Recompute toàn bộ ma trận nhầm lẫn, Accuracy, Precision, Recall, Macro-F1 từ các tệp `predictions.jsonl` gốc; sai số $< 10^{-9}$ so với `sklearn.metrics`.
+     - `D0`: Acc **60.87%** (28/46), Macro-F1 **0.4883**, Prec 0.5028, Rec 0.6453.
+     - `D1`: Acc **65.22%** (30/46), Macro-F1 **0.4457**, Prec 0.4623, Rec 0.4337.
+     - `D2`: Acc **67.39%** (31/46), Macro-F1 **0.4640**, Prec 0.4925, Rec 0.4504.
+     - `D3`: Acc **69.57%** (32/46), Macro-F1 **0.4467**, Prec 0.5006, Rec 0.4480.
+     - `D4`: Acc **69.57%** (32/46), Macro-F1 **0.5562**, Prec 0.5612, Rec 0.7004.
+     - `D5`: Acc **63.04%** (29/46), Macro-F1 **0.5076**, Prec 0.4946, Rec 0.6562.
+     - `D6`: Acc **60.87%** (28/46), Macro-F1 **0.4479**, Prec 0.4629, Rec 0.4484.
+  2. *Kiểm Định Giả Thuyết So Sánh Cặp (Hypothesis Testing):*
+     - **D4 vs D0:** Net Gain: **+4 claims** (7 improved, 3 regressed, 25 unchanged correct). $\Delta$ Accuracy: **+8.70%** (95% CI: `[-4.35%, +21.74%]`). $\Delta$ Macro-F1: **+0.0679** (95% CI: `[-0.0812, +0.2180]`). McNemar $p = \mathbf{0.3438}$. Cả 2 khoảng tin cậy 95% đều chứa giá trị 0 $\implies$ **KHÔNG có ý nghĩa thống kê**.
+     - **D4 vs D3:** Net Gain: **+0 claims** (2 improved, 2 regressed, 30 unchanged correct). $\Delta$ Accuracy: **+0.00%** (95% CI: `[-8.70%, +8.70%]`). $\Delta$ Macro-F1: **+0.1095** (95% CI: `[-0.0454, +0.2713]`). McNemar $p = \mathbf{1.0000}$. Khoảng tin cậy Macro-F1 chứa giá trị 0 $\implies$ **KHÔNG có ý nghĩa thống kê**.
+     - **D4 vs D5:** Net Gain: **+3 claims** (4 improved, 1 regressed, 28 unchanged correct). $\Delta$ Accuracy: **+6.52%** (95% CI: `[-2.17%, +15.22%]`). $\Delta$ Macro-F1: **+0.0486** (95% CI: `[-0.0957, +0.1871]`). McNemar $p = \mathbf{0.3750}$ $\implies$ **KHÔNG có ý nghĩa thống kê**.
+     - **D2 vs D1:** Net Gain: **+1 claim** (1 improved, 0 regressed, 30 unchanged correct). $\Delta$ Accuracy: **+2.17%** (95% CI: `[+0.00%, +6.52%]`). $\Delta$ Macro-F1: **+0.0183** (95% CI: `[+0.0000, +0.0623]`). McNemar $p = \mathbf{1.0000}$.
+  3. *Làm Rõ Cơ Chế Macro-F1 Vượt Trội của D4 so với D3:*
+     - D4 và D3 có cùng số lượng claim đúng ($32/46 = 69.57\%$).
+     - Độ chênh Macro-F1 (+0.1095) đến từ sự bất đối xứng mẫu trong Fold B: `Refuted` (23), `Supported` (15), `Conflicting Evidence` (7), `Not Enough Evidence` (1).
+     - D3 (random exemplars) thiên lệch về các lớp đa số (đúng 13/15 `Supported`, 18/23 `Refuted`), nhưng bỏ sót hoàn toàn `Not Enough Evidence` (0/1 đúng, Recall = 0.0) và chỉ đúng 1/7 `Conflicting Evidence` (Recall = 0.1429, F1 = 0.2222).
+     - D4 (similarity-retrieved exemplars) hy sinh 2 claim lớp đa số `Supported` (`train:69`, `train:82`), nhưng đoán đúng claim duy nhất `train:99` của lớp `Not Enough Evidence` (Recall nhảy vọt lên 100%, F1 = 0.3333) và thêm 1 claim `train:67` của lớp `Conflicting Evidence` (F1 = 0.3636).
+     - Do Macro-F1 tính trọng số bình quân đều ($0.25$ cho mỗi lớp), việc ăn được 1 claim duy nhất của lớp thiểu số đã tạo ra bước nhảy vọt Macro-F1 mà không làm tăng tổng số claim đúng.
+  4. *Khác Biệt Biểu Diễn Giữa D4 và D5:*
+     - D4 và D5 truy xuất đúng 100% cùng các exemplar IDs trên tất cả 46 claims.
+     - D4 dùng biểu diễn mẫu chuẩn (Gold Reasoning). D5 chèn thêm phán quyết sai ban đầu của Base model và lời giải thích sửa sai.
+     - Việc đưa chuỗi lỗi vào prompt ở D5 gây nhiễu suy luận, khiến mô hình bị thụt lùi ở 3 claims (`train:62`, `train:76`, `train:91`), làm giảm Accuracy từ $69.57\%$ xuống $63.04\%$.
+  5. *Độ Tương Đồng Từ Vựng và Trùng Lặp Exemplar:*
+     - D4 đạt độ tương đồng Jaccard 3-gram trung bình **0.1020** với claim đánh giá (min 0.0421, max 0.1644).
+     - D3 chỉ đạt **0.0520** (min 0.0000, max 0.1131).
+     - Mức độ trùng lặp exemplar giữa D3 và D4 chỉ là **4/92 vị trí (4.3%)**, chứng minh bộ chọn D4 hoạt động rất khác biệt so với lấy mẫu ngẫu nhiên.
+  6. *Case Studies Trích Xuất:*
+     - D4 đúng & D3 sai: `train:67` (`Conflicting Evidence`), `train:99` (`Not Enough Evidence`).
+     - D3 đúng & D4 sai: `train:69` (`Supported`), `train:82` (`Supported`).
+     - Cả hai cùng đúng: 30 claims. Cả hai cùng sai: 12 claims.
+  7. *Xác Minh An Toàn Rò Rỉ:*
+     - 100% exemplars đến từ Fold A (`train:0..49`).
+     - Tỷ lệ rò rỉ ID vào Fold B là 0.0%.
+     - 4 candidate claims (`train:50`, `train:52`, `train:53`, `train:54`) bị cách ly near-duplicate thành công trước khi chạy inference.
+     - Nhãn vàng và justification của claim mục tiêu hoàn toàn không bị rò rỉ trong prompt.
+- **Triển Khai & Kiểm Toán Part B (Confirmatory Experiment):**
+  1. *Lựa Chọn Quần Thể Đánh Giá Độc Lập:*
+     - Chọn **Fold C** (`train:100..149`, 50 claims) từ tập train chính thức AVeriTeC.
+     - Đã chạy kiểm tra near-duplicate quarantine với Fold A source memory: **50 claims được chấp nhận (admitted), 0 claims bị quarantine (100% sạch)**.
+  2. *Đóng Băng Toàn Bộ Tham Số:*
+     - Checkpoint: Qwen3-8B snapshot `b968826d9c46dd6066d109eabc6255188de91218`.
+     - Decoding: Greedy (`temperature=0.0`), Non-thinking (`enable_thinking=False`), `max_new_tokens=512`.
+     - Exemplar selection: Lexical 3-gram Jaccard, $k=2$, tie-breaking ổn định.
+     - Ontology: 4 nhãn chính thức AVeriTeC, bộ trích xuất chuẩn hóa.
+  3. *Thu Hẹp Bộ Điều Kiện Confirmatory:* D0 (baseline), D3 (random exemplar control), D4 (similarity exemplar), D5 (similarity + correction), D2 (source error rules).
+  4. *Kiểm Toán Tiền Khả Thi Bằng Chứng R4 & Document Stores:*
+     - Tệp `R4.jsonl` hiện có (`outputs/m11-store-r14-pilot100-20261023-162716/R4.jsonl`) **chỉ bao gồm claims 0..99**.
+     - Bằng chứng R4 cho Fold C (`train:100..149`) **chưa tồn tại**.
+     - Kho tri thức thô của `train-100` đến `train-149` nằm trong tệp nén `train_0_999.zip`.
+     - Script `scripts/run_m141_confirmatory.sh` được lập trình để tự động kiểm tra sự hiện diện của tệp `R4.jsonl` Fold C, đưa ra hướng dẫn rõ ràng nếu chưa có, và chạy trọn vẹn pipeline khi tệp đã sẵn sàng.
+  5. *Phần Mềm & Báo Cáo Triển Khai:*
+     - `src/tffv/verification/m141_confirmatory.py`: Trình thực thi confirmatory hoàn chỉnh.
+     - `scripts/audit_m141_mechanism.py`: Script kiểm toán cơ chế và đối chiếu scikit-learn.
+     - `scripts/run_m141_confirmatory.sh`: Script bash chạy confirmatory trên server.
+     - `tests/test_m141_confirmatory.py`: 4 bài unit test kiểm tra vectorized macro-f1, paired bootstrap CI, Fold C quarantine và tính chất McNemar test.
+     - `docs/M1_4_1_MECHANISM_AUDIT.md`: Báo cáo kiểm toán cơ chế khoa học toàn diện.
+- **Kiểm Thử Phần Mềm:**
+  * Local: `python scripts/run_tests.py` -> **138/138 passed in 23.80s** (100% pass rate).
+- **Trạng Thái Milestone:** M1.4.1 Mechanism Audit & Confirmatory Setup **COMPLETE & VERIFIED**.
+
+- **Mục tiêu:**
+  1. *Part A — Hoàn thiện tính nhất quán báo cáo M1.3:* Sửa nguồn số Macro-F1 của C6 (khớp chính xác 0.3508 giữa bảng và phần phân tích narrative); tái thiết kế bảng chuyển đổi cặp thể hiện tường minh 9 danh mục độc lập loại trừ lẫn nhau ($C \to C, C \to W, C \to U, W \to C, W \to W, W \to U, U \to C, U \to W, U \to U$), mỗi claim thuộc đúng 1 category và tổng bằng 46; bóc tách suy giảm của C6 thành 2 phần độc lập: tổn thất do truncation (6 claims) và tổn thất phân loại ngữ nghĩa trên tập parsed (6 claims); loại bỏ mọi nhận định tâm lý/nhân quả chưa được kiểm chứng.
+  2. *Part B — Chuẩn bị toàn diện Pilot M1.4 (Training-Free, Quality-First):* Thiết kế giao thức thử nghiệm có kiểm soát D0–D6 với context budget nghiêm ngặt (< 3.200 tokens), k=2 compact demonstrations, retrieval tương đồng từ vựng 3-gram, luật kiểm định ngắn gọn (ngăn chặn cạn kiệt ngân sách sinh).
+- **Chi Tiết Khắc Phục Part A (M1.3 Final Consistency):**
+  - Đã đối soát mã nguồn và dữ liệu JSON: C6 Macro-F1 thực tế là **0.3508** (trung bình F1 4 lớp: Supported 0.5517, Refuted 0.4516, Not Enough Evidence 0.4000, Cherrypicking 0.0000). Giá trị 0.2867 trong phần phân tích văn bản là lỗi typo từ bản thảo sớm, đã được sửa chuẩn hóa trong `src/tffv/verification/m13_audit.py` và `docs/M1_3_REPAIRED_EVALUATION_REPORT.md`.
+  - Bảng so sánh cặp được tổ chức lại với 9 cột độc lập, không gộp lẫn nhóm cha và nhóm con:
+    * C1: 23 $C \to C$, 4 $C \to W$, 1 $C \to U$, 3 $W \to C$, 15 $W \to W$, 0 $W \to U$, 0 $U \to C$, 0 $U \to W$, 0 $U \to U$. Tổng = 46. Net = -2.
+    * C2: 18 $C \to C$, 10 $C \to W$, 0 $C \to U$, 1 $W \to C$, 17 $W \to W$, 0 $W \to U$. Tổng = 46. Net = -9.
+    * C3: 20 $C \to C$, 8 $C \to W$, 0 $C \to U$, 4 $W \to C$, 14 $W \to W$, 0 $W \to U$. Tổng = 46. Net = -4.
+    * C4: 19 $C \to C$, 8 $C \to W$, 1 $C \to U$, 1 $W \to C$, 15 $W \to W$, 2 $W \to U$. Tổng = 46. Net = -8.
+    * C5: 19 $C \to C$, 8 $C \to W$, 1 $C \to U$, 4 $W \to C$, 13 $W \to W$, 1 $W \to U$. Tổng = 46. Net = -5.
+    * C6: 15 $C \to C$, 7 $C \to W$, 6 $C \to U$, 1 $W \to C$, 11 $W \to W$, 6 $W \to U$. Tổng = 46. Net = -12.
+  - Phân tích bóc tách C6: Trong 12 claims bị unparsed, có 6 claims trước đó đã đoán đúng ở C0 ($C \to U = 6$). Trên 34 claims parsed, mô hình đúng 16 claims (độ chính xác có điều kiện 47.1% so với 64.7% của C0 trên chính 34 claims này, net loss = 6 claims). Như vậy 50% mức suy giảm là do truncation cơ học của token budget, 50% là do phân loại ngữ nghĩa.
+- **Triển Khai M1.4 Controlled Pilot (Part B):**
+  - **7 Điều kiện thực nghiệm:**
+    * `D0`: Frozen Base Protocol v1.0 (Zero-shot B1, R4 Top-8, 512 tokens).
+    * `D1`: Concise generic verification rules (chỉ thị ngắn gọn 2 câu, ép lý giải 1 câu để không vượt 512 tokens).
+    * `D2`: Concise source-derived error rules (luật đúc kết từ lỗi Fold A về media debate và missing context).
+    * `D3`: Random error demonstrations ($k=2$, trích xuất Top-1 passage $\le 250$ ký tự từ Fold A).
+    * `D4`: Similarity-retrieved error demonstrations ($k=2$, truy xuất lỗi tương đồng từ vựng 3-gram từ Fold A).
+    * `D5`: Similarity-retrieved error demonstrations with verified corrections ($k=2$, kèm Base mistake và Gold correction).
+    * `D6`: Correct/wrong contrastive demonstrations ($k=2$: 1 nearest correct + 1 nearest error từ Fold A).
+  - **Modules triển khai mới:**
+    * `src/tffv/verification/m14_prompting.py`: Bộ sinh prompt cho D0–D6, hàm tính độ tương đồng 3-gram và bộ chọn top-k tương đồng xác định.
+    * `src/tffv/verification/m14_runner.py`: Runner thực nghiệm toàn diện, tự động seal hash, tính toán chuyển đổi cặp 9 danh mục, kiểm định McNemar và Bootstrap CI.
+    * `scripts/run_m14_pilot.sh`: Script bash thực thi trên server GPU RTX 5090.
+    * `tests/test_m14_pilot.py`: Bộ kiểm thử 4 bài test độ tương đồng, sinh prompt và synthetic end-to-end runner.
+    * `docs/M1_4_PILOT_PROTOCOL.md`: Đặc tả chi tiết giao thức, giả thuyết và hướng dẫn vận hành.
+  - **Chỉ định pilot:** Toàn bộ thực nghiệm M1.4 trên 46 claims Fold B được đánh dấu rõ là **EXPLORATORY DEBUG PILOT** để phát hiện cơ chế; bất kỳ tín hiệu khả quan nào cũng phải được kiểm chứng lại trên tập held-out độc lập.
+- **Kết Quả Kiểm Thử Phần Mềm & Xác Minh Server:**
+  * Sửa lỗi chữ ký gọi hàm `Qwen3FrozenBackbone(spec=spec, device=args.device, dtype=args.dtype)` trong `src/tffv/verification/m14_runner.py`.
+  * Giới hạn chặt chẽ `candidate_sids` trong Fold B (`50 <= id < 100`) ngăn chặn việc nạp quá 3.000 claims từ toàn bộ corpus.
+  * Bổ sung cơ chế chống tràn số `OverflowError` trong `exact_mcnemar_test_twosided` (`src/tffv/verification/stabilization.py`) với xấp xỉ phân phối chuẩn hiệu chỉnh tính liên tục cho $N > 1000$.
+  * Bổ sung script tiền kiểm tra thực tế trên server GPU: `scripts/test_m14_server_preflight.py`.
+  * **Xác minh trực tiếp trên server `hvtham-server` qua SSH:**
+    1. Tải thành công `Qwen3FrozenBackbone` trên GPU CUDA trong 7.31s.
+    2. Chạy thử 1 forward pass thành công trong 1.25s.
+    3. Chạy thử toàn bộ pipeline `m14_runner.py` trên các tệp dữ liệu thật của server (`R4.jsonl`, `claims.jsonl`, `train.json`, `b1_preds`) hoàn thành 100% không có lỗi, sinh đầy đủ báo cáo Markdown.
+  * Toàn bộ **134/134 unit tests** đạt 100% pass trên cả máy local và server.
+- **Trạng Thái Git:**
+  * Đã push commit `75f88d1` lên nhánh `main`. Pipeline đã được tiền kiểm tra và sẵn sàng 100% để người dùng bấm lệnh chạy.
+
 
 
