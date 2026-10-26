@@ -279,7 +279,11 @@ def execute_single_pass_condition(
 
         prompt_obj = build_m15_prompt(condition, claim_text, ev_list, rng=rng)
         t0 = time.time()
-        resp = backbone.generate(prompt_obj["messages"], max_new_tokens=max_new_tokens)
+        resp = backbone.generate(
+            prompt_obj["messages"],
+            max_new_tokens=max_new_tokens,
+            enable_thinking=False,
+        )
         lat = time.time() - t0
 
         raw_text = resp.get("raw_text") or resp.get("generated_text") or ""
@@ -358,7 +362,11 @@ def execute_permutation_condition_m4(
         for perm_name, perm_ev in permutations:
             prompt_obj = build_m15_prompt("M0", claim_text, perm_ev)
             t0 = time.time()
-            resp = backbone.generate(prompt_obj["messages"], max_new_tokens=max_new_tokens)
+            resp = backbone.generate(
+            prompt_obj["messages"],
+            max_new_tokens=max_new_tokens,
+            enable_thinking=False,
+        )
             dt = time.time() - t0
             claim_lat += dt
             total_in_toks += resp.get("input_tokens") or resp.get("prompt_tokens") or 0
