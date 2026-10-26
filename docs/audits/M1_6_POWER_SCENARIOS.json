@@ -1,0 +1,170 @@
+﻿{
+  "status": "PLANNING_ONLY_NOT_OBSERVED_POWER",
+  "macro_f1_power": null,
+  "joint_power": null,
+  "assumptions": "Normal approximation; 90% marginal target for eventual >=80% joint via union bound, conditional on adequate power for BOTH endpoints. Cluster factor 1.2 is hypothetical.",
+  "scenarios": [
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.03,
+      "assumed_discordance": 0.1,
+      "n_independent_claims_approx": 1367,
+      "n_with_assumed_design_effect_1_2": 1641
+    },
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.03,
+      "assumed_discordance": 0.2,
+      "n_independent_claims_approx": 2746,
+      "n_with_assumed_design_effect_1_2": 3296
+    },
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.03,
+      "assumed_discordance": 0.3,
+      "n_independent_claims_approx": 4125,
+      "n_with_assumed_design_effect_1_2": 4950
+    },
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.05,
+      "assumed_discordance": 0.1,
+      "n_independent_claims_approx": 485,
+      "n_with_assumed_design_effect_1_2": 582
+    },
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.05,
+      "assumed_discordance": 0.2,
+      "n_independent_claims_approx": 981,
+      "n_with_assumed_design_effect_1_2": 1178
+    },
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.05,
+      "assumed_discordance": 0.3,
+      "n_independent_claims_approx": 1477,
+      "n_with_assumed_design_effect_1_2": 1773
+    },
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.08,
+      "assumed_discordance": 0.1,
+      "n_independent_claims_approx": 182,
+      "n_with_assumed_design_effect_1_2": 219
+    },
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.08,
+      "assumed_discordance": 0.2,
+      "n_independent_claims_approx": 376,
+      "n_with_assumed_design_effect_1_2": 452
+    },
+    {
+      "family": "primary_two_endpoints_Holm_bound",
+      "alpha_two_sided": 0.025,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.08,
+      "assumed_discordance": 0.3,
+      "n_independent_claims_approx": 570,
+      "n_with_assumed_design_effect_1_2": 684
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.03,
+      "assumed_discordance": 0.1,
+      "n_independent_claims_approx": 1573,
+      "n_with_assumed_design_effect_1_2": 1888
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.03,
+      "assumed_discordance": 0.2,
+      "n_independent_claims_approx": 3160,
+      "n_with_assumed_design_effect_1_2": 3792
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.03,
+      "assumed_discordance": 0.3,
+      "n_independent_claims_approx": 4747,
+      "n_with_assumed_design_effect_1_2": 5697
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.05,
+      "assumed_discordance": 0.1,
+      "n_independent_claims_approx": 558,
+      "n_with_assumed_design_effect_1_2": 670
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.05,
+      "assumed_discordance": 0.2,
+      "n_independent_claims_approx": 1129,
+      "n_with_assumed_design_effect_1_2": 1355
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.05,
+      "assumed_discordance": 0.3,
+      "n_independent_claims_approx": 1700,
+      "n_with_assumed_design_effect_1_2": 2040
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.08,
+      "assumed_discordance": 0.1,
+      "n_independent_claims_approx": 209,
+      "n_with_assumed_design_effect_1_2": 251
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.08,
+      "assumed_discordance": 0.2,
+      "n_independent_claims_approx": 433,
+      "n_with_assumed_design_effect_1_2": 520
+    },
+    {
+      "family": "secondary_four_tests_Holm_bound",
+      "alpha_two_sided": 0.0125,
+      "marginal_power_assumed": 0.9,
+      "assumed_accuracy_delta": 0.08,
+      "assumed_discordance": 0.3,
+      "n_independent_claims_approx": 656,
+      "n_with_assumed_design_effect_1_2": 788
+    }
+  ]
+}

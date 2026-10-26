@@ -1,0 +1,247 @@
+﻿{
+  "frozen_before_after_check": {
+    "files_checked": 196,
+    "mismatches": [],
+    "all_unchanged": true
+  },
+  "recovery": {
+    "m15-evaluation-20261026-142010": {
+      "M0": {
+        "n": 99,
+        "stored_valid": 0,
+        "raw_nonempty": 0,
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "M1": {
+        "n": 99,
+        "stored_valid": 0,
+        "raw_nonempty": 0,
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "M4": {
+        "n": 99,
+        "stored_valid": 0,
+        "raw_nonempty": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "permutation_raw_nonempty": 0
+      }
+    },
+    "m15-evaluation-20261026-151554": {
+      "M0": {
+        "n": 99,
+        "stored_valid": 99,
+        "raw_nonempty": 99,
+        "input_tokens": 260971,
+        "output_tokens": 5792
+      },
+      "M1": {
+        "n": 99,
+        "stored_valid": 99,
+        "raw_nonempty": 99,
+        "input_tokens": 260971,
+        "output_tokens": 5830
+      },
+      "M4": {
+        "n": 99,
+        "stored_valid": 99,
+        "raw_nonempty": 0,
+        "input_tokens": 782913,
+        "output_tokens": 17400,
+        "permutation_raw_nonempty": 297
+      }
+    },
+    "partition_bytes_equal": true,
+    "prompt_hashes_equal": {
+      "M0": true,
+      "M1": true
+    }
+  },
+  "head": "08c6ba77f8d148ca77311ae465d0c349a402d0df",
+  "status": " M scripts/run_m15_eval.sh\n",
+  "runner_diff": "diff --git a/scripts/run_m15_eval.sh b/scripts/run_m15_eval.sh\nold mode 100644\nnew mode 100755\n",
+  "files": [
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/M0/condition_manifest.json",
+      "bytes": 427,
+      "sha256": "aff639654e68169acee36e2a3834c872fce709bebed1db9fde823ecd9f87e34c"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/M0/predictions.jsonl",
+      "bytes": 40948,
+      "sha256": "45df15ad454bba56f5da6d3b234b3094076118e5c05d6d15f7fb475d6c6c4887"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/M1/condition_manifest.json",
+      "bytes": 427,
+      "sha256": "18d40d56218950dfe0de8bb1a1d7a2e51a35a1a648c285cb05adc389c9d23b45"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/M1/predictions.jsonl",
+      "bytes": 40952,
+      "sha256": "ddc604f9eac556f0c617afbcd60b0784fb2577d2df5104af2b1751868cf3ef92"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/M1_5_EVALUATION_REPORT.md",
+      "bytes": 2440,
+      "sha256": "96fd410ca954bffa52f332fc1b2139702b03b4e3c74387ab85c9d3d21311a3c5"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/M4/condition_manifest.json",
+      "bytes": 742,
+      "sha256": "2bc787d8ff2d8e47a5c07814fda101bbaf07256a3b755c577536390304d79fae"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/M4/permutations_M4_detail.jsonl",
+      "bytes": 64222,
+      "sha256": "7179924e1f8a9b9dc15055a255dd79d056a09dcadba137731fc2524de31af72e"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/M4/predictions.jsonl",
+      "bytes": 45696,
+      "sha256": "b004c2496152b39f8e90a72894858f0f21cd2603454ec2f1a55a681e3a60691f"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/holm_adjusted_p_values.json",
+      "bytes": 41,
+      "sha256": "5777badf2b66725a08262e5debff75e3a53b545e72341e74a985bb4f2923f9a6"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/metrics_summary.json",
+      "bytes": 5334,
+      "sha256": "45dbca014b5aec66774d207e74717e6e15e1d7b1a8bb8ccf4a3bc7d81c64e2ad"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/paired_comparisons.json",
+      "bytes": 1603,
+      "sha256": "9bc5275db6b964782861d709214a43a22354f88b804a268df3fcdb112dcb1cf0"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/partition_manifest.json",
+      "bytes": 1927,
+      "sha256": "12425b725e9a789add04d934d7b7fef0c3eaea3c33d29962d9bc43af32991fc1"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-142010/quarantine_manifest.json",
+      "bytes": 2479,
+      "sha256": "1f3623dedca0a555ecf73fa44cf1452b80cd9f8e959616625bc9b910908b6cc1"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/M0/condition_manifest.json",
+      "bytes": 428,
+      "sha256": "ad256d5bfa91e793ddc866359099d91cfe3d514e39e8e3b00f1d9a188c79ea11"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/M0/predictions.jsonl",
+      "bytes": 67852,
+      "sha256": "1262d62d759d50f70abe3caec82f760cdb549333af24f8fd566cb18adc7aee46"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/M1/condition_manifest.json",
+      "bytes": 428,
+      "sha256": "08f6d6d4f6c5df89791bfe758e114cff2ad374c30f6a28d3c9ccaaacfd3150af"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/M1/predictions.jsonl",
+      "bytes": 68176,
+      "sha256": "140be8e2dd8b6cdbf311ffe404df87678851529ef2c9615b0d9d150f955b9f8c"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/M1_5_EVALUATION_REPORT.md",
+      "bytes": 2454,
+      "sha256": "f947aafa82df38ae6e461b15ed1eaa730e4cefc1908ccfaf41f675c52d0e387b"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/M4/condition_manifest.json",
+      "bytes": 743,
+      "sha256": "39a898a505c57da809404cb073b6e3b8500843962879790f3259efe42e311e04"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/M4/permutations_M4_detail.jsonl",
+      "bytes": 146448,
+      "sha256": "6b4d02f2e83e1efcc186bbb818d4ff220160bfbc0cd8d1565133ecbd48a3bcca"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/M4/predictions.jsonl",
+      "bytes": 44998,
+      "sha256": "18cd50f9848bbf024e3583d940f99b4f40cc63142397337c903f0f7c34bf4dc6"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/holm_adjusted_p_values.json",
+      "bytes": 41,
+      "sha256": "5777badf2b66725a08262e5debff75e3a53b545e72341e74a985bb4f2923f9a6"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/metrics_summary.json",
+      "bytes": 5775,
+      "sha256": "2f675b5d61d8bb6d4b41b0a8c2600f194b4861f6a0af236285b5903eb3714494"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/paired_comparisons.json",
+      "bytes": 1679,
+      "sha256": "6b69e78c6f97248be585e8c44150c6f3801d729a12ff8aaa5e8cbf2dae9952d2"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/partition_manifest.json",
+      "bytes": 1927,
+      "sha256": "12425b725e9a789add04d934d7b7fef0c3eaea3c33d29962d9bc43af32991fc1"
+    },
+    {
+      "path": "outputs/m15-evaluation-20261026-151554/quarantine_manifest.json",
+      "bytes": 2479,
+      "sha256": "1f3623dedca0a555ecf73fa44cf1452b80cd9f8e959616625bc9b910908b6cc1"
+    },
+    {
+      "path": "outputs/m15-folde-r4/R1.jsonl",
+      "bytes": 3216063,
+      "sha256": "5f79a311010eeaf8d7c050ebfe40a859dd81d77ea54014b12d014f6ac8979b2c"
+    },
+    {
+      "path": "outputs/m15-folde-r4/R2.jsonl",
+      "bytes": 3300375,
+      "sha256": "3a271ac6346ace3054a3a2ef4d3ff6a5a28e0b5eba25d7c66b9f5cad05537134"
+    },
+    {
+      "path": "outputs/m15-folde-r4/R3.jsonl",
+      "bytes": 4010364,
+      "sha256": "38abe9a9701932558fa611ffaba21211acd5a696efa8f242cc08ef0da01ba591"
+    },
+    {
+      "path": "outputs/m15-folde-r4/R4.jsonl",
+      "bytes": 4493345,
+      "sha256": "72f6f2fa711f68a92b5900f217b2174ac39f4395d06e18070d40d6a938522ac5"
+    },
+    {
+      "path": "outputs/m15-folde-r4/claims.jsonl",
+      "bytes": 17588,
+      "sha256": "35a775aa471b85777c6da6115d5aece2999507abc81c12f903ffaae42e5624cb"
+    },
+    {
+      "path": "outputs/m15-folde-r4/diagnostics.jsonl",
+      "bytes": 28853,
+      "sha256": "e8a52c2d1f7e0ae957cb14bb6f082c60f501552df3ce5a5bcf1849e4fdc6bf52"
+    },
+    {
+      "path": "outputs/m15-folde-r4/evidence_manifest.json",
+      "bytes": 2017,
+      "sha256": "21b2529da5e54feb54776ecb6dce3b5604cc9d8a443cab789ee77640668974c9"
+    },
+    {
+      "path": "outputs/m15-folde-r4/manifest.json",
+      "bytes": 18247,
+      "sha256": "dac9b4bb3a846cee2f288af5eb77ed0a9a8fd458b33c4d6520805b3f2fcc09cb"
+    },
+    {
+      "path": "outputs/m15-folde-r4/manual_review_queue.jsonl",
+      "bytes": 6542289,
+      "sha256": "bebd2b10e75d651f7a9960fefdaa6d98622b4633b52e171f9fdd203492e00636"
+    },
+    {
+      "path": "outputs/m15-folde-r4/summary.json",
+      "bytes": 44177,
+      "sha256": "ad9da382760f0021da1b7698708a5f0c125610e346ce871254e59ad6ccac3a82"
+    }
+  ]
+}
