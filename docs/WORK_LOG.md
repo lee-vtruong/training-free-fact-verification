@@ -1014,3 +1014,35 @@
   * `python scripts/run_tests.py`: **150/150 passed in 28.32s (100% pass, 0 failures)**.
 - **Trạng thái:** Mã nguồn đã vá, commit và push lên GitHub. Sẵn sàng thực thi tiếp tục giai đoạn suy luận kiểm định ngay trên server mà không cần chạy lại bước chuẩn bị bằng chứng Fold D.
 
+## 2026-10-26 07:15 +07:00 — M1.4.3 Cross-Fold Failure Analysis & Research Direction Audit
+
+- **Mục tiêu:**
+  * Thực hiện audit toàn diện kết quả thực nghiệm M1.4.2 trên Fold D ($N=91$ clean, 9 quarantined).
+  * Phân tích đối chiếu chéo (Cross-Fold Synthesis) qua 3 tập đánh giá độc lập: Fold B ($N=46$), Fold C ($N=50$), Fold D ($N=91$).
+  * Xác định nguyên nhân gốc rễ (Root Cause) vì sao các phương pháp training-free khai thác historical error memory (như D4 ICL exemplars hay D2 static error rules) không vượt được generic prompting có kiểm soát định dạng (`D1_matched`).
+  * Đánh giá 5 giả thuyết nghiên cứu dựa trên dữ liệu thực nghiệm thuần túy (Analysis Only, không điều chỉnh prompt để test lại trên cùng fold).
+  * Ban hành quyết định nghiên cứu chiến lược (Research Decision) và đề xuất 3 hướng đi training-free khả thi cho Milestone M1.5.
+- **Báo cáo Khoa học Đã Hoàn Thành:**
+  * `docs/M1_4_3_CROSS_FOLD_FAILURE_ANALYSIS.md` (Phân tích thất bại liên tập và kiểm định cơ chế).
+  * `docs/M1_4_3_RESEARCH_DECISION.md` (Quyết định nghiên cứu và lộ trình chiến lược cho M1.5).
+- **Kết Quả Audit & Phát Hiện Cốt Lõi:**
+  1. *Audit Fold D (M1.4.2):*
+     - Admission: 91/100 claims được chấp nhận, 9 claims bị cách ly chính xác do trùng lặp gần (near-duplicates, Jaccard 0.67–1.00) với các claims tư pháp Kenya từ Fold A (`train:174`, `177`, `180`, `182`, `183`, `185`, `186`, `187`, `189`).
+     - So sánh cặp chính (Primary Contrast) `D2 vs D1_matched`: 54 C→C, 4 C→W, 0 W→C, 33 W→W (Tổng: 91 claims).
+     - Net Gain: **-4 claims** (D2 thua D1_matched 54/91 vs 58/91).
+     - Paired Bootstrap 95% CI trên Delta Accuracy: `[-0.0900, -0.0100]` (hoàn toàn âm, loại trừ 0).
+     - Exact McNemar test: $p = 0.1250$ (do $n_{\text{discordant}}=4$, về mặt toán học kiểm định nhị thức hai phía không thể đạt $p < 0.05$ khi $n < 6$). Cả hai phương pháp thống kê đều xác nhận D2 không vượt được D1_matched.
+     - Cơ chế Rule: Rule 1 (Media debate) mang lại lợi ích (+2.2% so với D2_minus_r1). Rule 2 (Missing context) gây hại nghiêm trọng (-3.3% so với D2_minus_r2, làm hỏng các claims `train:152`, `train:239`, `train:242`).
+  2. *Tổng hợp Liên Tập (Cross-Fold Synthesis qua 187 claims B, C, D):*
+     - D4 (Similarity ICL) sụp đổ hoàn toàn: Đạt Macro-F1 0.5562 trên Fold B (do may mắn đoán đúng 1 claim thiểu số), nhưng rớt xuống 0.3333 trên Fold C (kém D0 và D3), và hòa ngẫu nhiên D3 ở 57.1% trên Fold D (Net Gain = 0).
+     - D2 (Static Error Rules) trên Fold C thắng D0 thuần túy do hiệu ứng rút gọn độ dài (output brevity: 64 tokens vs 179 tokens), ngăn chặn LLM tự suy diễn lan man thành Conflicting/NEI. Khi đối đầu với `D1_matched` (cùng độ dài 64 tokens nhưng dùng generic rules), `D1_matched` chiến thắng áp đảo (63.7% vs 59.3%).
+  3. *Quyết Định Nghiên Cứu & Đề Xuất 3 Hướng Training-Free Tiếp Theo:*
+     - Khai tử hoàn toàn hướng tiếp cận Static Error Rules (D2) và Lexical Error ICL (D4).
+     - Hướng 1 (Khuyến nghị chính cho M1.5): **Deterministic Permutation-Consistency Calibration** (Hiệu chuẩn độ bất biến qua hoán vị thứ tự bằng chứng và prompt paraphrase để lọc bỏ hallucination ngẫu nhiên, chi phí ~9 phút GPU).
+     - Hướng 2: **Two-Stage Attribution-Fact Decomposition** (Tách biệt xác thực trích dẫn phát ngôn và xác thực sự thật thế giới, giải quyết triệt để lỗi phân cực và tranh luận báo chí, chi phí ~3.5 phút GPU).
+     - Hướng 3: **Retrieval-Density Gated Evidence Sufficiency Filtering** (Đo mật độ điểm R4 reranker để ấn định Not Enough Evidence ở tầng IR, không gọi LLM generator, chi phí 0 GPU seconds, giải quyết F1=0.0000 của NEI).
+- **Kiểm thử Phần mềm:**
+  * Bổ sung unit tests kiểm tra tính toàn vẹn dữ liệu và đối chiếu báo cáo trong `tests/test_m143_audit.py`.
+  * Chạy `python scripts/run_tests.py`: **152 passed in 38.61s (100% pass, 0 failures)**.
+- **Trạng thái Milestone:** Milestone M1.4.3 **COMPLETED & VALIDATED**. Ready for User Review.
+
