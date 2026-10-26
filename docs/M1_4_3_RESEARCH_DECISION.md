@@ -11,7 +11,7 @@
 
 ## Executive Decision: Deprecating Static In-Context Error Injection
 
-Following three independent evaluation iterations across **187 unseen claims** (Fold B: $N=46$, Fold C: $N=50$, Fold D: $N=91$ clean), the empirical evidence is decisive:
+Following three sequential evaluation iterations across **187 unseen claims** (Fold B: $N=46$, Fold C: $N=50$, Fold D: $N=91$ clean, examined as exploratory audits rather than pre-registered confirmatory tests of post-hoc hypotheses), the empirical evidence is decisive:
 
 1. **`D4` (Similarity-Retrieved Error Demonstrations) is Terminated:**
    Lexical similarity retrieval of error exemplars failed replication on both Fold C (Macro-F1 0.3333 vs D0 0.3801) and Fold D (57.1% vs generic 63.7%). Topic similarity does not correlate with reasoning failure modes.
@@ -104,21 +104,24 @@ Claim decomposition is well explored in QA-based fact-checking (e.g. FACTIFY, Mi
 
 ---
 
-### Direction 3: Retrieval-Density Gated Evidence Sufficiency Filtering (Calibration for NEI)
+### Direction 3: Retrieval-Density vs Evidence Sufficiency Calibration (Investigating NEI)
 
-#### 1. Research Hypothesis
-Across all three evaluation folds, ALL LLM prompts (`D0`, `D1_matched`, `D2`, `D3`, `D4`) achieved an **F1 score of 0.0000 on `Not Enough Evidence` (NEI)**. LLMs possess a strong generation bias toward either refuting or supporting claims when presented with arbitrary text. The decision for `Not Enough Evidence` is fundamentally an **information-retrieval density property**, not a generation property. Evaluating retrieval cross-encoder score distributions can deterministically identify NEI claims without LLM prompting.
+#### 1. Research Hypothesis & Scientific Clarification
+- **Correction regarding NEI Performance:** While concise rule-constrained prompts (`D1_matched`, `D2`, `D3`, `D4`) suffered complete NEI collapse (NEI F1 = 0.0000 with 0 true positives on Fold D), the detailed unconstrained baseline `D0` did identify true NEI claims on Fold D, achieving **NEI F1 = 0.2500** (3 true positives, 14 false positives, 4 false negatives). The concise prompts wiped out both false positives (14 down to 3) and true positives (3 down to 0).
+- **Fundamental Distinction: Reranker Relevance Score vs Logical Evidence Sufficiency:**
+  A cross-encoder reranker score measures passage-to-query topical/lexical match, **not logical evidence sufficiency**. A passage may have a high rerank score (e.g. discussing the exact government official and bill mentioned in the claim) while lacking the decisive fact needed to prove or refute the claim (a true `Not Enough Evidence` case). Conversely, a lower rerank score may simply stem from vocabulary mismatch despite containing the logical rebuttal.
+- **Hypothesis:** Can retrieval density metrics provide an unlearned prior to assist in distinguishing true unanswerable claims from topical passages without confounding IR relevance with logical sufficiency?
 
-#### 2. Training-Free Mechanism
-1. From the frozen retrieval pipeline (R1 BM25 + R4 Qwen3-Reranker-0.6B), extract the maximum reranker cross-encoder score among the top-8 evidence passages:
+#### 2. Training-Free Mechanism (Exploratory Only)
+1. From the frozen retrieval pipeline (R1 BM25 + R4 Qwen3-Reranker-0.6B), inspect maximum reranker cross-encoder score $S_{\text{max}}$ alongside passage length and coverage:
    $$S_{\text{max}} = \max_{p \in \text{Top8}} \text{Score}_{\text{R4}}(p)$$
-2. Compute an unlearned threshold $\tau_{\text{NEI}}$ from source Fold A (e.g. 10th percentile of true positive evidence scores).
-3. **Decision Rule:**
-   - If $S_{\text{max}} < \tau_{\text{NEI}}$: Deterministically assign **`Verdict: Not Enough Evidence`** (bypassing the generator).
-   - If $S_{\text{max}} \ge \tau_{\text{NEI}}$: Pass evidence to `D1_matched` to classify between `Supported`, `Refuted`, and `Conflicting`.
+2. Contrast unlearned thresholding $\tau_{\text{NEI}}$ against generative hesitation:
+   - Carefully evaluate whether low $S_{\text{max}}$ correlates with true absence of facts or merely poor retrieval quality.
+   - Do NOT conflate topical retrieval failure with logical evidence insufficiency.
 
 #### 3. Mandatory Baselines
-- `D1_matched` (Pure LLM prompt without retrieval gating).
+- `D1_matched` (Concise generic prompt).
+- `D0` (Detailed base prompt, which retains non-zero NEI recall).
 - Random class-prior baseline.
 
 #### 4. Minimal Ablations
@@ -131,8 +134,8 @@ Across all three evaluation folds, ALL LLM prompts (`D0`, `D1_matched`, `D2`, `D
 - CPU Execution Time: **$< 0.1 \text{ seconds}$**.
 
 #### 6. Go/No-Go Decision Criteria
-- **GO:** Increases `Not Enough Evidence` F1 from 0.0000 to $\ge 0.3000$ (identifying at least 2 true NEI claims) without degrading overall accuracy below `D1_matched` (63.7%).
-- **NO-GO:** If false positive NEI rate exceeds 10% (corrupting valid Supported/Refuted claims).
+- **GO:** Increases `Not Enough Evidence` F1 beyond `D0` (0.2500) or recovers true positives without triggering excessive false positives (keeping NEI precision $\ge 25\%$) and without degrading overall accuracy below `D1_matched` (63.7%).
+- **NO-GO:** If false positive NEI rate exceeds 10% (corrupting valid Supported/Refuted claims) or if low rerank score merely reflects retrieval failure rather than genuine NEI.
 
 #### 7. Novelty Risk Assessment
 Retrieval score thresholding is standard practice in open-domain question answering (Karpukhin et al., 2020). Novelty cannot be claimed for thresholding. The contribution is limited to calibrating retrieval density as an inductive prior for the 4th class in AVeriTeC.

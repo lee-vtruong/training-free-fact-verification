@@ -14,7 +14,7 @@
 
 ## Executive Summary
 
-Across three consecutive independent evaluation folds (**Fold B**, **Fold C**, and **Fold D**), representing **187 unique, unobserved fact-checking claims**, we conducted an exhaustive cross-fold audit to answer a fundamental scientific question:
+Across three consecutive evaluation folds examined sequentially during exploratory analysis (**Fold B**, **Fold C**, and **Fold D**), representing **187 unique, unobserved fact-checking claims** (evaluated as exploratory audits rather than pre-registered confirmatory validations of post-hoc hypotheses), we conducted an exhaustive cross-fold audit to answer a fundamental scientific question:
 
 > **Why have training-free fact verification methods utilizing historical error memory (error-retrieval demonstrations or empirical error rules) failed to consistently outperform matched generic prompting?**
 
@@ -263,11 +263,11 @@ When an un-finetuned instruction model (Qwen3-8B) is allowed to generate unconst
 Because AVeriTeC claims span vastly disparate topics (African constitutional budgets, American COVID regulations, European election ages, Asian celebrity rumors), error patterns are driven by **topic-specific linguistics and evidence store quality**, not static dataset-level invariants.
 
 ### 2. Does Lexical Similarity Correlate with Exemplar Helpfulness?
-**No.**
-In D4, 3-gram character Jaccard similarity retrieved exemplars that shared surface keywords (e.g., matching "budget" or "hospital"). However:
+**Empirically not observed in our pilot setup (Downgraded to Hypothesis).**
+In D4, 3-gram character Jaccard similarity retrieved exemplars that shared surface keywords (e.g., matching "budget" or "hospital"). In our evaluated setup:
 - A claim about a hospital budget can fail due to double negatives.
 - The retrieved exemplar failed due to media speculation.
-Topical similarity has zero correlation with the underlying logical failure mode. Consequently, D4 was indistinguishable from random exemplar selection (D3) on Fold D (52/91 vs 52/91, exact McNemar $p = 1.0000$).
+In this specific implementation ($k=2$ 3-gram Jaccard retrieval from $N=50$ Fold A claims), lexical similarity demonstrated no measurable correlation with logical failure mode transfer: D4 was statistically indistinguishable from random exemplar selection (D3) on Fold D (52/91 vs 52/91, exact McNemar $p = 1.0000$). Whether broader lexical or dense semantic similarity metrics could correlate with reasoning failures in a larger bank remains an unverified hypothesis lacking empirical validation.
 
 ### 3. Do Corrective Rules Trade Off Across Confusion Pairs?
 **Yes.**
@@ -277,10 +277,13 @@ This is the central dilemma of static rule injection:
 Natural language rules lack operational bounds. An LLM interprets them globally, applying them to contexts where they distort valid reasoning.
 
 ### 4. Are There Observable Label-Free Features That Predict Failure Modes?
-**Yes.** Observable, deployable features exist that do not require ground truth labels:
-1. **Evidence Score Density:** The maximum cross-encoder score of retrieved passages. When $\max(\text{Rerank Score}) < \tau$, retrieved passages genuinely lack relevance, reliably flagging true `Not Enough Evidence`.
-2. **Direct Quote Attribution vs World Fact:** Claims with attribution syntax (*"X claims that Y"*, *"X said Y"*) fail at $3\times$ higher rates than empirical claims (*"GDP grew by Z%"*) because models confuse proving the quote was uttered with proving the quote's proposition.
-3. **Retrieval Polarity Margin:** Disagreement among the top-3 reranked passages strongly predicts model hesitation into `Conflicting Evidence`.
+**Partially — with critical distinctions and unverified hypotheses:**
+1. **Reranker Relevance Score vs Logical Evidence Sufficiency (Crucial Distinction):**
+   The maximum cross-encoder reranking score $\max(\text{Rerank Score})$ measures topical/lexical relevance between query and passages, **not logical evidence sufficiency**. A passage may score highly because it discusses the exact person, date, and institution in the claim, yet still lack the specific quantitative or factual evidence needed to verify or refute the claim (a true `Not Enough Evidence` case). Conversely, a lower rerank score may reflect vocabulary mismatch rather than true absence of evidence. Thresholding $\max(\text{Rerank Score}) < \tau$ cannot be treated as a proxy for logical sufficiency without controlled validation.
+2. **Direct Quote Attribution vs World Fact (Hypothesis H-ATTR):**
+   *Hypothesis:* Claims containing explicit attribution syntax (*"X claims that Y"*, *"X said Y"*, *"X pledged Y"*) may pose elevated risk because frozen LLMs confuse verifying whether the quote was uttered with verifying whether the underlying proposition is true. *Status:* This is an exploratory qualitative observation from individual claim inspections; the claim that attribution claims fail at "$3\times$ higher rates" has not been verified via a controlled quantitative audit across official splits and is hereby downgraded to an unverified hypothesis.
+3. **Retrieval Polarity Margin (Hypothesis H-POL):**
+   *Hypothesis:* Apparent divergence in polarity among top-ranked passages may trigger model hesitation into `Conflicting Evidence`. *Status:* Requires rigorous statistical validation against true conflicting labels before being deployed as a deterministic signal.
 
 ### 5. Does Adding Error Knowledge Improve Beyond Matched Generic Knowledge?
 **No.**

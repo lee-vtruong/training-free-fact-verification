@@ -1046,3 +1046,64 @@
   * Chạy `python scripts/run_tests.py`: **152 passed in 38.61s (100% pass, 0 failures)**.
 - **Trạng thái Milestone:** Milestone M1.4.3 **COMPLETED & VALIDATED**. Ready for User Review.
 
+## 2026-10-26 07:35 +07:00 — M1.5 Source-Grounded Failure Mechanism Feasibility Study & Experiment Protocol
+
+- **Mục tiêu Nghiên cứu:**
+  * Khảo sát liệu historical verification errors có chứa failure mechanisms ổn định, có thể nhận diện từ claim/evidence mà không cần target gold labels, và có mang lại giá trị gia tăng vượt generic prompting hay không.
+  * Tuân thủ nghiêm ngặt nguyên tắc TRAINING-FREE: Không fine-tuning, optimizer, gradient updates, learned classifiers hay multi-agent architectures.
+- **Part A — Sửa chữa & Chuẩn hóa Các Luận điểm Khoa học (Claim Repairs):**
+  1. *Đính chính chỉ số Not Enough Evidence (NEI):*
+     - Bác bỏ kết luận sai trước đây rằng "tất cả các fold đều có NEI F1 = 0".
+     - Xác minh thực nghiệm trên Fold D ($N=91$ clean, 7 true NEI): Prompt gốc `D0` đạt **NEI F1 = 0.2500** (3 True Positives / 7, 14 False Positives, 4 False Negatives, Recall = 42.86%, Precision = 17.65%).
+     - Hiện tượng sụp đổ NEI F1 = 0.0000 chỉ xảy ra trên các biến thể prompt rút gọn độ dài (`D1_matched`, `D2`, `D2_minus_r2`, `D3`, `D4`) do chỉ dẫn ngắn gọn 1 câu đã triệt tiêu sự ngập ngừng của mô hình, ép chuyển thành binary Supported hoặc Refuted.
+  2. *Phân biệt Điểm Reranker với Tính Đầy đủ của Bằng chứng (Evidence Sufficiency):*
+     - Phân định rõ: Điểm cross-encoder reranker $\max(\text{Rerank Score})$ phản ánh độ tương đồng từ vựng/chủ đề giữa truy vấn và đoạn văn, **không phản ánh tính đầy đủ về mặt logic của bằng chứng**.
+     - Một đoạn văn có thể có điểm rerank rất cao (> 0.85) vì nhắc đúng tên người, chức vụ, bộ luật nhưng không chứa số liệu xác thực (thuộc lớp NEI chuẩn). Ngược lại, điểm rerank thấp có thể chỉ do bất đồng ngữ nghĩa từ vựng trong khi vẫn chứa phản biện logic.
+     - Không thể dùng ngưỡng $S_{\text{max}} < \tau$ để ấn định NEI nếu chưa qua kiểm chứng có đối chứng.
+  3. *Hạ cấp Các Khẳng định Định lượng Thiếu Bằng chứng Thành Giả thuyết:*
+     - Tuyên bố *"attribution claims fail 3x more"* được hạ cấp thành Giả thuyết H-ATTR (chưa có kiểm định định lượng quy mô mẫu chuẩn hóa trên các split chính thức).
+     - Tuyên bố *"lexical similarity has zero correlation"* được chuẩn hóa thành phát hiện thực nghiệm cục bộ của cấu hình $k=2$ 3-gram Jaccard trên Fold D (D4 hòa ngẫu nhiên D3, $p=1.0000$).
+  4. *Chuẩn hóa Phương pháp luận về Fold B, C, D:*
+     - Khẳng định Fold B, C, D là các tập khảo sát hồi quy/thám sát (exploratory audits). Các giả thuyết hình thành sau khi xem kết quả của Fold B, C, D không được coi là đã được "độc lập xác nhận" trên các fold này. Bất kỳ kiểm định xác thực nào (confirmatory validation) đều phải thực hiện trên tập tách biệt hoàn toàn (Fold E: `train:250..349`).
+- **Part B — Bảng Phân loại Cơ chế Thất bại Thuần Nguồn (Source-Only Taxonomy):**
+  * Thực hiện audit toàn diện trên 25 lỗi của tập Fold A (`train:0..49`, $N=50$ claims, 25 errors):
+    1. *Scope, Quantifier & Denominator Mismatch:* **$n=8$ / 25 errors (32.0%)**. (Cơ chế duy nhất có đủ mẫu hỗ trợ). Ví dụ: phân bổ ngân sách Nigeria (`train:2`, `6`, `11`), tỷ lệ tiêu thụ cồn Nam Phi (`train:47`, `48`, `49`).
+    2. *Partial Truth vs Cherrypicking:* **$n=5$ / 25 errors (20.0%)**. Thiếu mẫu ($n \le 5$). Ví dụ: Biden ủng hộ 2/3 cuộc chiến (`train:8`), tuổi bầu cử Scotland/Wales (`train:18`, `19`).
+    3. *Evidence Sufficiency Confusion:* **$n=5$ / 25 errors (20.0%)**. Thiếu mẫu ($n \le 5$). Ví dụ: cam kết thuế $400k (`train:26`), số vụ án tòa án Kenya (`train:29`, `31`, `38`, `39`).
+    4. *Apparent vs Genuine Evidence Conflict:* **$n=3$ / 25 errors (12.0%)**. Thiếu mẫu nghiêm trọng ($n=3$). Ví dụ: tăng trưởng GDP và thất nghiệp Ghana (`train:35`, `37`), tỷ lệ sát thương cảnh sát Mỹ (`train:17`).
+    5. *Attribution vs Proposition Confusion:* **$n=2$ / 25 errors (8.0%)**. Thiếu mẫu nghiêm trọng ($n=2$). Ví dụ: cam kết biên giới Biden (`train:3`), luật cảnh sát Buhari (`train:14`).
+    6. *Negation / Polarity Inversion:* **$n=2$ / 25 errors (8.0%)**. Thiếu mẫu nghiêm trọng ($n=2$). Ví dụ: dự án tư nhân vs nhà nước (`train:20`), tỷ lệ tài trợ dưới 1% (`train:25`).
+  * **Kết luận về Kích thước Mẫu:** Nguồn 50 claims (25 lỗi) không đủ hỗ trợ thống kê cho 5/6 cơ chế ($n \le 5$). Báo cáo trung thực tình trạng thiếu mẫu (sample insufficiency), không suy đoán quy tắc gượng ép.
+- **Part C — Khảo sát Độ Tin cậy của Tín hiệu Không Nhãn (Observable Signal Feasibility):**
+  * Xây dựng và kiểm định các bộ trích xuất tín hiệu không nhãn (regex/heuristics) trên toàn bộ 50 claims Fold A (`scripts/audit_signal_feasibility.py`):
+    - *Scope/Quantifier:* Khớp 24 claims (8 đúng, 16 sai). Signal Precision: 66.7%. Nguy cơ gây sai trên claim đang đúng (Risk of Regression): 32.0% (8 claims).
+    - *Negation:* Khớp 10 claims (7 đúng, 3 sai). Signal Precision: **30.0%**. Nguy cơ gây hại: **28.0% (7 claims đang đúng)**. Nếu áp dụng quy tắc đảo ngược phân cực, mô hình sẽ phá hỏng 7 claims đang làm đúng để cố sửa 3 claims sai.
+    - *Attribution:* Khớp 2 claims (1 đúng, 1 sai). Signal Precision: 50.0%. Bỏ sót 1 trong 2 lỗi attribution của Fold A.
+- **Part D — Thiết kế Giao thức Khảo nghiệm Có Đối chứng (Experiment Protocol):**
+  * Xây dựng giao thức M1.5 đóng băng trước kiểm định trong `docs/M1_5_EXPERIMENT_PROTOCOL.md`:
+    - `M0`: Matched generic control (`D1_matched`, 1-sentence prompt, 0 error rules).
+    - `M1`: Generic verification + claim-type clarification (hướng dẫn phân loại scope, attribution, compound theo nguyên lý tổng quát, không chứa historical error rules).
+    - `M2`: Source-derived mechanism recognition + conditional guidance (chỉ kích hoạt khi có signal; fallback về M0 nếu không có signal).
+    - `M3`: Negative control (gán ngẫu nhiên chỉ dẫn mechanism độc lập với đặc trưng claim, seed=42).
+    - `M4`: Permutation consistency baseline (training-free, zero error memory, bỏ phiếu đa số qua 3 hoán vị thứ tự bằng chứng).
+  * Đóng băng các so sánh chính: Primary Hypothesis 1 (`M4 vs M0`), Secondary Hypothesis 2 (`M1 vs M0`), Diagnostic Contrast (`M2 vs M3` trên active claims).
+  * Phân vùng dữ liệu an toàn: Dành riêng Fold E (`train:250..349`, $N=100$) làm untouched test split, cách ly toàn bộ near-duplicates (Jaccard $\ge 0.60$ hoặc 3-gram containment $\ge 0.50$).
+  * Phân lập nhân quả: Khẳng định lợi ích từ permutation consistency (M4) là kỹ thuật tổng hợp suy luận (inference aggregation), tuyệt đối không được gán ghép cho việc học lỗi lịch sử.
+- **Part E — Quyết định Nghiên cứu Chiến lược (Final Research Decision):**
+  * Trả lời 3 câu hỏi cốt lõi:
+    1. *Historical errors có ổn định và đủ support?* **KHÔNG** (5/6 cơ chế có $n \le 5$, trôi dạt chủ đề sâu sắc giữa các fold).
+    2. *Có thể nhận diện label-free?* **KÉM / ĐỘ CHÍNH XÁC THẤP** (Negation precision 30%, Attribution precision 50%, nguy cơ gây hại lớn hơn lợi ích).
+    3. *Kỳ vọng vượt matched generic guidance?* **KHÔNG** (D2 đã thua D1_matched -4 claims trên Fold D, CI `[-0.09, -0.01]`, $W\to C = 0$).
+  * **Quyết định:** **NO-GO đối với việc triển khai M2 (Mechanism Recognition Guidance)** trên đợt đánh giá confirmatory tiếp theo.
+  * **Lộ trình Thay thế (MODIFY):** Ưu tiên **M4 (Permutation Consistency Baseline)** và **M1 (Generic Claim-Type Clarification)**; chỉ xem xét lại M2 khi ngân hàng lỗi nguồn được mở rộng lên ít nhất $N \ge 200$ claims với kế hoạch phân vùng dữ liệu được đăng ký trước.
+- **Sản phẩm Bàn giao (Deliverables):**
+  1. `docs/M1_5_FAILURE_MECHANISM_FEASIBILITY.md`: Báo cáo nghiên cứu khả thi cơ chế lỗi và quyết định chiến lược.
+  2. `docs/M1_5_EXPERIMENT_PROTOCOL.md`: Giao thức thực nghiệm M0–M4 đóng băng trước đánh giá.
+  3. `src/tffv/verification/taxonomy.py`: Module định nghĩa taxonomy, trích xuất signal không nhãn, logic fallback và tạo rule.
+  4. `scripts/audit_signal_feasibility.py`: Script audit độ phủ và độ tin cậy của signal trên Fold A.
+  5. `tests/test_m15_feasibility.py`: 4 unit tests kiểm định taxonomy, extractors, guidance builder và Fold A consistency.
+- **Kiểm thử Phần mềm:**
+  * `python scripts/run_tests.py`: **156/156 passed in 29.27s (100% pass, 0 failures)**.
+- **Trạng thái Milestone:** Milestone M1.5 Feasibility Study **COMPLETED & VALIDATED**. Git commit ready.
+
+
