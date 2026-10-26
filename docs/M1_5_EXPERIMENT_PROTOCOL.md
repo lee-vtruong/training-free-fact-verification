@@ -119,3 +119,15 @@ For every evaluated condition on Fold E, the following metrics must be computed 
    - Any Fold E claim exhibiting near-duplicate similarity to Fold A is excluded prior to metric calculation.
 3. **Deterministic Reproducibility:**
    - All random seeds, prompt templates, and execution parameters are frozen in `taxonomy.py` and git-committed prior to any server execution.
+
+---
+
+## 5. Implementation & Execution CLI
+
+- **Evidence Preparation Pipeline:** [`src/tffv/retrieval/prepare_fold_evidence.py`](file:///c:/Users/ASUS/Downloads/training-free-fact-verification/src/tffv/retrieval/prepare_fold_evidence.py)
+  - Prepares R4 evidence for Fold E (`train:250..349`) into `outputs/m15-folde-r4/` using frozen BM25 + Qwen3-Embedding + Qwen3-Reranker-0.6B.
+- **Evaluation Runner:** [`src/tffv/verification/m15_runner.py`](file:///c:/Users/ASUS/Downloads/training-free-fact-verification/src/tffv/verification/m15_runner.py)
+  - Executes Conditions `M0`, `M1`, and `M4` (with optional `M2`, `M3` diagnostics).
+  - Enforces anti-leakage quarantine against Fold A (`train:0..49`).
+  - Computes exact McNemar tests, bootstrap CIs, Holm-Bonferroni corrections, and outputs [`M1_5_EVALUATION_REPORT.md`](file:///c:/Users/ASUS/Downloads/training-free-fact-verification/outputs/m15-folde-evaluation/M1_5_EVALUATION_REPORT.md).
+

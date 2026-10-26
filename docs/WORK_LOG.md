@@ -1106,4 +1106,43 @@
   * `python scripts/run_tests.py`: **156/156 passed in 29.27s (100% pass, 0 failures)**.
 - **Trạng thái Milestone:** Milestone M1.5 Feasibility Study **COMPLETED & VALIDATED**. Git commit ready.
 
+## 2026-10-26 07:55 +07:00 — M1.5 Fold E Execution Readiness & Research Evidence Consolidation
+
+- **Mục tiêu:**
+  * Hoàn tất toàn bộ hạ tầng thực thi, pipeline kiểm định và bộ kiểm thử cho Milestone M1.5 trên tập độc lập Fold E (`train:250..349`).
+  * Tuân thủ nghiêm ngặt protocol đã PRE-REGISTERED & FROZEN: Không thay đổi giả thuyết, prompt rules, thresholds, output budgets hay tập dữ liệu để tìm kiếm kết quả thuận lợi.
+  * Tổng hợp toàn diện bằng chứng nghiên cứu qua các milestones M1.3–M1.5 trong `docs/M1_5_RESEARCH_SYNTHESIS.md`, thiết kế phần handoff cho M1.6 nhưng KHÔNG triển khai M1.6 trong milestone này.
+- **1. Audit & Xác minh Tập Fold E:**
+  * Tập ứng viên Fold E gồm chính xác 100 claims (`train:250..349`).
+  * Thực thi kiểm tra anti-leakage quarantine đối chiếu với nguồn Fold A (`train:0..49`):
+    - Đạt chuẩn cách ly: **99 claims được chấp nhận (Admitted)**, **1 claim bị cách ly (Quarantined)** (`train:251` do trùng lặp gần với `train:27` về tuyên bố Malabo 10% ngân sách nông nghiệp, 3-gram containment $\ge 0.50$).
+    - Kiểm tra tính rời rạc tuyệt đối (assert_fold_disjointness): Đạt 100%. Không có bất kỳ target gold labels nào được dùng để chọn claims hay prompts.
+- **2. Xây dựng Runner M1.5 (`src/tffv/verification/m15_runner.py`):**
+  * Hỗ trợ đầy đủ các điều kiện đã đóng băng:
+    - `M0`: Matched generic control (`D1_matched`, 1-sentence prompt, 0 error rules).
+    - `M1`: Generic claim-type clarification (hướng dẫn phân biệt scope, attribution, compound theo nguyên lý tổng quát, 0 error rules).
+    - `M2`: Source-derived mechanism-specific guidance (kích hoạt theo tín hiệu không nhãn, fallback về M0 nếu không có tín hiệu).
+    - `M3`: Random mechanism guidance (negative control, fixed random seed 42).
+    - `M4`: Permutation consistency baseline (3 hoán vị thứ tự bằng chứng: Canonical $[1..8]$, Reverse $[8..1]$, Interleaved $[1,8,2,7...]$, bỏ phiếu đa số, Canonical tie-break).
+  * Kiểm soát suy luận: Frozen Qwen3-8B (`b968826d9c46dd6066d109eabc6255188de91218`), greedy decoding (`temperature=0.0`), `max_new_tokens=64`.
+  * Phân tích đối sánh cặp:
+    - Primary Contrast: `M4 vs M0`.
+    - Secondary Contrast: `M1 vs M0`.
+    - Ma trận chuyển đổi 9 ô ($C\to C, C\to W, W\to C, W\to W$, unparsed), exact two-tailed McNemar test, paired bootstrap 95% CIs trên Delta Accuracy và Delta Macro-F1 (10,000 resamples), điều chỉnh Holm-Bonferroni FWER.
+    - Xuất tự động báo cáo khoa học `M1_5_EVALUATION_REPORT.md`, `metrics_summary.json`, `paired_comparisons.json`, và chi tiết hoán vị `permutations_M4_detail.jsonl`.
+- **3. Tổng hợp Bằng chứng Nghiên cứu & Handoff M1.6 (`docs/M1_5_RESEARCH_SYNTHESIS.md`):**
+  * Phân tích chuyên sâu 10 chiều cạnh cốt lõi từ M1.3 đến M1.5:
+    1. Hiệu ứng độ dài output (Brevity): D1_matched (64 tokens) vượt D0 (179 tokens) +6.6% accuracy trên Fold D do triệt tiêu hallucination.
+    2. Bất đối xứng của quy tắc: Rule 1 (Media debate) mang lại lift dương (+2.2%), Rule 2 (Missing context) gây hại nghiêm trọng (-3.3%).
+    3. Thất bại của ICL tương đồng từ vựng: D4 sụp đổ trên Folds C & D, hòa ngẫu nhiên D3 ở 57.1% ($p=1.0000$).
+    4. Giới hạn ngân hàng lỗi nguồn: $N=50$ claims chỉ có duy nhất 1 cơ chế đủ mẫu ($n=8$), 5 cơ chế còn lại $n \le 5$.
+    5. Đính chính chỉ số: Bác bỏ nhận định NEI F1=0 toàn diện; D0 đạt NEI F1=0.2500 trên Fold D.
+  * Phân định rạch ròi giữa kết quả thực nghiệm (empirical findings), giả thuyết (hypotheses), và giới hạn phương pháp.
+  * Thiết kế khung Handoff M1.6: Đặc tả các candidate components (D1_matched base, Rule 1 isolated, Attribution Clause, Scope Alignment, Contrastive Exemplars, Permutation Consistency) và ma trận ablation chuẩn, cam kết KHÔNG triển khai trước khi có kết quả Fold E.
+- **4. Kiểm thử Phần mềm:**
+  * Bổ sung `tests/test_m15_runner.py` kiểm định: sinh hoán vị bằng chứng, logic bỏ phiếu đa số và giải quyết hòa, hiệu chỉnh Holm-Bonferroni, và kiểm thử end-to-end toàn bộ runner trên CPU với `SyntheticBackbone`.
+  * Chạy toàn bộ test suite (`python scripts/run_tests.py`): **160/160 passed in 25.80s (100% pass, 0 failures)**.
+- **Trạng thái Milestone:** Milestone M1.5 Execution Readiness & Evidence Synthesis **COMPLETED & READY FOR SERVER RUN**. Git commit ready.
+
+
 
