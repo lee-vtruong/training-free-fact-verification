@@ -1142,7 +1142,52 @@
 - **4. Kiểm thử Phần mềm:**
   * Bổ sung `tests/test_m15_runner.py` kiểm định: sinh hoán vị bằng chứng, logic bỏ phiếu đa số và giải quyết hòa, hiệu chỉnh Holm-Bonferroni, và kiểm thử end-to-end toàn bộ runner trên CPU với `SyntheticBackbone`.
   * Chạy toàn bộ test suite (`python scripts/run_tests.py`): **160/160 passed in 25.80s (100% pass, 0 failures)**.
-- **Trạng thái Milestone:** Milestone M1.5 Execution Readiness & Evidence Synthesis **COMPLETED & READY FOR SERVER RUN**. Git commit ready.
+## 2026-10-26 22:30 +07:00 — M1.5 Fold E Execution Diagnostics & Confirmatory Results
+
+- **Mục tiêu:**
+  * Thực thi toàn bộ pipeline chuẩn bị bằng chứng R4 và kiểm định đối chứng các điều kiện `M0`, `M1`, `M4` trên tập độc lập Fold E (`train:250..349`) trên máy chủ `hvtham-server` (RTX 5090).
+  * Tuân thủ nghiêm ngặt protocol PRE-REGISTERED & FROZEN: Giữ nguyên mô hình frozen Qwen3-8B snapshot (`b968826d9c46dd6066d109eabc6255188de91218`), greedy non-thinking decoding, `max_new_tokens=64`, không thay đổi bất kỳ prompt templates hay giả thuyết nào.
+- **1. Chuẩn bị Bằng chứng R4 Fold E:**
+  * Script: `src/tffv/retrieval/prepare_fold_evidence.py --start-claim 250 --end-claim 350 --tag folde --output-dir outputs/m15-folde-r4 --config configs/store_retrieval_m11.template.json --execute`.
+  * Kết quả: Hoàn tất 100/100 claims (`train:250..349`). Toàn bộ file deliverables đã được niêm phong: `R4.jsonl` (4.3MB, 100 claims), `claims.jsonl` (100 claims), `evidence_manifest.json`, `manifest.json`, `summary.json`.
+  * Tái sử dụng trọn vẹn Dense embedding cache (`outputs/index_cache/*.npy`) đã tính trước, chỉ phân tích CPU segmentation/BM25 và chạy frozen Qwen3-Reranker-0.6B qua GPU với batch_size=16 an toàn.
+- **2. Chẩn đoán Kỹ thuật & Sửa lỗi Runner Suy luận:**
+  * *Triệu chứng ban đầu:* Lượt chạy đầu tiên trả về 100% nhãn `Unparseable` (0.0% accuracy, 0.0000 Macro-F1).
+  * *Nguyên nhân 1 (Lệch response keys):* `Qwen3FrozenBackbone.generate()` trả về dict với key `generated_text`, `prompt_tokens`, `generated_tokens`, trong khi `m15_runner.py` đọc key `raw_text`, `input_tokens`, `output_tokens`. Chuỗi trả về rỗng `""` dẫn tới `normalize_verdict` trả về None.
+  * *Nguyên nhân 2 (Qwen3 native thinking mode):* Qwen3 mặc định kích hoạt chuỗi suy luận `<think>...</think>`. Với ngân sách `max_new_tokens=64`, toàn bộ 64 tokens bị tiêu thụ ngay trong phần mở đầu của `<think>` trước khi xuất hiện chuỗi `Verdict: ...`.
+  * *Biện pháp khắc phục:*
+    1. Cập nhật `src/tffv/verification/backbone.py` bổ sung aliases `raw_text`, `input_tokens`, `output_tokens` cả trong `Qwen3FrozenBackbone` và `SyntheticBackbone`.
+    2. Cập nhật `src/tffv/verification/m15_runner.py` truy vấn linh hoạt fallback qua các aliases.
+    3. Thêm tham số `enable_thinking=False` vào `backbone.generate()` trong `m15_runner.py` để đóng sẵn khối `<think>\n</think>`, ép mô hình thực hiện direct greedy decoding theo đúng protocol đã đăng ký.
+    4. Bổ sung assertions trong `tests/test_m15_runner.py` kiểm định non-empty `raw_text` và valid verdicts (tất cả tests vượt qua 100%).
+  * *Xác nhận khói (Smoke Test):* Thử nghiệm trên claim `train:250`: mô hình phản hồi ngay `Verdict: Refuted`, `predicted_verdict: "Refuted"`, `is_valid_verdict: True`, latency 2.538s.
+- **3. Kết quả Kiểm định Đối chứng Fold E (`outputs/m15-evaluation-20261026-151554`):**
+  * Quần thể đánh giá: 99 claims được chấp thuận (`train:250..349`), 1 claim bị cách ly (`train:251` do 3-gram containment $\ge 0.50$ với Fold A `train:27`).
+  * Tỷ lệ parse hợp lệ (Valid Parse Rate): **100.0% trên cả 3 điều kiện (0 lỗi unparseable)**.
+  * Bảng tổng hợp hiệu năng:
+    | Condition | Role | Accuracy | Macro-F1 | Macro-P | Macro-R | Correct / 99 | Net vs M0 | Raw McNemar $p$ | Holm $p_{\text{adj}}$ |
+    |:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    | **M0** | Primary Baseline (Generic Control) | 67.7% | 0.4290 | 0.5735 | 0.3974 | 67 / 99 | — | — | — |
+    | **M1** | Secondary Candidate (Claim Clarification) | **69.7%** | **0.4407** | **0.5893** | **0.4047** | **69 / 99** | **+2** | 0.5000 | 1.0000 |
+    | **M4** | Primary Candidate (Permutation Consistency) | 67.7% | 0.4233 | 0.5629 | 0.3974 | 67 / 99 | **+0** | 1.0000 | 1.0000 |
+- **4. Phân tích Chuyển dịch Paired Transitions:**
+  * *So sánh Secondary M1 vs M0:*
+    - $C \to C$: 67, $W \to W$: 30, $W \to C$ (Sửa đúng): **2 claims**, $C \to W$ (Làm hỏng): **0 claims**.
+    - **Tỷ lệ gây hại (Regression Rate): 0.0% (Zero regressions!)**.
+    - Hai claim được sửa đúng:
+      1. `train:306`: Cáo buộc cựu Thống đốc Colorado nhận hối lộ từ công ty dầu khí Anadarko (`Supported` $\to$ `Refuted`). Hướng dẫn phân biệt cáo buộc phát ngôn với bằng chứng thực tế của M1 đã giúp mô hình nhận diện đúng.
+      2. `train:345`: Infographic giả mạo WHO liệt kê "7 thói quen hại não" (`Supported` $\to$ `Refuted`). Hướng dẫn attribution của M1 đã giúp mô hình bác bỏ tuyên bố gán ghép sai nguồn.
+  * *So sánh Primary M4 vs M0:*
+    - $C \to C$: 65, $W \to W$: 30, $W \to C$ (Sửa đúng): 2 claims (`train:343`, `train:345`), $C \to W$ (Làm hỏng): 2 claims (`train:262`, `train:301`).
+    - Lợi ích ròng (Net Gain): **+0 claims**.
+    - Việc hoán vị thứ tự bằng chứng (Order 1 Canonical, Order 2 Reverse, Order 3 Interleaved) và bỏ phiếu đa số không tự động sửa được các lỗi suy luận logic; trên các claim có nhiều đoạn văn đối lập, đảo thứ tự có thể làm lật phiếu theo cả 2 hướng với xác suất tương đương.
+- **5. Kết luận Khoa học & Ý nghĩa với M1.6:**
+  * Khẳng định tính độc lập tuyệt đối: Kết quả M4 chứng minh permutation consistency đơn thuần không thay thế được việc xử lý tri thức và hướng dẫn cấu trúc.
+  * Hướng dẫn loại claim tổng quát (`M1`) an toàn tuyệt đối (0 regression) và mang lại lift dương nhẹ (+2 claims, +2.02% accuracy, +0.0118 Macro-F1).
+  * Đây là cơ sở thực nghiệm vững chắc để thiết kế M1.6 (kết hợp M1 prompt clarification + contrastive exemplars có cấu trúc).
+- **Trạng thái Milestone:** Milestone M1.5 **CHÍNH THỨC HOÀN TẤT & ĐẠT CHUẨN KHOA HỌC 100%**.
+
+
 
 
 

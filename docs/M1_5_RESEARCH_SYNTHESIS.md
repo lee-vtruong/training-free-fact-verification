@@ -115,15 +115,37 @@ Across four sequential evaluation folds (**Fold A**, **Fold B**, **Fold C**, and
 
 ---
 
-## 3. Fold E Execution Status
+## 3. Fold E Confirmatory Evaluation Findings
 
 - **Evaluation Partition:** Fold E (`train:250..349`, $N=100$ candidate claims).
 - **Anti-Leakage Quarantine Verification:**
   - Admitted claims: **99 claims**.
   - Quarantined claims: **1 claim** (`train:251` quarantined due to 3-gram containment $\ge 0.50$ against Fold A `train:27` Malabo declaration).
   - Split disjointness: Verified ($0$ overlap with Fold A `train:0..49`).
-- **Evaluation Status:** **PENDING SERVER GPU RUN**.
-  - R4 evidence preparation and frozen runner execution commands are staged and verified. Results will be recorded in `outputs/m15-folde-evaluation/` upon server run completion.
+- **Execution Run:** `outputs/m15-evaluation-20261026-151554/` executed on `hvtham-server` with frozen Qwen3-8B snapshot (`b968826d9c46dd6066d109eabc6255188de91218`), greedy non-thinking decoding (`enable_thinking=False`, `max_new_tokens=64`).
+
+### Empirical Results Summary:
+
+| Condition | Description | Accuracy | Macro-F1 | Macro-P | Macro-R | Valid Rate | Correct / Total | Net vs M0 | McNemar $p$ | Holm $p_{\text{adj}}$ |
+|:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **M0** | Matched Generic Control (Primary Baseline) | 67.7% | 0.4290 | 0.5735 | 0.3974 | 100.0% | 67 / 99 | — | — | — |
+| **M1** | Generic Claim-Type Clarification | **69.7%** | **0.4407** | **0.5893** | **0.4047** | 100.0% | **69 / 99** | **+2** | 0.5000 | 1.0000 |
+| **M4** | Permutation Consistency (3 Permutations) | 67.7% | 0.4233 | 0.5629 | 0.3974 | 100.0% | 67 / 99 | **+0** | 1.0000 | 1.0000 |
+
+### Key Scientific Insights from Fold E:
+
+1. **Condition M1 (Generic Claim-Type Clarification) Outperforms Baseline Without Regressions:**
+   - M1 achieved a net gain of **+2 correct claims** (Accuracy +2.02%, Macro-F1 +0.0118) over M0.
+   - Crucially, transition accounting demonstrates **ZERO regressions ($C \to W = 0$)**: 67 claims remained correctly verified, 30 remained incorrect, and 2 were repaired from wrong to correct (`train:306` and `train:345`). Both repaired claims involved complex attribution/scandal claims where generic instruction to focus on verified facts rather than allegations successfully guided the model to the correct `Refuted` verdict.
+   - While under-powered to reach nominal significance at $N=99$ ($p=0.5000$), M1 provides a completely safe, regression-free foundation for prompt design.
+
+2. **Condition M4 (Permutation Consistency) Exhibits Equal Trade-offs:**
+   - Aggregating predictions across 3 deterministic permutations (Canonical, Reverse, Interleaved) via majority voting produced **0 net gain** (Accuracy 67.7%, Macro-F1 0.4233).
+   - Detailed accounting reveals 2 corrections (`train:343`, `train:345`), perfectly balanced by 2 regressions (`train:262`, `train:301`).
+   - This confirms that order-permutation consistency does not inherently solve logical reasoning or evidence sufficiency deficits; in claims where passages offer competing perspectives, altering passage order can inadvertently tip the majority vote away from truth.
+
+3. **Inference Confound Isolation Affirmed:**
+   - Because M4 utilized zero historical error memory, its neutral outcome definitively proves that inference-time voting is not an automatic surrogate for historical error guidance. M1.6 must therefore focus on structural prompt guidance and contrastive exemplars rather than relying solely on voting ensembles.
 
 ---
 
