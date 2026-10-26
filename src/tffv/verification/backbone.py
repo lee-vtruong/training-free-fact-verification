@@ -156,8 +156,11 @@ class Qwen3FrozenBackbone:
         return {
             "prompt_text": prompt_text,
             "generated_text": output_text,
+            "raw_text": output_text,
             "prompt_tokens": input_len,
+            "input_tokens": input_len,
             "generated_tokens": len(gen_tokens),
+            "output_tokens": len(gen_tokens),
             "enable_thinking": enable_thinking,
             "max_new_tokens": max_new_tokens,
         }
@@ -209,8 +212,11 @@ class SyntheticBackbone:
         return {
             "prompt_text": user_text,
             "generated_text": text,
+            "raw_text": text,
             "prompt_tokens": len(user_text.split()),
+            "input_tokens": len(user_text.split()),
             "generated_tokens": len(text.split()),
+            "output_tokens": len(text.split()),
             "enable_thinking": enable_thinking,
             "max_new_tokens": max_new_tokens,
         }

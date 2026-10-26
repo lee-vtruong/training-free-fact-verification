@@ -282,7 +282,7 @@ def execute_single_pass_condition(
         resp = backbone.generate(prompt_obj["messages"], max_new_tokens=max_new_tokens)
         lat = time.time() - t0
 
-        raw_text = resp.get("raw_text", "")
+        raw_text = resp.get("raw_text") or resp.get("generated_text") or ""
         verdict = normalize_verdict(raw_text)
         is_valid = bool(verdict in VERDICTS)
         if is_valid:
@@ -297,8 +297,8 @@ def execute_single_pass_condition(
             "predicted_verdict": verdict or "Unparseable",
             "is_valid_verdict": is_valid,
             "latency_seconds": round(lat, 3),
-            "input_tokens": resp.get("input_tokens", 0),
-            "output_tokens": resp.get("output_tokens", 0),
+            "input_tokens": resp.get("input_tokens") or resp.get("prompt_tokens") or 0,
+            "output_tokens": resp.get("output_tokens") or resp.get("generated_tokens") or 0,
             "prompt_sha256": prompt_obj["prompt_sha256"],
         }
         records.append(rec)
@@ -361,10 +361,10 @@ def execute_permutation_condition_m4(
             resp = backbone.generate(prompt_obj["messages"], max_new_tokens=max_new_tokens)
             dt = time.time() - t0
             claim_lat += dt
-            total_in_toks += resp.get("input_tokens", 0)
-            total_out_toks += resp.get("output_tokens", 0)
+            total_in_toks += resp.get("input_tokens") or resp.get("prompt_tokens") or 0
+            total_out_toks += resp.get("output_tokens") or resp.get("generated_tokens") or 0
 
-            raw = resp.get("raw_text", "")
+            raw = resp.get("raw_text") or resp.get("generated_text") or ""
             verd = normalize_verdict(raw)
             perm_results[perm_name] = {
                 "raw_text": raw,

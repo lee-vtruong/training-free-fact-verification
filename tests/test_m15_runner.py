@@ -172,3 +172,11 @@ def test_m15_runner_synthetic_end_to_end(monkeypatch):
         part_manifest = json.loads((out_run / "partition_manifest.json").read_text(encoding="utf-8"))
         assert part_manifest["admitted_claims_count"] == 2
         assert set(part_manifest["admitted_claims_sample_ids"]) == {"train:250", "train:252"}
+
+        # Check predictions have non-empty raw_text and valid verdicts
+        m0_preds = [json.loads(l) for l in (out_run / "M0" / "predictions.jsonl").read_text(encoding="utf-8").strip().split("\n")]
+        assert len(m0_preds) == 2
+        for p in m0_preds:
+            assert len(p["raw_text"]) > 0
+            assert p["predicted_verdict"] in {"Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking"}
+            assert p["is_valid_verdict"] is True
