@@ -1,0 +1,58 @@
+{
+  "assistant_candidate_drafts": 1,
+  "correct_control_review_cases": 42,
+  "date": "2026-10-27",
+  "error_review_cases": 33,
+  "human_reviews_completed": 0,
+  "local_root": "outputs\\m161-review-preparation-v1",
+  "m162_readiness": "MODIFY",
+  "next_gate": "Real independent human review; >=30 verified error records, >=3 mechanisms with >=5 verified records each, >=80% source-only correct-control matching coverage. No automatic next source batch.",
+  "prepared_file_hashes": {
+    "combined75.json": "8ec5d9fbc496b48c1483b64942a8b50bf7e41cee56d71eaec07b884c81047618",
+    "control-reviews/candidate_annotations_template.json": "f74bf666136ae58c4a1257bb065dac33ad357731c367e9114ad63a1f222d463a",
+    "control-reviews/reviewer_1.json": "3860c414eddcf8df6f693f22bab71d9b73988345fd289a4fa44b32c3f1da4081",
+    "control-reviews/reviewer_2.json": "3860c414eddcf8df6f693f22bab71d9b73988345fd289a4fa44b32c3f1da4081",
+    "correct-controls42.json": "f8bc67593f14ec6a1dcf86fde3a20c5c281d60eb40c746dba4b95f9853409a77",
+    "error-reviews/candidate_annotations_template.json": "d31af987be5e4b80cc1ee9ce5655beb502b0f923df2245f0ffbb0be5fe18b27d",
+    "error-reviews/reviewer_1.json": "867897def20e80b19d6198a38bab031144ed9dacf0e88a8e8a430a2d6567958e",
+    "error-reviews/reviewer_2.json": "867897def20e80b19d6198a38bab031144ed9dacf0e88a8e8a430a2d6567958e",
+    "errors33.json": "5891fb0773114858900d6c6cca007429cc9bdbabace35164f68109f087633f48",
+    "inputs/new-source-memory.json": "bc89c625464e5b70f26b40a2c1d5960c6e6997b83f26d15f8260d99644ddb399",
+    "inputs/new-source-summary.json": "12bd950a5e0a5416ea116ccb7efff7fc3b0f136b410802859aa00b3d95863488"
+  },
+  "schema_checks": "PASS",
+  "scope": "CPU post-batch review preparation; no new inference",
+  "summary": {
+    "artifact_chain_checked_records": 75,
+    "base_correct_verdicts": 42,
+    "base_incorrect_verdicts": 33,
+    "candidate_mechanism_flags_not_verified": {
+      "attribution": 4,
+      "evidence_sufficiency": 16,
+      "negation_polarity": 28,
+      "partial_truth_context": 12,
+      "reported_conflict": 10,
+      "scope_quantifier": 18
+    },
+    "completed_new_source_predictions": 25,
+    "evidence_sufficiency_unreviewed": 75,
+    "human_reviews": 0,
+    "incomplete_evidence_cases": 0,
+    "new_gpu_calls_during_memory_build": 0,
+    "parser_errors": 0,
+    "retained_prediction_costs_not_new_build_costs": {
+      "generated_tokens": 17271,
+      "latency_seconds": 412.81577435694635,
+      "prompt_tokens": 192665
+    },
+    "source_gpu_active_seconds": null,
+    "source_records": 75,
+    "statuses": {
+      "PENDING_REVIEW": 75
+    },
+    "verified_correct_control_rationales": 0,
+    "verified_corrective_rationales": 0,
+    "verified_mechanism_support": {},
+    "verified_reasoning_failures": 0
+  }
+}
