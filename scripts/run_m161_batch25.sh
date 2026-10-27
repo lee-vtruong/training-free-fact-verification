@@ -2,6 +2,9 @@
 # User-run only. No daemon, scheduler, automatic expansion or HEAL ablations.
 set -Eeuo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
+if [[ -f "$PWD/.venv/bin/activate" ]]; then
+  source "$PWD/.venv/bin/activate"
+fi
 export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
 RUN="$PWD/outputs/m161-source-batch25-v1"
