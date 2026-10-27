@@ -1,0 +1,7 @@
+{
+  "condition": "P0",
+  "template": "native_D0",
+  "max_new_tokens": 512,
+  "enable_thinking": false,
+  "do_sample": false
+}

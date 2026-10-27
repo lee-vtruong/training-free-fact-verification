@@ -1,5 +1,7 @@
 # M1.6.1 — Review after the completed source batch
 
+**Later update:** The explicitly requested minimal exploratory follow-up is now specified in [the M1.6.1.1 correction audit](M1_6_1_1_CORRECTION_AUDIT.md) and [M1.6.2a pilot protocol](M1_6_2A_HEAL_PILOT_PROTOCOL.md). It permits provisional P0–P3/N0 preparation with reviewed-rationale P4 blocked; it does not claim the broad-study verification threshold below has been met.
+
 Date: 2026-10-27. The user completed the fixed 25-source batch. Current combined bank: **75 records, 33 incorrect verdicts, 42 correct verdicts, zero parser errors**. All 75 remain PENDING_REVIEW. One assistant correction draft exists for train:25; the other 32 incorrect cases have no drafted correction yet. Human/verified rationale counts remain **0**.
 
 ## Prepared CPU artifacts

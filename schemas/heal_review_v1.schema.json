@@ -266,6 +266,44 @@
       "sample_id": {
         "type": "string",
         "pattern": "^train:[0-9]+$"
+      },
+      "draft_assessment": {
+        "type": "object",
+        "required": [
+          "author_type",
+          "status",
+          "reason",
+          "limitations",
+          "evidence_inventory_passage_ids"
+        ],
+        "properties": {
+          "author_type": {
+            "const": "assistant"
+          },
+          "status": {
+            "enum": [
+              "PENDING_REVIEW",
+              "INSUFFICIENT_EVIDENCE"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limitations": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_inventory_passage_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "human_reviews": {
+            "const": 0
+          }
+        }
       }
     }
   }

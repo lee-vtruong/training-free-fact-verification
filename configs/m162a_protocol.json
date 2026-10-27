@@ -1,0 +1,31 @@
+{
+  "version": "m162a-initial-v1",
+  "k": 1,
+  "seed": 42,
+  "output_tokens": 512,
+  "scope": "EXPLORATORY",
+  "condition_files": [
+    "configs/m162a_P0.json",
+    "configs/m162a_P1.json",
+    "configs/m162a_P2.json",
+    "configs/m162a_P3.json",
+    "configs/m162a_P4.json",
+    "configs/m162a_N0.json"
+  ],
+  "primary_comparisons": [
+    "P3_vs_P2",
+    "P3_vs_P1"
+  ],
+  "optional_comparison": "P4_vs_P3_if_eligible_before_launch",
+  "metrics": [
+    "Accuracy",
+    "Macro-F1"
+  ],
+  "n_bootstrap": 10000,
+  "n_paired_permutations": 19999,
+  "source_error_gate": "assistant-evidence-grounded pending OR human-verified; no insufficient examples",
+  "P4_gate": "Every selected P2/P3 same-ID exemplar VERIFIED by two real humans before preparation",
+  "retrieval": "fixed source-claim BM25 k1=1.2 b=.75, ID tie break; no k/seed search",
+  "non_error_control": "same source gold class, different source group, closest unpadded demo token count within20%; actual full prompt lengths matched within2 tokens",
+  "no_automatic_CoT_or_refitting": true
+}

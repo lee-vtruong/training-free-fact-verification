@@ -115,7 +115,9 @@ def refresh(r):
 
 
 def candidate_hash(r):
-    return digest({k:r[k] for k in ('record_id','corrected_explanation','citations','candidate_mechanisms')})
+    obj={k:r[k] for k in ('record_id','corrected_explanation','citations','candidate_mechanisms')}
+    if 'draft_assessment' in r: obj['draft_assessment']=r['draft_assessment']
+    return digest(obj)
 
 
 def check_citations(r):
@@ -136,6 +138,8 @@ def review_status(r):
         return 'INSUFFICIENT_EVIDENCE'
     reviews = r['reviews']
     if len(reviews) < 2:
+        if r.get('draft_assessment',{}).get('status')=='INSUFFICIENT_EVIDENCE':
+            return 'INSUFFICIENT_EVIDENCE'
         return 'PENDING_REVIEW'
     if len(reviews) != 2 or len({v['reviewer_id'].casefold() for v in reviews}) != 2:
         raise ValueError('Exactly two distinct human reviewers required')
@@ -202,6 +206,14 @@ def validate_record(r):
         raise ValueError('Review status cannot be assigned without required evidence/reviews')
     if not set(r['candidate_mechanisms']).issubset(MECHANISMS):
         raise ValueError('Unknown candidate mechanism')
+    if 'draft_assessment' in r:
+        d=r['draft_assessment']
+        if d['author_type']!='assistant' or d['status'] not in ('PENDING_REVIEW','INSUFFICIENT_EVIDENCE') or not d['limitations'] or not d['reason']:
+            raise ValueError('Invalid non-human source drafting assessment')
+        if set(d['evidence_inventory_passage_ids'])!={e['passage_id'] for e in r['evidence']}:
+            raise ValueError('Draft evidence inventory changed')
+        if d['status']=='INSUFFICIENT_EVIDENCE' and r['corrected_explanation'] is not None:
+            raise ValueError('Do not fabricate a gold correction for insufficient evidence')
     if len({e['passage_id'] for e in r['evidence']})!=len(r['evidence']):
         raise ValueError('Duplicate evidence passage IDs')
     for e in r['evidence']:
@@ -265,7 +277,8 @@ def summary(memory):
             'verified_reasoning_failures':reasoning, 'verified_mechanism_support':dict(support),
             'candidate_mechanism_flags_not_verified':dict(Counter(k for r in wrong for k in r['candidate_mechanisms'])),
             'incomplete_evidence_cases':sum(r['review_status']=='INSUFFICIENT_EVIDENCE' for r in rr),
-            'evidence_sufficiency_unreviewed':sum(r['review_status']=='PENDING_REVIEW' for r in rr),
+            'evidence_sufficiency_unreviewed':sum(len(r['reviews'])<2 for r in rr),
+            'assistant_insufficient_screenings':sum(r.get('draft_assessment',{}).get('status')=='INSUFFICIENT_EVIDENCE' for r in rr),
             'human_reviews':sum(len(r['reviews']) for r in rr),
             'new_gpu_calls_during_memory_build':0,
             'completed_new_source_predictions':sum(r['provenance']['origin']=='OWN_PROJECT_M161_BATCH25' for r in rr),
@@ -327,8 +340,10 @@ def apply_candidates(memory, annotations, contract):
         r['corrected_explanation'] = a['corrected_explanation']
         r['citations'] = a['citations']
         r['candidate_mechanisms'] = a.get('candidate_mechanisms',r['candidate_mechanisms'])
+        if 'draft_assessment' in a: r['draft_assessment']=a['draft_assessment']
         check_citations(r)
         r['review_record_sha256'] = None
+        r['review_status']=review_status(r)
         refresh(r)
     contract.check_memory(result)
     return result
@@ -349,6 +364,7 @@ def export_reviews(memory, destination):
                            'reviewed_at':None,'decision':None,'reason':None,
                            'evidence_sufficient':None,'correction_grounded':None,'gold_relation_supported':None,
                            'failure_category':None,'confirmed_mechanisms':[]})
+            if 'draft_assessment' in r: sheets[-1]['draft_assessment']=r['draft_assessment']
         save(dest / f'reviewer_{slot}.json',sheets)
     save(dest / 'candidate_annotations_template.json',[
         {'sample_id':r['sample_id'],'record_sha256':r['content_sha256'],
@@ -376,6 +392,8 @@ def import_reviews(memory, first, second, contract):
             for key in ('claim','base_prediction','gold_verdict','evidence','corrected_explanation','citations','candidate_mechanisms'):
                 if v[key]!=r[key]:
                     raise ValueError('Review sheet source/candidate context was edited: '+key)
+            if v.get('draft_assessment')!=r.get('draft_assessment'):
+                raise ValueError('Review sheet drafting limitations/status were edited')
         if any(v['record_sha256']!=r['content_sha256'] or v['candidate_sha256']!=candidate_hash(r) for v in pair):
             raise ValueError('Review sheet pins a stale or different source/candidate')
         if all(v.get('decision') is None for v in pair):

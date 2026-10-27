@@ -10,3 +10,7 @@ configs/m16*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr
 scripts/run_m161_batch25.sh text eol=lf
 src/tffv/memory/heal.py text eol=lf
 src/tffv/experiments/m161.py text eol=lf
+src/tffv/experiments/m162a.py text eol=lf
+src/tffv/memory/corrections.py text eol=lf
+src/tffv/verification/heal_pilot.py text eol=lf
+scripts/run_m162a_pilot.sh text eol=lf
