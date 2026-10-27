@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Independent review sheet export, pending fields nullable; importer enforces completed decisions",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "reviewer_id",
+      "reviewer_type",
+      "independent_review",
+      "reviewed_at",
+      "decision",
+      "reason",
+      "record_sha256",
+      "candidate_sha256",
+      "evidence_sufficient",
+      "correction_grounded",
+      "gold_relation_supported",
+      "failure_category",
+      "confirmed_mechanisms",
+      "sample_id",
+      "claim",
+      "base_prediction",
+      "gold_verdict",
+      "evidence",
+      "corrected_explanation",
+      "citations",
+      "candidate_mechanisms"
+    ],
+    "properties": {
+      "reviewer_id": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "reviewer_type": {
+        "anyOf": [
+          {
+            "const": "human"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "independent_review": {
+        "anyOf": [
+          {
+            "const": true
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "reviewed_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "decision": {
+        "anyOf": [
+          {
+            "enum": [
+              "VERIFIED",
+              "REJECTED",
+              "INSUFFICIENT_EVIDENCE"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "reason": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "record_sha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "candidate_sha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "evidence_sufficient": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "correction_grounded": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "gold_relation_supported": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "failure_category": {
+        "anyOf": [
+          {
+            "enum": [
+              "REASONING_FAILURE_SUPPORTED_BY_EVIDENCE",
+              "INCOMPLETE_RETRIEVAL_EVIDENCE",
+              "PARSER_ERROR",
+              "BASE_CORRECT",
+              "OTHER",
+              "UNKNOWN"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "confirmed_mechanisms": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "claim": {
+        "type": "string",
+        "minLength": 1
+      },
+      "base_prediction": {
+        "type": "object",
+        "required": [
+          "stored_verdict",
+          "reparsed_verdict",
+          "raw_generation",
+          "raw_generation_sha256",
+          "prompt_sha256"
+        ],
+        "properties": {
+          "stored_verdict": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reparsed_verdict": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "raw_generation": {
+            "type": "string"
+          },
+          "raw_generation_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "prompt_sha256": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "gold_verdict": {
+        "enum": [
+          "Supported",
+          "Refuted",
+          "Not Enough Evidence",
+          "Conflicting Evidence/Cherrypicking"
+        ]
+      },
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "corrected_explanation": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "citations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "passage_id",
+            "start",
+            "end",
+            "quote"
+          ],
+          "properties": {
+            "passage_id": {
+              "type": "string"
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "quote": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "candidate_mechanisms": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "enum": [
+            "scope_quantifier",
+            "evidence_sufficiency",
+            "attribution",
+            "negation_polarity",
+            "reported_conflict",
+            "partial_truth_context"
+          ]
+        }
+      },
+      "sample_id": {
+        "type": "string",
+        "pattern": "^train:[0-9]+$"
+      }
+    }
+  }
+}

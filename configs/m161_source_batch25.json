@@ -1,0 +1,59 @@
+{
+  "backbone": {
+    "local_path": "/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots/b968826d9c46dd6066d109eabc6255188de91218",
+    "model_id": "Qwen/Qwen3-8B",
+    "revision": "b968826d9c46dd6066d109eabc6255188de91218"
+  },
+  "candidate_policy": "quarantine_review_flags_v1",
+  "generation": {
+    "do_sample": false,
+    "dtype": "bfloat16",
+    "enable_thinking": false,
+    "max_context_length": 8192,
+    "max_new_tokens": 512
+  },
+  "legacy_retrieval_config_sha256": "7f716c4fe2888ba311a4edba9ca8dd618c368de43707264dde1d5cf129e907ec",
+  "limits": {
+    "free_disk_bytes": 107374182400,
+    "scratch_bytes": 32212254720,
+    "wall_seconds": 43200
+  },
+  "retrieval": {
+    "batch_size": 16,
+    "bm25": {
+      "b": 0.75,
+      "k1": 1.2
+    },
+    "candidate_depth": 200,
+    "corpus_scope": "per_claim",
+    "dedup_threshold": 0.95,
+    "device": "cuda",
+    "dtype": "float16",
+    "embedding": {
+      "local_path": "/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Embedding-0.6B/snapshots/97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "model_id": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "snapshot_sha256": "667106c1965ebad2038f612af424b1990ab6e6dabcee5cf20f45ed5c4dee071a"
+    },
+    "evaluation_depth": 10,
+    "evidence_depth": 8,
+    "fusion_depth": 200,
+    "max_length": 1024,
+    "protocol": "claim_scoped_retrieval_v1",
+    "ranking_store_depth": 100,
+    "rerank_depth": 200,
+    "reranker": {
+      "local_path": "/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Reranker-0.6B/snapshots/e61197ed45024b0ed8a2d74b80b4d909f1255473",
+      "model_id": "Qwen/Qwen3-Reranker-0.6B",
+      "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+      "snapshot_sha256": "5219a20fa423e1054c34b93a5a8c0ffa640ca52320181603be32d7afe26de353"
+    },
+    "rrf_constant": 60,
+    "seed": 2026,
+    "segmentation": {
+      "overlap": 30,
+      "words": 180
+    }
+  },
+  "schema_version": "m161-batch25-v1"
+}

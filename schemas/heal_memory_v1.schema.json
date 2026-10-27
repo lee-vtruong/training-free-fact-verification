@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "heal-memory-v1.schema.json",
+  "title": "Source-only HEAL memory bank",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "partition_seal_sha256",
+    "origin",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "heal-bank-v1"
+    },
+    "partition_seal_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "origin": {
+      "enum": [
+        "OWN_PROJECT_LEGACY_FOLD_A",
+        "OWN_PROJECT_M161_BATCH25",
+        "OWN_PROJECT_COMBINED_SOURCE"
+      ]
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/record"
+      }
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "sample_id",
+        "claim",
+        "group_id",
+        "record_id",
+        "content_sha256",
+        "gold_verdict",
+        "is_base_error",
+        "confusion_type",
+        "failure_classification",
+        "candidate_mechanisms",
+        "corrected_explanation",
+        "citations",
+        "reviews",
+        "review_record_sha256",
+        "provenance",
+        "review_status",
+        "evidence",
+        "base_prediction"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "heal-memory-v1"
+        },
+        "sample_id": {
+          "type": "string",
+          "pattern": "^train:[0-9]+$"
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "group_id": {
+          "type": "string"
+        },
+        "record_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "gold_verdict": {
+          "enum": [
+            "Supported",
+            "Refuted",
+            "Not Enough Evidence",
+            "Conflicting Evidence/Cherrypicking"
+          ]
+        },
+        "is_base_error": {
+          "type": "boolean"
+        },
+        "confusion_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "failure_classification": {
+          "enum": [
+            "BASE_CORRECT",
+            "BASE_INCORRECT_VERDICT_UNDIAGNOSED",
+            "PARSER_ERROR"
+          ]
+        },
+        "candidate_mechanisms": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "scope_quantifier",
+              "evidence_sufficiency",
+              "attribution",
+              "negation_polarity",
+              "reported_conflict",
+              "partial_truth_context"
+            ]
+          }
+        },
+        "corrected_explanation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "citations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/citation"
+          }
+        },
+        "reviews": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/review"
+          }
+        },
+        "review_record_sha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "provenance": {
+          "type": "object",
+          "required": [
+            "origin",
+            "artifact_checks_passed"
+          ],
+          "properties": {
+            "artifact_checks_passed": {
+              "type": "boolean"
+            }
+          }
+        },
+        "review_status": {
+          "enum": [
+            "PENDING_REVIEW",
+            "VERIFIED",
+            "REJECTED",
+            "INSUFFICIENT_EVIDENCE",
+            "PROVENANCE_UNKNOWN"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "passage_id",
+              "text",
+              "text_sha256",
+              "rendered_text",
+              "rendered_text_sha256",
+              "source_url"
+            ],
+            "properties": {
+              "passage_id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "text_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "rendered_text": {
+                "type": "string"
+              },
+              "rendered_text_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "source_url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "base_prediction": {
+          "type": "object",
+          "required": [
+            "stored_verdict",
+            "reparsed_verdict",
+            "raw_generation",
+            "raw_generation_sha256",
+            "prompt_sha256"
+          ],
+          "properties": {
+            "stored_verdict": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reparsed_verdict": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "raw_generation": {
+              "type": "string"
+            },
+            "raw_generation_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "prompt_sha256": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "passage_id",
+        "start",
+        "end",
+        "quote"
+      ],
+      "properties": {
+        "passage_id": {
+          "type": "string"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewer_id",
+        "reviewer_type",
+        "independent_review",
+        "reviewed_at",
+        "decision",
+        "reason",
+        "record_sha256",
+        "candidate_sha256",
+        "evidence_sufficient",
+        "correction_grounded",
+        "gold_relation_supported",
+        "failure_category",
+        "confirmed_mechanisms"
+      ],
+      "properties": {
+        "reviewer_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewer_type": {
+          "const": "human"
+        },
+        "independent_review": {
+          "const": true
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "decision": {
+          "enum": [
+            "VERIFIED",
+            "REJECTED",
+            "INSUFFICIENT_EVIDENCE"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "record_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "candidate_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "evidence_sufficient": {
+          "type": "boolean"
+        },
+        "correction_grounded": {
+          "type": "boolean"
+        },
+        "gold_relation_supported": {
+          "type": "boolean"
+        },
+        "failure_category": {
+          "enum": [
+            "REASONING_FAILURE_SUPPORTED_BY_EVIDENCE",
+            "INCOMPLETE_RETRIEVAL_EVIDENCE",
+            "PARSER_ERROR",
+            "BASE_CORRECT",
+            "OTHER",
+            "UNKNOWN"
+          ]
+        },
+        "confirmed_mechanisms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}
