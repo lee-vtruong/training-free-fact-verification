@@ -138,7 +138,7 @@ def assign(rows, groups, dup_map, inventory, config, external_exposed=()):
                 if sid not in source_legacy:
                     outcomes.add(sid)
                 origin[sid].append(art['path'])
-    outcomes.update(external_exposed)
+    external = set(external_exposed)
     by_id = {r['sample_id']: r for r in rows}
     records, blocks = [], []
     for ids in groups:
@@ -147,6 +147,7 @@ def assign(rows, groups, dup_map, inventory, config, external_exposed=()):
         bad = [s for s in ids if not normalize(by_id[s]['claim'])]
         has_a = bool(set(ids) & source_legacy)
         has_exposure = bool(set(ids) & outcomes)
+        has_external = bool(set(ids) & external)
         rank = int(sha((config['seed'] + ':' + gid).encode()), 16) / 2**256
         if bad:
             partition = 'QUARANTINE_INVALID'
@@ -156,8 +157,11 @@ def assign(rows, groups, dup_map, inventory, config, external_exposed=()):
             partition = 'LEGACY_EXPLORATORY'
         else:
             partition = next(k for k, (lo, hi) in config['assignment_intervals'].items() if lo <= rank < hi)
+        if has_external and partition == 'TEST_SEALED':
+            partition = 'TEST_QUARANTINE_EXPOSED'
         block = {'group_id': gid, 'sample_ids': ids, 'partition': partition,
                  'legacy_A_present': has_a, 'outcome_exposed_component': has_exposure,
+                 'external_execution_exposed_component': has_external,
                  'hash_rank': rank, 'claims': len(ids)}
         blocks.append(block)
         for sid in ids:
@@ -173,7 +177,7 @@ def assign(rows, groups, dup_map, inventory, config, external_exposed=()):
                             'artifact_outcome_exposure_propagated': propagated,
                             'legacy_source_A': is_a, 'source_memory_eligible': memory_eligible,
                             'outcome_artifact_paths': sorted(origin[sid]),
-                            'external_exposure_status': 'UNKNOWN',
+                            'external_exposure_status': 'KNOWN_EXTERNAL_PREDICTION_EXPOSURE' if has_external else 'UNKNOWN',
                             'confirmatory_eligible': False,
                             'test_certification': 'NOT_TEST' if partition != 'TEST_SEALED' else
                               'SEALED_CANDIDATE_UNKNOWN_EXTERNAL_HISTORY'})
@@ -185,6 +189,7 @@ def main():
     p.add_argument('--input', type=Path, required=True)
     p.add_argument('--config', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--external-exposure', type=Path)
     a = p.parse_args()
     if a.output.exists():
         p.error('Output must be a new directory; never overwrite a sealed partition')
@@ -196,7 +201,8 @@ def main():
     assert all(not forbidden.intersection(r) for r in rows)
     assert len({r['sample_id'] for r in rows}) == len(rows) == inventory['dataset']['claims']
     groups, edges, dup_map = build_groups(rows, config)
-    records, blocks = assign(rows, groups, dup_map, inventory, config)
+    external = json.loads(a.external_exposure.read_text(encoding='utf-8-sig')) if a.external_exposure else None
+    records, blocks = assign(rows, groups, dup_map, inventory, config, external['known_external_train_ids'] if external else ())
     by_id = {r['sample_id']: r for r in records}
     assert all(by_id[e['a']]['partition'] == by_id[e['b']]['partition'] for e in edges)
     assert all(not r['artifact_outcome_exposure_propagated'] for r in records if r['partition'] in ('DEVELOPMENT', 'TEST_SEALED'))
@@ -208,24 +214,26 @@ def main():
     write('groups_manifest.json', blocks)
     write('group_edges.json', edges)
     write('protocol.json', config)
-    for part in sorted({r['partition'] for r in records}):
+    for part in sorted({r['partition'] for r in records} | {'SOURCE', 'DEVELOPMENT', 'TEST_SEALED'}):
         write(part.lower() + '_manifest.json', [r for r in records if r['partition'] == part])
     counts = {part: {'claims': sum(r['partition'] == part for r in records),
                      'groups': sum(g['partition'] == part for g in blocks),
                      'source_memory_eligible': sum(r['partition'] == part and r['source_memory_eligible'] for r in records)}
-              for part in sorted({r['partition'] for r in records})}
+              for part in sorted({r['partition'] for r in records} | {'SOURCE', 'DEVELOPMENT', 'TEST_SEALED'})}
     hashes = {f.name: sha(f.read_bytes()) for f in sorted(a.output.iterdir()) if f.is_file()}
     summary = {'protocol': config['protocol'], 'dataset_sha256': inventory['dataset']['sha256'],
                'inventory_sha256': sha((a.input / 'inventory.json').read_bytes()),
                'projection_sha256': sha((a.input / 'claims_metadata.jsonl').read_bytes()),
                'config_sha256': sha(a.config.read_bytes()), 'script_sha256': sha(Path(__file__).read_bytes()),
+               'external_exposure_sha256': sha(a.external_exposure.read_bytes()) if a.external_exposure else None,
                'claims': len(records), 'duplicate_groups': len(set(dup_map.values())), 'leakage_blocks': len(blocks),
                'edge_counts': dict(Counter(e['kind'] for e in edges)), 'largest_block_claims': max(map(len, groups)),
-               'partitions': counts, 'leakage_checks': {'cross_partition_edges': 0, 'test_or_dev_exposed_components': 0,
+               'partitions': counts, 'leakage_checks': {'cross_partition_edges': 0, 'test_or_dev_local_method_exposed_components': 0,
                                                        'test_or_dev_memory_eligible': 0, 'label_fields_in_projection': 0},
                'files_sha256': hashes, 'external_exposure_attestation': config['external_exposure_attestation'],
                'confirmation_ready': False, 'gpu_calls': 0,
                'certified_confirmatory_claims': 0, 'certified_confirmatory_groups': 0,
+               'known_external_prediction_claims': len(external['known_external_train_ids']) if external else 0,
                'limits': ['Leakage blocks are operational groups, not proof of statistical independence.',
                           'All prior claim-text exports remain explicitly disclosed.',
                           'No gold labels accessed for grouping/assignment; no test class counts computed.',

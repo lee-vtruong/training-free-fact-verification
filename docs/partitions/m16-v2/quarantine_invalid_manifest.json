@@ -1,0 +1,19 @@
+[
+  {
+    "artifact_outcome_exposed_directly": false,
+    "artifact_outcome_exposure_propagated": false,
+    "claim_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "claim_text_previously_exported": false,
+    "confirmatory_eligible": false,
+    "duplicate_group_id": "dup-c1c54fef1cd2fe33",
+    "external_exposure_status": "KNOWN_EXTERNAL_PREDICTION_EXPOSURE",
+    "group_id": "grp-c1c54fef1cd2fe33",
+    "legacy_source_A": false,
+    "official_split": "train",
+    "outcome_artifact_paths": [],
+    "partition": "QUARANTINE_INVALID",
+    "sample_id": "train:1948",
+    "source_memory_eligible": false,
+    "test_certification": "NOT_TEST"
+  }
+]

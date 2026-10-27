@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-27",
+  "scope": "AVeriTeC official train; original zero-based ordinals",
+  "ranges": [
+    {
+      "start": 0,
+      "stop_exclusive": 350,
+      "human_method_development_use": "KNOWN_LOCAL_RESEARCH_EXPOSURE"
+    },
+    {
+      "start": 350,
+      "stop_exclusive": 3068,
+      "human_method_development_use": "UNKNOWN_COLLABORATOR_HISTORY",
+      "user_attestation": "No known personal label/prediction/error-analysis use for method design; not an absolute collaborator attestation"
+    }
+  ],
+  "external_prediction_execution": "KNOWN_FOR_ALL_3068_IDS",
+  "clean_confirmatory_claims": 0,
+  "frozen_prior_artifact_check": {
+    "files_checked": 196,
+    "mismatches": [],
+    "all_unchanged": true
+  },
+  "server_git_status_preserved": " M scripts/run_m15_eval.sh\n",
+  "new_gpu_calls": 0,
+  "new_retrieval_calls": 0,
+  "source_memory_construction_performed": false
+}

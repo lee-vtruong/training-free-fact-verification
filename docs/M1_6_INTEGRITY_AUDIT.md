@@ -3,6 +3,12 @@
 Date: 2026-10-26 (Asia/Saigon). Audited revision: `08c6ba77f8d148ca77311ae465d0c349a402d0df`.
 Status: requested numerical audit COMPLETE; historical execution provenance has the limitations below. M1.6 GPU experiments NOT RUN.
 
+## 2026-10-27 scope extension: data readiness is not complete
+
+The prior status refers to the numerical M1.3–M1.5 audit only. The user's revised M1.6.0 additionally requires actual data/exposure partitions and resources. The [data audit](M1_6_DATA_PARTITION_PLAN.md) now inventories all 3,068 train rows, retains 1,952 leakage blocks and seals v2 manifests. External ERRORFlow `b1_train_all` and `oracle_train_all_s0` predictions cover every train ordinal, with exact text identity for all 3,067 nonempty claims. Only IDs/provenance were audited; no external predictions, gold corrections or memory were reused.
+
+Thus **clean confirmatory test readiness is INCOMPLETE (0 eligible claims/groups)**. The initial 1,230 candidate IDs are quarantined, v1 remains preserved, and v2 has an explicit empty clean-test manifest. Human method-use history remains partly UNKNOWN; execution exposure is known. The [resource plan](M1_6_RESOURCE_AND_STAGE_PLAN.md) defines coverage/resource stopping and a later development/power decision, replacing automatic source/test quotas. No GPU retrieval/inference, memory construction or test evaluation has begun.
+
 ## Evidence and precedence
 
 CPU recomputation ran directly on `hvtham-server`, project `/home/stackops/whale/training-free-fact-verification`. Gold was read only for offline scoring from the read-only ERRORFlow `data/raw/averitec/train.json`; its SHA-256 is recorded, and no gold was sent to retrieval/inference. No ERRORFlow files were written.

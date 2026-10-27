@@ -1,0 +1,81 @@
+{
+  "certified_confirmatory_claims": 0,
+  "certified_confirmatory_groups": 0,
+  "claims": 3068,
+  "config_sha256": "b1aab8c9cfa252584e92cbce5df1934fc93ea5f799aea3b604fd802a7ee26a15",
+  "confirmation_ready": false,
+  "dataset_sha256": "ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c",
+  "duplicate_groups": 2647,
+  "edge_counts": {
+    "fact_checking_article": 1067,
+    "lexical": 868,
+    "original_claim_url": 396,
+    "speaker_month_anchor": 104
+  },
+  "external_exposure_attestation": "USER_REPORTS_NO_OWN_METHOD_USE_TRAIN_350_PLUS_COLLABORATOR_HISTORY_UNVERIFIED_2026_10_27",
+  "external_exposure_sha256": "afdd984cef353d36d744fc83419d728a66ab4d1ebaab29d35dbf357c54f5d77e",
+  "files_sha256": {
+    "claims_manifest.json": "d550dc68902ac89a78f5ea11316fb7dfd09c1d8e89f31ba07652ea6aa4c99ce7",
+    "development_manifest.json": "c63f1b6e94adda6df9efa6f2273543b4eb9cf1687720ead75d726c1a75043cb6",
+    "group_edges.json": "c2078dae57c3866e3328275728d9af527301080582d32c132e447c8b4655a8c0",
+    "groups_manifest.json": "b21f57a09b3b54e33ef6ba868eb063f86d5ad37223b51454636183519bf29fac",
+    "legacy_exploratory_manifest.json": "fb287cc3a7307165e75078156ffee234f0138039e9c9ea85d04022c7fdf78310",
+    "protocol.json": "040388b45611ce7b497274cbdec8f448a19c81040cc16fcd22aabaebc486249f",
+    "quarantine_invalid_manifest.json": "2dbcd548067f2fdaaa9c0eded55e3afbb32c69fdc11416aa41d1bbeafa7c9c00",
+    "source_manifest.json": "226640c90cef5bd501598f10295d8379f05cd671641bcb9f12b7849028526592",
+    "test_quarantine_exposed_manifest.json": "764ea187dc7aade64427ff099f528f82a56c8a525cd3b358267296fa10fba5a3",
+    "test_sealed_manifest.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "gpu_calls": 0,
+  "inventory_sha256": "b821e63f3425e39dd81fe37ae29b469ede8396cebed75c11d2ab85d9c39746e6",
+  "known_external_prediction_claims": 3068,
+  "largest_block_claims": 102,
+  "leakage_blocks": 1952,
+  "leakage_checks": {
+    "cross_partition_edges": 0,
+    "label_fields_in_projection": 0,
+    "test_or_dev_local_method_exposed_components": 0,
+    "test_or_dev_memory_eligible": 0
+  },
+  "limits": [
+    "Leakage blocks are operational groups, not proof of statistical independence.",
+    "All prior claim-text exports remain explicitly disclosed.",
+    "No gold labels accessed for grouping/assignment; no test class counts computed.",
+    "Candidate TEST reservoir sealed, confirmatory size and power decision deferred."
+  ],
+  "partitions": {
+    "DEVELOPMENT": {
+      "claims": 541,
+      "groups": 364,
+      "source_memory_eligible": 0
+    },
+    "LEGACY_EXPLORATORY": {
+      "claims": 283,
+      "groups": 202,
+      "source_memory_eligible": 0
+    },
+    "QUARANTINE_INVALID": {
+      "claims": 1,
+      "groups": 1,
+      "source_memory_eligible": 0
+    },
+    "SOURCE": {
+      "claims": 1013,
+      "groups": 550,
+      "source_memory_eligible": 973
+    },
+    "TEST_QUARANTINE_EXPOSED": {
+      "claims": 1230,
+      "groups": 835,
+      "source_memory_eligible": 0
+    },
+    "TEST_SEALED": {
+      "claims": 0,
+      "groups": 0,
+      "source_memory_eligible": 0
+    }
+  },
+  "projection_sha256": "5f834b8516e237b7af12b9a8e2cc63b67eabc1ba6cdc1420f86f6bac5d35eb14",
+  "protocol": "HEAL-M16-partition-v2-external-exposure",
+  "script_sha256": "8734d44172cabda88fda9f04a5d7b3563e4586b4409a2a3ce94f303f58c1af05"
+}

@@ -2,6 +2,8 @@
 
 Date: 2026-10-26. Status: prospective design; no M1.6 GPU results. All quality, latency and token measurements for these new conditions are null/not measured. Candidate/test manifests must be sealed before confirmatory execution.
 
+Update 2026-10-27: this matrix belongs to M1.6.2 development, following M1.6.1 reviewed historical memory. [M1.6.0 actual audit](M1_6_DATA_PARTITION_PLAN.md) locked source/development roles but found no clean confirmatory train population; the 1,230 former test candidates are exposed and quarantined. The confirmatory design below is conditional on a separately justified clean holdout and development-based power/budget gates, not a command to evaluate 1,400 targets. Preserve native D0, D1_matched, identical-ID E0/E1 and appropriate length/reasoning controls; no 64-token cap is imposed on CoT.
+
 ## Condition matrix
 
 In this document **D1 = D1_matched** (`CONCISE_MATCHED_GENERIC_RULES`), not `CONCISE_GENERIC_RULES`. Historical D2 replaced generic directives; B4 below adds rules to D1 and is a new experiment. Exact rule texts appear in the [integrity audit](M1_6_INTEGRITY_AUDIT.md).

@@ -1,0 +1,9 @@
+# Preserve sealed artifact bytes and their SHA-256 across Windows/Linux checkouts.
+docs/partitions/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/audits/M1_6_DATA_INVENTORY.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/audits/M1_6_EXTERNAL_EXPOSURE.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/audits/M1_6_RESOURCE_PROVENANCE.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/audits/M1_6_COST_ESTIMATES.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/audits/M1_6_EXPOSURE_CUSTODY.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/m16*.py text eol=lf
+configs/m16*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
