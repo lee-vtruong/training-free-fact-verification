@@ -13,6 +13,8 @@ The user's M1.6.1 instruction authorizes exploratory source work independently o
 
 Each record retains source claim/ID/group, full retrieved evidence and exact displayed text, original provenance/offsets/hashes, Base stored/reparsed/raw prediction and cost fields, official source gold, **wrong -> gold** confusion type, candidate mechanism flags, nullable explanation/citations, review state, review-file/parent-bank hashes and limitations. Source gold joins select only the explicitly admitted IDs and never copy QA/justifications. The legacy gold-file JSON is parsed offline, but only selected source claim/label values are accessed for construction; no development/test gold influences selection or inference.
 
+One concrete **assistant-authored, unverified** candidate was prepared for `train:25`: the Base output acknowledges a below-1% budget but reads “not even 1%” as a minimum. Exact displayed 0.43%/0.44% spans are cited; intended period/denominator still need human review. Files: `outputs/m161-assistant-candidates-v1.json`, `outputs/m161-candidate-bank-v1.json`, and two blank sheets in `outputs/m161-candidate-review-v1/`. It stays PENDING_REVIEW with zero human decisions. Original blank-bank exports remain separate; no other error is assigned an invented explanation.
+
 `record_id` binds immutable source facts, Base output, evidence and provenance. `content_sha256` additionally covers the evolving candidate/review state. A review pins the source record revision and candidate hash. Candidate changes or edited sheet context invalidate older reviews. New files/revisions are required; old outputs are not overwritten.
 
 ## States and source-error interpretation

@@ -31,6 +31,8 @@ The source-only original Accuracy is 25/50, not a HEAL result. No new method has
 
 Full original files contain 100 predictions/evidence rows; construction explicitly filters to the 50 SOURCE IDs. B rows are not joined into memory. Original serialized evidence is preserved, and the actual prompt formatter's 1,200-character passage display is recorded separately. New correction citations must refer to exact displayed text, not truncated-away content.
 
+One assistant-authored candidate for `train:25` is preserved separately in `outputs/m161-candidate-bank-v1.json`, with exact displayed-evidence span citations and independent blank review sheets in `outputs/m161-candidate-review-v1/`. It diagnoses the Base's explicit below-1% / “not even 1%” interpretation and asks humans to check temporal/denominator assumptions. This is **one unverified draft**, not a human judgment or an additional verified mechanism. Human/verified counts remain zero; the machine-readable audit preserves its authoring status and hashes.
+
 ## Trust issue and limits
 
 The old M1.3 builder assigns `gold_explanation_verified=True` unconditionally and stores gold justifications. All 50 old records carry that flag; **it is not human-review evidence**. The new builder does not import that field or the justification text. Every new correction explanation starts null and every original case awaits review.
