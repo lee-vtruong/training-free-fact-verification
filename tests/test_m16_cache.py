@@ -69,6 +69,7 @@ def test_missing_evidence_fails_cleanly_and_resume_does_not_duplicate(tmp_path):
     (run/'train-7'/'retrieval-attempt-001'/'R4.jsonl').unlink()
     with pytest.raises(ValueError,match='Receipt output missing'):
         cache.index(run,root/'outputs'/'missing.json')
+    assert not (root/'outputs'/'missing.json').exists()
 
 
 def test_evaluation_only_reuses_predictions_without_model(tmp_path):

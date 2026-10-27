@@ -7,6 +7,8 @@ from pathlib import Path
 import argparse
 from collections import Counter
 import json
+import sys
+import time
 
 from tffv.provenance import digest, file_hash, write_json
 from tffv.memory.heal import jsonl, read
@@ -90,7 +92,9 @@ def index(canonical_run, destination):
         source=read(memory_path); c=SourceContract(ROOT); c.check_memory(source)
         require_no_source_target_leakage((r['group_id'] for r in source['records']),
                                          (c.rows[s]['group_id'] for s in batch['sample_ids']))
-    for sid in batch['sample_ids']:
+    started=time.monotonic(); total=len(batch['sample_ids'])
+    print(f'INDEX start: validating {total} sealed claims; no output index is written until all hashes pass.',file=sys.stderr,flush=True)
+    for number,sid in enumerate(batch['sample_ids'],1):
         claim=claims.get(sid)
         if not claim or set(claim)!={'sample_id','dataset','split','claim'}: raise ValueError('Target labels/extra fields in cache indexing')
         d=run/sid.replace(':','-')
@@ -115,6 +119,7 @@ def index(canonical_run, destination):
                      'r4_path':str(r4),'r4_sha256':file_hash(r4),'retrieval_receipt_sha256':file_hash(d/'retrieval.receipt.json'),
                      'prediction_receipt_sha256':file_hash(d/'predictions.receipt.json'),'prediction_cache_keys':pks,
                      'conditions':sorted(pks),'prediction_path':str(preds),'prompt_paths_hash':digest(rendered)})
+        print(f'INDEX {number}/{total}: {sid} verified; elapsed={time.monotonic()-started:.1f}s',file=sys.stderr,flush=True)
     obj={'schema_version':'m16-cache-index-v1','scope':'READ_ONLY_CANONICAL_REUSE','canonical_run':str(run),
          'batch_sha256':file_hash(run/'batch.json'),'sealed_prompts_sha256':file_hash(run/'sealed_prompts.json'),
          'source_memory_sha256':batch['source_memory_sha256'],'source_memory_path':batch['source_memory_path'],
@@ -122,7 +127,9 @@ def index(canonical_run, destination):
              'gold_provenance':'source-only record field/provenance','selection_order_sha256':digest(batch['slates']),
              'correction_review_version':'unreviewed; P4 BLOCKED'},
          'active_conditions':batch['status']['active_conditions'],'records':rows,'gold_accessed':False}
-    dest=output(destination); dest.parent.mkdir(parents=True,exist_ok=True); write_json(dest,obj); return obj
+    dest=output(destination); dest.parent.mkdir(parents=True,exist_ok=True); write_json(dest,obj)
+    print(f'INDEX complete: {total}/{total}; output={dest}',file=sys.stderr,flush=True)
+    return obj
 
 
 def load_index(path):
