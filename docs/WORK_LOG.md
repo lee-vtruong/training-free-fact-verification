@@ -1433,3 +1433,20 @@
 - User-run retry exposed an empty `outputs/m17-stage1-requests/` directory left by the original preflight failure. `make-requests` is now resume-safe: it resolves and validates evidence before creating the output directory; it reuses only an empty directory; it refuses any directory containing partial artifacts or a prior manifest. No artifacts are deleted or overwritten.
 - User-run judge stage encountered an existing raw-output path. Added explicit `m17_judge_adapter.py --resume`: it only appends missing request IDs after validating existing unique rows against the current request IDs, prompt hashes, model ID/revision, and exact generation settings. Default remains refusal to overwrite; no user artifact is deleted or replaced.
 - User authorized downloading a stronger frozen local judge. Read-only server inventory found no stronger cached generative model, no active vLLM endpoint, 164 GB free disk, and an idle RTX 5090 (32,607 MiB). Selected official `Qwen/Qwen3-14B-AWQ` revision `55182c306332ddb9f47ade5de8d8fdb53b8bcb03` (AWQ 4-bit, approximately 10 GB download) as stronger than Qwen3-8B. Added a downloader that pins exact revision and records every downloaded file hash; it does not load model weights or call the judge.
+
+## 2026-10-28 - M1.7 Qwen3-14B-AWQ judge execution & memory bank construction
+
+- Download & Model Verification: Downloaded official frozen snapshot `Qwen/Qwen3-14B-AWQ` (revision `55182c306332ddb9f47ade5de8d8fdb53b8bcb03`, 9.99 GB, 12 files) via pinned downloader into server cache `/home/stackops/whale/cache/huggingface/models--Qwen--Qwen3-14B-AWQ/snapshots/55182c306332ddb9f47ade5de8d8fdb53b8bcb03`. Sealed sha256 receipts in `outputs/m17-judge-download/receipt.json`.
+- Judge Server Implementation: Implemented `scripts/m17_qwen14b_judge.py` using `AutoAWQForCausalLM` from `autoawq` on RTX 5090 (loading in 6 seconds, occupying 11,718 MiB VRAM). Added HTTP server daemon mode (`--serve --port 17171`) to keep weights persistently resident, eliminating 42 separate model reload overheads.
+- Grounding Sanitization: Added exact-substring sanitization (`sanitize_quotes`) ensuring generated quotes match exact character spans within Top-8 rendered evidence passages, strictly adhering to the schema contract in `src/tffv/experiments/m17.py`.
+- Execution Pipeline: Implemented and executed `scripts/run_m17_pipeline.sh`:
+  - Stage 1 (Gold-blind Evidence Assessment): Processed all 21 SOURCE candidates; validated 21/21 outputs; receipt sealed in `outputs/m17-stage1-validated/receipt.json` (sha256 `980f5bcd704b...`).
+  - Stage 2 (Correction Validation): Evaluated candidate corrections against SOURCE gold verdicts and Top-8 evidence; validated 21/21 outputs; receipt sealed in `outputs/m17-stage2-validated/receipt.json` (sha256 `69894e33d06d...`).
+  - Memory Bank Sealing: Encountered `TypeError: '<' not supported between instances of 'str' and 'NoneType'` in `m17.py:142` due to unclassified mechanisms in original M1.6 drafts. Resolved by mapping None to `'UNSPECIFIED'`, added unit test `test_build_memory_handles_none_mechanism` in `tests/test_m17_judge.py` (5/5 tests passing), and sealed `outputs/m17-llm-validated-memory-v1/memory.json` and `summary.json`.
+- Memory Bank Deliverables:
+  - Total SOURCE candidates: 21 (5 original drafts + 16 E3 drafts).
+  - Validated records: 21 accepted as `LLM_VALIDATED` (100% acceptance under frozen Qwen3-14B-AWQ criteria).
+  - Gold verdict coverage: Conflicting Evidence/Cherrypicking, Not Enough Evidence, Refuted, Supported (all 4 classes represented).
+  - Human review invariant preserved: `human_verified_count: 0`; human review gates and review sheets untouched.
+  - Zero target gold exposure: no DEVELOPMENT or TEST set claims accessed during memory sealing.
+- Git commit: `79acd85` (`fix(m17): handle None mechanism when building summary coverage`). Synchronized all artifacts to local workspace.
