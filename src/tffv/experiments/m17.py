@@ -81,7 +81,6 @@ def request(r, stage, prior=None):
     return base
 
 def make_requests(output, candidate_path=CANDIDATES, stage_one_outputs=None, bank_path=None):
-    out=output_path(output); out.mkdir(parents=True,exist_ok=False)
     rows=candidates(candidate_path,bank_path); reqs=[]
     if stage_one_outputs is None:
         reqs=[request(r,'evidence_assessment') for r in rows]; name='evidence_assessment_requests.jsonl'
@@ -92,6 +91,15 @@ def make_requests(output, candidate_path=CANDIDATES, stage_one_outputs=None, ban
             if first['request_id'] not in got: raise ValueError('missing stage-one output '+r['sample_id'])
             reqs.append(request(r,'correction_validation',got[first['request_id']]))
         name='correction_validation_requests.jsonl'
+    out=output_path(output)
+    # Earlier versions made this directory before validating the evidence bank.
+    # An interrupted/failed preflight therefore left an empty directory. Reuse
+    # only that demonstrably empty shell; never overwrite a partial run.
+    if out.exists():
+        if not out.is_dir() or any(out.iterdir()):
+            raise FileExistsError('Output exists and is not an empty failed-preflight directory: '+str(out))
+    else:
+        out.mkdir(parents=True,exist_ok=False)
     _write_lines(out/name,reqs)
     save(out/'manifest.json',{'schema_version':'m17-request-manifest-v1','stage':reqs[0]['stage'],'count':len(reqs),'requests_sha256':file_hash(out/name),'candidate_source_sha256':file_hash(candidate_path),'evidence_bank_path':rows[0]['_m17_bank_path'],'evidence_bank_sha256':file_hash(rows[0]['_m17_bank_path']),'protocol_sha256':file_hash(CFG),'source_only':True,'development_targets_present':False})
     return out/name

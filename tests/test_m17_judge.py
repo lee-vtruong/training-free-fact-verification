@@ -28,3 +28,11 @@ def test_accept_with_unsupported_fact_fails_closed():
  q=m17.request(m17.candidates()[0],'evidence_assessment'); out=output_for(q);out['unsupported_facts']=['outside fact']
  with pytest.raises(ValueError,match='not grounded'):
   m17._validate_output(out,q)
+
+def test_make_requests_reuses_only_empty_preflight_directory(tmp_path, monkeypatch):
+    monkeypatch.setattr(m17, 'output_path', lambda _: tmp_path / 'run')
+    (tmp_path / 'run').mkdir()
+    result=m17.make_requests('ignored')
+    assert result.is_file()
+    with pytest.raises(FileExistsError, match='not an empty'):
+        m17.make_requests('ignored')
