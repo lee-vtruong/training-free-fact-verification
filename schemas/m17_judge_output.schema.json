@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M1.7 frozen LLM judge output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_id", "stage", "evidence_supported", "verdict_assessment", "grounding_quotes", "failure_mechanism", "decision", "rationale", "confidence", "unsupported_facts", "provenance"],
+  "properties": {
+    "request_id": {"type": "string", "minLength": 1},
+    "stage": {"enum": ["evidence_assessment", "correction_validation"]},
+    "evidence_supported": {"type": "boolean"},
+    "verdict_assessment": {"enum": ["Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking", "ABSTAIN"]},
+    "grounding_quotes": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "failure_mechanism": {"type": ["string", "null"]},
+    "decision": {"enum": ["ACCEPT", "REVISE", "REJECT", "ABSTAIN"]},
+    "rationale": {"type": "string", "minLength": 1},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "unsupported_facts": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["model_id", "model_revision", "temperature", "generation", "prompt_sha256"], "properties": {"model_id": {"type": "string", "minLength": 1}, "model_revision": {"type": "string", "minLength": 1}, "temperature": {"type": "number"}, "generation": {"type": "object"}, "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}
+  }
+}
