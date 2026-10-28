@@ -1,4 +1,4 @@
-"""M1.6.2e gate tests: arithmetic, record schema, no-VERIFIED invariant, fail-closed pool."""
+"""M1.6.2e gate tests: arithmetic, review provenance, and fail-closed coverage."""
 import json
 from pathlib import Path
 
@@ -23,7 +23,7 @@ def test_gate_arithmetic_matches_locked_policy():
     assert report['unchanged_top8_ceiling'] == 21
     assert report['full_memory_gate_verified'] == 30
     assert 25 < 30 and 21 < 30  # the >=30 milestone gate is structurally unsatisfiable
-    assert report['verified_now'] == 0
+    assert report['verified_now'] == 5
     assert report['feasibility_ok'] is False
     assert report['gate'] == 'TIER1_UNMET_FAIL_CLOSED'
 
@@ -47,8 +47,17 @@ def test_record_schema_complete_for_every_record():
         for key in required:
             assert key in r, (r['sample_id'], key)
         assert r['sample_id'].startswith('train:')
-        assert r['verified'] is False  # assistant never marks VERIFIED (C.4)
-        assert r['reviews'] == {'reviewer_1': None, 'reviewer_2': None}
+        if r['sample_id'] in {'train:6', 'train:11', 'train:25', 'train:978', 'train:1824'}:
+            assert r['verified'] is True
+            assert r['review_status'] == 'VERIFIED'
+            assert r['mechanism']
+            for slot in r['reviews'].values():
+                assert slot['reviewer_type'] == 'human'
+                assert slot['independent_review'] is True
+                assert slot['submission_ref']
+        else:
+            assert r['verified'] is False
+            assert r['reviews'] == {'reviewer_1': None, 'reviewer_2': None}
 
 
 def test_e2_quarantined_and_e1_no_draft_invariants():
@@ -90,11 +99,12 @@ def test_reviewer_sheets_identical_and_blank():
         assert 'assistant must not fill' in sheet['instructions'].lower()
 
 
-def test_verified_pool_fail_closed_today():
+def test_verified_pool_still_fails_closed_on_coverage():
     pool = m162e.verified_pool()
-    assert pool == []
+    assert len(pool) == 5
+    assert m162e.class_coverage(pool, 2) == {}
     with pytest.raises(ValueError, match='Tier-1 feasibility gate not met'):
-        m162e.require_feasible([], m162e.load_config())
+        m162e.require_feasible(pool, m162e.load_config())
 
 
 def test_verified_pool_accepts_only_double_reviewed_primary_records():

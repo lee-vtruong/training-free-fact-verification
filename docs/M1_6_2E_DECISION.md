@@ -3,6 +3,12 @@
 Milestone: M1.6.2e — Verified Error-Memory Feasibility & Review Gate Correction
 Date: 2026-10-28 · Scope: CPU-only (no GPU, no retrieval, no new-population inference)
 
+## Review-bookkeeping update (2026-10-28)
+
+Two human-review submissions supplied by the user have now been imported for the five original SOURCE drafts (`train:6`, `train:11`, `train:25`, `train:978`, `train:1824`). The immutable candidate bank remains untouched; imported records are in `docs/audits/M1_6_2E_REVIEWED_RECORDS.json`, with a separate evidence reconciliation in `docs/audits/M1_6_2E_TOP8_COMPLETION_AUDIT.md`.
+
+All five are qualified `VERIFIED` corrections under the recorded two-reviewer bookkeeping. This does **not** meet Tier-1: the five records occupy five distinct mechanism classes, so none has the required two verified exemplars per class. The gate report is therefore `verified_now=5`, `covered_classes={}`, `TIER1_UNMET_FAIL_CLOSED`.
+
 ## Verdict: **MODIFY**
 
 The corrected gate framework, candidate correction drafts, two-reviewer review artifacts, and the

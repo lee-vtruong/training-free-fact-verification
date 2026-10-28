@@ -7,16 +7,16 @@ configs/m162e_feasibility_protocol.json. No GPU, no retrieval, no model calls.
 Fail-closed by construction: the exemplar pool is derived at runtime from
 two-reviewer review records and is EMPTY unless both reviewers accepted a record
 (decision in ACCEPT/ACCEPT_WITH_EDITS, verified flag set by human bookkeeping).
-Today that pool is empty, so every downstream entry point raises before any
-prompt is built for a real target. Assistant drafts are never counted as
-verified; E2-quarantined records never enter the primary reasoning-error pool.
+Assistant drafts are never counted as verified; E2-quarantined records never
+enter the primary reasoning-error pool. A non-empty pool may still fail closed
+at the Tier-1 two-exemplars-per-mechanism coverage gate.
 """
 from pathlib import Path
 import json
 
 ROOT = Path(__file__).resolve().parents[3]
 CONFIG_PATH = ROOT / 'configs' / 'm162e_feasibility_protocol.json'
-RECORDS_PATH = ROOT / 'docs' / 'audits' / 'M1_6_2E_CANDIDATE_DRAFTS.json'
+RECORDS_PATH = ROOT / 'docs' / 'audits' / 'M1_6_2E_REVIEWED_RECORDS.json'
 REVIEW_SHEETS = (ROOT / 'docs' / 'audits' / 'M1_6_2E_REVIEW_RECORDS_REVIEWER1.json',
                  ROOT / 'docs' / 'audits' / 'M1_6_2E_REVIEW_RECORDS_REVIEWER2.json')
 

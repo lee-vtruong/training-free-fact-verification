@@ -69,6 +69,7 @@
     "gate_policy": "docs/M1_6_2E_GATE_POLICY.md",
     "protocol": "docs/M1_6_2E_PROTOCOL.md",
     "candidate_drafts": "docs/audits/M1_6_2E_CANDIDATE_DRAFTS.json",
+    "reviewed_records": "docs/audits/M1_6_2E_REVIEWED_RECORDS.json",
     "review_records": [
       "docs/audits/M1_6_2E_REVIEW_RECORDS_REVIEWER1.json",
       "docs/audits/M1_6_2E_REVIEW_RECORDS_REVIEWER2.json"
