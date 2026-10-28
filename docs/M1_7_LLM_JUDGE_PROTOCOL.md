@@ -37,6 +37,7 @@ source .venv/bin/activate
 export PYTHONPATH="$PWD/src"
 
 python -m tffv.experiments.m17 make-requests \
+  --evidence-bank "$PWD/outputs/m162a-inputs-v1/memory75.json" \
   --output outputs/m17-stage1-requests
 
 python scripts/m17_judge_adapter.py \
@@ -51,6 +52,7 @@ python -m tffv.experiments.m17 validate \
   --outputs outputs/m17-stage1-raw.jsonl --output outputs/m17-stage1-validated
 
 python -m tffv.experiments.m17 make-requests \
+  --evidence-bank "$PWD/outputs/m162a-inputs-v1/memory75.json" \
   --stage-one-outputs outputs/m17-stage1-validated/validated_outputs.jsonl \
   --output outputs/m17-stage2-requests
 
@@ -66,6 +68,7 @@ python -m tffv.experiments.m17 validate \
   --outputs outputs/m17-stage2-raw.jsonl --output outputs/m17-stage2-validated
 
 python -m tffv.experiments.m17 build-memory \
+  --evidence-bank "$PWD/outputs/m162a-inputs-v1/memory75.json" \
   --stage-one outputs/m17-stage1-validated/validated_outputs.jsonl \
   --stage-two outputs/m17-stage2-validated/validated_outputs.jsonl \
   --output outputs/m17-llm-validated-memory-v1

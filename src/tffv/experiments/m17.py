@@ -15,7 +15,10 @@ from tffv.verification.ontology import VERDICTS
 ROOT = Path(__file__).resolve().parents[3]
 CFG = ROOT / 'configs/m17_protocol.json'
 CANDIDATES = ROOT / 'docs/audits/M1_6_2E_CANDIDATE_DRAFTS.json'
-BANK = ROOT / 'outputs/m161-review-preparation-v1/combined75.json'
+# The server's canonical M1.6.2a input bank is first. The older combined75
+# copy exists only in some local worktrees and is a read-only compatibility aid.
+BANK_CANDIDATES = (ROOT / 'outputs/m162a-inputs-v1/memory75.json',
+                   ROOT / 'outputs/m161-review-preparation-v1/combined75.json')
 
 def _canon(x): return json.dumps(x, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
 def _hash(x): return hashlib.sha256(_canon(x).encode()).hexdigest()
@@ -32,9 +35,19 @@ def config():
     if c['judge_generation']!={'temperature':0.0,'do_sample':False,'max_new_tokens':768}: raise ValueError('judge decoding drift')
     return c
 
-def candidates(path=CANDIDATES):
+def evidence_bank(path=None):
+    if path is not None:
+        p=Path(path)
+        if not p.is_file(): raise FileNotFoundError('M1.7 evidence bank missing: '+str(p))
+        return p
+    for p in BANK_CANDIDATES:
+        if p.is_file(): return p
+    raise FileNotFoundError('M1.7 needs canonical evidence bank; checked: '+', '.join(map(str,BANK_CANDIDATES)))
+
+def candidates(path=CANDIDATES, bank_path=None):
     c=config(); data=read(path); rows=[]
-    bank={r['sample_id']:r for r in read(BANK)['records']}
+    bank_file=evidence_bank(bank_path)
+    bank={r['sample_id']:r for r in read(bank_file)['records']}
     for r in data['records']:
         if r['record_kind'] not in c['candidate_kinds']: continue
         if r['triage_class'] in c['excluded_triage_classes']: continue
@@ -42,7 +55,7 @@ def candidates(path=CANDIDATES):
         if not r['draft_text'] or r['sample_id'] not in bank: raise ValueError('candidate lacks frozen correction/evidence')
         top8=bank[r['sample_id']]['evidence']
         if len(top8)!=8 or any(not e.get('rendered_text') for e in top8): raise ValueError('full rendered Top-8 unavailable')
-        rr=dict(r); rr['_m17_top8']=top8; rows.append(rr)
+        rr=dict(r); rr['_m17_top8']=top8; rr['_m17_bank_path']=str(bank_file.resolve()); rows.append(rr)
     if len(rows)!=21 or len({r['sample_id'] for r in rows})!=21: raise ValueError('expected exactly 5 original + 16 E3 SOURCE records')
     return sorted(rows,key=lambda r:int(r['sample_id'].split(':')[1]))
 
@@ -67,9 +80,9 @@ def request(r, stage, prior=None):
     base['prompt_sha256']=_hash({k:v for k,v in base.items() if k not in ('request_id','prompt_sha256')})
     return base
 
-def make_requests(output, candidate_path=CANDIDATES, stage_one_outputs=None):
+def make_requests(output, candidate_path=CANDIDATES, stage_one_outputs=None, bank_path=None):
     out=output_path(output); out.mkdir(parents=True,exist_ok=False)
-    rows=candidates(candidate_path); reqs=[]
+    rows=candidates(candidate_path,bank_path); reqs=[]
     if stage_one_outputs is None:
         reqs=[request(r,'evidence_assessment') for r in rows]; name='evidence_assessment_requests.jsonl'
     else:
@@ -80,7 +93,7 @@ def make_requests(output, candidate_path=CANDIDATES, stage_one_outputs=None):
             reqs.append(request(r,'correction_validation',got[first['request_id']]))
         name='correction_validation_requests.jsonl'
     _write_lines(out/name,reqs)
-    save(out/'manifest.json',{'schema_version':'m17-request-manifest-v1','stage':reqs[0]['stage'],'count':len(reqs),'requests_sha256':file_hash(out/name),'candidate_source_sha256':file_hash(candidate_path),'evidence_bank_sha256':file_hash(BANK),'protocol_sha256':file_hash(CFG),'source_only':True,'development_targets_present':False})
+    save(out/'manifest.json',{'schema_version':'m17-request-manifest-v1','stage':reqs[0]['stage'],'count':len(reqs),'requests_sha256':file_hash(out/name),'candidate_source_sha256':file_hash(candidate_path),'evidence_bank_path':rows[0]['_m17_bank_path'],'evidence_bank_sha256':file_hash(rows[0]['_m17_bank_path']),'protocol_sha256':file_hash(CFG),'source_only':True,'development_targets_present':False})
     return out/name
 
 def _validate_output(out, req):
@@ -106,8 +119,8 @@ def validate(stage_requests, judge_outputs, output):
     save(out/'receipt.json',{'schema_version':'m17-judge-validation-v1','requests_sha256':file_hash(stage_requests),'raw_outputs_sha256':file_hash(judge_outputs),'validated_outputs_sha256':file_hash(out/'validated_outputs.jsonl'),'count':21,'stage':outs[0]['stage'],'source_only':True})
     return out
 
-def build_memory(candidate_path, stage_one, stage_two, output):
-    rows={r['sample_id']:r for r in candidates(candidate_path)}
+def build_memory(candidate_path, stage_one, stage_two, output, bank_path=None):
+    rows={r['sample_id']:r for r in candidates(candidate_path,bank_path)}
     one={x['request_id']:x for x in _lines(stage_one)}; two={x['request_id']:x for x in _lines(stage_two)}
     selected=[]
     for r in rows.values():
@@ -125,11 +138,11 @@ def main():
  p=argparse.ArgumentParser(); s=p.add_subparsers(dest='cmd',required=True)
  for name in ('make-requests','validate','build-memory'):
   q=s.add_parser(name)
-  if name=='make-requests': q.add_argument('--output',required=True);q.add_argument('--candidates',default=str(CANDIDATES));q.add_argument('--stage-one-outputs')
+  if name=='make-requests': q.add_argument('--output',required=True);q.add_argument('--candidates',default=str(CANDIDATES));q.add_argument('--evidence-bank');q.add_argument('--stage-one-outputs')
   elif name=='validate': q.add_argument('--requests',required=True);q.add_argument('--outputs',required=True);q.add_argument('--output',required=True)
-  else: q.add_argument('--candidates',default=str(CANDIDATES));q.add_argument('--stage-one',required=True);q.add_argument('--stage-two',required=True);q.add_argument('--output',required=True)
+  else: q.add_argument('--candidates',default=str(CANDIDATES));q.add_argument('--evidence-bank');q.add_argument('--stage-one',required=True);q.add_argument('--stage-two',required=True);q.add_argument('--output',required=True)
  a=p.parse_args()
- if a.cmd=='make-requests': print(make_requests(a.output,a.candidates,a.stage_one_outputs))
+ if a.cmd=='make-requests': print(make_requests(a.output,a.candidates,a.stage_one_outputs,a.evidence_bank))
  elif a.cmd=='validate': print(validate(a.requests,a.outputs,a.output))
- else: print(build_memory(a.candidates,a.stage_one,a.stage_two,a.output))
+ else: print(build_memory(a.candidates,a.stage_one,a.stage_two,a.output,a.evidence_bank))
 if __name__=='__main__': main()
