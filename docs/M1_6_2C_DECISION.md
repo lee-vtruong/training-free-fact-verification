@@ -1,6 +1,6 @@
 # M1.6.2c — Historical memory coverage & label-prior audit (decision)
 
-Status: CPU audit COMPLETE (no GPU in this milestone). Machine-readable evidence: [M1_6_2C_AUDIT.json](audits/M1_6_2C_AUDIT.json). Raw-train SHA verified `ae5eda7c…`. Decision: **GO** for the three-arm cache-only coverage pilot (150 new calls, exploratory); **NO-GO** for history-separation arms until human review exists.
+Status: pilot **COMPLETE** 2026-10-28 (CPU audit + user-executed GPU inference of the two GO arms; results: [M1_6_2C_RESULTS.md](M1_6_2C_RESULTS.md)). Machine-readable evidence: [M1_6_2C_AUDIT.json](audits/M1_6_2C_AUDIT.json). Raw-train SHA verified `ae5eda7c…`. Decision: **GO** executed for `COV_PLACEBO_G3` / `COV_NEI_G3` (2×50 new calls, exploratory); `COV_CONF_G3` **NO-GO** (empty non-colliding pool after the leakage-group guard); **NO-GO** for history-separation arms until human review exists.
 
 ## A. SOURCE coverage audit (75 historical cases)
 
