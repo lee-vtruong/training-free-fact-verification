@@ -35,6 +35,7 @@ ROOT = Path(__file__).resolve().parents[3]
 MEMORY_PATH = ROOT / 'outputs' / 'm17-llm-validated-memory-v1' / 'memory.json'
 DEV_MANIFEST = ROOT / 'outputs' / 'm16-partitions-v1' / 'development_manifest.json'
 CLAIMS_MANIFEST = ROOT / 'outputs' / 'm16-partitions-v1' / 'claims_manifest.json'
+SOURCE_CLAIMS = ROOT / 'outputs' / 'm11-source-claims-20261021-055413' / 'claims.jsonl'
 PHASE_SCHEDULE = ROOT / 'docs' / 'partitions' / 'm16-execution-plan-v1' / 'phase_schedule.json'
 ACQUISITION_PLAN = ROOT / 'configs' / 'm161_acquisition_plan.json'
 CONFIG_PATH = ROOT / 'configs' / 'm161_source_batch25.json'
@@ -81,7 +82,7 @@ def prepare(output_dir, memory_path=MEMORY_PATH, n_targets=TARGET_COUNT):
 
     out.mkdir(parents=True, exist_ok=True)
     targets = select_clean_development_targets(n_targets)
-    all_claims = {r['sample_id']: r for r in json.loads(CLAIMS_MANIFEST.read_text('utf-8-sig'))}
+    clean_claims = {r['sample_id']: r for r in [json.loads(l) for l in SOURCE_CLAIMS.read_text('utf-8-sig').splitlines() if l.strip()]}
     mem = json.loads(Path(memory_path).read_text('utf-8-sig'))
     exemplars = mem['records']
 
@@ -93,12 +94,7 @@ def prepare(output_dir, memory_path=MEMORY_PATH, n_targets=TARGET_COUNT):
 
     # Setup per-claim input directory
     for sid in targets:
-        clean_claim = {
-            'sample_id': sid,
-            'dataset': 'AVeriTeC',
-            'split': 'train',
-            'claim': all_claims[sid]['claim']
-        }
+        clean_claim = clean_claims[sid]
         claim_dir = out / sid.replace(':', '-') / 'input'
         claim_dir.mkdir(parents=True, exist_ok=True)
         (claim_dir / 'claims.jsonl').write_text(json.dumps(clean_claim) + '\n', encoding='utf-8')
@@ -252,7 +248,7 @@ def run_prediction_all(run_dir):
     cfg = json.loads(Path(batch['configuration_path']).read_text('utf-8-sig'))
     mem = json.loads(Path(batch['memory_path']).read_text('utf-8-sig'))
     exemplar_map = {r['sample_id']: r for r in mem['records']}
-    all_claims = {r['sample_id']: r for r in json.loads(CLAIMS_MANIFEST.read_text('utf-8-sig'))}
+    all_claims = {r['sample_id']: r for r in [json.loads(l) for l in SOURCE_CLAIMS.read_text('utf-8-sig').splitlines() if l.strip()]}
 
     from tffv.verification.backbone import Qwen3FrozenBackbone
 
