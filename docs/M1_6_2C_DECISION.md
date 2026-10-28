@@ -29,21 +29,21 @@ Crosstab of gold verdict × Base history (records with guarded evidence text + s
 
 ## C. Next experiment — preregistered coverage pilot (branch 1, coverage sufficient)
 
-New condition family `m162c-coverage-v1`, [frozen config](../configs/m162c_coverage_gold_only.json) and runner [`tffv.experiments.m162c`](../src/tffv/experiments/m162c.py), sealed CPU-side per arm before any model load. All arms are k=3 displays of the fixed Mixed pair (canonical correct-then-wrong gold-only blocks) plus exactly one added Base-correct gold-only exemplar (1 excerpt, header strictly neutral and identical across arms), same canonical target R4 Top-8, same frozen Qwen3-8B decoding (non-thinking greedy, 512), no rerun of any existing arm:
+New condition family `m162c-coverage-v1`, [frozen config](../configs/m162c_coverage_gold_only.json) and runner [`tffv.experiments.m162c`](../src/tffv/experiments/m162c.py), sealed CPU-side per arm before any model load. All arms are k=3 displays of the fixed Mixed pair (canonical correct-then-wrong gold-only blocks) plus exactly one added Base-correct **non-colliding-leakage-group** gold-only exemplar (1 excerpt, header strictly neutral and identical across arms), same canonical target R4 Top-8, same frozen Qwen3-8B decoding (non-thinking greedy, 512), no rerun of any existing arm:
 
 | Arm | Added exemplar (class) | Purpose | New calls |
 |---|---|---|---:|
-| `COV_PLACEBO_G3` | train:0 for Supported-pair targets, train:1 for Refuted-pair targets (pair-gold class) | token/(time)-matched composition control without new class | 50 |
-| `COV_NEI_G3` | train:23 (Not-Enough-Evidence class; 2-record pool, tie count 8-8 broken ascending ID) | add NEI class display | 50 |
-| `COV_CONF_G3` | train:7 (Conflicting; forced, pool n=1) | add Conflicting class display | 50 |
+| `COV_PLACEBO_G3` | train:0 for Supported-pair targets, train:1231 for Refuted-pair targets (pair-gold class) | token/composition-matched control without new class | 50 |
+| `COV_NEI_G3` | train:23 (38 targets) / train:2811 (12 targets) — Not-Enough-Evidence class, group-guard fall-through | add NEI class display | 50 |
+| `COV_CONF_G3` | *blocked* (single Conflicting-correct exemplar shares a leakage block with the pair) | NO-GO this release | 0 |
 
-Selection rule (preregistered, label-free for DEVELOPMENT): usable SOURCE Base-correct exemplar of the arm's gold class; highest evidence-item count, ties ascending sample_id; pair IDs excluded; zero target/exemplar-group overlap rechecked per target at seal.
+Selection rules (preregistered, label-free for DEVELOPMENT): usable SOURCE Base-correct exemplar of the arm's gold class, **not sharing a leakage group with the pair or the target**; highest evidence-item count, ties ascending sample_id; empty pool blocks the arm. **Preflight correction (pre-inference, group-integrity only, no DEVELOPMENT outcomes consulted):** the first-cut selections `train:23` (NEI), `train:7` (Conflicting) and `train:1` (placebo) share leakage blocks with the frozen pair exemplars, so the sealed assignments fall through by the same rule: NEI → `train:23` for 38 targets / `train:2811` for 12 (group 16097fa1 collision); placebo → `train:0` for all 26 Supported-pair targets / `train:1231` for all 24 Refuted-pair targets; **`COV_CONF_G3` pool is empty (Conflicting-correct count is 1 and it collides) — that arm is NO-GO in this release**, pending a separately authorized source expansion that supplies a non-colliding Conflicting-correct exemplar. The GPU pilot therefore covers 2 arms × 50 = **100 new inference calls**.
 
 - **Label-coverage vs history separation:** the three arms hold the added exemplar's Base history constant (Base-correct everywhere), so `COV_NEI − COV_PLACEBO` and `COV_CONF − COV_PLACEBO` isolate *adding a class-coverage display* at matched k, order, header and template; the placebo arm's 2-sides variation is disclosed as a within-control factor. The Base-correct/wrong-history contrast is explicitly **parked**: gold-only blocks cannot display history, and history-revealing blocks require human-verified corrective rationales (currently 0). Attempts to invent history signals would violate the work rules.
 - Cache-first: preparation validates canonical batch/index/memory hashes, per-target R4 Top-8 bytes, prompt token IDs, and group leakage; `run` fails closed before model load; resumes only missing receipts (checkpoints now use the atomic `update()` fix from `cfa2a29`).
 - **Branch 2 (documented contingency, not triggered):** if usable coverage had been insufficient — for example if the Conflicting pool (n=1) or the Near-Miss pool is later judged too thin for any interpretation — the source-only expansion path is planned but NOT executed: the sealed SOURCE partition holds 1013 claims of which **973 are memory-eligible** with gold distribution Refuted 533 / Supported 272 / NEI 97 / Conflicting 71; any expansion batch must go through the same legacy-audit → retrieval → batch pipeline as reviewed batches, source-only, with predeclared stopping, and stays far from DEV/TEST.
 
-User-run commands (exactly 3×50 new calls on first execution, resumable):
+User-run commands (exactly 2 GO arms × 50 = 100 new calls on first execution, resumable):
 
 ```bash
 ssh hvtham-server 'bash -s' <<'REMOTE'
@@ -65,6 +65,6 @@ Outputs: `outputs/m162c-COV_*-v1/evaluation-v1/results.json` per arm. Planned re
 
 ## E. Decision
 
-- **GO**: preregistered `COV_PLACEBO_G3` / `COV_NEI_G3` / `COV_CONF_G3` cache-only coverage pilot — 150 new inference calls, EXPLORATORY on the exposed DEVELOPMENT50, never confirmation evidence.
+- **GO**: preregistered `COV_PLACEBO_G3` / `COV_NEI_G3` cache-only coverage pilot — 100 new inference calls, EXPLORATORY on the exposed DEVELOPMENT50, never confirmation evidence. `COV_CONF_G3` is NO-GO this release (empty non-colliding pool) and moves to the branch-2 expansion path.
 - **NO-GO**: history-revealing (Base correct/wrong separation) arms until ≥30 verified-error rationales exist; automatic source expansion; M1.6.3 confirmation via TEST_QUARANTINE; any tuning of the mixed/verdict-free predictors based on B.
-- Known limitations: DEV50 exposure persists; Conflicting pool n=1 (single-group exemplar identity confound in that arm); NEI pool tie 8-8 broken ascending; placebo adds same-class exemplar identity; added exemplars are not human-verified (gold-only display, masked rationale); single-exemplar-per-arm content confound; GPU-active and monetary costs stay null unless separately measured.
+- Known limitations: DEV50 exposure persists; Conflicting-correct pool is empty after the leakage-group guard (arm blocked, identity confound moot); NEI added exemplar varies per target (2 identities, 38/12 split); placebo adds same-class exemplar identity; added exemplars are not human-verified (gold-only display, masked rationale); GPU-active and monetary costs stay null unless separately measured.

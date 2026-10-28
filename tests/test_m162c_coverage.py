@@ -20,14 +20,27 @@ def test_addition_selection_is_deterministic_count_then_id():
     records = [record('train:23', False, 'Not Enough Evidence', 'g1', evidence_count=3),
                record('train:2811', False, 'Not Enough Evidence', 'g2', evidence_count=5),
                record('train:21', True, 'Not Enough Evidence', 'g3', evidence_count=99)]
-    added = m162c.select_added({r['sample_id']: r for r in records},
-                               'Not Enough Evidence', set(), config)
+    pool = {r['sample_id']: r for r in records}
+    added = m162c.select_added(pool, 'Not Enough Evidence', set(), set(), config)
     assert added['sample_id'] == 'train:2811'
-    added = m162c.select_added({r['sample_id']: r for r in records},
-                               'Not Enough Evidence', {'train:2811'}, config)
+    added = m162c.select_added(pool, 'Not Enough Evidence', {'train:2811'}, set(), config)
     assert added['sample_id'] == 'train:23'
-    with pytest.raises(ValueError, match='No usable Base-correct'):
-        m162c.select_added({r['sample_id']: r for r in records}, 'Missing class', set(), config)
+    with pytest.raises(ValueError, match='no non-colliding usable'):
+        m162c.select_added(pool, 'Not Enough Evidence', set(), {'g1', 'g2'}, config)
+    with pytest.raises(ValueError, match='Coverage arm blocked'):
+        m162c.select_added(pool, 'Missing class', set(), set(), config)
+
+
+def test_addition_never_shares_pair_leakage_group():
+    config = m162c.load_config()
+    records = [record('a', False, 'Supported', 'blk-shared', evidence_count=9),
+               record('b', False, 'Supported', 'blk-other', evidence_count=2)]
+    with pytest.raises(ValueError, match='no non-colliding usable'):
+        m162c.select_added({r['sample_id']: r for r in records}, 'Supported',
+                           {'b'}, {'blk-shared', 'blk-other'}, config)
+    added = m162c.select_added({r['sample_id']: r for r in records}, 'Supported',
+                               set(), {'blk-shared'}, config)
+    assert added['sample_id'] == 'b'
 
 
 def test_frozen_coverage_config_contract():

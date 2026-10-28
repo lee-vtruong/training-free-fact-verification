@@ -19,7 +19,7 @@ exec > >(tee -a "$LOG") 2>&1
 echo "M1.6.2c EXPLORATORY: three cache-only k=3 gold-only coverage arms; no retrieval."
 echo "UTC=$(date -u +%FT%TZ) HEAD=$(git rev-parse HEAD) LOG=$LOG"
 test -f "$INDEX"
-for ARM in COV_PLACEBO_G3 COV_NEI_G3 COV_CONF_G3; do
+for ARM in COV_PLACEBO_G3 COV_NEI_G3; do
   RUN="$PWD/outputs/m162c-$ARM-v1"
   if [[ ! -d "$RUN" ]]; then
     python -m tffv.experiments.m162c prepare --canonical-run "$CANONICAL" \
@@ -34,5 +34,6 @@ for ARM in COV_PLACEBO_G3 COV_NEI_G3 COV_CONF_G3; do
       --gold-source "$GOLD" --output "$RUN/evaluation-v1"
   fi
 done
-echo "DONE. Exactly 50 new inference calls per arm on first execution; resumptions run only missing receipts."
+echo "COV_CONF_G3 is NO-GO in this release: its only usable Conflicting-correct exemplar (train:7) shares a leakage block with the frozen pair exemplars; re-run only after a separately authorized source expansion supplies a non-colliding exemplar."
+echo "DONE. Exactly 50 new inference calls per GO arm on first execution; resumptions run only missing receipts."
 echo "RESULTS=$PWD/outputs/m162c-COV_*-v1/evaluation-v1/results.json LOG=$LOG"

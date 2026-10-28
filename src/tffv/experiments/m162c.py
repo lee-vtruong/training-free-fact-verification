@@ -82,8 +82,9 @@ def load_config():
     return config
 
 
-SELECT_RULE = ('usable SOURCE Base-correct exemplar of the arm gold class; '
-               'highest evidence-item count, ties ascending sample_id')
+SELECT_RULE = ('usable SOURCE Base-correct exemplar of the arm gold class, not sharing '
+               'a leakage group with the pair or the target; highest evidence-item '
+               'count, ties ascending sample_id; empty pool blocks the arm')
 
 
 def usable(record):
@@ -91,13 +92,20 @@ def usable(record):
     return bool(items) and all(i.get('source_url') and i.get('rendered_text') for i in items)
 
 
-def select_added(records, gold_class, exclude, config):
-    """Preregistered deterministic rule; no dev gold, no seeds, no tuning."""
+def select_added(records, gold_class, exclude, exclude_groups, config):
+    """Preregistered deterministic rule; no dev gold, no seeds, no tuning.
+
+    exclude: pair sample IDs; exclude_groups: leakage groups of the pair and
+    the target, so an added exemplar never shares a block with them. If no
+    candidate is left, the arm is blocked (ValueError = fail closed).
+    """
     pool = [r for r in records.values()
             if r['gold_verdict'] == gold_class and not r['is_base_error']
-            and r['sample_id'] not in exclude and usable(r)]
+            and r['sample_id'] not in exclude and r['group_id'] not in exclude_groups
+            and usable(r)]
     if not pool:
-        raise ValueError('No usable Base-correct exemplar for class: ' + str(gold_class))
+        raise ValueError('Coverage arm blocked: no non-colliding usable Base-correct '
+                         'exemplar for class: ' + str(gold_class))
     return sorted(pool, key=lambda r: (-len(r['evidence']), r['sample_id']))[0]
 
 
@@ -149,11 +157,11 @@ def prepare(canonical_run, cache_index, memory_path, tokenizer_path, arm, destin
         validate_pair(slate, records, contract)
         target_group = contract.rows[sid]['group_id']
         exclude = {slate['correct_id'], slate['error_id']}
+        collide_groups = {target_group, records[slate['correct_id']]['group_id'],
+                          records[slate['error_id']]['group_id']}
         gold_class = ADDED_CLASS[arm] or records[slate['correct_id']]['gold_verdict']
-        added = select_added(records, gold_class, exclude, config)
-        overlap = {target_group, records[slate['correct_id']]['group_id'],
-                   records[slate['error_id']]['group_id']}
-        if added['sample_id'] in exclude or added['group_id'] in overlap:
+        added = select_added(records, gold_class, exclude, collide_groups, config)
+        if added['sample_id'] in exclude or added['group_id'] in collide_groups:
             raise ValueError('Added exemplar collides with pair/target: ' + sid)
         added_by_target[sid] = added
     prompts = {}
