@@ -2,6 +2,8 @@
 
 Status: implementation prepared; **no judge call, retrieval, GPU inference, SSH, or development evaluation has run**.
 
+Approved server judge snapshot: `Qwen/Qwen3-14B-AWQ` revision `55182c306332ddb9f47ade5de8d8fdb53b8bcb03` (official 4-bit AWQ). Downloading it is separate from loading or running it.
+
 M1.7 is an exploratory branch beside M1.6 human review. `LLM_VALIDATED` means a frozen judge accepted an evidence-grounded correction; it never means `HUMAN_VERIFIED`, and it does not alter M1.6 review sheets, gates, or records.
 
 ## Frozen scope and two stages
