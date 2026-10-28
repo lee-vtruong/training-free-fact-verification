@@ -11,7 +11,7 @@ def test_select_clean_development_targets():
     assert all(t.startswith('train:') for t in targets)
 
     # Check zero overlap with DEV50
-    dev50 = set(json.loads(m17_eval.DEV50_BATCH.read_text('utf-8-sig'))['sample_ids'])
+    dev50 = set(json.loads(m17_eval.PHASE_SCHEDULE.read_text('utf-8-sig'))['development_pilot_claims'])
     assert dev50.isdisjoint(targets)
 
     # Check mutually disjoint groups

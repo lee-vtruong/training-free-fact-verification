@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parents[3]
 MEMORY_PATH = ROOT / 'outputs' / 'm17-llm-validated-memory-v1' / 'memory.json'
 DEV_MANIFEST = ROOT / 'outputs' / 'm16-partitions-v1' / 'development_manifest.json'
 CLAIMS_MANIFEST = ROOT / 'outputs' / 'm16-partitions-v1' / 'claims_manifest.json'
-DEV50_BATCH = ROOT / 'outputs' / 'm162a-dev50-preparation-v4' / 'batch.json'
+PHASE_SCHEDULE = ROOT / 'docs' / 'partitions' / 'm16-execution-plan-v1' / 'phase_schedule.json'
 ACQUISITION_PLAN = ROOT / 'configs' / 'm161_acquisition_plan.json'
 CONFIG_PATH = ROOT / 'configs' / 'm161_source_batch25.json'
 TOKENIZER_DIR = Path('/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots/b968826d9c46dd6066d109eabc6255188de91218')
@@ -47,7 +47,7 @@ def select_clean_development_targets(n=TARGET_COUNT):
     """Select n clean, mutually disjoint development claims with zero DEV50 collision."""
     dev_claims = json.loads(DEV_MANIFEST.read_text('utf-8-sig'))
     all_claims = json.loads(CLAIMS_MANIFEST.read_text('utf-8-sig'))
-    dev50_ids = set(json.loads(DEV50_BATCH.read_text('utf-8-sig'))['sample_ids'])
+    dev50_ids = set(json.loads(PHASE_SCHEDULE.read_text('utf-8-sig'))['development_pilot_claims'])
 
     claim_map = {r['sample_id']: r for r in all_claims}
     dev50_groups = {claim_map[s]['group_id'] for s in dev50_ids}
