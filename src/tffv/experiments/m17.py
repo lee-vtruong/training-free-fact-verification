@@ -139,7 +139,7 @@ def build_memory(candidate_path, stage_one, stage_two, output, bank_path=None):
     out=output_path(output); out.mkdir(parents=True,exist_ok=False)
     payload={'schema_version':'m17-llm-validated-memory-v1','scope':'EXPLORATORY_SOURCE_ONLY','human_review_status':'UNCHANGED_NOT_HUMAN_VERIFIED','records':selected,'input_hashes':{'candidates':file_hash(candidate_path),'stage_one':file_hash(stage_one),'stage_two':file_hash(stage_two),'protocol':file_hash(CFG)}}
     save(out/'memory.json',payload)
-    save(out/'summary.json',{'source_candidates':21,'llm_validated':len(selected),'gold_coverage':sorted(set(r['gold_verdict'] for r in selected)),'mechanism_coverage':sorted(set(r['mechanism'] for r in selected)),'leakage_groups':'not emitted by candidate artifact; no DEVELOPMENT target used','human_verified_count':0})
+    save(out/'summary.json',{'source_candidates':21,'llm_validated':len(selected),'gold_coverage':sorted(set(r['gold_verdict'] for r in selected)),'mechanism_coverage':sorted(set(r['mechanism'] or 'UNSPECIFIED' for r in selected)),'leakage_groups':'not emitted by candidate artifact; no DEVELOPMENT target used','human_verified_count':0})
     return out
 
 def main():

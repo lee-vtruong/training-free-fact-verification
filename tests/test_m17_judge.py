@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 from tffv.experiments import m17
 
 def output_for(req):
@@ -36,3 +37,32 @@ def test_make_requests_reuses_only_empty_preflight_directory(tmp_path, monkeypat
     assert result.is_file()
     with pytest.raises(FileExistsError, match='not an empty'):
         m17.make_requests('ignored')
+
+def test_build_memory_handles_none_mechanism(tmp_path, monkeypatch):
+    monkeypatch.setattr(m17, 'output_path', lambda p: Path(p))
+    import json
+    candidates = m17.candidates()
+    stage1_rows = []
+    stage2_rows = []
+    for r in candidates:
+        q1 = m17.request(r, 'evidence_assessment')
+        o1 = output_for(q1)
+        o1['verdict_assessment'] = r['gold_verdict']
+        stage1_rows.append(o1)
+        q2 = m17.request(r, 'correction_validation', o1)
+        o2 = output_for(q2)
+        o2['verdict_assessment'] = r['gold_verdict']
+        stage2_rows.append(o2)
+
+    s1_path = tmp_path / 'stage1.jsonl'
+    s2_path = tmp_path / 'stage2.jsonl'
+    s1_path.write_text('\n'.join(json.dumps(x) for x in stage1_rows), encoding='utf-8')
+    s2_path.write_text('\n'.join(json.dumps(x) for x in stage2_rows), encoding='utf-8')
+
+    out = m17.build_memory(m17.CANDIDATES, s1_path, s2_path, tmp_path / 'mem_out')
+    assert (out / 'memory.json').exists()
+    assert (out / 'summary.json').exists()
+    summary = json.loads((out / 'summary.json').read_text(encoding='utf-8'))
+    assert 'UNSPECIFIED' in summary['mechanism_coverage']
+    assert summary['source_candidates'] == 21
+
