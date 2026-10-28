@@ -1,0 +1,24 @@
+{
+  "condition": "MIXED_GOLD_ONLY_K2",
+  "k": 2,
+  "order": [
+    "base_correct_gold_only",
+    "base_wrong_gold_only"
+  ],
+  "selection": "Reuse each canonical P2/P3 error exemplar and its fixed same-gold different-group correct control from the sealed slate.",
+  "visible_historical_fields": [
+    "claim",
+    "retrieved_evidence",
+    "gold_verdict"
+  ],
+  "hidden_historical_fields": [
+    "base_wrong_verdict",
+    "corrective_rationale",
+    "source_gold_qa"
+  ],
+  "generation": {
+    "do_sample": false,
+    "enable_thinking": false,
+    "max_new_tokens": 512
+  }
+}
