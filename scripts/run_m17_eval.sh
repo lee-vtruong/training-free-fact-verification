@@ -13,7 +13,6 @@ export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"
 export PYTHONUNBUFFERED=1
 
 mkdir -p outputs
-exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "================================================================================"
 echo ">>> [M1.7] Step 1: Prepare 24 Clean Development Targets & Batch Manifest"
