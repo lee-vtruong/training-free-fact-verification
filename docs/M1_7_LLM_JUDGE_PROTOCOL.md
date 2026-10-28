@@ -47,6 +47,10 @@ python scripts/m17_judge_adapter.py \
   --model-id 'YOUR_FROZEN_STRONGER_JUDGE' --model-revision 'IMMUTABLE_REVISION' \
   --temperature 0.0 --max-new-tokens 768
 
+# If this command stopped after writing some valid raw rows, rerun the same
+# command with --resume. It validates every existing row's request/model/decode
+# provenance and executes only missing requests; it never overwrites rows.
+
 python -m tffv.experiments.m17 validate \
   --requests outputs/m17-stage1-requests/evidence_assessment_requests.jsonl \
   --outputs outputs/m17-stage1-raw.jsonl --output outputs/m17-stage1-validated
