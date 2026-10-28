@@ -1,4 +1,7 @@
 """M1.6.2c coverage-arm tests: selection rule, prompt contract, config freeze"""
+import json
+from pathlib import Path
+
 import pytest
 from tffv.experiments import m162c
 
@@ -48,3 +51,27 @@ def test_arm_validation_rejects_unknown_names():
     with pytest.raises(SystemExit):
         m162c.prepare(canonical_run=None, cache_index=None, memory_path=None,
                       tokenizer_path=None, arm='COV_BOGUS', destination='unused')
+
+
+def test_locked_result_schema_accepts_versioned_pilot_results():
+    result = json.loads((Path(__file__).resolve().parents[1]
+                         / 'docs/audits/M1_6_2B_MIXED_RESULTS.json').read_text('utf-8-sig'))
+    assert m162c.validate_result(result) == result
+    broken = {**result, 'exact_mcnemar_p_missing_removed': None}
+    del broken['gpu_active_seconds']
+    with pytest.raises(ValueError, match='missing locked key'):
+        m162c.validate_result(broken)
+    drift = json.loads(json.dumps(result))
+    drift['comparisons'][list(drift['comparisons'])[0]]['exact_mcnemar_p'] = 1.0
+    del drift['comparisons'][list(drift['comparisons'])[0]]['transitions']
+    with pytest.raises(ValueError, match='transitions'):
+        m162c.validate_result(drift)
+
+
+def test_results_file_formally_validates_against_json_schema():
+    jsonschema = pytest.importorskip('jsonschema')
+    schema = json.loads((Path(__file__).resolve().parents[1]
+                         / 'schemas/m162c_results.schema.json').read_text('utf-8-sig'))
+    result = json.loads((Path(__file__).resolve().parents[1]
+                         / 'docs/audits/M1_6_2B_MIXED_RESULTS.json').read_text('utf-8-sig'))
+    jsonschema.validate(result, schema)

@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "M1.6.2c/x6 pilot evaluation results (locked reporting shape)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scope",
+    "condition",
+    "claims",
+    "metrics",
+    "comparisons",
+    "prompt_tokens",
+    "output_tokens",
+    "generation_wall_seconds",
+    "gpu_active_seconds"
+  ],
+  "properties": {
+    "scope": {"const": "EXPLORATORY_NOT_CONFIRMATORY"},
+    "condition": {"type": "string", "minLength": 1},
+    "claims": {"const": 50},
+    "prompt_tokens": {"type": "integer", "minimum": 0},
+    "output_tokens": {"type": "integer", "minimum": 0},
+    "generation_wall_seconds": {"type": "number", "minimum": 0},
+    "gpu_active_seconds": {"type": "null"},
+    "predicted_verdict_prior": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accuracy", "confusion_matrix", "macro_f1", "macro_precision", "macro_recall", "per_class", "correct_claims", "total_claims", "valid_rate"],
+      "properties": {
+        "accuracy": {"type": "number", "minimum": 0, "maximum": 1},
+        "macro_f1": {"type": "number", "minimum": 0, "maximum": 1},
+        "macro_precision": {"type": "number", "minimum": 0, "maximum": 1},
+        "macro_recall": {"type": "number", "minimum": 0, "maximum": 1},
+        "correct_claims": {"type": "integer", "minimum": 0, "maximum": 50},
+        "total_claims": {"const": 50},
+        "valid_rate": {"const": 1.0},
+        "confusion_matrix": {"$ref": "#/definitions/classification_matrix"},
+        "per_class": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/definitions/class_metrics"}
+        }
+      }
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/definitions/comparison"}
+    }
+  },
+  "definitions": {
+    "classification_matrix": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "patternProperties": {"^.": {"type": "integer", "minimum": 0}},
+        "additionalProperties": false
+      }
+    },
+    "class_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["f1", "fn", "fp", "precision", "recall", "support", "tp"],
+      "properties": {
+        "f1": {"type": "number", "minimum": 0, "maximum": 1},
+        "precision": {"type": "number", "minimum": 0, "maximum": 1},
+        "recall": {"type": "number", "minimum": 0, "maximum": 1},
+        "support": {"type": "integer", "minimum": 0},
+        "tp": {"type": "integer", "minimum": 0},
+        "fp": {"type": "integer", "minimum": 0},
+        "fn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "accuracy_delta",
+        "accuracy_bootstrap_ci95",
+        "macro_f1_delta",
+        "macro_f1_bootstrap_ci95",
+        "exact_mcnemar_p",
+        "macro_f1_paired_swap_p",
+        "transitions",
+        "correction_ids",
+        "regression_ids"
+      ],
+      "properties": {
+        "accuracy_delta": {"type": "number", "minimum": -1, "maximum": 1},
+        "macro_f1_delta": {"type": "number", "minimum": -1, "maximum": 1},
+        "accuracy_bootstrap_ci95": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+        "macro_f1_bootstrap_ci95": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+        "exact_mcnemar_p": {"type": "number", "minimum": 0, "maximum": 1},
+        "macro_f1_paired_swap_p": {"type": "number", "minimum": 0, "maximum": 1},
+        "transitions": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0},
+          "required": ["CC", "CW", "WC", "WW"]
+        },
+        "correction_ids": {"type": "array", "items": {"type": "string", "pattern": "^train:[0-9]+$"}},
+        "regression_ids": {"type": "array", "items": {"type": "string", "pattern": "^train:[0-9]+$"}}
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ gold-only mode and cannot be separated without reviewed corrections.
 """
 from pathlib import Path
 import argparse, json, time
+from collections import Counter
 
 from tffv.provenance import digest, file_hash
 from tffv.memory.heal import read, save, update, jsonl, indexed
@@ -25,6 +26,48 @@ ADDED_CLASS = {'COV_PLACEBO_G3': None,
                'COV_NEI_G3': 'Not Enough Evidence',
                'COV_CONF_G3': 'Conflicting Evidence/Cherrypicking'}
 ADDED_HEADER = 'Reference 2 — additional historical example, gold-only:\n'
+
+
+def validate_result(result):
+    """Locked reporting shape (schemas/m162c_results.schema.json), dependency-free.
+
+    Runs before any results.json write so evaluation output cannot drift.
+    """
+    top = ('scope', 'condition', 'claims', 'metrics', 'comparisons', 'prompt_tokens',
+           'output_tokens', 'generation_wall_seconds', 'gpu_active_seconds')
+    for key in top:
+        if key not in result:
+            raise ValueError('Results missing locked key: ' + key)
+    if result['scope'] != 'EXPLORATORY_NOT_CONFIRMATORY' or result['claims'] != 50 or \
+            result['gpu_active_seconds'] is not None:
+        raise ValueError('Results scope/population/cost lock violated')
+    metrics = result['metrics']
+    for key in ('accuracy', 'confusion_matrix', 'macro_f1', 'macro_precision',
+                'macro_recall', 'per_class', 'correct_claims', 'total_claims', 'valid_rate'):
+        if key not in metrics:
+            raise ValueError('Results metrics missing locked key: ' + key)
+    classes = ('Supported', 'Not Enough Evidence', 'Refuted',
+               'Conflicting Evidence/Cherrypicking')
+    for klass, cell in metrics['per_class'].items():
+        if klass not in classes:
+            raise ValueError('Unexpected per_class entry: ' + klass)
+        for key in ('f1', 'precision', 'recall', 'support', 'tp', 'fp', 'fn'):
+            if key not in cell:
+                raise ValueError('per_class missing ' + key + ' for ' + klass)
+    for name, comp in result['comparisons'].items():
+        for key in ('accuracy_delta', 'accuracy_bootstrap_ci95', 'macro_f1_delta',
+                    'macro_f1_bootstrap_ci95', 'exact_mcnemar_p',
+                    'macro_f1_paired_swap_p', 'transitions', 'correction_ids',
+                    'regression_ids'):
+            if key not in comp:
+                raise ValueError('Comparison summaries missing locked key '
+                                 + key + ' in ' + name)
+        for key in ('CC', 'CW', 'WC', 'WW'):
+            if key not in comp['transitions']:
+                raise ValueError('Transitions missing ' + key + ' in ' + name)
+    if not 2 <= len(result['comparisons']) <= 4:
+        raise ValueError('Unexpected comparison count')
+    return result
 
 
 def load_config():
@@ -313,6 +356,7 @@ def evaluate(run, canonical_run, mixed_run, gold_source, destination):
     gold = [raw[int(s.split(':')[1])]['label'] for s in b['sample_ids']]
     result = {'scope': 'EXPLORATORY_NOT_CONFIRMATORY', 'condition': b['condition'],
               'claims': 50, 'metrics': hp.metric(gold, pred),
+              'predicted_verdict_prior': dict(sorted(Counter(pred).items())),
               'prompt_tokens': sum(x['prompt_tokens'] for x in rows),
               'output_tokens': sum(x['output_tokens'] for x in rows),
               'generation_wall_seconds': sum(x['latency_seconds'] for x in rows),
@@ -325,6 +369,7 @@ def evaluate(run, canonical_run, mixed_run, gold_source, destination):
         z['regression_ids'] = [sid for sid, g, a, y in zip(b['sample_ids'], gold, base, pred)
                                if a == g and y != g]
         result['comparisons'][b['condition'] + '_vs_' + name] = z
+    validate_result(result)
     dest = out(destination)
     dest.mkdir(parents=True, exist_ok=False)
     save(dest / 'results.json', result)
