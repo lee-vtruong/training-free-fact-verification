@@ -93,10 +93,15 @@ def prepare(output_dir, memory_path=MEMORY_PATH, n_targets=TARGET_COUNT):
 
     # Setup per-claim input directory
     for sid in targets:
-        claim_data = all_claims[sid]
+        clean_claim = {
+            'sample_id': sid,
+            'dataset': 'AVeriTeC',
+            'split': 'train',
+            'claim': all_claims[sid]['claim']
+        }
         claim_dir = out / sid.replace(':', '-') / 'input'
         claim_dir.mkdir(parents=True, exist_ok=True)
-        (claim_dir / 'claims.jsonl').write_text(json.dumps(claim_data) + '\n', encoding='utf-8')
+        (claim_dir / 'claims.jsonl').write_text(json.dumps(clean_claim) + '\n', encoding='utf-8')
         save(claim_dir / 'claims_manifest.json', {
             'dataset': 'AVeriTeC', 'split': 'train', 'sample_id': sid,
             'source_role': 'source_train',
