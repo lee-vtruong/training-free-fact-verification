@@ -99,6 +99,8 @@ def prepare(output_dir, memory_path=MEMORY_PATH, n_targets=TARGET_COUNT):
         (claim_dir / 'claims.jsonl').write_text(json.dumps(claim_data) + '\n', encoding='utf-8')
         save(claim_dir / 'claims_manifest.json', {
             'dataset': 'AVeriTeC', 'split': 'train', 'sample_id': sid,
+            'source_role': 'source_train',
+            'records': 1,
             'role': 'DEVELOPMENT_RESEARCH_NOT_HISTORICAL_SOURCE',
             'annotation_values_used': False,
             'claims_sha256': file_hash(claim_dir / 'claims.jsonl')
@@ -141,20 +143,20 @@ def retrieve_one_claim(run_dir, sid, config):
     ordinal = int(sid.split(':')[1])
     # 1. Acquire
     acq_out = folder / 'acquire'
-    acquire(config['acquisition_plan_path'], acq_out, [ordinal], execute=True)
+    acq_manifest = acquire(config['acquisition_plan_path'], acq_out, [ordinal], execute=True)
 
     # 2. Audit
     aud_out = folder / 'audit'
-    audit(acq_out, aud_out, max_record_mib=64)
+    aud_manifest = audit(acq_manifest, aud_out, max_record_mib=64)
 
     # 3. Candidates
     cm = folder / 'input' / 'claims_manifest.json'
     ca_out = folder / 'candidates'
-    prepare_candidates(aud_out, cm, ca_out, policy=config.get('candidate_policy', 'quarantine_review_flags_v1'))
+    ca_manifest = prepare_candidates(aud_manifest, cm, ca_out, policy=config.get('candidate_policy', 'quarantine_review_flags_v1'))
 
     # 4. Retrieval R1..R4
     ret_out = folder / 'retrieval'
-    r4_file = retrieve_store(ca_out, ret_out, methods=('R1', 'R2', 'R3', 'R4'),
+    r4_file = retrieve_store(ca_manifest, ret_out, methods=('R1', 'R2', 'R3', 'R4'),
                              config=config['retrieval'], index_cache=ret_out / 'embedding_cache') / 'R4.jsonl'
 
     save(receipt_path, {
