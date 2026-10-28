@@ -31,3 +31,18 @@ def test_mixed_pair_rejects_label_or_group_leakage():
     bad['gold_verdict']='Supported';good['group_id']='target-group'
     with pytest.raises(ValueError,match='group leakage'):
         m162b.validate_pair({'sample_id':'target','correct_id':'good','error_id':'bad'},{'good':good,'bad':bad},Contract())
+
+
+def test_mixed_state_checkpoint_updates_in_place(tmp_path):
+    """Regression: execute() checkpoints state.json per completed ID; the
+    create-only save() raised FileExistsError on the first checkpoint."""
+    from tffv.memory import heal
+    state=tmp_path/'state.json'
+    heal.save(state,{'completed_ids':[],'spent_seconds':0.0})
+    heal.update(state,{'completed_ids':['train:810'],'spent_seconds':40.0})
+    assert heal.read(state)=={'completed_ids':['train:810'],'spent_seconds':40.0}
+    heal.update(state,{'completed_ids':['train:810','train:385'],'spent_seconds':81.0})
+    assert heal.read(state)=={'completed_ids':['train:810','train:385'],'spent_seconds':81.0}
+    assert not (tmp_path/'state.json.tmp').exists()
+    with pytest.raises(FileExistsError):
+        heal.save(state,{'immutable':True})

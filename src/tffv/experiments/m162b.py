@@ -4,7 +4,7 @@ import argparse, json, os, signal, subprocess, sys, time
 from collections import Counter
 
 from tffv.provenance import digest,file_hash,write_json
-from tffv.memory.heal import read,save,jsonl,indexed,SourceContract
+from tffv.memory.heal import read,save,update,jsonl,indexed,SourceContract
 from tffv.experiments import m16_cache,m161
 from tffv.verification import heal_pilot as hp
 
@@ -116,7 +116,7 @@ def execute(run,allowed=False):
         if receipt(run,sid):
           if sid not in state['completed_ids']: state['completed_ids'].append(sid)
           continue
-        started=time.time(); row=worker(run,sid); state['spent_seconds']+=time.time()-started; state['completed_ids'].append(sid); save(run/'state.json',state)
+        started=time.time(); row=worker(run,sid); state['spent_seconds']+=time.time()-started; state['completed_ids'].append(sid); update(run/'state.json',state)
         print(f'CHECKPOINT mixed={len(state["completed_ids"])}/50 sid={sid}',flush=True)
       if len(state['completed_ids'])!=50: raise ValueError('Incomplete mixed prediction population')
       save(run/'completed.json',{'batch_sha256':file_hash(run/'mixed_batch.json'),'sample_ids':b['sample_ids'],'condition':CONDITION,'gold_accessed':False})

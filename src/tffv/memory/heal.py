@@ -4,6 +4,7 @@ from copy import deepcopy
 from datetime import datetime
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 
@@ -40,6 +41,23 @@ def save(path, obj):
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open('x', encoding='utf-8', newline='\n') as f:
         f.write(json.dumps(obj, ensure_ascii=False, sort_keys=True, indent=2, allow_nan=False) + '\n')
+
+
+def update(path, obj):
+    """Atomically replace a mutable checkpoint file; unlike save(), it overwrites.
+
+    save() stays create-only for immutable receipts. Checkpoints (state.json)
+    are rewritten after every completed item and must survive interruption,
+    so this writes a sibling temporary file, fsyncs it, then renames it.
+    """
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + '.tmp')
+    with tmp.open('w', encoding='utf-8', newline='\n') as f:
+        f.write(json.dumps(obj, ensure_ascii=False, sort_keys=True, indent=2, allow_nan=False) + '\n')
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, path)
 
 
 def indexed(rows):
