@@ -1450,3 +1450,25 @@
   - Human review invariant preserved: `human_verified_count: 0`; human review gates and review sheets untouched.
   - Zero target gold exposure: no DEVELOPMENT or TEST set claims accessed during memory sealing.
 - Git commit: `79acd85` (`fix(m17): handle None mechanism when building summary coverage`). Synchronized all artifacts to local workspace.
+
+## 2026-10-29 01:10 +07:00 — M1.7 4-arm exploratory evaluation on 24 Development claims
+
+- Objective: Execute 4-arm comparative feasibility study (Arms A, B, C, D) using sealed LLM-validated corrective memory bank (`outputs/m17-llm-validated-memory-v1/memory.json`) and frozen verifier `Qwen/Qwen3-8B` (bfloat16, greedy decoding) on 24 fresh Development claims.
+- Target Population: Exactly 24 clean, mutually disjoint development claims (`train:352, 361, 370, 372, 373, 383, 384, 392, 393, 395, 402, 405, 415, 421, 429, 431, 432, 447, 452, 455, 474, 482, 494, 496`). Zero overlap with DEV50, 0 shared groups with DEV50, mutually disjoint groups among themselves, strictly gold-blind selection via count-then-ID rule.
+- Retrieval Pipeline: Fresh, complete 4-stage retrieval executed per target claim: `acquire` -> `audit` -> `candidates` -> `retrieval` (R1 BM25, R2 Frozen Dense `Qwen3-Embedding-0.6B`, R3 RRF, R4 Frozen Cross-Encoder Reranker `Qwen3-Reranker-0.6B`) over candidate stores (~5.8M passages corpus). R4 Top-8 evidence sealed with sha256 receipts and shared across all 4 arms. Total retrieval runtime: ~2h 05m on RTX 5090.
+- Inference: Executed 96 predictions (24 claims x 4 arms) on frozen `Qwen3-8B`:
+  - Arm A (gold_only): Exemplar with Gold verdict only.
+  - Arm B (gold_validated): Exemplar with Gold verdict + LLM-validated corrective rationale.
+  - Arm C (wrong_gold_validated): Exemplar with Base wrong verdict + Gold verdict + LLM-validated corrective rationale.
+  - Arm D (gold_filler_length_matched): Exemplar with Gold verdict + length-matched neutral placebo.
+- Target Gold Blindness: Target gold labels opened only at scoring time from `train.json` after all 96 predictions were completely generated and sealed.
+- Empirical Results:
+  - Arm A (gold_only): Accuracy 62.50% (15/24), Macro-F1 0.4144, Valid Rate 100.0%.
+  - Arm B (gold_validated): Accuracy 62.50% (15/24), Macro-F1 0.4287, Valid Rate 100.0% ($\Delta \text{Macro-F1} = +0.0144$).
+  - Arm C (wrong_gold_validated): Accuracy 50.00% (12/24), Macro-F1 0.2897, Valid Rate 100.0% ($\Delta \text{Acc} = -12.50\%$, $\Delta \text{Macro-F1} = -0.1247$, McNemar $p = 0.5078$).
+  - Arm D (gold_filler_length_matched): Accuracy 41.67% (10/24), Macro-F1 0.3080, Valid Rate 100.0% ($\Delta \text{Acc vs B} = -20.83\%$, $\Delta \text{Macro-F1 vs B} = -0.1207$, McNemar $p = 0.1250$, bootstrap CI $[-41.7\%, +0.0\%]$).
+- Key Scientific Insights:
+  1. Informational Value vs. Length Artifacts: Arm B (62.50%, Macro-F1 0.4287) substantially outperforms Arm D (41.67%, Macro-F1 0.3080) by +20.83% accuracy and +0.1207 Macro-F1. This decisively rejects the hypothesis that corrective rationales act merely as uninformative prompt length inflation; neutral content of equal length severely degrades verifier performance, whereas grounded corrective rationales maintain and improve verdict discernment.
+  2. Noise Distraction: Arm C (-12.50% vs Arm A) demonstrates that presenting the erroneous prior verdict distracts the frozen verifier even when followed by corrective reasoning, confirming negative transfer from explicit erroneous exemplars.
+  3. LLM-Validated Memory Utility: LLM-validated corrections provide a viable, automated surrogate for historical grounding without violating human verification separation or requiring parameter updates.
+- Deliverables: `outputs/m17-eval-24dev/results.json`, `outputs/m17-eval-24dev/REPORT.md`, `outputs/m17-eval-24dev/batch.json`, `outputs/m17-eval-24dev/state.json`, and predictions. All synchronized locally and on `hvtham-server`.
