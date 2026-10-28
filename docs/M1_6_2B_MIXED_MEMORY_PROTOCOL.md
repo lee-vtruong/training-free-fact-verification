@@ -1,6 +1,6 @@
 # M1.6.2b — Cache-only mixed positive-negative memory pilot
 
-Status: CPU preparation COMPLETE; GPU inference NOT RUN. This is an exploratory follow-up on the already exposed DEVELOPMENT50 population. It is not confirmation evidence and does not reopen TEST_QUARANTINE.
+Status: CPU preparation COMPLETE; user-run GPU inference COMPLETE with results in [M1_6_2B_MIXED_RESULTS.md](M1_6_2B_MIXED_RESULTS.md). This is an exploratory follow-up on the already exposed DEVELOPMENT50 population. It is not confirmation evidence and does not reopen TEST_QUARANTINE.
 
 ## Paired analysis of canonical M1.6.2a
 
