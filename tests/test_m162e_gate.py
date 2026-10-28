@@ -23,9 +23,10 @@ def test_gate_arithmetic_matches_locked_policy():
     assert report['unchanged_top8_ceiling'] == 21
     assert report['full_memory_gate_verified'] == 30
     assert 25 < 30 and 21 < 30  # the >=30 milestone gate is structurally unsatisfiable
-    assert report['verified_now'] == 5
-    assert report['feasibility_ok'] is False
-    assert report['gate'] == 'TIER1_UNMET_FAIL_CLOSED'
+    assert report['verified_now'] == 9
+    assert report['covered_classes'] == {'metric_mismatch': 2, 'missed_direct_ranking': 2}
+    assert report['feasibility_ok'] is True
+    assert report['gate'] == 'TIER1_MET_PENDING_LOCKED_EXECUTION'
 
 
 def test_config_validates_against_locked_policy():
@@ -47,7 +48,8 @@ def test_record_schema_complete_for_every_record():
         for key in required:
             assert key in r, (r['sample_id'], key)
         assert r['sample_id'].startswith('train:')
-        if r['sample_id'] in {'train:6', 'train:11', 'train:25', 'train:978', 'train:1824'}:
+        if r['sample_id'] in {'train:6', 'train:11', 'train:21', 'train:25', 'train:31',
+                              'train:47', 'train:48', 'train:978', 'train:1824'}:
             assert r['verified'] is True
             assert r['review_status'] == 'VERIFIED'
             assert r['mechanism']
@@ -99,12 +101,12 @@ def test_reviewer_sheets_identical_and_blank():
         assert 'assistant must not fill' in sheet['instructions'].lower()
 
 
-def test_verified_pool_still_fails_closed_on_coverage():
+def test_verified_pool_meets_coverage_only_after_two_reviewed_e3_pairs():
     pool = m162e.verified_pool()
-    assert len(pool) == 5
-    assert m162e.class_coverage(pool, 2) == {}
-    with pytest.raises(ValueError, match='Tier-1 feasibility gate not met'):
-        m162e.require_feasible(pool, m162e.load_config())
+    assert len(pool) == 9
+    assert m162e.class_coverage(pool, 2) == {'metric_mismatch': 2,
+                                              'missed_direct_ranking': 2}
+    m162e.require_feasible(pool, m162e.load_config())
 
 
 def test_verified_pool_accepts_only_double_reviewed_primary_records():

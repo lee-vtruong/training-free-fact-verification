@@ -503,12 +503,40 @@
    ],
    "author": "assistant (M1.6.2e, CPU only)",
    "drafted_at": "2026-10-28T04:45:48Z",
-   "review_status": "PENDING_REVIEW",
-   "verified": false,
+   "review_status": "VERIFIED",
+   "verified": true,
    "reviews": {
-    "reviewer_1": null,
-    "reviewer_2": null
-   }
+    "reviewer_1": {
+     "reviewer_id": "human-review-3:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT",
+     "edited_text": null,
+     "rationale": "The UNODC passage provides a worldwide inhabitants-per-judge-or-magistrate figure, while the thesis passage gives a separate judges-to-persons figure. Neither quoted passage establishes a comparable Kenya judges-and-magistrates ratio or supplies a same-metric comparison sufficient to decide the claim. The stored Base verdict is Supported; the displayed evidence does not ground that verdict.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "YES. The claim is read as asserting a global average in relation to Kenya's judges-and-magistrates-to-population ratio, not merely asking whether a worldwide average exists. The UNODC worldwide figure alone establishes a global statistic but does not establish the comparable Kenya relation. On this reading, the quoted evidence is insufficient, supporting Not Enough Evidence rather than Supported.",
+     "submission_ref": "tier1-e3 user submission 3"
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-4:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT",
+     "edited_text": null,
+     "rationale": "The UNODC passage provides a worldwide inhabitants-per-judge-or-magistrate figure, while the thesis passage gives a separate judges-to-persons figure. Neither quoted passage establishes a comparable Kenya judges-and-magistrates ratio or supplies a same-metric comparison sufficient to decide the claim. The stored Base verdict is Supported; the displayed evidence does not ground that verdict.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "YES. The claim is read as asserting a global average in relation to Kenya's judges-and-magistrates-to-population ratio, not merely asking whether a worldwide average exists. The UNODC worldwide figure alone establishes a global statistic but does not establish the comparable Kenya relation. On this reading, the quoted evidence is insufficient, supporting Not Enough Evidence rather than Supported.",
+     "submission_ref": "tier1-e3 user submission 4"
+    }
+   },
+   "verification_scope": "Two user-attested independent human reviews; source-only rendered Top-8 evidence.",
+   "review_import_provenance": "Two separate user submissions; payload text was byte-identical (sha256 7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668), independence asserted by user."
   },
   {
    "record_kind": "E3_CANDIDATE_DRAFT",
@@ -687,12 +715,40 @@
    ],
    "author": "assistant (M1.6.2e, CPU only)",
    "drafted_at": "2026-10-28T04:45:48Z",
-   "review_status": "PENDING_REVIEW",
-   "verified": false,
+   "review_status": "VERIFIED",
+   "verified": true,
    "reviews": {
-    "reviewer_1": null,
-    "reviewer_2": null
-   }
+    "reviewer_1": {
+     "reviewer_id": "human-review-3:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT",
+     "edited_text": null,
+     "rationale": "The quoted Kenya passage concerns a judge-to-population ratio, while the ReliefWeb passage refers to a global average of 17 in a different professional category. The worldwide judges-and-magistrates figure also cannot resolve the claim without a comparable Kenya measure. The stored Base verdict is Refuted, but the displayed evidence does not establish a contradiction of the claim.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "YES. Metric mismatch means the quoted measures cannot establish the claimed relation; it does not itself create conflicting evidence. No comparable Kenya judges-and-magistrates measure is shown, and the public-defender statistic cannot be treated as a judges-and-magistrates statistic. The appropriate relation is Not Enough Evidence rather than Refuted.",
+     "submission_ref": "tier1-e3 user submission 3"
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-4:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT",
+     "edited_text": null,
+     "rationale": "The quoted Kenya passage concerns a judge-to-population ratio, while the ReliefWeb passage refers to a global average of 17 in a different professional category. The worldwide judges-and-magistrates figure also cannot resolve the claim without a comparable Kenya measure. The stored Base verdict is Refuted, but the displayed evidence does not establish a contradiction of the claim.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "YES. Metric mismatch means the quoted measures cannot establish the claimed relation; it does not itself create conflicting evidence. No comparable Kenya judges-and-magistrates measure is shown, and the public-defender statistic cannot be treated as a judges-and-magistrates statistic. The appropriate relation is Not Enough Evidence rather than Refuted.",
+     "submission_ref": "tier1-e3 user submission 4"
+    }
+   },
+   "verification_scope": "Two user-attested independent human reviews; source-only rendered Top-8 evidence.",
+   "review_import_provenance": "Two separate user submissions; payload text was byte-identical (sha256 7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668), independence asserted by user."
   },
   {
    "record_kind": "E3_CANDIDATE_DRAFT",
@@ -816,12 +872,40 @@
    "subflags": [],
    "author": "assistant (M1.6.2e, CPU only)",
    "drafted_at": "2026-10-28T04:45:48Z",
-   "review_status": "PENDING_REVIEW",
-   "verified": false,
+   "review_status": "VERIFIED",
+   "verified": true,
    "reviews": {
-    "reviewer_1": null,
-    "reviewer_2": null
-   }
+    "reviewer_1": {
+     "reviewer_id": "human-review-3:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT_WITH_EDITS",
+     "edited_text": "In the cited WHO-2015 per-capita ranking as reported by BusinessTech, South Africa is described as the third-biggest drinking nation in Africa. That ranking places at least two African countries ahead of South Africa, refuting the claim that South Africans consume more alcohol per person than anywhere else in Africa. This conclusion is limited to the cited ranking's year, measure, and reporting.",
+     "rationale": "If 'third biggest drinking nation in Africa' refers to the same per-capita consumption measure as the claim, third place contradicts an Africa-wide first-place superlative. The replacement makes that shared-measure assumption explicit and retains the source's stated temporal and measurement scope.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "N/A. The review concerns a direct ranking comparison, not the interpretation of a cross-metric relation.",
+     "submission_ref": "tier1-e3 user submission 3"
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-4:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT_WITH_EDITS",
+     "edited_text": "In the cited WHO-2015 per-capita ranking as reported by BusinessTech, South Africa is described as the third-biggest drinking nation in Africa. That ranking places at least two African countries ahead of South Africa, refuting the claim that South Africans consume more alcohol per person than anywhere else in Africa. This conclusion is limited to the cited ranking's year, measure, and reporting.",
+     "rationale": "If 'third biggest drinking nation in Africa' refers to the same per-capita consumption measure as the claim, third place contradicts an Africa-wide first-place superlative. The replacement makes that shared-measure assumption explicit and retains the source's stated temporal and measurement scope.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "N/A. The review concerns a direct ranking comparison, not the interpretation of a cross-metric relation.",
+     "submission_ref": "tier1-e3 user submission 4"
+    }
+   },
+   "verification_scope": "Two user-attested independent human reviews; source-only rendered Top-8 evidence.",
+   "review_import_provenance": "Two separate user submissions; payload text was byte-identical (sha256 7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668), independence asserted by user."
   },
   {
    "record_kind": "E3_CANDIDATE_DRAFT",
@@ -854,12 +938,40 @@
    "subflags": [],
    "author": "assistant (M1.6.2e, CPU only)",
    "drafted_at": "2026-10-28T04:45:48Z",
-   "review_status": "PENDING_REVIEW",
-   "verified": false,
+   "review_status": "VERIFIED",
+   "verified": true,
    "reviews": {
-    "reviewer_1": null,
-    "reviewer_2": null
-   }
+    "reviewer_1": {
+     "reviewer_id": "human-review-3:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT_WITH_EDITS",
+     "edited_text": "In the cited WHO/2005-era per-capita ranking reported by BusinessTech, South Africa is listed below Namibia (31.3 litres), Eswatini (32.7 litres), and Tunisia (33.4 litres). Because these countries are in Africa and are listed above South Africa on the cited per-capita measure, the ranking refutes the claim that South Africans drink more per person than anywhere else in Africa. This conclusion is limited to the source's stated ranking, period, and measure.",
+     "rationale": "Namibia, Eswatini, and Tunisia are African countries, and the quoted comparison places them above South Africa. The per-capita litres basis matches the claim's per-person scope, provided the quoted ordering and figures represent the same source-defined measure. The edited correction preserves the source's temporal and measurement limitations.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "N/A. The review concerns a direct ranking comparison, not the interpretation of a cross-metric relation.",
+     "submission_ref": "tier1-e3 user submission 3"
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-4:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT_WITH_EDITS",
+     "edited_text": "In the cited WHO/2005-era per-capita ranking reported by BusinessTech, South Africa is listed below Namibia (31.3 litres), Eswatini (32.7 litres), and Tunisia (33.4 litres). Because these countries are in Africa and are listed above South Africa on the cited per-capita measure, the ranking refutes the claim that South Africans drink more per person than anywhere else in Africa. This conclusion is limited to the source's stated ranking, period, and measure.",
+     "rationale": "Namibia, Eswatini, and Tunisia are African countries, and the quoted comparison places them above South Africa. The per-capita litres basis matches the claim's per-person scope, provided the quoted ordering and figures represent the same source-defined measure. The edited correction preserves the source's temporal and measurement limitations.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "N/A. The review concerns a direct ranking comparison, not the interpretation of a cross-metric relation.",
+     "submission_ref": "tier1-e3 user submission 4"
+    }
+   },
+   "verification_scope": "Two user-attested independent human reviews; source-only rendered Top-8 evidence.",
+   "review_import_provenance": "Two separate user submissions; payload text was byte-identical (sha256 7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668), independence asserted by user."
   },
   {
    "record_kind": "E3_CANDIDATE_DRAFT",
@@ -1500,5 +1612,17 @@
   ],
   "verified_count": 5,
   "note": "No assistant decision was created; all five records retain qualified limitations."
+ },
+ "tier1_e3_review_import": {
+  "imported_at": "2026-10-28T05:44:13Z",
+  "ids": [
+   "train:21",
+   "train:31",
+   "train:47",
+   "train:48"
+  ],
+  "two_submission_text_sha256": "7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668",
+  "textual_identity": "byte-identical",
+  "independence_basis": "user attestation"
  }
 }

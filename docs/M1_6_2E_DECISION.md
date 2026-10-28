@@ -9,6 +9,12 @@ Two human-review submissions supplied by the user have now been imported for the
 
 All five are qualified `VERIFIED` corrections under the recorded two-reviewer bookkeeping. This does **not** meet Tier-1: the five records occupy five distinct mechanism classes, so none has the required two verified exemplars per class. The gate report is therefore `verified_now=5`, `covered_classes={}`, `TIER1_UNMET_FAIL_CLOSED`.
 
+## Tier-1 review completion update (2026-10-28)
+
+Two further user-attested human-review submissions were imported for `train:21`, `train:31`, `train:47`, and `train:48`. Their text is byte-identical (sha256 `7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668`), and that fact plus the user's independence attestation is retained in `docs/audits/M1_6_2E_TIER1_E3_REVIEW_SUBMISSIONS.json`; no personal reviewer identity was invented.
+
+The current machine-checked gate is now `verified_now=9`, `metric_mismatch=2`, `missed_direct_ranking=2`, `TIER1_MET_PENDING_LOCKED_EXECUTION`. Tier-1 review sufficiency is met. This is **not** authorization to execute: the locked protocol still requires separate human authorization for the one new-population R4 retrieval pass and the frozen GPU arms. No retrieval, inference, or test access occurred during import.
+
 ## Verdict: **MODIFY**
 
 The corrected gate framework, candidate correction drafts, two-reviewer review artifacts, and the
