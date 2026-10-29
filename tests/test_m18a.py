@@ -89,7 +89,8 @@ def test_outcome_bank_metrics_and_separation(tmp_path):
 
 
 def test_candidate_corrections_schema(tmp_path):
-    cands = generate_candidate_corrections(output_dir=tmp_path)
+    bank = build_outcome_bank(output_dir=tmp_path / 'ob')
+    cands = generate_candidate_corrections(outcome_bank_path=tmp_path / 'ob' / 'outcome_bank.json', output_dir=tmp_path / 'cands')
     assert len(cands) > 0
     for c in cands:
         assert 'sample_id' in c
@@ -102,7 +103,8 @@ def test_candidate_corrections_schema(tmp_path):
 
 
 def test_expanded_memory_invariants(tmp_path):
-    mem = build_expanded_memory(output_dir=tmp_path)
+    bank = build_outcome_bank(output_dir=tmp_path / 'ob')
+    mem = build_expanded_memory(outcome_bank_path=tmp_path / 'ob' / 'outcome_bank.json', output_dir=tmp_path / 'mem')
     assert mem['schema_version'] == 'm18a-expanded-memory-v1'
     assert mem['scope'] == 'FULL_TRAIN_HISTORICAL_ERROR_MEMORY'
     assert mem['human_review_status'] == 'UNCHANGED_NOT_HUMAN_VERIFIED'

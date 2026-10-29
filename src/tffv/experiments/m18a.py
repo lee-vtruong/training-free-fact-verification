@@ -468,7 +468,7 @@ def build_outcome_bank(manifest_path=None, cache_inventory_path=None, output_dir
 
     outcome_bank = {
         'schema_version': 'm18a-outcome-bank-v1',
-        'evaluated_claims_count': len(base_preds),
+        'evaluated_claims_count': len(correct_pool) + len(wrong_pool),
         'correct_count': len(correct_pool),
         'wrong_count': len(wrong_pool),
         'base_accuracy': metrics.get('accuracy', 0.0),
@@ -482,7 +482,7 @@ def build_outcome_bank(manifest_path=None, cache_inventory_path=None, output_dir
     out = Path(output_dir).resolve()
     save_json(out / 'outcome_bank.json', outcome_bank)
     save_json(out / 'summary.json', {
-        'evaluated_claims': len(base_preds),
+        'evaluated_claims': len(correct_pool) + len(wrong_pool),
         'correct': len(correct_pool),
         'wrong': len(wrong_pool),
         'accuracy': metrics.get('accuracy', 0.0),
@@ -509,6 +509,8 @@ def generate_candidate_corrections(outcome_bank_path=None, output_dir='outputs/m
     candidates = []
     for r in ob['wrong_records']:
         sid = r['sample_id']
+        if r.get('base_verdict') not in VERDICTS:
+            continue
         if sid in m17_validated:
             # Reuse M1.7 validated correction
             ex = m17_validated[sid]
