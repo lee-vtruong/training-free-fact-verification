@@ -1566,3 +1566,4 @@
   2. Cache Eviction Between Stages: Added explicit `torch.cuda.empty_cache()` between dense search (R2/R3) and cross-encoder reranking (R4) in `OptimizedRetrievalRunner.retrieve_claim()`.
   3. Allocator Configuration: Configured `export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in server runbook to enable virtual memory segment expansion and eliminate allocator fragmentation.
   4. Verified Unit Tests: All 15 tests pass across `test_m18a.py`, `test_m18b_equivalence.py`, and `test_m18b1_integrity.py` in 1.73s.
+  5. Handled Stale Claim Directory Invariant: `audit_subset.py` and `prepare_store_candidates.py` enforce `mkdir(..., exist_ok=False)`. Added automatic candidate reuse and stale directory cleanup in `prepare_claim_input_and_candidates` to prevent `FileExistsError` on restarts.

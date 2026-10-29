@@ -100,8 +100,24 @@ def prepare_claim_input_and_candidates(
     claim_work_dir: Path,
 ) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
     """Execute acquire, audit, and candidate preparation for a single train claim."""
-    ordinal = int(sid.split(":")[1])
+    cand_out = claim_work_dir / "candidates"
+    cand_manifest_file = cand_out / "candidate_manifest.json"
+    if cand_manifest_file.is_file():
+        try:
+            _, _, loaded = load_candidates(cand_manifest_file)
+            if loaded:
+                claim_meta, documents, _, _ = loaded[0]
+                return claim_meta, documents
+        except Exception:
+            pass
+
+    # Clean partial/stale directories to satisfy exist_ok=False invariant in audit & prepare_candidates
+    if claim_work_dir.exists():
+        import shutil
+        shutil.rmtree(claim_work_dir, ignore_errors=True)
     claim_work_dir.mkdir(parents=True, exist_ok=True)
+
+    ordinal = int(sid.split(":")[1])
 
     # 1. Acquire
     acq_out = claim_work_dir / "acquire"
@@ -136,7 +152,6 @@ def prepare_claim_input_and_candidates(
     )
 
     # 4. Candidate preparation
-    cand_out = claim_work_dir / "candidates"
     cand_manifest = prepare_candidates(
         aud_manifest,
         inp_dir / "claims_manifest.json",
