@@ -316,22 +316,30 @@ def scan_cache_inventory(output_dir='outputs/m18a-cache-inventory-v1'):
                             cond = row.get('condition')
                             if sid and (cond in ('base', 'P0', 'P1', 'A', 'D0', 'M1') or 'predicted_verdict' in row):
                                 if sid not in base_cache:
-                                    base_cache[sid] = {
-                                        'source_file': str(f.resolve()),
-                                        'predicted_verdict': row['predicted_verdict'],
-                                        'raw_generation': row.get('raw_generation') or row.get('raw_text', '')
-                                    }
+                                    pred = row.get('predicted_verdict')
+                                    if not pred or pred not in VERDICTS:
+                                        pred = normalize_verdict(row.get('raw_generation') or row.get('raw_text', ''))
+                                    if pred and pred in VERDICTS:
+                                        base_cache[sid] = {
+                                            'source_file': str(f.resolve()),
+                                            'predicted_verdict': pred,
+                                            'raw_generation': row.get('raw_generation') or row.get('raw_text', '')
+                                        }
                 elif f.suffix == '.json':
                     d = json.loads(f.read_text(encoding='utf-8'))
                     if isinstance(d, dict) and ('A' in d or 'base' in d):
                         arm = 'A' if 'A' in d else 'base'
                         sid = d[arm].get('sample_id') or f.stem.replace('-', ':')
                         if sid not in base_cache:
-                            base_cache[sid] = {
-                                'source_file': str(f.resolve()),
-                                'predicted_verdict': d[arm]['predicted_verdict'],
-                                'raw_generation': d[arm].get('raw_generation', '')
-                            }
+                            pred = d[arm].get('predicted_verdict')
+                            if not pred or pred not in VERDICTS:
+                                pred = normalize_verdict(d[arm].get('raw_generation', ''))
+                            if pred and pred in VERDICTS:
+                                base_cache[sid] = {
+                                    'source_file': str(f.resolve()),
+                                    'predicted_verdict': pred,
+                                    'raw_generation': d[arm].get('raw_generation', '')
+                                }
             except Exception:
                 pass
 
@@ -410,14 +418,20 @@ def build_outcome_bank(manifest_path=None, cache_inventory_path=None, output_dir
                                 sid = r.get('sample_id')
                                 if sid and sid in gold_map and sid not in base_preds:
                                     pred = r.get('predicted_verdict')
-                                    if pred:
+                                    if not pred or pred not in VERDICTS:
+                                        pred = normalize_verdict(r.get('raw_generation') or r.get('raw_text', ''))
+                                    if pred and pred in VERDICTS:
                                         base_preds[sid] = {'predicted_verdict': pred, 'raw_generation': r.get('raw_generation') or r.get('raw_text', '')}
                     elif f.suffix == '.json' and f.name != 'condition_manifest.json':
                         d = json.loads(f.read_text(encoding='utf-8'))
                         if isinstance(d, dict) and 'A' in d:
                             sid = d['A']['sample_id']
                             if sid not in base_preds:
-                                base_preds[sid] = {'predicted_verdict': d['A']['predicted_verdict'], 'raw_generation': d['A'].get('raw_generation', '')}
+                                pred = d['A'].get('predicted_verdict')
+                                if not pred or pred not in VERDICTS:
+                                    pred = normalize_verdict(d['A'].get('raw_generation', ''))
+                                if pred and pred in VERDICTS:
+                                    base_preds[sid] = {'predicted_verdict': pred, 'raw_generation': d['A'].get('raw_generation', '')}
                 except Exception:
                     pass
 
@@ -428,6 +442,8 @@ def build_outcome_bank(manifest_path=None, cache_inventory_path=None, output_dir
 
     for sid in sorted(base_preds.keys(), key=lambda s: int(s.split(':')[1])):
         pred = base_preds[sid]['predicted_verdict']
+        if pred not in VERDICTS:
+            continue
         gold = gold_map[sid]
         gold_list.append(gold)
         pred_list.append(pred)
