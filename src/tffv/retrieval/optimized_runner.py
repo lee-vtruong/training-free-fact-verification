@@ -36,7 +36,7 @@ class OptimizedRetrievalRunner:
         self,
         config: Dict[str, Any],
         synthetic: bool = False,
-        reranker_batch_size: int = 64,
+        reranker_batch_size: int = 16,
         index_cache_dir: Optional[str] = None,
     ):
         self.config = dict(config)
@@ -170,6 +170,14 @@ class OptimizedRetrievalRunner:
         with self.profiler.measure("rrf_fusion"):
             fusion_depth = self.config.get("fusion_depth", self.config.get("candidate_depth", 200))
             fused_hits = rrf({"bm25": b_hits, "dense": d_hits}, fusion_depth, self.config.get("rrf_constant", 60))
+
+        # Clear dense activations to avoid VRAM fragmentation before cross-encoder pass
+        if self.device == "cuda":
+            try:
+                import torch
+                torch.cuda.empty_cache()
+            except Exception:
+                pass
 
         # 6. R4 Cross-Encoder Reranking
         with self.profiler.measure("cross_encoder_reranking"):

@@ -41,7 +41,7 @@
   },
   "part_b_uncached_throughput": {
     "count": 25,
-    "batch_sizes": [64, 128],
+    "batch_sizes": [16, 32],
     "selection_policy": "deterministic_uniform_stride_across_uncached_train",
     "claims": [
       {"sample_id": "train:360", "ordinal": 360},

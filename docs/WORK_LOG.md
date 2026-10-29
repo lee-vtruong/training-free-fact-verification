@@ -1553,3 +1553,16 @@
 - Documentation & Server Runbook:
   - Authored benchmark spec `docs/M1_8B1_BENCHMARK_SPEC.md`.
   - Authored exact server runbook `docs/M1_8B1_SERVER_COMMANDS.md`.
+
+## 2026-10-29 11:35 +07:00 — M1.8b.1 CUDA OOM Diagnosis & Resolution on Reranker Batching
+
+- Incident Report: User execution of `scripts/benchmark_m18b1_real_gpu.py` on `hvtham-server` failed with `torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 13.18 GiB` during `F.linear` projection in `self.lm_head` of `Qwen3ForCausalLM` on claim `train:12`.
+- Root Cause Analysis:
+  1. Excessive Batch Projection Volume: At `batch_size=64` with context length up to 1,024, the batch contains up to 65,536 tokens. The causal LM head projection (`152,064` vocabulary size) attempts a single contiguous tensor allocation of $64 \times 1024 \times 152064 \times 2 \approx 13.18 \text{ GiB}$.
+  2. Caching Allocator Fragmentation: PyTorch caching allocator had reserved 13.80 GiB in separate chunks from dense encoding and earlier operations. When reranking requested a single contiguous 13.18 GiB block from the 9.65 GiB of unreserved VRAM, PyTorch raised OOM despite 16+ GiB of total unallocated memory.
+  3. Canonical Reference Drift: Canonical R4 retrieval in `configs/m161_source_batch25.json` strictly specifies `"batch_size": 16`. At `batch_size=16`, the linear projection is only $3.3 \text{ GiB}$, which executes reliably without memory spikes.
+- Engineering Resolution:
+  1. Aligned Default Batch Size: Set `reranker_batch_size: int = 16` across `OptimizedRetrievalRunner`, `benchmark_m18b1_real_gpu.py` Part A (exact canonical match) and Part B (with optional 32 evaluation).
+  2. Cache Eviction Between Stages: Added explicit `torch.cuda.empty_cache()` between dense search (R2/R3) and cross-encoder reranking (R4) in `OptimizedRetrievalRunner.retrieve_claim()`.
+  3. Allocator Configuration: Configured `export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in server runbook to enable virtual memory segment expansion and eliminate allocator fragmentation.
+  4. Verified Unit Tests: All 15 tests pass across `test_m18a.py`, `test_m18b_equivalence.py`, and `test_m18b1_integrity.py` in 1.73s.

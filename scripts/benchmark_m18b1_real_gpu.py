@@ -294,7 +294,7 @@ def run_benchmark_m18b1(
         part_a_runner = OptimizedRetrievalRunner(
             config=retrieval_cfg,
             synthetic=synthetic,
-            reranker_batch_size=64,
+            reranker_batch_size=16,
             index_cache_dir=str(out / "part_a_index_cache"),
         )
 
@@ -358,20 +358,20 @@ def run_benchmark_m18b1(
         part_b_dir = out / "part_b_throughput"
         part_b_dir.mkdir(parents=True, exist_ok=True)
 
-        # 1. Benchmark batch_size=64
-        print("\n--- Sub-task B1: Benchmarking batch_size=64 ---")
-        runner_bs64 = OptimizedRetrievalRunner(
+        # 1. Benchmark batch_size=16 (Canonical Baseline)
+        print("\n--- Sub-task B1: Benchmarking batch_size=16 (Canonical Baseline) ---")
+        runner_bs16 = OptimizedRetrievalRunner(
             config=retrieval_cfg,
             synthetic=synthetic,
-            reranker_batch_size=64,
+            reranker_batch_size=16,
             index_cache_dir=str(out / "part_b_index_cache"),
         )
-        bs64_log_file = part_b_dir / "bs64_profiling.jsonl"
+        bs16_log_file = part_b_dir / "bs16_profiling.jsonl"
 
         try:
             for idx, item in enumerate(part_b_claims, 1):
                 sid = item["sample_id"]
-                claim_work_dir = part_b_dir / "bs64" / sid.replace(":", "-")
+                claim_work_dir = part_b_dir / "bs16" / sid.replace(":", "-")
 
                 claim_meta, documents = prepare_claim_input_and_candidates(
                     sid=sid,
@@ -380,52 +380,52 @@ def run_benchmark_m18b1(
                     claim_work_dir=claim_work_dir,
                 )
 
-                rec, prof = runner_bs64.retrieve_claim(
+                rec, prof = runner_bs16.retrieve_claim(
                     claim=claim_meta,
                     documents=documents,
                     output_dir=claim_work_dir / "retrieval",
                 )
-                prof["batch_size"] = 64
+                prof["batch_size"] = 16
                 part_b_bs64_profiling.append(prof)
 
-                with bs64_log_file.open("a", encoding="utf-8") as f:
+                with bs16_log_file.open("a", encoding="utf-8") as f:
                     f.write(canonical(prof) + "\n")
 
                 print(
-                    f"[{idx}/{len(part_b_claims)}] BS64 {sid}: total={prof['wall_time_seconds']:.2f}s "
+                    f"[{idx}/{len(part_b_claims)}] BS16 {sid}: total={prof['wall_time_seconds']:.2f}s "
                     f"(cold={prof['is_cold']}, rerank={prof['cross_encoder_reranking_seconds']:.2f}s, "
                     f"passages={prof['passages_count']})",
                     flush=True,
                 )
         finally:
-            runner_bs64.close()
+            runner_bs16.close()
 
-        # 2. Benchmark batch_size=128 (if requested and VRAM is safe)
-        if 128 in batch_sizes:
-            print("\n--- Sub-task B2: Evaluating batch_size=128 Memory Safety & Scaling ---")
-            # Verify peak VRAM from bs64
+        # 2. Benchmark batch_size=32 (if requested and VRAM is safe)
+        if 32 in batch_sizes:
+            print("\n--- Sub-task B2: Evaluating batch_size=32 Memory Safety & Scaling ---")
+            # Verify peak VRAM from bs16
             peak_vram_alloc = max([p.get("peak_vram_allocated_bytes") or 0 for p in part_b_bs64_profiling], default=0)
             sys_vram = part_b_bs64_profiling[0].get("total_system_vram_bytes") or (32 * 1024**3)
 
             is_safe = (peak_vram_alloc < 0.75 * sys_vram) or synthetic
             if not is_safe:
-                print(f"Skipping batch_size=128: peak VRAM ({peak_vram_alloc / 1024**3:.2f} GiB) exceeds 75% system VRAM.")
+                print(f"Skipping batch_size=32: peak VRAM ({peak_vram_alloc / 1024**3:.2f} GiB) exceeds 75% system VRAM.")
             else:
-                print(f"VRAM safe: Peak BS64 allocated {peak_vram_alloc / 1024**3:.2f} GiB on {sys_vram / 1024**3:.2f} GiB system.")
-                print("Running warm throughput comparison with batch_size=128 on representative subset (10 claims)...")
-                bs128_subset = part_b_claims[:10]
-                runner_bs128 = OptimizedRetrievalRunner(
+                print(f"VRAM safe: Peak BS16 allocated {peak_vram_alloc / 1024**3:.2f} GiB on {sys_vram / 1024**3:.2f} GiB system.")
+                print("Running warm throughput comparison with batch_size=32 on representative subset (10 claims)...")
+                bs32_subset = part_b_claims[:10]
+                runner_bs32 = OptimizedRetrievalRunner(
                     config=retrieval_cfg,
                     synthetic=synthetic,
-                    reranker_batch_size=128,
+                    reranker_batch_size=32,
                     index_cache_dir=str(out / "part_b_index_cache"),
                 )
-                bs128_log_file = part_b_dir / "bs128_profiling.jsonl"
+                bs32_log_file = part_b_dir / "bs32_profiling.jsonl"
 
                 try:
-                    for idx, item in enumerate(bs128_subset, 1):
+                    for idx, item in enumerate(bs32_subset, 1):
                         sid = item["sample_id"]
-                        claim_work_dir = part_b_dir / "bs128" / sid.replace(":", "-")
+                        claim_work_dir = part_b_dir / "bs32" / sid.replace(":", "-")
 
                         claim_meta, documents = prepare_claim_input_and_candidates(
                             sid=sid,
@@ -434,24 +434,24 @@ def run_benchmark_m18b1(
                             claim_work_dir=claim_work_dir,
                         )
 
-                        rec, prof = runner_bs128.retrieve_claim(
+                        rec, prof = runner_bs32.retrieve_claim(
                             claim=claim_meta,
                             documents=documents,
                             output_dir=claim_work_dir / "retrieval",
                         )
-                        prof["batch_size"] = 128
+                        prof["batch_size"] = 32
                         part_b_bs128_profiling.append(prof)
 
-                        with bs128_log_file.open("a", encoding="utf-8") as f:
+                        with bs32_log_file.open("a", encoding="utf-8") as f:
                             f.write(canonical(prof) + "\n")
 
                         print(
-                            f"[{idx}/{len(bs128_subset)}] BS128 {sid}: total={prof['wall_time_seconds']:.2f}s "
+                            f"[{idx}/{len(bs32_subset)}] BS32 {sid}: total={prof['wall_time_seconds']:.2f}s "
                             f"(cold={prof['is_cold']}, rerank={prof['cross_encoder_reranking_seconds']:.2f}s)",
                             flush=True,
                         )
                 finally:
-                    runner_bs128.close()
+                    runner_bs32.close()
 
     # =========================================================================
     # PART D: Statistical Aggregation & Decision Report Generation
@@ -544,6 +544,17 @@ def run_benchmark_m18b1(
             "results": part_a_results,
         },
         "performance_profile": {
+            "batch_size_16": {
+                "cold_latency_seconds": cold_time,
+                "warm_mean_seconds": mean_warm,
+                "warm_p50_seconds": p50_warm,
+                "warm_p95_seconds": p95_warm,
+                "throughput_claims_per_hour": throughput_cph,
+                "substages_mean_seconds": substage_means,
+                "peak_vram_allocated_bytes": peak_vram_alloc,
+                "peak_vram_reserved_bytes": peak_vram_res,
+                "total_system_vram_bytes": sys_vram,
+            },
             "batch_size_64": {
                 "cold_latency_seconds": cold_time,
                 "warm_mean_seconds": mean_warm,
@@ -554,6 +565,10 @@ def run_benchmark_m18b1(
                 "peak_vram_allocated_bytes": peak_vram_alloc,
                 "peak_vram_reserved_bytes": peak_vram_res,
                 "total_system_vram_bytes": sys_vram,
+            },
+            "batch_size_32": {
+                "evaluated": bool(part_b_bs128_profiling),
+                "warm_mean_seconds": mean_warm_bs128,
             },
             "batch_size_128": {
                 "evaluated": bool(part_b_bs128_profiling),
@@ -702,7 +717,7 @@ def main():
     parser.add_argument("--config", default="configs/m161_source_batch25.json", help="Retrieval config path")
     parser.add_argument("--acq-plan", default="configs/m161_acquisition_plan.json", help="Acquisition plan path")
     parser.add_argument("--output-dir", default="outputs/m18b1-real-benchmark", help="Benchmark output directory")
-    parser.add_argument("--batch-sizes", default="64,128", help="Comma-separated batch sizes to benchmark")
+    parser.add_argument("--batch-sizes", default="16,32", help="Comma-separated batch sizes to benchmark")
     parser.add_argument("--score-tolerance", type=float, default=1e-4, help="Max score diff tolerance")
     parser.add_argument("--synthetic", action="store_true", help="Run with CPU synthetic test doubles")
     parser.add_argument("--skip-part-a", action="store_true", help="Skip Part A equivalence check")

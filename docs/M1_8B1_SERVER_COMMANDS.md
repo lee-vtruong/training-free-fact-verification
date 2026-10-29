@@ -3,7 +3,7 @@
 **Branch:** `codex/m16-heal-design-integrity`  
 **Host:** `hvtham-server`  
 **Working Directory:** `/home/stackops/whale/training-free-fact-verification`  
-**Python Environment:** `/home/stackops/whale/venvs/errorflow/bin/python`
+**Python Environment:** `.venv/bin/python` (in repo root)
 
 ---
 
@@ -37,8 +37,11 @@ git fetch origin codex/m16-heal-design-integrity
 git checkout codex/m16-heal-design-integrity
 git pull --ff-only origin codex/m16-heal-design-integrity
 
+# Activate project environment
+source .venv/bin/activate
+
 # Run unit tests in the server environment (CPU-only, ~1 second)
-/home/stackops/whale/venvs/errorflow/bin/python -m pytest tests/test_m18b1_integrity.py tests/test_m18b_equivalence.py -v
+python -m pytest tests/test_m18b1_integrity.py tests/test_m18b_equivalence.py -v
 ```
 
 ---
@@ -49,15 +52,18 @@ Execute the complete benchmark suite on the RTX 5090 GPU:
 
 ```bash
 cd /home/stackops/whale/training-free-fact-verification
+source .venv/bin/activate
 mkdir -p logs outputs/m18b1-real-benchmark
 
 export PYTHONPATH=src
-nohup /home/stackops/whale/venvs/errorflow/bin/python scripts/benchmark_m18b1_real_gpu.py \
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+nohup python scripts/benchmark_m18b1_real_gpu.py \
     --manifest configs/m18b1_benchmark_manifest.json \
     --config configs/m161_source_batch25.json \
     --acq-plan configs/m161_acquisition_plan.json \
     --output-dir outputs/m18b1-real-benchmark \
-    --batch-sizes 64,128 \
+    --batch-sizes 16,32 \
     --score-tolerance 1e-4 \
     > logs/m18b1_real_benchmark.log 2>&1 &
 

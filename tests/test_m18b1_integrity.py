@@ -36,7 +36,7 @@ def test_manifest_schema_and_separation():
     part_b = manifest["part_b_uncached_throughput"]
     assert part_b["count"] == 25
     assert len(part_b["claims"]) == 25
-    assert 64 in part_b["batch_sizes"]
+    assert 16 in part_b["batch_sizes"]
 
     # Mutual exclusion between Part A and Part B
     sids_a = {c["sample_id"] for c in part_a["claims"]}
