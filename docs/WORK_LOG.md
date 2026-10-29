@@ -1472,3 +1472,39 @@
   2. Noise Distraction: Arm C (-12.50% vs Arm A) demonstrates that presenting the erroneous prior verdict distracts the frozen verifier even when followed by corrective reasoning, confirming negative transfer from explicit erroneous exemplars.
   3. LLM-Validated Memory Utility: LLM-validated corrections provide a viable, automated surrogate for historical grounding without violating human verification separation or requiring parameter updates.
 - Deliverables: `outputs/m17-eval-24dev/results.json`, `outputs/m17-eval-24dev/REPORT.md`, `outputs/m17-eval-24dev/batch.json`, `outputs/m17-eval-24dev/state.json`, and predictions. All synchronized locally and on `hvtham-server`.
+
+## 2026-10-29 08:30 +07:00 — M1.8a Full-Train Historical Memory Construction & Audit Architecture
+
+- Objective: Build Historical Error Memory across all 3,068 AVeriTeC Official Train claims to serve HEAL-B (Training-Free Error-Informed Fact Verification). Final evaluation is deferred to the 500 Official Dev claims, completely separated from memory construction.
+- Data & Integrity Audit:
+  - Audited all 3,068 train claims (`train.json`).
+  - Exactly 3,067 valid claims (non-empty text, standard 4-class ontology).
+  - Exactly 1 invalid claim: `train:1948` (empty string `""`, quarantined).
+  - Sealed M1.6 partitions preserved: 1,013 SOURCE, 541 DEVELOPMENT, 283 LEGACY_EXPLORATORY, 1,230 TEST_SEALED, 1 QUARANTINE_INVALID.
+  - Cross-Split Audit: Exactly 4 exact normalized text overlaps between Train and Dev (`train:1539` <-> `dev:458`, `train:1340` <-> `dev:194`, `train:1341` <-> `dev:216`, `train:1536` <-> `dev:463`), 3 fact-checking URL overlaps, 1 original claim URL overlap. All documented in immutable manifest `outputs/m18a-manifest-v1/train_manifest.json` and `docs/audits/M1_8A_TRAIN_INTEGRITY.md`.
+- Cache Inventory:
+  - Scanned existing verified artifacts across server and local repositories.
+  - Existing R4 Top-8 evidence cached: 449 unique claims (`train:0` to `train:349`, plus dev50, batch25, m17_eval).
+  - Existing Base zero-shot predictions cached: 414 unique claims (Base Accuracy: 50.72%, 210 CORRECT, 204 WRONG).
+  - Claims requiring fresh R4 retrieval: 2,618 claims (~240 GPU hours).
+- Historical Outcome Bank:
+  - Base zero-shot verifier (`Qwen/Qwen3-8B`, BF16, greedy decoding) partitioned into `CORRECT` and `WRONG` pools.
+  - Accuracy: 50.72%, Macro-F1: 0.3533 on evaluated claims.
+  - Zero intersection between CORRECT and WRONG pools.
+- Candidate Corrections & Stronger LLM Judge:
+  - Implemented `generate-candidates` generating grounded draft corrections for WRONG pool claims.
+  - Stronger frozen LLM Judge runner (`run-judge`) leveraging `Qwen/Qwen3-14B-AWQ` over HTTP daemon (port 17171).
+  - Two-stage evaluation: Stage 1 gold-blind evidence assessment, Stage 2 gold-aware correction validation.
+  - Deterministic exact-quote verification: candidate rationale must cite exact substrings from Top-8 rendered passages.
+  - Status invariant: accepted records receive `LLM_VALIDATED` (strictly never `HUMAN_VERIFIED`).
+- Expanded Memory Bank:
+  - Output: `outputs/m18a-fulltrain-memory-v1/memory.json`.
+  - Locked HEAL-B configuration: k=1, selection rule `deterministic_within_class_rotation`, prompt template `m162e_standard_prompt`, token budget overhead max 768, 7 arms configured (`D0`, `D1`, `N0`, `A`, `B`, `C`, `D`).
+  - Zero Dev claims in memory records.
+- Official Dev Readiness:
+  - Preflight certified at `outputs/m18a-dev-readiness-v1/dev_readiness.json`.
+  - Status: `READY_FOR_SEALED_EVALUATION`. Official dev gold remains completely unread during memory construction.
+- Automated Testing & Server Runbooks:
+  - Implemented CPU-only unit test suite `tests/test_m18a.py` (6/6 tests passing in 0.40s).
+  - Created server batch runner `scripts/run_m18a_batch.sh`.
+  - Authored comprehensive server runbook `docs/M1_8A_SERVER_COMMANDS.md` and runtime plan `docs/M1_8A_RESOURCE_AND_RUNTIME_PLAN.md`.
