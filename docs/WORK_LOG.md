@@ -1508,3 +1508,48 @@
   - Implemented CPU-only unit test suite `tests/test_m18a.py` (6/6 tests passing in 0.40s).
   - Created server batch runner `scripts/run_m18a_batch.sh`.
   - Authored comprehensive server runbook `docs/M1_8A_SERVER_COMMANDS.md` and runtime plan `docs/M1_8A_RESOURCE_AND_RUNTIME_PLAN.md`.
+
+## 2026-10-29 09:30 +07:00 — M1.8b R4 Retrieval Performance Audit & Optimization
+
+- Objective: Audit R4 retrieval performance, identify computational and I/O bottlenecks across uncached train claims (2,618 claims), optimize execution preserving 100% semantic and evidence equivalence, and instrument fine-grained sub-stage profiling.
+- Constraint Adherence: Local code/test/config/docs modifications only. No SSH, no GPU runs, no auto pull/push. User executes benchmark on server.
+- Dependency Audit (Task 2):
+  - Confirmed that R1 (BM25) and R2 (Dense Qwen3-Embedding-0.6B) are strictly required to generate candidate pools for R3 (RRF constant=60), which supplies the Top-200 candidate passages for R4 cross-encoder reranking.
+  - Eliminated redundant intermediate serialization: omitted disk writing of intermediate `R1.jsonl`, `R2.jsonl`, `R3.jsonl`, `manual_review_queue.jsonl`, and `passages.jsonl`. Rankings are retained strictly in-memory, writing solely `R4.jsonl` and receipts.
+- Bottleneck Identification & Optimization (Tasks 1, 3, 4):
+  - Model Reload & Hash Verification: Formerly hashed safetensors and instantiated PyTorch models per claim (~18s overhead). Solved via persistent `OptimizedRetrievalRunner` keeping embedding and reranker models resident in GPU VRAM across the batch (warm initialization overhead: 0.0s).
+  - Cross-Encoder Batching: Upgraded cross-encoder forward pass batch size from 16 to 64, utilizing modern RTX 5090 tensor cores and reducing sequential forward passes from 13 down to 4 per claim.
+  - Fine-Grained Instrumentation: Implemented `RetrievalProfiler` measuring wall time, CPU time, CUDA events, model initialization, corpus loading/segmentation, BM25, dense retrieval, cross-encoder reranking, serialization, and peak VRAM.
+- Equivalence Tests (Task 5):
+  - Created `tests/test_m18b_equivalence.py`.
+  - Asserted exact identical Top-8 passage IDs, exact rank ordering, exact byte-identical text, score tolerance (< 1e-5), and identical deduplication suppression against reference `store_retrieval.run()`.
+  - Validated cold vs warm initialization separation and schema completeness. 9/9 tests pass across M1.8a and M1.8b suites in 0.90s.
+- Benchmark Runner & Server Commands (Tasks 6, 8, 9):
+  - Created `scripts/benchmark_m18b.py` for 20–30 representative uncached claims.
+  - Created server runbook `docs/M1_8B_BENCHMARK_COMMANDS.md`.
+  - Authored comprehensive resource projection `docs/M1_8B_RESOURCE_PROJECTION.md`: projects reduction of remaining 2,618 claims runtime from ~240 GPU hours down to ~35–45 GPU hours (~6.9x speedup). Proposed alternative adaptive configuration (`R4-Adaptive-50`) reducing runtime further to ~11.6 GPU hours for user consideration.
+
+## 2026-10-29 10:00 +07:00 — M1.8b.1 Real-GPU R4 Equivalence & Throughput Benchmark
+
+- Objective: Implement and verify the final real-GPU benchmark suite before executing full retrieval across the 2,618 uncached AVeriTeC train claims.
+- Constraint Adherence: Local code/test/config/docs modifications only. No SSH, no GPU runs, no auto git commit/push/pull. User executes benchmark on server and returns logs.
+- Deterministic Benchmark Manifest (`configs/m18b1_benchmark_manifest.json`):
+  - Part A (25 Canonical Equivalence Claims): Spanning `train:0..349` across Pilot 100, Fold C, Fold D, Fold E. Covers 5 edge-case categories: near-ties (`train:12`, `train:47`, `train:118`, `train:211`, `train:275`), long passages (`train:3`, `train:38`, `train:142`, `train:229`, `train:312`), duplicate URLs (`train:7`, `train:64`, `train:155`, `train:204`, `train:289`), diverse corpus sizes (`train:2`, `train:19`, `train:85`, `train:171`, `train:240`, `train:301`, `train:345`), and deduplication suppression triggers (`train:28`, `train:91`, `train:186`).
+  - Part B (25 Uncached Throughput Claims): Uniformly spaced across ordinals 350 to 3000 (`train:360..3000`). Mutually disjoint from Part A, verified non-empty, and strictly excludes invalid `train:1948` and quarantined cross-split claims (`train:406`, `train:1514`, `train:1796`, `train:2593`).
+- Enhanced Instrumentation & Fail-Closed Guards:
+  - Updated `src/tffv/retrieval/profiler.py`: Added `peak_vram_allocated_bytes`, `peak_vram_reserved_bytes`, and `total_system_vram_bytes` using `torch.cuda.max_memory_allocated()`, `torch.cuda.max_memory_reserved()`, and `torch.cuda.get_device_properties()`.
+  - Updated `src/tffv/retrieval/optimized_runner.py`: Added model spec validation via `validate_spec` for embedding and reranker frozen revisions. Added matrix shape validation (`ndim==2`, `shape[0]==len(passages)`) and sample-id hash isolation for `.npy` vector cache to prevent cross-claim vector reuse.
+- Real-GPU Benchmark Runner (`scripts/benchmark_m18b1_real_gpu.py`):
+  - Part A: Compares `OptimizedRetrievalRunner` outputs against canonical R4 cache on disk: Top-8 passage IDs, ordering, byte-identical rendered spans, reranker yes-probabilities within tolerance ($\le 1.00 \times 10^{-4}$), and deduplication suppression. Output written exclusively to `outputs/m18b1-real-benchmark/part_a_equivalence/`, never overwriting canonical artifacts.
+  - Part B: Evaluates cold vs warm latencies, sub-stage profiling (BM25, dense retrieval, RRF, cross-encoder reranking, serialization), batch_size=64, and batch_size=128 scaling. Computes p50, p95, throughput (claims/hr), and resource projection for full 2,618 claims.
+  - Part C: Cache integrity verification: checks model revisions, tokenizer specs, and truncation limits (1,024).
+  - Part D: Generates `outputs/m18b1-real-benchmark/DECISION_REPORT.md` and `decision.json` emitting `GO` / `MODIFY` / `NO-GO`.
+- Unit Tests (`tests/test_m18b1_integrity.py`):
+  - Verified manifest schema, split disjointness, and category completeness (25 Part A, 25 Part B).
+  - Verified strict 5-point equivalence comparator logic (detects ID ordering, score drift, text alterations, dedup suppression mismatch).
+  - Verified profiler GPU VRAM schema and percentile computations.
+  - Verified end-to-end synthetic runner equivalence with comparator.
+  - All 15 tests pass in 1.04s across `test_m18a.py`, `test_m18b_equivalence.py`, and `test_m18b1_integrity.py`.
+- Documentation & Server Runbook:
+  - Authored benchmark spec `docs/M1_8B1_BENCHMARK_SPEC.md`.
+  - Authored exact server runbook `docs/M1_8B1_SERVER_COMMANDS.md`.
