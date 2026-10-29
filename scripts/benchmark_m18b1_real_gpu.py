@@ -400,10 +400,32 @@ def run_benchmark_m18b1(
             index_cache_dir=str(out / "part_b_index_cache"),
         )
         bs16_log_file = part_b_dir / "bs16_profiling.jsonl"
+        existing_bs16 = {}
+        if bs16_log_file.is_file():
+            try:
+                for line in bs16_log_file.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line:
+                        p = json.loads(line)
+                        if "sample_id" in p:
+                            existing_bs16[p["sample_id"]] = p
+            except Exception:
+                pass
 
         try:
             for idx, item in enumerate(part_b_claims, 1):
                 sid = item["sample_id"]
+                if sid in existing_bs16:
+                    prof = existing_bs16[sid]
+                    part_b_bs64_profiling.append(prof)
+                    print(
+                        f"[{idx}/{len(part_b_claims)}] BS16 {sid} (cached profiling): total={prof['wall_time_seconds']:.2f}s "
+                        f"(cold={prof.get('is_cold')}, rerank={prof.get('cross_encoder_reranking_seconds', 0.0):.2f}s, "
+                        f"passages={prof.get('passages_count')})",
+                        flush=True,
+                    )
+                    continue
+
                 claim_work_dir = part_b_dir / "bs16" / sid.replace(":", "-")
 
                 claim_meta, documents = prepare_claim_input_and_candidates(
@@ -454,10 +476,31 @@ def run_benchmark_m18b1(
                     index_cache_dir=str(out / "part_b_index_cache"),
                 )
                 bs32_log_file = part_b_dir / "bs32_profiling.jsonl"
+                existing_bs32 = {}
+                if bs32_log_file.is_file():
+                    try:
+                        for line in bs32_log_file.read_text(encoding="utf-8").splitlines():
+                            line = line.strip()
+                            if line:
+                                p = json.loads(line)
+                                if "sample_id" in p:
+                                    existing_bs32[p["sample_id"]] = p
+                    except Exception:
+                        pass
 
                 try:
                     for idx, item in enumerate(bs32_subset, 1):
                         sid = item["sample_id"]
+                        if sid in existing_bs32:
+                            prof = existing_bs32[sid]
+                            part_b_bs128_profiling.append(prof)
+                            print(
+                                f"[{idx}/{len(bs32_subset)}] BS32 {sid} (cached profiling): total={prof['wall_time_seconds']:.2f}s "
+                                f"(cold={prof.get('is_cold')}, rerank={prof.get('cross_encoder_reranking_seconds', 0.0):.2f}s)",
+                                flush=True,
+                            )
+                            continue
+
                         claim_work_dir = part_b_dir / "bs32" / sid.replace(":", "-")
 
                         claim_meta, documents = prepare_claim_input_and_candidates(

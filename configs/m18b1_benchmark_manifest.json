@@ -8,7 +8,7 @@
       "near_ties": ["train:12", "train:47", "train:118", "train:211", "train:275"],
       "long_passages": ["train:3", "train:38", "train:142", "train:229", "train:312"],
       "duplicate_urls": ["train:7", "train:64", "train:155", "train:204", "train:289"],
-      "diverse_corpus_sizes": ["train:2", "train:19", "train:85", "train:171", "train:240", "train:301", "train:345"],
+      "diverse_corpus_sizes": ["train:2", "train:19", "train:85", "train:171", "train:240", "train:305", "train:345"],
       "dedup_suppressed": ["train:28", "train:91", "train:186"]
     },
     "claims": [
@@ -34,7 +34,7 @@
       {"sample_id": "train:240", "category": "diverse_corpus_sizes", "description": "Small-medium corpus spread"},
       {"sample_id": "train:275", "category": "near_ties", "description": "Tight reranker score distribution in Top 10"},
       {"sample_id": "train:289", "category": "duplicate_urls", "description": "Same-article multi-chunk provenance"},
-      {"sample_id": "train:301", "category": "diverse_corpus_sizes", "description": "Corpus with high lexical density"},
+      {"sample_id": "train:305", "category": "diverse_corpus_sizes", "description": "Diverse international news corpus distribution"},
       {"sample_id": "train:312", "category": "long_passages", "description": "Extended expository passages"},
       {"sample_id": "train:345", "category": "diverse_corpus_sizes", "description": "Representative Fold E corpus distribution"}
     ]

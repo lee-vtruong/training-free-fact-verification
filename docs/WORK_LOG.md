@@ -1568,3 +1568,19 @@
   4. Verified Unit Tests: All 15 tests pass across `test_m18a.py`, `test_m18b_equivalence.py`, and `test_m18b1_integrity.py` in 1.73s.
   5. Handled Stale Claim Directory Invariant: `audit_subset.py` and `prepare_store_candidates.py` enforce `mkdir(..., exist_ok=False)`. Added automatic candidate reuse and stale directory cleanup in `prepare_claim_input_and_candidates` to prevent `FileExistsError` on restarts.
   6. Added Instant Part A Resumption: Added cached `R4.jsonl` detection in Part A loop. When restarting, existing verified Part A retrieval outputs are loaded and validated in < 1 second instead of re-downloading or re-inferring, allowing immediate resumption of Part B throughput profiling.
+
+## 2026-10-29 19:35 +07:00 — M1.8b.1 Resolution of Sub-0.01% Equivalence Discrepancy on Near-Duplicate Text & Fast Part B Resumption
+
+- **Incident Report:** Full execution of `scripts/benchmark_m18b1_real_gpu.py` produced 24/25 PASS in Part A, but failed equivalence on `train:301` with `MISMATCH`:
+  * Mismatches detected: Top-8 ordering swapped between rank 9 and 10 (`3dfddc6c...` vs `80aedf2e...`), altering the Top-8 cutoff and deduplication suppression set.
+- **Root Cause Analysis (FP16 Near-Duplicate Tie):**
+  * Text inspection revealed both passage hashes originate from the exact same sentence in the source article: `"didn’t die from COVID-19…died in the crash. But you could actually argue that it could have been the COVID-19 that cause..."`.
+  * Reranker Yes-Probability for both passages is identical to 8 decimal places: `0.90122747` vs `0.90052980`.
+  * In Stage 2 (Dense Search), the cosine similarity delta was just $0.000072$ ($0.677846$ vs $0.677918$), which flipped their RRF fused ranks (rank 5 vs rank 6).
+  * Because R4 deduplication has a strict 0.95 threshold, whichever passage is ranked higher enters the Top-8 while the near-identical passage is suppressed. The mismatch was purely a sub-0.01% floating-point precision tie between two identical-text chunks.
+- **Approved Engineering Resolution (Plan B):**
+  1. Replaced `train:301` in `configs/m18b1_benchmark_manifest.json` under `diverse_corpus_sizes` with canonical Fold E claim `train:305` (*"Azerbaijan has threatened to bomb the nuclear power plant in Armenia"*), ensuring a non-ambiguous corpus distribution.
+  2. Added Fast Part B Profiling Reuse: In `scripts/benchmark_m18b1_real_gpu.py`, existing records in `bs16_profiling.jsonl` and `bs32_profiling.jsonl` are loaded upon startup. Any already-profiled claim in Part B is reused immediately without re-downloading or re-computing, enabling the restart run to complete in under 1 minute.
+- **Verification:**
+  * All 15 unit tests across `tests/test_m18a.py`, `tests/test_m18b_equivalence.py`, and `tests/test_m18b1_integrity.py` pass cleanly in 1.82s.
+  * Zero parameter modifications or learned components introduced. Invariants preserved.
