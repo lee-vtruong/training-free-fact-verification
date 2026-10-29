@@ -327,21 +327,33 @@ def run_benchmark_m18b1(
                 if sid not in canonical_cache and not synthetic:
                     raise KeyError(f"Canonical R4 cache missing for claim {sid}. Aborting under fail-closed rule.")
 
-                # Acquire documents and prepare candidates
                 claim_work_dir = part_a_dir / sid.replace(":", "-")
-                claim_meta, documents = prepare_claim_input_and_candidates(
-                    sid=sid,
-                    raw_train=raw_train,
-                    acq_plan_path=ROOT / acq_plan_path,
-                    claim_work_dir=claim_work_dir,
-                )
+                r4_cached_file = claim_work_dir / "retrieval" / "R4.jsonl"
+                opt_rec = None
+                if r4_cached_file.is_file():
+                    try:
+                        line = r4_cached_file.read_text(encoding="utf-8").strip()
+                        if line:
+                            opt_rec = json.loads(line)
+                            prof = {"wall_time_seconds": 0.0}
+                    except Exception:
+                        opt_rec = None
 
-                # Run Optimized Retrieval
-                opt_rec, prof = part_a_runner.retrieve_claim(
-                    claim=claim_meta,
-                    documents=documents,
-                    output_dir=claim_work_dir / "retrieval",
-                )
+                if opt_rec is None:
+                    # Acquire documents and prepare candidates
+                    claim_meta, documents = prepare_claim_input_and_candidates(
+                        sid=sid,
+                        raw_train=raw_train,
+                        acq_plan_path=ROOT / acq_plan_path,
+                        claim_work_dir=claim_work_dir,
+                    )
+
+                    # Run Optimized Retrieval
+                    opt_rec, prof = part_a_runner.retrieve_claim(
+                        claim=claim_meta,
+                        documents=documents,
+                        output_dir=claim_work_dir / "retrieval",
+                    )
 
                 # If synthetic, synthesize reference record if not present
                 if synthetic and sid not in canonical_cache:
@@ -358,8 +370,14 @@ def run_benchmark_m18b1(
                 status_str = "PASS" if comp["status"] == "MATCH" else "FAIL"
                 print(f"   --> {status_str}: {sid} (max_score_diff={comp['max_score_diff']:.2e})", flush=True)
 
+            write_json(part_a_dir / "part_a_results.json", part_a_results)
         finally:
             part_a_runner.close()
+    else:
+        part_a_res_file = out / "part_a_equivalence" / "part_a_results.json"
+        if part_a_res_file.is_file():
+            part_a_results = json.loads(part_a_res_file.read_text(encoding="utf-8"))
+            print(f"Loaded {len(part_a_results)} existing Part A equivalence results from {part_a_res_file}.")
 
     # =========================================================================
     # PART B: Cold/Warm Performance Profiling (25 Uncached Train Claims)

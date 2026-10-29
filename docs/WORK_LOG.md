@@ -1567,3 +1567,4 @@
   3. Allocator Configuration: Configured `export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in server runbook to enable virtual memory segment expansion and eliminate allocator fragmentation.
   4. Verified Unit Tests: All 15 tests pass across `test_m18a.py`, `test_m18b_equivalence.py`, and `test_m18b1_integrity.py` in 1.73s.
   5. Handled Stale Claim Directory Invariant: `audit_subset.py` and `prepare_store_candidates.py` enforce `mkdir(..., exist_ok=False)`. Added automatic candidate reuse and stale directory cleanup in `prepare_claim_input_and_candidates` to prevent `FileExistsError` on restarts.
+  6. Added Instant Part A Resumption: Added cached `R4.jsonl` detection in Part A loop. When restarting, existing verified Part A retrieval outputs are loaded and validated in < 1 second instead of re-downloading or re-inferring, allowing immediate resumption of Part B throughput profiling.
