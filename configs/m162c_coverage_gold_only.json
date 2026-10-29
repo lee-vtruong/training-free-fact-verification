@@ -1,0 +1,16 @@
+{
+  "schema_version": "m162c-coverage-v1",
+  "scope": "EXPLORATORY_CACHE_ONLY",
+  "arms": ["COV_PLACEBO_G3", "COV_NEI_G3", "COV_CONF_G3"],
+  "target_population": "canonical DEVELOPMENT50 with canonical R4 Top-8 evidence reuse",
+  "rerun_conditions": [],
+  "k": 3,
+  "order": ["pair_correct", "added", "pair_wrong"],
+  "added_context_excerpts": 1,
+  "added_selection_rule": "usable SOURCE Base-correct exemplar of the arm gold class, not sharing a leakage group with the pair or the target; highest evidence-item count, ties ascending sample_id; empty pool blocks the arm",
+  "placebo_rule": "added exemplar of the pair's own gold class, same selection rule, pair IDs excluded",
+  "history_displayed": false,
+  "generation": {"max_new_tokens": 512, "enable_thinking": false, "do_sample": false},
+  "baseline_predictions_reused": ["P2", "N0", "MIXED_GOLD_ONLY_K2"],
+  "validation": "fail closed on cache identity, prompt token IDs, group leakage, duplicates and incomplete Top-8 before model load"
+}

@@ -1,0 +1,610 @@
+{
+  "branch2_source_pool_gold_counts": {
+    "ineligible_claims_without_known_gold": 0,
+    "memory_eligible_claims": 973,
+    "memory_eligible_gold": {
+      "Conflicting Evidence/Cherrypicking": 71,
+      "Not Enough Evidence": 97,
+      "Refuted": 533,
+      "Supported": 272
+    },
+    "total_source_claims": 1013
+  },
+  "correction_status": {
+    "assistant_insufficient_error_ids": [
+      "train:12",
+      "train:14",
+      "train:17",
+      "train:18",
+      "train:1863",
+      "train:1873",
+      "train:1881",
+      "train:19",
+      "train:2",
+      "train:20",
+      "train:21",
+      "train:2224",
+      "train:24",
+      "train:2449",
+      "train:26",
+      "train:27",
+      "train:29",
+      "train:3",
+      "train:31",
+      "train:35",
+      "train:37",
+      "train:38",
+      "train:39",
+      "train:47",
+      "train:48",
+      "train:49",
+      "train:8",
+      "train:979"
+    ],
+    "errors_with_assistant_draft_text": [
+      "train:11",
+      "train:1824",
+      "train:25",
+      "train:6",
+      "train:978"
+    ],
+    "historical_errors": 33,
+    "note": "assistant drafts are never human verification; full suite of 42 correct controls also remains structurally audited only",
+    "pending_error_review_ids": [
+      "train:11",
+      "train:1824",
+      "train:25",
+      "train:6",
+      "train:978"
+    ],
+    "records_with_any_human_review": [],
+    "verified_rationales": []
+  },
+  "pilot_failure": {
+    "arm_accuracy": {
+      "MIXED_GOLD_ONLY_K2": 0.7,
+      "N0": 0.7,
+      "P2": 0.66
+    },
+    "composition_breakdown": {
+      "refuted_pair": {
+        "mixed_accuracy": 0.75,
+        "mixed_member_predictions_sample": [
+          "train:521",
+          "train:2298",
+          "train:1812",
+          "train:2473",
+          "train:1382",
+          "train:1517"
+        ],
+        "n0_accuracy": 0.75,
+        "targets": 24
+      },
+      "supported_pair": {
+        "mixed_accuracy": 0.6538461538461539,
+        "mixed_member_predictions_sample": [
+          "train:810",
+          "train:1062",
+          "train:780",
+          "train:368",
+          "train:1025",
+          "train:2185"
+        ],
+        "n0_accuracy": 0.6538461538461539,
+        "targets": 26
+      }
+    },
+    "confusion_matrices": {
+      "MIXED_GOLD_ONLY_K2": {
+        "Conflicting Evidence/Cherrypicking": {
+          "Conflicting Evidence/Cherrypicking": 0,
+          "Not Enough Evidence": 0,
+          "Refuted": 3,
+          "Supported": 1,
+          "Unparseable": 0
+        },
+        "Not Enough Evidence": {
+          "Conflicting Evidence/Cherrypicking": 0,
+          "Not Enough Evidence": 0,
+          "Refuted": 4,
+          "Supported": 2,
+          "Unparseable": 0
+        },
+        "Refuted": {
+          "Conflicting Evidence/Cherrypicking": 0,
+          "Not Enough Evidence": 0,
+          "Refuted": 31,
+          "Supported": 1,
+          "Unparseable": 0
+        },
+        "Supported": {
+          "Conflicting Evidence/Cherrypicking": 1,
+          "Not Enough Evidence": 0,
+          "Refuted": 3,
+          "Supported": 4,
+          "Unparseable": 0
+        }
+      },
+      "N0": {
+        "Conflicting Evidence/Cherrypicking": {
+          "Conflicting Evidence/Cherrypicking": 0,
+          "Not Enough Evidence": 0,
+          "Refuted": 2,
+          "Supported": 2,
+          "Unparseable": 0
+        },
+        "Not Enough Evidence": {
+          "Conflicting Evidence/Cherrypicking": 0,
+          "Not Enough Evidence": 0,
+          "Refuted": 3,
+          "Supported": 3,
+          "Unparseable": 0
+        },
+        "Refuted": {
+          "Conflicting Evidence/Cherrypicking": 0,
+          "Not Enough Evidence": 0,
+          "Refuted": 31,
+          "Supported": 1,
+          "Unparseable": 0
+        },
+        "Supported": {
+          "Conflicting Evidence/Cherrypicking": 1,
+          "Not Enough Evidence": 0,
+          "Refuted": 3,
+          "Supported": 4,
+          "Unparseable": 0
+        }
+      },
+      "P2": {
+        "Conflicting Evidence/Cherrypicking": {
+          "Conflicting Evidence/Cherrypicking": 0,
+          "Not Enough Evidence": 0,
+          "Refuted": 3,
+          "Supported": 1,
+          "Unparseable": 0
+        },
+        "Not Enough Evidence": {
+          "Conflicting Evidence/Cherrypicking": 1,
+          "Not Enough Evidence": 0,
+          "Refuted": 4,
+          "Supported": 1,
+          "Unparseable": 0
+        },
+        "Refuted": {
+          "Conflicting Evidence/Cherrypicking": 0,
+          "Not Enough Evidence": 0,
+          "Refuted": 29,
+          "Supported": 3,
+          "Unparseable": 0
+        },
+        "Supported": {
+          "Conflicting Evidence/Cherrypicking": 1,
+          "Not Enough Evidence": 0,
+          "Refuted": 3,
+          "Supported": 4,
+          "Unparseable": 0
+        }
+      }
+    },
+    "mean_prompt_tokens": {
+      "MIXED_GOLD_ONLY_K2": 3084.64,
+      "N0": 2803.32,
+      "P0": 2483.34,
+      "P1": 2519.64,
+      "P2": 2802.84,
+      "P3": 2803.36
+    },
+    "mixed_vs_n0_exact_verdict_differences": [
+      {
+        "both_wrong_other_class": true,
+        "gold": "Conflicting Evidence/Cherrypicking",
+        "mixed": "Refuted",
+        "n0": "Supported",
+        "sample_id": "train:1249"
+      },
+      {
+        "both_wrong_other_class": true,
+        "gold": "Not Enough Evidence",
+        "mixed": "Refuted",
+        "n0": "Supported",
+        "sample_id": "train:1217"
+      }
+    ],
+    "mixed_vs_p2_correction_ids": [
+      "train:1728",
+      "train:1853",
+      "train:627"
+    ],
+    "mixed_vs_p2_regression_ids": [
+      "train:1935"
+    ],
+    "note": "exact verdicts read from immutable receipts; descriptive only, no causal conclusion, no tuning",
+    "pair_gold_composition": {
+      "refuted_pair": [
+        "train:521",
+        "train:2298",
+        "train:1812",
+        "train:2473",
+        "train:1382",
+        "train:1517",
+        "train:1011",
+        "train:1299",
+        "train:1024",
+        "train:1923",
+        "train:971",
+        "train:2137",
+        "train:2073",
+        "train:1853",
+        "train:1592",
+        "train:1447",
+        "train:1455",
+        "train:2100",
+        "train:627",
+        "train:2770",
+        "train:1728",
+        "train:3054",
+        "train:2374",
+        "train:1201"
+      ],
+      "supported_pair": [
+        "train:810",
+        "train:1062",
+        "train:780",
+        "train:368",
+        "train:1025",
+        "train:2185",
+        "train:1935",
+        "train:385",
+        "train:954",
+        "train:1284",
+        "train:3026",
+        "train:898",
+        "train:1102",
+        "train:1733",
+        "train:2826",
+        "train:2935",
+        "train:832",
+        "train:2763",
+        "train:1249",
+        "train:2450",
+        "train:1895",
+        "train:1952",
+        "train:1932",
+        "train:1217",
+        "train:1384",
+        "train:493"
+      ]
+    },
+    "predicted_verdict_priors": {
+      "MIXED_GOLD_ONLY_K2": {
+        "Conflicting Evidence/Cherrypicking": 1,
+        "Refuted": 41,
+        "Supported": 8
+      },
+      "N0": {
+        "Conflicting Evidence/Cherrypicking": 1,
+        "Refuted": 39,
+        "Supported": 10
+      },
+      "P2": {
+        "Conflicting Evidence/Cherrypicking": 2,
+        "Refuted": 39,
+        "Supported": 9
+      }
+    },
+    "targets_nei_conflicting_against_pair_gold": {
+      "train:1102": "Supported",
+      "train:1201": "Refuted",
+      "train:1217": "Supported",
+      "train:1249": "Supported",
+      "train:1517": "Refuted",
+      "train:2185": "Supported",
+      "train:2298": "Refuted",
+      "train:2763": "Supported",
+      "train:368": "Supported",
+      "train:493": "Supported"
+    }
+  },
+  "raw_train_sha256": "ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c",
+  "schema_version": "m162c-audit-v1",
+  "scope": "CPU_ONLY_AUDIT_NO_INFERENCE",
+  "source_coverage": {
+    "bank_groups_shared_by_multiple_records": {
+      "grp-16097fa1c40f653a": 15,
+      "grp-89b80b7304ffaec0": 9,
+      "grp-ad2fe96a6908a131": 5,
+      "grp-ccb9a4adef6135a1": 3,
+      "grp-d131cd3e0c0942e2": 2
+    },
+    "by_class": {
+      "Conflicting Evidence/Cherrypicking": {
+        "correct_ids": [
+          "train:7"
+        ],
+        "usable_correct": [
+          "train:7"
+        ],
+        "usable_wrong": [
+          "train:12",
+          "train:18",
+          "train:19",
+          "train:24",
+          "train:2449",
+          "train:8",
+          "train:979"
+        ],
+        "wrong_ids": [
+          "train:12",
+          "train:18",
+          "train:19",
+          "train:24",
+          "train:2449",
+          "train:8",
+          "train:979"
+        ]
+      },
+      "Not Enough Evidence": {
+        "correct_ids": [
+          "train:23",
+          "train:2811"
+        ],
+        "usable_correct": [
+          "train:23",
+          "train:2811"
+        ],
+        "usable_wrong": [
+          "train:21",
+          "train:26",
+          "train:27",
+          "train:31",
+          "train:35",
+          "train:39",
+          "train:49"
+        ],
+        "wrong_ids": [
+          "train:21",
+          "train:26",
+          "train:27",
+          "train:31",
+          "train:35",
+          "train:39",
+          "train:49"
+        ]
+      },
+      "Refuted": {
+        "correct_ids": [
+          "train:1",
+          "train:10",
+          "train:1231",
+          "train:1236",
+          "train:1288",
+          "train:1402",
+          "train:15",
+          "train:16",
+          "train:1644",
+          "train:1817",
+          "train:1847",
+          "train:2055",
+          "train:3012",
+          "train:34",
+          "train:36",
+          "train:4",
+          "train:41",
+          "train:43",
+          "train:44",
+          "train:5",
+          "train:694",
+          "train:828",
+          "train:9",
+          "train:903"
+        ],
+        "usable_correct": [
+          "train:1",
+          "train:10",
+          "train:1231",
+          "train:1236",
+          "train:1288",
+          "train:1402",
+          "train:15",
+          "train:16",
+          "train:1644",
+          "train:1817",
+          "train:1847",
+          "train:2055",
+          "train:3012",
+          "train:34",
+          "train:36",
+          "train:4",
+          "train:41",
+          "train:43",
+          "train:44",
+          "train:5",
+          "train:694",
+          "train:828",
+          "train:9",
+          "train:903"
+        ],
+        "usable_wrong": [
+          "train:11",
+          "train:1824",
+          "train:1863",
+          "train:1873",
+          "train:20",
+          "train:2224",
+          "train:47",
+          "train:48",
+          "train:6"
+        ],
+        "wrong_ids": [
+          "train:11",
+          "train:1824",
+          "train:1863",
+          "train:1873",
+          "train:20",
+          "train:2224",
+          "train:47",
+          "train:48",
+          "train:6"
+        ]
+      },
+      "Supported": {
+        "correct_ids": [
+          "train:0",
+          "train:13",
+          "train:1429",
+          "train:22",
+          "train:28",
+          "train:30",
+          "train:32",
+          "train:33",
+          "train:40",
+          "train:42",
+          "train:426",
+          "train:45",
+          "train:46",
+          "train:467",
+          "train:718"
+        ],
+        "usable_correct": [
+          "train:0",
+          "train:13",
+          "train:1429",
+          "train:22",
+          "train:28",
+          "train:30",
+          "train:32",
+          "train:33",
+          "train:40",
+          "train:42",
+          "train:426",
+          "train:45",
+          "train:46",
+          "train:467",
+          "train:718"
+        ],
+        "usable_wrong": [
+          "train:14",
+          "train:17",
+          "train:1881",
+          "train:2",
+          "train:25",
+          "train:29",
+          "train:3",
+          "train:37",
+          "train:38",
+          "train:978"
+        ],
+        "wrong_ids": [
+          "train:14",
+          "train:17",
+          "train:1881",
+          "train:2",
+          "train:25",
+          "train:29",
+          "train:3",
+          "train:37",
+          "train:38",
+          "train:978"
+        ]
+      }
+    },
+    "case_count": 75,
+    "crosstab_gold_x_base_history": {
+      "x_Conflicting Evidence/Cherrypicking__correct": 1,
+      "x_Conflicting Evidence/Cherrypicking__wrong": 7,
+      "x_Not Enough Evidence__correct": 2,
+      "x_Not Enough Evidence__wrong": 7,
+      "x_Refuted__correct": 24,
+      "x_Refuted__wrong": 9,
+      "x_Supported__correct": 15,
+      "x_Supported__wrong": 10
+    },
+    "development_group_overlap": [],
+    "distinct_leakage_groups": 46,
+    "records_with_any_human_review": [],
+    "records_with_assistant_candidate_text": [
+      "train:25"
+    ],
+    "records_with_zero_citations": [
+      "train:0",
+      "train:1",
+      "train:10",
+      "train:11",
+      "train:12",
+      "train:1231",
+      "train:1236",
+      "train:1288",
+      "train:13",
+      "train:14",
+      "train:1402",
+      "train:1429",
+      "train:15",
+      "train:16",
+      "train:1644",
+      "train:17",
+      "train:18",
+      "train:1817",
+      "train:1824",
+      "train:1847",
+      "train:1863",
+      "train:1873",
+      "train:1881",
+      "train:19",
+      "train:2",
+      "train:20",
+      "train:2055",
+      "train:21",
+      "train:22",
+      "train:2224",
+      "train:23",
+      "train:24",
+      "train:2449",
+      "train:26",
+      "train:27",
+      "train:28",
+      "train:2811",
+      "train:29",
+      "train:3",
+      "train:30",
+      "train:3012",
+      "train:31",
+      "train:32",
+      "train:33",
+      "train:34",
+      "train:35",
+      "train:36",
+      "train:37",
+      "train:38",
+      "train:39",
+      "train:4",
+      "train:40",
+      "train:41",
+      "train:42",
+      "train:426",
+      "train:43",
+      "train:44",
+      "train:45",
+      "train:46",
+      "train:467",
+      "train:47",
+      "train:48",
+      "train:49",
+      "train:5",
+      "train:6",
+      "train:694",
+      "train:7",
+      "train:718",
+      "train:8",
+      "train:828",
+      "train:9",
+      "train:903",
+      "train:978",
+      "train:979"
+    ],
+    "records_with_zero_evidence": [],
+    "review_statuses": {
+      "PENDING_REVIEW": 75
+    },
+    "usability_definition": "SOURCE-admitted record with >=1 guarded evidence item (nonempty article text + source URL), >=1 citation URL, known gold"
+  }
+}

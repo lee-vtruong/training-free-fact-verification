@@ -1,0 +1,3205 @@
+﻿{
+  "gpu_snapshot": "NVIDIA GeForce RTX 5090, 32607 MiB, 3 MiB, 0 %, 580.159.03",
+  "disk": {
+    "total": 1006097063936,
+    "used": 750589300736,
+    "free": 212462247936
+  },
+  "timings": [
+    {
+      "path": "outputs/m11-store-r14-20261021-080538/summary.json",
+      "sha256": "c70af7cf0545348e4059ac9a0e6b4dcbc2ceab9bc25ef302211f0a0c53ea0335",
+      "elapsed_seconds": 3017.843353255652,
+      "methods": {
+        "R1": {
+          "n_claims": 3,
+          "mean_latency_seconds": 0.08095699703941743,
+          "peak_gpu_memory_bytes": null
+        },
+        "R2": {
+          "n_claims": 3,
+          "mean_latency_seconds": 992.6427482760822,
+          "peak_gpu_memory_bytes": 1500765184.0
+        },
+        "R3": {
+          "n_claims": 3,
+          "mean_latency_seconds": 992.7240152827775,
+          "peak_gpu_memory_bytes": 1500765184.0
+        },
+        "R4": {
+          "n_claims": 3,
+          "mean_latency_seconds": 993.8419578392059,
+          "peak_gpu_memory_bytes": 1500765184.0
+        }
+      }
+    },
+    {
+      "path": "outputs/m11-store-r14-pilot100-20261023-162716/summary.json",
+      "sha256": "5f28431f60f51c6265db9de1a5ed86c8125a32f9558b639040313f9984abcf8d",
+      "elapsed_seconds": 33156.91255914979,
+      "methods": {
+        "R1": {
+          "n_claims": 100,
+          "mean_latency_seconds": 0.26335570541210473,
+          "peak_gpu_memory_bytes": null
+        },
+        "R2": {
+          "n_claims": 100,
+          "mean_latency_seconds": 304.9738619010616,
+          "peak_gpu_memory_bytes": 5586083343.36
+        },
+        "R3": {
+          "n_claims": 100,
+          "mean_latency_seconds": 305.2386488891393,
+          "peak_gpu_memory_bytes": 5586083343.36
+        },
+        "R4": {
+          "n_claims": 100,
+          "mean_latency_seconds": 306.79350648838096,
+          "peak_gpu_memory_bytes": 6043438950.4
+        }
+      }
+    },
+    {
+      "path": "outputs/m141-retrieval-foldc-20261025-055810/summary.json",
+      "sha256": "2bfbdbdb7487b01d173ac67a014756b0e6665354b4f1a0368691c2442c8272d8",
+      "elapsed_seconds": 13440.53982593771,
+      "methods": {
+        "R1": {
+          "n_claims": 50,
+          "mean_latency_seconds": 0.251659516505897,
+          "peak_gpu_memory_bytes": null
+        },
+        "R2": {
+          "n_claims": 50,
+          "mean_latency_seconds": 248.3766950972378,
+          "peak_gpu_memory_bytes": 5574576547.84
+        },
+        "R3": {
+          "n_claims": 50,
+          "mean_latency_seconds": 248.62970516687258,
+          "peak_gpu_memory_bytes": 5574576547.84
+        },
+        "R4": {
+          "n_claims": 50,
+          "mean_latency_seconds": 250.20748416969553,
+          "peak_gpu_memory_bytes": 6270985410.56
+        }
+      }
+    },
+    {
+      "path": "outputs/m142-retrieval-foldd-20261025-105806/summary.json",
+      "sha256": "305e6aea296f6fb07553aaa46f85ed4a67b689e4c1c3dd8d84e10a724abd3c49",
+      "elapsed_seconds": 37802.77445316035,
+      "methods": {
+        "R1": {
+          "n_claims": 100,
+          "mean_latency_seconds": 0.31155771288089457,
+          "peak_gpu_memory_bytes": null
+        },
+        "R2": {
+          "n_claims": 100,
+          "mean_latency_seconds": 345.2870022013504,
+          "peak_gpu_memory_bytes": 5589766179.84
+        },
+        "R3": {
+          "n_claims": 100,
+          "mean_latency_seconds": 345.6001955713611,
+          "peak_gpu_memory_bytes": 5589766179.84
+        },
+        "R4": {
+          "n_claims": 100,
+          "mean_latency_seconds": 347.22873413111085,
+          "peak_gpu_memory_bytes": 6263121382.4
+        }
+      }
+    },
+    {
+      "path": "outputs/m142-retrieval-folde-20261026-131900/summary.json",
+      "sha256": "ad9da382760f0021da1b7698708a5f0c125610e346ce871254e59ad6ccac3a82",
+      "elapsed_seconds": 2176.5210411921144,
+      "methods": {
+        "R1": {
+          "n_claims": 100,
+          "mean_latency_seconds": 0.20707370686344803,
+          "peak_gpu_memory_bytes": null
+        },
+        "R2": {
+          "n_claims": 100,
+          "mean_latency_seconds": 0.6160787052661181,
+          "peak_gpu_memory_bytes": 1231499381.76
+        },
+        "R3": {
+          "n_claims": 100,
+          "mean_latency_seconds": 0.8238085878361017,
+          "peak_gpu_memory_bytes": 1231499381.76
+        },
+        "R4": {
+          "n_claims": 100,
+          "mean_latency_seconds": 2.4286693557631223,
+          "peak_gpu_memory_bytes": 5722482534.4
+        }
+      }
+    },
+    {
+      "path": "outputs/m15-folde-r4/summary.json",
+      "sha256": "ad9da382760f0021da1b7698708a5f0c125610e346ce871254e59ad6ccac3a82",
+      "elapsed_seconds": 2176.5210411921144,
+      "methods": {
+        "R1": {
+          "n_claims": 100,
+          "mean_latency_seconds": 0.20707370686344803,
+          "peak_gpu_memory_bytes": null
+        },
+        "R2": {
+          "n_claims": 100,
+          "mean_latency_seconds": 0.6160787052661181,
+          "peak_gpu_memory_bytes": 1231499381.76
+        },
+        "R3": {
+          "n_claims": 100,
+          "mean_latency_seconds": 0.8238085878361017,
+          "peak_gpu_memory_bytes": 1231499381.76
+        },
+        "R4": {
+          "n_claims": 100,
+          "mean_latency_seconds": 2.4286693557631223,
+          "peak_gpu_memory_bytes": 5722482534.4
+        }
+      }
+    }
+  ],
+  "logs": [
+    {
+      "path": "outputs/download_qwen3_8b.log",
+      "bytes": 534,
+      "sha256": "7ae8890bdf1c1750f17665d24b15cce7feb30eaf7ea9dde757c51ee395f21308",
+      "train_350_plus_references": []
+    },
+    {
+      "path": "outputs/download_shard3.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "train_350_plus_references": []
+    },
+    {
+      "path": "outputs/m121_run.log",
+      "bytes": 6825,
+      "sha256": "095062f7403d6d5fad54759695455ff989e15f90bf7188ef51f1e1ae5f566642",
+      "train_350_plus_references": []
+    },
+    {
+      "path": "outputs/m12_run.log",
+      "bytes": 7125,
+      "sha256": "fe130298f0cf997bee1a4d2e007e4fd34d8e68e0be6b15a42c305eb79a49d21e",
+      "train_350_plus_references": []
+    },
+    {
+      "path": "outputs/m13_run.log",
+      "bytes": 10187,
+      "sha256": "da05fb59ca688133efe419a3a342941db8b8e5a1d3cc10dd439eaaa80a0e406c",
+      "train_350_plus_references": []
+    },
+    {
+      "path": "outputs/m14_run.log",
+      "bytes": 5350,
+      "sha256": "af78f15aabe15e2b128bc0f11351f28e1936869aad651f8eb22081ff7bd6a2ec",
+      "train_350_plus_references": []
+    },
+    {
+      "path": "outputs/run_pilot100.log",
+      "bytes": 17940,
+      "sha256": "a8761725ddf136e168d25a1290daf217401d70ad28c7b2f584414a4d578480fb",
+      "train_350_plus_references": []
+    },
+    {
+      "path": "outputs/wait_and_run.log",
+      "bytes": 7441,
+      "sha256": "3d2126cddeb8fd369476ad915aa61f9dff2858b1b24c284eb2f32010c80598eb",
+      "train_350_plus_references": []
+    }
+  ],
+  "archive_inventory": [],
+  "external_reference_inventory": [
+    {
+      "path": "/home/stackops/whale/ERRORFlow",
+      "entries": [
+        ".git",
+        ".gitignore",
+        ".pytest_cache",
+        "README.md",
+        "configs",
+        "data",
+        "docs",
+        "legacy",
+        "outputs",
+        "paper",
+        "pyproject.toml",
+        "scripts",
+        "src",
+        "tests",
+        "workrule.md"
+      ]
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs",
+      "entries": [
+        "error_memory",
+        "fever",
+        "full_dev_retrieval.log",
+        "logs",
+        "qwen3_baseline",
+        "qwen3_interventions",
+        "retrieval_v1",
+        "step2_demo",
+        "v2",
+        "v3"
+      ]
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/data",
+      "entries": [
+        "processed",
+        "raw"
+      ]
+    },
+    {
+      "path": "/home/stackops/whale/training-free-fact-verification/data",
+      "entries": [
+        "raw"
+      ]
+    }
+  ],
+  "index_cache": {
+    "files": 350,
+    "bytes": 89203539712,
+    "manifest_files": [],
+    "reuse_verified_for_new_partitions": false
+  },
+  "external_artifact_files": [
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/error_memory/train_first1000_counterfactual.jsonl",
+      "bytes": 610020
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/fever/audit.json",
+      "bytes": 641
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/full_dev_retrieval.log",
+      "bytes": 18342
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/_climate_a3.log",
+      "bytes": 5837
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_action_utility_matrix.log",
+      "bytes": 3132
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_conflict_audit_v1.log",
+      "bytes": 10503
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_coverage_audit_v1.log",
+      "bytes": 11025
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_download.log",
+      "bytes": 1230
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_g1.log",
+      "bytes": 2908
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_holdout475_s0.log",
+      "bytes": 28384
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_oracle_dev_first25.log",
+      "bytes": 1587
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_refutation_audit_v1.log",
+      "bytes": 10545
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_router_cv.log",
+      "bytes": 9977
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_router_v1_robustness.log",
+      "bytes": 3825
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_s0.log",
+      "bytes": 2884
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_s1.log",
+      "bytes": 2748
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/averitec_train_all_s0.log",
+      "bytes": 190335
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/climate_fever_a3_full.log",
+      "bytes": 108057
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/climate_fever_b1_full.log",
+      "bytes": 107281
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/cross_label_ablation.log",
+      "bytes": 32824
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/cross_label_ablation_nb8.log",
+      "bytes": 36372
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/group_c_canonical_main.log",
+      "bytes": 1736
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/in_domain_climate_fever_crossfit.log",
+      "bytes": 13336
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/in_domain_climate_groupboot.log",
+      "bytes": 15637
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/m3b_mistral_averitec.log",
+      "bytes": 1403
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/m3b_mistral_climate.log",
+      "bytes": 1361
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/m3b_qwen_averitec.log",
+      "bytes": 1327
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/m3b_qwen_climate.log",
+      "bytes": 1336
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/m3b_qwen_scifact_bm25.log",
+      "bytes": 1263
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/m3b_qwen_scifact_oracle.log",
+      "bytes": 1237
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/memory_ablation_nlf_b0_b9.log",
+      "bytes": 45766
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/memory_ablation_nlf_b10_b17.log",
+      "bytes": 67088
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/meta_mistral_averitec.log",
+      "bytes": 93450
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/meta_mistral_climate.log",
+      "bytes": 56314
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/meta_qwen_averitec.log",
+      "bytes": 85203
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/meta_qwen_climate.log",
+      "bytes": 54438
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/meta_qwen_scifact_bm25.log",
+      "bytes": 27546
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/meta_qwen_scifact_oracle.log",
+      "bytes": 27563
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/mistral7b_v03_c170c70_averitec_a3.log",
+      "bytes": 195244
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/mistral7b_v03_c170c70_averitec_b1.log",
+      "bytes": 196677
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/mistral7b_v03_c170c70_averitec_eval.log",
+      "bytes": 19255
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/mistral7b_v03_c170c70_climate_b1.log",
+      "bytes": 110960
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/mistral7b_v03_c170c70_memory.log",
+      "bytes": 320
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/mistral7b_v03_c170c70_residual_analysis.log",
+      "bytes": 4032
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/mistral7b_v03_c170c70_smoke25_a3.log",
+      "bytes": 4724
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/mistral7b_v03_c170c70_smoke25_b1.log",
+      "bytes": 12421
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/nc_similarity.log",
+      "bytes": 2526
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/nd_utility.log",
+      "bytes": 1426
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/ne6_climate_fever.log",
+      "bytes": 4196
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/ne6_scifact_bm25.log",
+      "bytes": 1578
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/ne6_scifact_oracle.log",
+      "bytes": 1577
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/ne_sensitivity.log",
+      "bytes": 34393
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/qwen3_4b_sha256.log",
+      "bytes": 2758
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/r6_nlf_averitec_grouped090.log",
+      "bytes": 19155
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/r6_nlf_climate_fever.log",
+      "bytes": 18300
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/r6_nlf_scifact_bm25.log",
+      "bytes": 15362
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/r6_nlf_scifact_oracle.log",
+      "bytes": 15180
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/reviewer2_supervised_averitec.log",
+      "bytes": 12632
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/reviewer5_standard_averitec.log",
+      "bytes": 189027
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/reviewer5_standard_climate.log",
+      "bytes": 108883
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/scifact_retrieved_a3.log",
+      "bytes": 21332
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/scifact_retrieved_b1.log",
+      "bytes": 20849
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/second_backbone_v1_averitec_a3.log",
+      "bytes": 5913
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/second_backbone_v1_averitec_b1.log",
+      "bytes": 5913
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/shared_task_dev_all_baseline.log",
+      "bytes": 344964
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/shared_task_dev_all_cost_critic.log",
+      "bytes": 71016
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_full_a3_router.log",
+      "bytes": 24915
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_full_conflicting_rescue_v1.log",
+      "bytes": 187978
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_group_c_p2.log",
+      "bytes": 68185
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_group_c_training_free.log",
+      "bytes": 9127
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_scifact_conflict_audit_v1.log",
+      "bytes": 20802
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_scifact_conflicting_rescue_v1.log",
+      "bytes": 20856
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_screen_conflicting_rescue_v1.log",
+      "bytes": 10188
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_screen_coverage_audit_v2.log",
+      "bytes": 10631
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_screen_entity_scope_audit_v1.log",
+      "bytes": 10318
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_screen_refutation_audit_v2.log",
+      "bytes": 10351
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/logs/v3_screen_structured_decomposition_v1.log",
+      "bytes": 10901
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/demo_predictions.jsonl",
+      "bytes": 357
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/deterministic_errors.jsonl",
+      "bytes": 515603
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_paper_dev_first100.jsonl",
+      "bytes": 50803
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_paper_dev_first100_errors.jsonl",
+      "bytes": 17072
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_paper_dev_first100_metrics.json",
+      "bytes": 826
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000.jsonl",
+      "bytes": 519694
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_confidence.jsonl",
+      "bytes": 644246
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_deterministic.jsonl",
+      "bytes": 583682
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_deterministic_metrics.json",
+      "bytes": 843
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_errors.jsonl",
+      "bytes": 136040
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_metrics.json",
+      "bytes": 841
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_retrieved.jsonl",
+      "bytes": 545979
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_retrieved_diagnosed.jsonl",
+      "bytes": 254787
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_retrieved_errors.jsonl",
+      "bytes": 491766
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_retrieved_fast.jsonl",
+      "bytes": 574733
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_retrieved_fast_metrics.json",
+      "bytes": 843
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/fever_train_first1000_retrieved_metrics.json",
+      "bytes": 842
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_all_confidence.jsonl",
+      "bytes": 12987779
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_all_metrics.json",
+      "bytes": 911
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_first1000.jsonl",
+      "bytes": 570107
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_first1000_confidence.jsonl",
+      "bytes": 655010
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_first1000_metrics.json",
+      "bytes": 822
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_first1000_v1_bge_top5.jsonl",
+      "bytes": 654772
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_first1000_v1_bge_top5_metrics.json",
+      "bytes": 866
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_first1000_v1_diagnosed.jsonl",
+      "bytes": 1117080
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_first1000_v1_error_summary.json",
+      "bytes": 1213
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_baseline/shared_task_dev_first1000_v1_errors.jsonl",
+      "bytes": 1044887
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/conflict_check.jsonl",
+      "bytes": 221172
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/conflict_check_control.jsonl",
+      "bytes": 358991
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/conflict_check_full_metrics.json",
+      "bytes": 240
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/conflict_check_metrics.json",
+      "bytes": 236
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/deterministic_evidence_critic_control.jsonl",
+      "bytes": 349473
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/deterministic_evidence_critic_errors.jsonl",
+      "bytes": 241375
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/deterministic_evidence_critic_full.json",
+      "bytes": 241
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/deterministic_evidence_critic_recovery.json",
+      "bytes": 238
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/deterministic_refuted_route.jsonl",
+      "bytes": 172464
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/deterministic_selective_full.jsonl",
+      "bytes": 612490
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/deterministic_selective_metrics.json",
+      "bytes": 842
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/evidence_critic.jsonl",
+      "bytes": 222631
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/evidence_critic_by_error_type.json",
+      "bytes": 828
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/evidence_critic_control.jsonl",
+      "bytes": 359226
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/evidence_critic_full_metrics.json",
+      "bytes": 240
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/evidence_critic_metrics.json",
+      "bytes": 236
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/evidence_critic_refuted_route.jsonl",
+      "bytes": 148769
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/evidence_critic_selective_full.jsonl",
+      "bytes": 581597
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/evidence_critic_selective_metrics.json",
+      "bytes": 843
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_all_cost_bootstrap.json",
+      "bytes": 571
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_all_cost_critic.jsonl",
+      "bytes": 800602
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_all_cost_full.jsonl",
+      "bytes": 13940724
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_all_cost_metrics.json",
+      "bytes": 939
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_cost_bootstrap.json",
+      "bytes": 542
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_cost_full.jsonl",
+      "bytes": 700848
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_cost_metrics.json",
+      "bytes": 868
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_cost_route.jsonl",
+      "bytes": 33936
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_first1000_v1_selective_bootstrap.json",
+      "bytes": 522
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_first1000_v1_selective_full.jsonl",
+      "bytes": 701122
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_first1000_v1_selective_metrics.json",
+      "bytes": 859
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_refuted_route.jsonl",
+      "bytes": 221385
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_selective_full.jsonl",
+      "bytes": 605817
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/shared_task_dev_selective_metrics.json",
+      "bytes": 820
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/train_confidence_thresholds.json",
+      "bytes": 2499
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_errors_entailment_gate.jsonl",
+      "bytes": 280594
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_errors_entailment_gate_by_type.json",
+      "bytes": 798
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_errors_entailment_gate_metrics.json",
+      "bytes": 237
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_errors_evidence_critic.jsonl",
+      "bytes": 281736
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_errors_evidence_critic_by_type.json",
+      "bytes": 795
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_errors_evidence_critic_metrics.json",
+      "bytes": 237
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_refuted_entailment_gate.jsonl",
+      "bytes": 257313
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_refuted_entailment_gate_c090.jsonl",
+      "bytes": 33135
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_refuted_entailment_gate_regression.json",
+      "bytes": 259
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/qwen3_interventions/v1_refuted_entailment_thresholds.json",
+      "bytes": 2241
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/retrieval_v1/shared_task_dev_all_title_metrics.json",
+      "bytes": 1116
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/retrieval_v1/shared_task_dev_first1000_bge_reranked_metrics.json",
+      "bytes": 1300
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/retrieval_v1/shared_task_dev_first1000_candidates50_metrics.json",
+      "bytes": 1121
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/retrieval_v1/shared_task_dev_first1000_hybrid_metrics.json",
+      "bytes": 1113
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/retrieval_v1/shared_task_dev_first1000_title_metrics.json",
+      "bytes": 1113
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/retrieval_v1/shared_task_dev_first1000_union100_metrics.json",
+      "bytes": 1300
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/step2_demo/README.md",
+      "bytes": 62
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/step2_demo/predictions.jsonl",
+      "bytes": 778
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/step2_demo/traces.jsonl",
+      "bytes": 606
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_baseline_vs_conflict_bootstrap.json",
+      "bytes": 572
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_baseline_vs_errorflow_bootstrap.json",
+      "bytes": 577
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_conflict_audit_v1.jsonl",
+      "bytes": 472765
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_conflict_audit_v1_metrics.json",
+      "bytes": 1571
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_conflict_vs_errorflow_bootstrap.json",
+      "bytes": 582
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_coverage_audit_v1.jsonl",
+      "bytes": 474839
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_errorflow_router_v1.jsonl",
+      "bytes": 407825
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_errorflow_router_v1_metrics.json",
+      "bytes": 1582
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/holdout475_refutation_audit_v1.jsonl",
+      "bytes": 473800
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/intervention_screen/action_utility_matrix.json",
+      "bytes": 14332
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/intervention_screen/conflict_audit_v1.jsonl",
+      "bytes": 155369
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/intervention_screen/conflict_audit_v1_metrics.json",
+      "bytes": 2359
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/intervention_screen/coverage_audit_v1.jsonl",
+      "bytes": 156389
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/intervention_screen/coverage_audit_v1_metrics.json",
+      "bytes": 2373
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/intervention_screen/refutation_audit_v1.jsonl",
+      "bytes": 155887
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/intervention_screen/refutation_audit_v1_metrics.json",
+      "bytes": 2373
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/memory/action_outcomes_train.jsonl",
+      "bytes": 578070
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/memory/router_cv.json",
+      "bytes": 9977
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/memory/router_v1_robustness.json",
+      "bytes": 3825
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_diagnosis.json",
+      "bytes": 3815
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_g1.jsonl",
+      "bytes": 17514
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_g1_diagnosis.json",
+      "bytes": 2928
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_g1_metrics.json",
+      "bytes": 896
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_metrics.json",
+      "bytes": 897
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_predictions.jsonl",
+      "bytes": 17892
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_s0.jsonl",
+      "bytes": 25266
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_s0_metrics.json",
+      "bytes": 896
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_s1.jsonl",
+      "bytes": 25510
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_first25_s1_metrics.json",
+      "bytes": 895
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_holdout475_s0.jsonl",
+      "bytes": 467202
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_dev_holdout475_s0_metrics.json",
+      "bytes": 957
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_train_all_s0.jsonl",
+      "bytes": 2996424
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v2/averitec/oracle_train_all_s0_metrics.json",
+      "bytes": 1618
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/component_removal_grouped090/paired_analysis/paired_predictions.jsonl",
+      "bytes": 12754871
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/component_removal_grouped090/paired_analysis/significance.json",
+      "bytes": 74883
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/component_removal_grouped090/predictions.jsonl",
+      "bytes": 11049964
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/component_removal_grouped090/routes.jsonl",
+      "bytes": 277291
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/component_removal_grouped090/summary.json",
+      "bytes": 112117
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/matched_budget_grouped090/natural_budget_predictions.jsonl",
+      "bytes": 14521975
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/matched_budget_grouped090/routes.jsonl",
+      "bytes": 786883
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/matched_budget_grouped090/summary.json",
+      "bytes": 140712
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/matched_budget_grouped090.log",
+      "bytes": 18695
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/memory_controls_grouped090/budget_predictions.jsonl",
+      "bytes": 22868437
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/memory_controls_grouped090/predictions.jsonl",
+      "bytes": 149537092
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/memory_controls_grouped090/routes.jsonl",
+      "bytes": 777019
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/memory_controls_grouped090/run.log",
+      "bytes": 67144
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/memory_controls_grouped090/summary.json",
+      "bytes": 453448
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/memory_grouped090/predictions.jsonl",
+      "bytes": 13804060
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/memory_grouped090/routes.jsonl",
+      "bytes": 516347
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/ablations/memory_grouped090/summary.json",
+      "bytes": 217729
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/audits/averitec_v3_reproducibility.json",
+      "bytes": 24942
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/audits/near_duplicate_grouping/jaccard_0p85_metrics.json",
+      "bytes": 2123
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/audits/near_duplicate_grouping/jaccard_0p85_predictions.jsonl",
+      "bytes": 2176857
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/audits/near_duplicate_grouping/jaccard_0p90_metrics.json",
+      "bytes": 2123
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/audits/near_duplicate_grouping/jaccard_0p90_predictions.jsonl",
+      "bytes": 2176552
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/audits/near_duplicate_grouping/jaccard_0p95_metrics.json",
+      "bytes": 2123
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/audits/near_duplicate_grouping/jaccard_0p95_predictions.jsonl",
+      "bytes": 2176951
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/audits/near_duplicate_grouping/summary.json",
+      "bytes": 7559
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/action_utility_summary.json",
+      "bytes": 33381
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/conflicting_rescue_v1.jsonl",
+      "bytes": 203868
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/conflicting_rescue_v1.manifest.json",
+      "bytes": 1301
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/coverage_audit_v2.jsonl",
+      "bytes": 203736
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/coverage_audit_v2.manifest.json",
+      "bytes": 1294
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/entity_scope_audit_v1.jsonl",
+      "bytes": 204297
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/entity_scope_audit_v1.manifest.json",
+      "bytes": 1302
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/refutation_audit_v2.jsonl",
+      "bytes": 203600
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/refutation_audit_v2.manifest.json",
+      "bytes": 1298
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/structured_decomposition_v1.jsonl",
+      "bytes": 205730
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/predictions/structured_decomposition_v1.manifest.json",
+      "bytes": 1314
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/residual_action_memory.jsonl",
+      "bytes": 873673
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/router_r0_r6.json",
+      "bytes": 25292
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/screen_baseline_records.jsonl",
+      "bytes": 265286
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/screen_examples.jsonl",
+      "bytes": 301695
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/action_screen/screen_manifest.json",
+      "bytes": 3231
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/b1_train_all.jsonl",
+      "bytes": 4136211
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/b1_train_all.manifest.json",
+      "bytes": 1254
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/cross_label_ablation/mechanistic.jsonl",
+      "bytes": 3546369
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/cross_label_ablation/predictions.jsonl",
+      "bytes": 26953958
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/cross_label_ablation/routes.jsonl",
+      "bytes": 303371
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/cross_label_ablation/summary.json",
+      "bytes": 122925
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/development/baseline_scores.jsonl",
+      "bytes": 5011093
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/development/residual_errors.jsonl",
+      "bytes": 1393681
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/development/residual_metrics.json",
+      "bytes": 3902
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/conflicting_rescue_v1.jsonl",
+      "bytes": 4148121
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/conflicting_rescue_v1.manifest.json",
+      "bytes": 1280
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/conflicting_rescue_v1_memory.jsonl",
+      "bytes": 3527842
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/conflicting_rescue_v1_router.json",
+      "bytes": 21849
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/conflicting_rescue_v1_utility.json",
+      "bytes": 8085
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/r6_utility_class_metrics.json",
+      "bytes": 1630
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/r6_utility_fold_stability.json",
+      "bytes": 2555
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/r6_utility_metrics.json",
+      "bytes": 447
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/r6_utility_predictions.jsonl",
+      "bytes": 2060633
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/full_actions/r6_utility_significance.json",
+      "bytes": 845
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_ablation_nlf/predictions.jsonl",
+      "bytes": 13820384
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_ablation_nlf/routes.jsonl",
+      "bytes": 529190
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_ablation_nlf/summary.json",
+      "bytes": 224255
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_controls_nlf/budget_predictions.jsonl",
+      "bytes": 22869793
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_controls_nlf/predictions.jsonl",
+      "bytes": 149609407
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_controls_nlf/routes.jsonl",
+      "bytes": 820887
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_controls_nlf/summary.json",
+      "bytes": 453401
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_size/size_0.json",
+      "bytes": 5191
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_size/size_100.json",
+      "bytes": 5409
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_size/size_200.json",
+      "bytes": 5410
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_size/size_25.json",
+      "bytes": 5440
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/memory_size/size_50.json",
+      "bytes": 5409
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/na_outcome_memory/budget_predictions.jsonl",
+      "bytes": 18213829
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/na_outcome_memory/predictions.jsonl",
+      "bytes": 17588802
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/na_outcome_memory/routes.jsonl",
+      "bytes": 121847
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/na_outcome_memory/summary.json",
+      "bytes": 92945
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/nc_similarity/predictions.jsonl",
+      "bytes": 12589528
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/nc_similarity/routes.jsonl",
+      "bytes": 91001
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/nc_similarity/summary.json",
+      "bytes": 48085
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/nd_utility/nd2_utility_diagnostics.jsonl",
+      "bytes": 861180
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/nd_utility/predictions.jsonl",
+      "bytes": 7931292
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/nd_utility/routes.jsonl",
+      "bytes": 130712
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/nd_utility/summary.json",
+      "bytes": 38938
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/climate_fever/predictions.jsonl",
+      "bytes": 3103468
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/climate_fever/routes.jsonl",
+      "bytes": 106037
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/climate_fever/summary.json",
+      "bytes": 19830
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/scifact_bm25/predictions.jsonl",
+      "bytes": 599781
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/scifact_bm25/routes.jsonl",
+      "bytes": 17029
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/scifact_bm25/summary.json",
+      "bytes": 17895
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/scifact_oracle/predictions.jsonl",
+      "bytes": 599620
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/scifact_oracle/routes.jsonl",
+      "bytes": 10916
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne6_external/scifact_oracle/summary.json",
+      "bytes": 17872
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne_sensitivity/predictions.jsonl",
+      "bytes": 101831534
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne_sensitivity/routes.jsonl",
+      "bytes": 738223
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne_sensitivity/sensitivity.jsonl",
+      "bytes": 167079
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/ne_sensitivity/summary.json",
+      "bytes": 234093
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/smoke25/b1_predictions.jsonl",
+      "bytes": 33160
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/smoke25/b1_predictions.manifest.json",
+      "bytes": 1255
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/smoke25/development/baseline_scores.jsonl",
+      "bytes": 40295
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/smoke25/development/residual_errors.jsonl",
+      "bytes": 19583
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/smoke25/development/residual_metrics.json",
+      "bytes": 3242
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/canonical_main/predictions.jsonl",
+      "bytes": 8267836
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/canonical_main/routes.jsonl",
+      "bytes": 54767
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/canonical_main/summary.json",
+      "bytes": 32329
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/embeddings/e5_base_v2.npz.manifest.json",
+      "bytes": 719
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/embeddings/minilm.npz.manifest.json",
+      "bytes": 746
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/p2/predictions.jsonl",
+      "bytes": 2679765
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/p2/routes.jsonl",
+      "bytes": 18185
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/p2/summary.json",
+      "bytes": 10493
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/training_free/predictions.jsonl",
+      "bytes": 47364470
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/training_free/routes.jsonl",
+      "bytes": 322549
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/substitution_ablation/training_free/summary.json",
+      "bytes": 175237
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/worked_cases/case_studies.json",
+      "bytes": 20662
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/averitec/worked_cases/case_studies.md",
+      "bytes": 6799
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/failed_empty_env_20261015_041943/a3.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/failed_empty_env_20261015_041943/a3.manifest.json",
+      "bytes": 1188
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/actions/a3.jsonl",
+      "bytes": 4760374
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/actions/a3.manifest.json",
+      "bytes": 1366
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/actions/a3_memory.jsonl",
+      "bytes": 3555933
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/actions/b1.jsonl",
+      "bytes": 4752155
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/actions/b1.manifest.json",
+      "bytes": 1362
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/development/baseline_scores.jsonl",
+      "bytes": 5308307
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/development/residual_errors.jsonl",
+      "bytes": 3060666
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/development/residual_metrics.json",
+      "bytes": 3917
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/eval/neighbor_diagnostics.jsonl",
+      "bytes": 3149429
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/eval/policy_manifest.json",
+      "bytes": 1743
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/eval/predictions.jsonl",
+      "bytes": 6829192
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/eval/routes.jsonl",
+      "bytes": 117772
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/averitec/eval/summary.json",
+      "bytes": 19407
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/actions/a3.jsonl",
+      "bytes": 2473242
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/actions/a3.log",
+      "bytes": 109335
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/actions/a3.manifest.json",
+      "bytes": 1439
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/actions/b1.jsonl",
+      "bytes": 2484249
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/actions/b1.manifest.json",
+      "bytes": 1444
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/eval/evaluation.log",
+      "bytes": 18368
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/eval/neighbor_diagnostics.jsonl",
+      "bytes": 1580228
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/eval/policy_manifest.json",
+      "bytes": 1771
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/eval/predictions.jsonl",
+      "bytes": 3556764
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/eval/routes.jsonl",
+      "bytes": 94919
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/climate_fever/eval/summary.json",
+      "bytes": 19117
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/smoke25/a3.jsonl",
+      "bytes": 38242
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/smoke25/a3.manifest.json",
+      "bytes": 1347
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/smoke25/b1.jsonl",
+      "bytes": 38175
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/mistral7b_v03_c170c70/smoke25/b1.manifest.json",
+      "bytes": 1343
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/second_backbone_v1/averitec/actions/a3.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/second_backbone_v1/averitec/actions/a3.manifest.json",
+      "bytes": 1171
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/second_backbone_v1/averitec/actions/b1.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/backbones/second_backbone_v1/averitec/actions/b1.manifest.json",
+      "bytes": 1167
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/external_eval/predictions.jsonl",
+      "bytes": 998659
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/external_eval/routes.jsonl",
+      "bytes": 53343
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/external_eval/summary.json",
+      "bytes": 10419
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/full/conflict_audit_v1.jsonl",
+      "bytes": 2347789
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/full/conflict_audit_v1.manifest.json",
+      "bytes": 1339
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/full/conflicting_rescue_v1.jsonl",
+      "bytes": 2355591
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/full/conflicting_rescue_v1.manifest.json",
+      "bytes": 1346
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/smoke25/conflict_audit_v1.jsonl",
+      "bytes": 37719
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/smoke25/conflict_audit_v1.manifest.json",
+      "bytes": 1337
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/smoke25/conflicting_rescue_v1.jsonl",
+      "bytes": 37821
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/climate_fever/smoke25/conflicting_rescue_v1.manifest.json",
+      "bytes": 1345
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit/baseline_scores.jsonl",
+      "bytes": 3077384
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit/manifest.json",
+      "bytes": 1436
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit/memory.jsonl",
+      "bytes": 1953235
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit/neighbor_diagnostics.jsonl",
+      "bytes": 2976612
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit/predictions.jsonl",
+      "bytes": 2487223
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit/routes.jsonl",
+      "bytes": 63323
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit/summary.json",
+      "bytes": 20706
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit_groupboot/baseline_scores.jsonl",
+      "bytes": 3077384
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit_groupboot/manifest.json",
+      "bytes": 1486
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit_groupboot/memory.jsonl",
+      "bytes": 1953235
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit_groupboot/neighbor_diagnostics.jsonl",
+      "bytes": 2976610
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit_groupboot/predictions.jsonl",
+      "bytes": 2487223
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit_groupboot/routes.jsonl",
+      "bytes": 63323
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/climate_fever/crossfit_groupboot/summary.json",
+      "bytes": 22999
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/dev_actions/alt.jsonl",
+      "bytes": 430613
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/dev_actions/alt.manifest.json",
+      "bytes": 1354
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/dev_actions/base.jsonl",
+      "bytes": 429468
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/dev_actions/base.manifest.json",
+      "bytes": 1350
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_actions/alt.jsonl",
+      "bytes": 1151248
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_actions/alt.manifest.json",
+      "bytes": 1343
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_actions/base.jsonl",
+      "bytes": 1148015
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_actions/base.manifest.json",
+      "bytes": 1341
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit/baseline_scores.jsonl",
+      "bytes": 1709952
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit/manifest.json",
+      "bytes": 1476
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit/memory.jsonl",
+      "bytes": 959882
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit/neighbor_diagnostics.jsonl",
+      "bytes": 1567400
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit/predictions.jsonl",
+      "bytes": 1318294
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit/routes.jsonl",
+      "bytes": 26104
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit/summary.json",
+      "bytes": 18498
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit_groupboot/baseline_scores.jsonl",
+      "bytes": 1709952
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit_groupboot/manifest.json",
+      "bytes": 1526
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit_groupboot/memory.jsonl",
+      "bytes": 959882
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit_groupboot/neighbor_diagnostics.jsonl",
+      "bytes": 1567400
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit_groupboot/predictions.jsonl",
+      "bytes": 1318294
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit_groupboot/routes.jsonl",
+      "bytes": 26104
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_crossfit_groupboot/summary.json",
+      "bytes": 20783
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_to_dev/neighbor_diagnostics.jsonl",
+      "bytes": 326551
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_to_dev/policy_manifest.json",
+      "bytes": 1705
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_to_dev/predictions.jsonl",
+      "bytes": 685248
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_to_dev/routes.jsonl",
+      "bytes": 11899
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/bm25/train_to_dev/summary.json",
+      "bytes": 16420
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/dev_actions/alt.jsonl",
+      "bytes": 424830
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/dev_actions/alt.manifest.json",
+      "bytes": 1344
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/dev_actions/base.jsonl",
+      "bytes": 423686
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/dev_actions/base.manifest.json",
+      "bytes": 1341
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_actions/alt.jsonl",
+      "bytes": 1133781
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_actions/alt.manifest.json",
+      "bytes": 1333
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_actions/base.jsonl",
+      "bytes": 1131030
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_actions/base.manifest.json",
+      "bytes": 1330
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit/baseline_scores.jsonl",
+      "bytes": 1095359
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit/manifest.json",
+      "bytes": 1477
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit/memory.jsonl",
+      "bytes": 956386
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit/neighbor_diagnostics.jsonl",
+      "bytes": 1557078
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit/predictions.jsonl",
+      "bytes": 1303679
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit/routes.jsonl",
+      "bytes": 18290
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit/summary.json",
+      "bytes": 18339
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit_groupboot/baseline_scores.jsonl",
+      "bytes": 1095359
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit_groupboot/manifest.json",
+      "bytes": 1527
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit_groupboot/memory.jsonl",
+      "bytes": 956386
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit_groupboot/neighbor_diagnostics.jsonl",
+      "bytes": 1557076
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit_groupboot/predictions.jsonl",
+      "bytes": 1303679
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit_groupboot/routes.jsonl",
+      "bytes": 18290
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_crossfit_groupboot/summary.json",
+      "bytes": 20599
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_to_dev/neighbor_diagnostics.jsonl",
+      "bytes": 321177
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_to_dev/policy_manifest.json",
+      "bytes": 1706
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_to_dev/predictions.jsonl",
+      "bytes": 680072
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_to_dev/routes.jsonl",
+      "bytes": 7133
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/in_domain_memory/scifact/oracle/train_to_dev/summary.json",
+      "bytes": 15940
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/audit.json",
+      "bytes": 829
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/experiment_report.md",
+      "bytes": 546
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/feature_ablation.csv",
+      "bytes": 1381
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/matched_budget_results.csv",
+      "bytes": 6769
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/models.json",
+      "bytes": 296200
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/natural_results.csv",
+      "bytes": 6187
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/oracle_regret.csv",
+      "bytes": 21298
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/per_query_predictions.jsonl",
+      "bytes": 38086780
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/statistical_comparisons.json",
+      "bytes": 19257
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/averitec_grouped090/summary.json",
+      "bytes": 48302
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/audit.json",
+      "bytes": 819
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/experiment_report.md",
+      "bytes": 544
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/feature_ablation.csv",
+      "bytes": 1262
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/matched_budget_results.csv",
+      "bytes": 6264
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/natural_results.csv",
+      "bytes": 5635
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/oracle_regret.csv",
+      "bytes": 13411
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/per_query_predictions.jsonl",
+      "bytes": 20117859
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/statistical_comparisons.json",
+      "bytes": 18768
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/mistral7b_v03_c170c70/climate_fever/summary.json",
+      "bytes": 47002
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/audit.json",
+      "bytes": 827
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/experiment_report.md",
+      "bytes": 524
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/feature_ablation.csv",
+      "bytes": 1267
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/matched_budget_results.csv",
+      "bytes": 6286
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/models.json",
+      "bytes": 289302
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/natural_results.csv",
+      "bytes": 5627
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/oracle_regret.csv",
+      "bytes": 10670
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/per_query_predictions.jsonl",
+      "bytes": 37578169
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/statistical_comparisons.json",
+      "bytes": 18884
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/averitec_grouped090/summary.json",
+      "bytes": 47057
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/audit.json",
+      "bytes": 817
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/experiment_report.md",
+      "bytes": 524
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/feature_ablation.csv",
+      "bytes": 1342
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/matched_budget_results.csv",
+      "bytes": 6654
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/natural_results.csv",
+      "bytes": 6046
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/oracle_regret.csv",
+      "bytes": 10597
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/per_query_predictions.jsonl",
+      "bytes": 19988990
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/statistical_comparisons.json",
+      "bytes": 17683
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/climate_fever/summary.json",
+      "bytes": 48014
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/audit.json",
+      "bytes": 817
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/experiment_report.md",
+      "bytes": 521
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/feature_ablation.csv",
+      "bytes": 1014
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/matched_budget_results.csv",
+      "bytes": 5619
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/natural_results.csv",
+      "bytes": 4487
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/oracle_regret.csv",
+      "bytes": 1955
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/per_query_predictions.jsonl",
+      "bytes": 3876108
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/statistical_comparisons.json",
+      "bytes": 17059
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_bm25/summary.json",
+      "bytes": 45144
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/audit.json",
+      "bytes": 817
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/experiment_report.md",
+      "bytes": 521
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/feature_ablation.csv",
+      "bytes": 1091
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/matched_budget_results.csv",
+      "bytes": 5559
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/natural_results.csv",
+      "bytes": 4697
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/oracle_regret.csv",
+      "bytes": 1951
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/per_query_predictions.jsonl",
+      "bytes": 3868579
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/statistical_comparisons.json",
+      "bytes": 17346
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/m3b_learned_gate/qwen3_4b/scifact_oracle/summary.json",
+      "bytes": 45294
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/audit_report.md",
+      "bytes": 2406
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/disagreement_analysis.csv",
+      "bytes": 21894
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/experiment_report.md",
+      "bytes": 4249
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/implementation_audit.json",
+      "bytes": 2424
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/implementation_audit.md",
+      "bytes": 895
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/matched_budget_results.csv",
+      "bytes": 34560
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/meta_disagreement_audit.csv",
+      "bytes": 32399
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/method_configs.json",
+      "bytes": 45426
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/natural_results.csv",
+      "bytes": 4616
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/oracle_headroom.json",
+      "bytes": 59256
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/per_class_results.csv",
+      "bytes": 12566
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/per_query_features.jsonl",
+      "bytes": 12152335
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/per_query_predictions.jsonl",
+      "bytes": 142450591
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/quality_budget_curves.csv",
+      "bytes": 12385
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/runtime_comparison.csv",
+      "bytes": 366
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/averitec_grouped090/statistical_comparisons.json",
+      "bytes": 10854
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/audit_report.md",
+      "bytes": 2370
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/disagreement_analysis.csv",
+      "bytes": 13667
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/experiment_report.md",
+      "bytes": 4205
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/implementation_audit.json",
+      "bytes": 1728
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/implementation_audit.md",
+      "bytes": 758
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/matched_budget_results.csv",
+      "bytes": 33449
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/meta_disagreement_audit.csv",
+      "bytes": 19298
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/method_configs.json",
+      "bytes": 2845
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/natural_results.csv",
+      "bytes": 4442
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/oracle_headroom.json",
+      "bytes": 29848
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/per_class_results.csv",
+      "bytes": 12127
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/per_query_features.jsonl",
+      "bytes": 6086528
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/per_query_predictions.jsonl",
+      "bytes": 74967049
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/quality_budget_curves.csv",
+      "bytes": 11998
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/runtime_comparison.csv",
+      "bytes": 367
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/mistral7b_v03_c170c70/climate_fever/statistical_comparisons.json",
+      "bytes": 7104
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/audit_report.md",
+      "bytes": 1980
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/disagreement_analysis.csv",
+      "bytes": 10762
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/experiment_report.md",
+      "bytes": 4193
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/implementation_audit.json",
+      "bytes": 1743
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/implementation_audit.md",
+      "bytes": 776
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/matched_budget_results.csv",
+      "bytes": 34446
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/meta_disagreement_audit.csv",
+      "bytes": 19285
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/method_configs.json",
+      "bytes": 44963
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/natural_results.csv",
+      "bytes": 4371
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/oracle_headroom.json",
+      "bytes": 52231
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/per_class_results.csv",
+      "bytes": 12462
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/per_query_features.jsonl",
+      "bytes": 11927823
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/per_query_predictions.jsonl",
+      "bytes": 140977456
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/quality_budget_curves.csv",
+      "bytes": 12342
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/runtime_comparison.csv",
+      "bytes": 368
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/averitec_grouped090/statistical_comparisons.json",
+      "bytes": 10342
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/audit_report.md",
+      "bytes": 1984
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/disagreement_analysis.csv",
+      "bytes": 11493
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/experiment_report.md",
+      "bytes": 4208
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/implementation_audit.json",
+      "bytes": 1769
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/implementation_audit.md",
+      "bytes": 786
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/matched_budget_results.csv",
+      "bytes": 33239
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/meta_disagreement_audit.csv",
+      "bytes": 15011
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/method_configs.json",
+      "bytes": 2628
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/natural_results.csv",
+      "bytes": 4526
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/oracle_headroom.json",
+      "bytes": 28122
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/per_class_results.csv",
+      "bytes": 12405
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/per_query_features.jsonl",
+      "bytes": 6055532
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/per_query_predictions.jsonl",
+      "bytes": 74489890
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/quality_budget_curves.csv",
+      "bytes": 11894
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/runtime_comparison.csv",
+      "bytes": 366
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/climate_fever/statistical_comparisons.json",
+      "bytes": 7067
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/audit_report.md",
+      "bytes": 1983
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/disagreement_analysis.csv",
+      "bytes": 1687
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/experiment_report.md",
+      "bytes": 4191
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/implementation_audit.json",
+      "bytes": 1672
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/implementation_audit.md",
+      "bytes": 754
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/matched_budget_results.csv",
+      "bytes": 27649
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/meta_disagreement_audit.csv",
+      "bytes": 1779
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/method_configs.json",
+      "bytes": 2687
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/natural_results.csv",
+      "bytes": 3637
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/oracle_headroom.json",
+      "bytes": 6979
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/per_class_results.csv",
+      "bytes": 8951
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/per_query_features.jsonl",
+      "bytes": 1176013
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/per_query_predictions.jsonl",
+      "bytes": 14466895
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/quality_budget_curves.csv",
+      "bytes": 9856
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/runtime_comparison.csv",
+      "bytes": 364
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_bm25/statistical_comparisons.json",
+      "bytes": 6430
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/audit_report.md",
+      "bytes": 1934
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/disagreement_analysis.csv",
+      "bytes": 1831
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/experiment_report.md",
+      "bytes": 4135
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/implementation_audit.json",
+      "bytes": 1724
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/implementation_audit.md",
+      "bytes": 772
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/matched_budget_results.csv",
+      "bytes": 26257
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/meta_disagreement_audit.csv",
+      "bytes": 2110
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/method_configs.json",
+      "bytes": 2645
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/natural_results.csv",
+      "bytes": 3759
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/oracle_headroom.json",
+      "bytes": 6861
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/per_class_results.csv",
+      "bytes": 8514
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/per_query_features.jsonl",
+      "bytes": 1184175
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/per_query_predictions.jsonl",
+      "bytes": 14311390
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/quality_budget_curves.csv",
+      "bytes": 9397
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/runtime_comparison.csv",
+      "bytes": 364
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/meta_routing_experiments/qwen3_4b/scifact_oracle/statistical_comparisons.json",
+      "bytes": 6864
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/averitec_grouped090/neighbor_diagnostics.jsonl",
+      "bytes": 3040028
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/averitec_grouped090/policy_manifest.json",
+      "bytes": 1627
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/averitec_grouped090/predictions.jsonl",
+      "bytes": 6691028
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/averitec_grouped090/routes.jsonl",
+      "bytes": 81654
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/averitec_grouped090/summary.json",
+      "bytes": 19280
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/climate_fever/neighbor_diagnostics.jsonl",
+      "bytes": 1550134
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/climate_fever/policy_manifest.json",
+      "bytes": 1615
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/climate_fever/predictions.jsonl",
+      "bytes": 3526028
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/climate_fever/routes.jsonl",
+      "bytes": 85689
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/climate_fever/summary.json",
+      "bytes": 19034
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_bm25/neighbor_diagnostics.jsonl",
+      "bytes": 304664
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_bm25/policy_manifest.json",
+      "bytes": 1621
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_bm25/predictions.jsonl",
+      "bytes": 687580
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_bm25/routes.jsonl",
+      "bytes": 15486
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_bm25/summary.json",
+      "bytes": 16721
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_oracle/neighbor_diagnostics.jsonl",
+      "bytes": 304263
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_oracle/policy_manifest.json",
+      "bytes": 1578
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_oracle/predictions.jsonl",
+      "bytes": 684851
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_oracle/routes.jsonl",
+      "bytes": 10258
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/nlf_eval/scifact_oracle/summary.json",
+      "bytes": 16486
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/repository_audit.json",
+      "bytes": 593
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/climate_fever/score_fusion/predictions.jsonl",
+      "bytes": 650448
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/climate_fever/score_fusion/summary.json",
+      "bytes": 7037
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/climate_fever/supervised/predictions.jsonl",
+      "bytes": 778614
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/climate_fever/supervised/summary.json",
+      "bytes": 3733
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/scifact_bm25/score_fusion/predictions.jsonl",
+      "bytes": 117157
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/scifact_bm25/score_fusion/summary.json",
+      "bytes": 7000
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/scifact_bm25/supervised/predictions.jsonl",
+      "bytes": 150719
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/scifact_bm25/supervised/summary.json",
+      "bytes": 3673
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/scifact_oracle/score_fusion/predictions.jsonl",
+      "bytes": 116861
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/scifact_oracle/score_fusion/summary.json",
+      "bytes": 6940
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/scifact_oracle/supervised/predictions.jsonl",
+      "bytes": 150467
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/external/scifact_oracle/supervised/summary.json",
+      "bytes": 3488
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/quality_budget/predictions.jsonl",
+      "bytes": 22325493
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/quality_budget/quality_budget_curves.csv",
+      "bytes": 7937
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/quality_budget/summary.json",
+      "bytes": 925
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/quality_budget_v2/predictions.jsonl",
+      "bytes": 22324977
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/quality_budget_v2/quality_budget_curves.csv",
+      "bytes": 7932
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/quality_budget_v2/summary.json",
+      "bytes": 925
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/score_ensemble/predictions.jsonl",
+      "bytes": 1024381
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/score_ensemble/summary.json",
+      "bytes": 18544
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/score_ensemble_v2/predictions.jsonl",
+      "bytes": 1024381
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/score_ensemble_v2/summary.json",
+      "bytes": 19335
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/score_ensemble_v3/predictions.jsonl",
+      "bytes": 1261614
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/score_ensemble_v3/summary.json",
+      "bytes": 20962
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/supervised_375/predictions.jsonl",
+      "bytes": 1457757
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_averitec/supervised_375/summary.json",
+      "bytes": 3755
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_climate_fever/score_ensemble_v3/predictions.jsonl",
+      "bytes": 650448
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_climate_fever/score_ensemble_v3/summary.json",
+      "bytes": 7037
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_scifact_bm25/score_ensemble_v3/predictions.jsonl",
+      "bytes": 117157
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_scifact_bm25/score_ensemble_v3/summary.json",
+      "bytes": 7000
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_scifact_oracle/score_ensemble_v3/predictions.jsonl",
+      "bytes": 116861
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_controls/qwen_scifact_oracle/score_ensemble_v3/summary.json",
+      "bytes": 6940
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/averitec/frontier/predictions.jsonl",
+      "bytes": 32161035
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/averitec/frontier/quality_budget_curves.csv",
+      "bytes": 10590
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/averitec/frontier/summary.json",
+      "bytes": 1058
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/averitec/supervised_375/predictions.jsonl",
+      "bytes": 2469761
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/averitec/supervised_375/summary.json",
+      "bytes": 12632
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/climate_fever/frontier/predictions.jsonl",
+      "bytes": 17300833
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/climate_fever/frontier/quality_budget_curves.csv",
+      "bytes": 10082
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/climate_fever/frontier/summary.json",
+      "bytes": 1046
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/climate_fever/supervised/predictions.jsonl",
+      "bytes": 1316700
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/climate_fever/supervised/summary.json",
+      "bytes": 12550
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/compatibility/mistral7b_v03_c170c70/predictions.jsonl",
+      "bytes": 423112
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/compatibility/mistral7b_v03_c170c70/summary.json",
+      "bytes": 5720
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/compatibility/qwen3_4b/predictions.jsonl",
+      "bytes": 406898
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/compatibility/qwen3_4b/summary.json",
+      "bytes": 5695
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_bm25/frontier/predictions.jsonl",
+      "bytes": 3350896
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_bm25/frontier/quality_budget_curves.csv",
+      "bytes": 8526
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_bm25/frontier/summary.json",
+      "bytes": 1038
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_bm25/supervised/predictions.jsonl",
+      "bytes": 255051
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_bm25/supervised/summary.json",
+      "bytes": 11366
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_oracle/frontier/predictions.jsonl",
+      "bytes": 3347202
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_oracle/frontier/quality_budget_curves.csv",
+      "bytes": 8592
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_oracle/frontier/summary.json",
+      "bytes": 1009
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_oracle/supervised/predictions.jsonl",
+      "bytes": 253607
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round2/scifact_oracle/supervised/summary.json",
+      "bytes": 11010
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round3/checksums/qwen3_4b_snapshot.json",
+      "bytes": 10473
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round3/harm_containment/climate_in_domain.json",
+      "bytes": 1017
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round3/harm_containment/mistral_averitec.json",
+      "bytes": 1011
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round3/harm_containment/qwen_averitec.json",
+      "bytes": 1003
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round3/harm_containment/scifact_bm25_native.json",
+      "bytes": 961
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round3/harm_containment/scifact_oracle_native.json",
+      "bytes": 934
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round3/memory_provenance/climate_in_domain_vs_averitec.json",
+      "bytes": 1523
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round3/memory_provenance/climate_in_domain_vs_averitec.jsonl",
+      "bytes": 382502
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/grouped_uncertainty/averitec_base_vs_memory_global.json",
+      "bytes": 1370
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/grouped_uncertainty/averitec_memory_vs_balanced_logistic.json",
+      "bytes": 1408
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/bm25_dev.jsonl",
+      "bytes": 432274
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/bm25_dev.manifest.json",
+      "bytes": 1352
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/bm25_dev_vs_audit_base.json",
+      "bytes": 948
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/bm25_train.jsonl",
+      "bytes": 1151271
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/bm25_train.manifest.json",
+      "bytes": 1338
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/oracle_dev.jsonl",
+      "bytes": 427157
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/oracle_dev.manifest.json",
+      "bytes": 1344
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/oracle_dev_vs_audit_base.json",
+      "bytes": 916
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/oracle_train.jsonl",
+      "bytes": 1136008
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round4/scifact_standard/oracle_train.manifest.json",
+      "bytes": 1327
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/averitec.jsonl",
+      "bytes": 4494534
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/averitec.manifest.json",
+      "bytes": 1276
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/averitec_alt_vs_standard.json",
+      "bytes": 1386
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/averitec_memory_vs_standard.json",
+      "bytes": 1401
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/averitec_standard_vs_audit.json",
+      "bytes": 1381
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/climate_alt_vs_standard.json",
+      "bytes": 1389
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/climate_fever.jsonl",
+      "bytes": 2361188
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/climate_fever.manifest.json",
+      "bytes": 1358
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/climate_memory_vs_standard.json",
+      "bytes": 1398
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/reviewer_round5/four_label_standard/climate_standard_vs_audit.json",
+      "bytes": 1378
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/adapter_audit/summary.json",
+      "bytes": 16204
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/adapter_audit/transitions.jsonl",
+      "bytes": 71828
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/b1_analysis/baseline_scores.jsonl",
+      "bytes": 421447
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/b1_analysis/residual_errors.jsonl",
+      "bytes": 158407
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/b1_analysis/residual_metrics.json",
+      "bytes": 3467
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/b1_projected.jsonl",
+      "bytes": 439947
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/b1_projected_metrics.json",
+      "bytes": 1132
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/conflict_audit_v1.jsonl",
+      "bytes": 410361
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/conflict_audit_v1.manifest.json",
+      "bytes": 1302
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/conflicting_rescue_v1.jsonl",
+      "bytes": 411639
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/conflicting_rescue_v1.manifest.json",
+      "bytes": 1311
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/direct3/conflict_audit_v1.jsonl",
+      "bytes": 404947
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/direct3/conflict_audit_v1.manifest.json",
+      "bytes": 1327
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/direct3/conflicting_rescue_v1.jsonl",
+      "bytes": 406131
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/direct3/conflicting_rescue_v1.manifest.json",
+      "bytes": 1336
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/r6_projected.jsonl",
+      "bytes": 247836
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/r6_projected_metrics.json",
+      "bytes": 1169
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/r6_raw_significance.json",
+      "bytes": 970
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/r6_significance.json",
+      "bytes": 952
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/r6_source_memory_raw.jsonl",
+      "bytes": 218254
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/r6_source_memory_raw_metrics.json",
+      "bytes": 450
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/conflict_audit_v1.jsonl",
+      "bytes": 446628
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/conflict_audit_v1.manifest.json",
+      "bytes": 1337
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/conflicting_rescue_v1.jsonl",
+      "bytes": 448066
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/conflicting_rescue_v1.manifest.json",
+      "bytes": 1345
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/external_eval/predictions.jsonl",
+      "bytes": 301287
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/external_eval/routes.jsonl",
+      "bytes": 9190
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/external_eval/summary.json",
+      "bytes": 9492
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/retrieval_condition_analysis.json",
+      "bytes": 4249
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/scifact/retrieved_evidence/retrieval_metrics.json",
+      "bytes": 655
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/PIPELINE.log",
+      "bytes": 259547
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/actions/standard_alt.jsonl",
+      "bytes": 4535472
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/actions/standard_alt.manifest.json",
+      "bytes": 1294
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/actions/standard_base.jsonl",
+      "bytes": 4494519
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/actions/standard_base.manifest.json",
+      "bytes": 1284
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/crossfit/baseline_scores.jsonl",
+      "bytes": 5022117
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/crossfit/manifest.json",
+      "bytes": 2218
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/crossfit/memory.jsonl",
+      "bytes": 3787361
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/crossfit/neighbor_diagnostics.jsonl",
+      "bytes": 5730526
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/crossfit/predictions.jsonl",
+      "bytes": 4758345
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/crossfit/routes.jsonl",
+      "bytes": 44106
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/crossfit/standard_pair_provenance.json",
+      "bytes": 698
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/averitec/crossfit/summary.json",
+      "bytes": 24118
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/actions/standard_alt.jsonl",
+      "bytes": 2349209
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/actions/standard_alt.manifest.json",
+      "bytes": 1356
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/actions/standard_base.jsonl",
+      "bytes": 2328964
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/actions/standard_base.manifest.json",
+      "bytes": 1346
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/crossfit/baseline_scores.jsonl",
+      "bytes": 3082118
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/crossfit/manifest.json",
+      "bytes": 2282
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/crossfit/memory.jsonl",
+      "bytes": 1970613
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/crossfit/neighbor_diagnostics.jsonl",
+      "bytes": 2995657
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/crossfit/predictions.jsonl",
+      "bytes": 2524934
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/crossfit/routes.jsonl",
+      "bytes": 49949
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/crossfit/standard_pair_provenance.json",
+      "bytes": 708
+    },
+    {
+      "path": "/home/stackops/whale/ERRORFlow/outputs/v3/standard_base_decisive/climate_fever/crossfit/summary.json",
+      "bytes": 23981
+    }
+  ]
+}

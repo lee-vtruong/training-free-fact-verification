@@ -1,0 +1,1116 @@
+{
+ "schema_version": "m162d-triage-v1",
+ "generated_utc": "2026-10-28T04:31:20Z",
+ "milestone": "M1.6.2d (internal M1.6.3a: Error Information Feasibility) — step 1",
+ "scope": "CPU-only evidence-adequacy triage of the 28 assistant-INSUFFICIENT error records of the memory75 bank. EXPLORATORY, not confirmatory; no M1.6.3 activation; no gold of any DEVELOPMENT/TEST target read; SOURCE bank labels are the records’ own gold fields; no prompt tuning, no model changes.",
+ "class_definitions": {
+  "E1": "Evidence for the gold verdict genuinely absent from the displayed Top-8 AND from the target’s per-claim store/corpus, or the gold reading is not derivable from displayed evidence without speculation — correction draft not grounded.",
+  "E2": "Decisive evidence present in the target’s own store/corpus (or in a retrieved passage) but missed by extraction/spanning or by retrieval ranking — draftable once the store passage is included.",
+  "E3": "Decisive (or both-sides) evidence already displayed in the Top-8; Base reasoning/ontology error — draftable now, pending human review."
+ },
+ "inputs": {
+  "bank": {
+   "path": "outputs\\m161-review-preparation-v1\\combined75.json",
+   "sha256": "8ec5d9fbc496b48c1483b64942a8b50bf7e41cee56d71eaec07b884c81047618"
+  },
+  "memory": {
+   "path": "outputs\\m1611-correction-audit-v3\\memory75.json",
+   "sha256": "b3f7275112aa49b71595d94c7313a4ae101b3ed263c277bb277f97def2565581"
+  }
+ },
+ "store_probes_note": "Server-side greps run 2026-10-28 on hvtham-server against per-claim stores (bank Top-8 passage_id membership verified 8/8 where checked; train:3 store identity inferred from same pilot100 batch). Store-level quotes were verified in those probes and are reproduced here; they are not re-assertable locally.",
+ "summary": {
+  "records": 28,
+  "by_class": {
+   "E1": 8,
+   "E2": 4,
+   "E3": 16
+  },
+  "by_gold_x_class": {
+   "Supported": {
+    "E2": 2,
+    "E1": 4,
+    "E3": 2
+   },
+   "Conflicting Evidence/Cherrypicking": {
+    "E3": 6,
+    "E2": 1
+   },
+   "Refuted": {
+    "E2": 1,
+    "E3": 3,
+    "E1": 2
+   },
+   "Not Enough Evidence": {
+    "E3": 5,
+    "E1": 2
+   }
+  },
+  "by_draftability": {
+   "requires_store_passage_inclusion": 4,
+   "not_grounded": 8,
+   "pending_human_review": 16
+  }
+ },
+ "records": [
+  {
+   "sample_id": "train:2",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "In Nigeria … in terms of revenue share, 20% goes to the local government.",
+   "triage_class": "E2",
+   "subflags": [
+    "RETRIEVAL_MISS"
+   ],
+   "draftability": "requires_store_passage_inclusion",
+   "rationale": "Original INSUFFICIENT rested on \"the only explicit 20% excerpt is historical (1976-1992)\". Store probe proves the target’s own store contains the current statutory formula (CBN chapter: FG 52.68/SG 26.72/LG 20.60; LinkedIn explainer: \"In the current revenue allocation formula... Local Governments get 20.60%\"), decisive for gold Supported and absent from the Top-8 span set. Draftable once the store passage is included; grounded, no speculation.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://files.eric.ed.gov/fulltext/EJ1158964.pdf",
+     "quote": "Between 1976 and 1992 the revenue allocation by the federal government to the local government increased from 10% to 20% of the federation account",
+     "span": [
+      20328,
+      21527
+     ],
+     "note": "the historical passage Base leaned on; the only explicit 20% excerpt per the original assessment"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "The only explicit 20% excerpt is historical (1976-1992); other baskets/years and fragmented formulas do not settle the undated current claim.",
+    "limitations": "Need the intended year and revenue basket; do not turn historical mention into current gold entailment."
+   },
+   "store_probe": {
+    "sample_id": "train:2",
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-2/passages.jsonl",
+    "lines": 32979,
+    "bank_top8_passage_ids_present": 8,
+    "decisive_hits": [
+     {
+      "passage_id": "d9f3169eb0c4492d2cefb8276b4d7d98a7974de1f2d921de6a69aaf6a4fa77af",
+      "url": "https://www.cbn.gov.ng/out/2013/ccd/chapter%20five.pdf",
+      "in_bank_top8": false,
+      "quote": "The Federation Account revenue sharing formula is as follows: FG (52.68%), SGs (26.72%) and LGs (20.60%)"
+     },
+     {
+      "passage_id": "480c026c8564c9434a3234e70e28727b312d8755da21a2174751736a3c8fc22e",
+      "url": "https://www.linkedin.com/pulse/how-revenue-being-shared-from-federation-account-victor-ejechi",
+      "in_bank_top8": false,
+      "quote": "In the current revenue allocation formula, the FG gets 52.68%, State Governments get 26.72% and the Local Governments get 20.60%"
+     }
+    ],
+    "corpus_probe": "outputs/m11-candidates-pilot100-20261023-161557/train-2/corpus.jsonl (423 docs): 5x 20.60 hits, 8x 52.68 hits incl. UBE doc \"allocates 52.68 percent to the federal government, 26.72 percent to state governments, and 20.6 percent to local governments\""
+   }
+  },
+  {
+   "sample_id": "train:3",
+   "gold_verdict": "Supported",
+   "base_verdict": "Refuted",
+   "claim": "Biden has pledged to stop border wall construction and give amnesty and health care to all illegal immigrants.",
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_TENSION"
+   ],
+   "draftability": "not_grounded",
+   "rationale": "Gold Supported is not derivable from the evidence: the displayed NBC fact-check (\"This is misleading\") and the store’s own full text (\"he has hardly proposed amnesty and free health care for all undocumented immigrants; Biden supports allowing undocumented immigrants to purchase health care with their own money\") support a mixed/refuted reading of the health-care element. A Supported draft would contradict the store’s decisive passage.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.nbcnews.com/politics/2020-election/fact-checking-night-2-republican-national-convention-n1238108",
+     "quote": "Eric Trump says Biden wants 'amnesty and health care' for undocumented immigrants. That's misleading.",
+     "span": [
+      2834,
+      3993
+     ],
+     "note": "displayed fact-check framing"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.nbcnews.com/politics/2020-election/fact-checking-night-2-republican-national-convention-n1238108",
+     "quote": "While it's true that Biden has pledged to stop construction of the border",
+     "span": [
+      2834,
+      3993
+     ],
+     "note": "partial-support element only"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Evidence disputes amnesty for all and distinguishes health-care access from free care; a repeated partisan allegation is not proof of the Supported gold compound.",
+    "limitations": "Need primary policy commitments and interpretation of all/amnesty; retrieved material can support the Base objection."
+   },
+   "store_probe": {
+    "sample_id": "train:3",
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-3/passages.jsonl",
+    "lines": 110306,
+    "bank_top8_passage_ids_present": null,
+    "decisive_hits": [
+     {
+      "passage_id": "d25fae756b24f9",
+      "url": "https://www.nbcnews.com/politics/2020-election/fact-checking-night-2-republican-national-convention",
+      "in_bank_top8": null,
+      "quote": "he has hardly proposed amnesty and free health care for all undocumented immigrants. Biden supports allowing undocumented immigrants to purchase health care with their own money; he does not support using taxpayer-funded subsidies"
+     }
+    ],
+    "corpus_probe": "outputs/m11-candidates-pilot100-20261023-161557/train-3/corpus.jsonl (1040 docs): same NBC full text present"
+   }
+  },
+  {
+   "sample_id": "train:8",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Supported",
+   "claim": "Joe Biden voted for the Irag War and supported war in Serbia, Syria and Libya.",
+   "triage_class": "E3",
+   "subflags": [
+    "SOURCE_CIRCULARITY"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "Base treated the partisan attack speech [1] (the claim’s own source) as confirmation. Displayed evidence supports a Conflicting draft: Iraq vote documented and later regretted [3]; Serbia/Syria/Libya support only asserted in the claim-source; jacobin [5] characterises his record as interventionist. Grounded without speculation.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 3,
+     "url": "https://www.cfr.org/election2020/candidate-tracker",
+     "quote": "supported the 2003 invasion of Iraq, but he now calls it a “mistake”",
+     "span": [
+      11635,
+      12734
+     ],
+     "note": "independent assessment"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://www.cnn.com/2020/08/25/politics/rand-paul-speech-transcript/index.html",
+     "quote": "Joe Biden voted for the Iraq War, which President Trump has long called",
+     "span": [
+      2576,
+      3373
+     ],
+     "note": "claim-source passage (circularity flag)"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Sources both report intervention support and explicitly report opposition to Libya; the gold cherrypicking judgment depends on temporal/contextual framing and near-duplicate source 13 has a different gold.",
+    "limitations": "Do not infer the official nuanced class solely from opposing narratives; human ontology/context adjudication is required."
+   }
+  },
+  {
+   "sample_id": "train:12",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Refuted",
+   "claim": "Donald Trump inherited a stagnant economy and then rebuilt it.",
+   "triage_class": "E3",
+   "subflags": [],
+   "draftability": "pending_human_review",
+   "rationale": "Base cited only the recovered-economy side. Both sides are displayed: recovered ([1] nwlc, [2] medium) vs inherited-stagnation narrative ([4] Trump WH archives \"secular stagnation\", [6] detroitnews). Conflicting gold draftable.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://nwlc.org/the-economy-isnt-broken-trump-just-wants-to-cut-taxes/",
+     "quote": "Donald Trump inherited an economy that had largely recovered",
+     "span": [
+      935,
+      2061
+     ],
+     "note": "anti-claim side"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 4,
+     "url": "https://trumpwhitehouse.archives.gov/articles/trump-bump-real/",
+     "quote": "low growth, or “secular stagnation,” would plague the U.S. economy indefinitely",
+     "span": [
+      0,
+      1229
+     ],
+     "note": "pro-claim side (WH archives)"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Evidence disputes stagnation but does not settle the full two-part inherited-and-rebuilt proposition under one consistent period/indicator.",
+    "limitations": "Political praise/disagreement alone is not conflicting factual evidence; need economic series and claim framing."
+   }
+  },
+  {
+   "sample_id": "train:14",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "President Muhammadu Buhari sign a new Police bill to allow officers arrest without a warrant",
+   "triage_class": "E1",
+   "subflags": [
+    "EVIDENCE_ELEMENTS_SPLIT"
+   ],
+   "draftability": "not_grounded",
+   "rationale": "Claim elements (Buhari signing; new Police bill; warrantless-arrest power) never appear together: Top-8 has generic warrantless-arrest law fragments [2][7] and a 2017/2019 gunshot-treatment bill [1]; store and raw corpus contain no Buhari+Police-Act-2020+arrest link. Gold Supported cannot be grounded without speculation.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.thisdaylive.com/index.php/2016/10/17/judges-arrest-report-from-presidency-says-dss-acted-in-accordance-with-law",
+     "quote": "any police officer may, without an order from a magistrate and without a warrant, arrest",
+     "span": [
+      6050,
+      7095
+     ],
+     "note": "generic CPL fragment, not the named bill"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Excerpts describe a 2017 gunshot-treatment bill and generic warrantless-arrest law, not the named new Buhari Police bill and its signing/provision together.",
+    "limitations": "Cannot fill the missing bill identity/date from the gold label or from current web sources."
+   },
+   "store_probe": {
+    "sample_id": "train:14",
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-14/passages.jsonl",
+    "lines": 82887,
+    "bank_top8_passage_ids_present": 8,
+    "decisive_hits": [],
+    "negative_findings": "No passage links Buhari + a new Police bill + warrantless arrest: \"Nigeria Police Act, 2020\" mentions (punchng) concern a later PSC-amendment bill; assent passages concern disability/finance/other bills; corpus.jsonl (650 docs) likewise has no decisive link (74x generic \"Police Act\", 31x Buhari hits all about other bills)."
+   }
+  },
+  {
+   "sample_id": "train:17",
+   "gold_verdict": "Supported",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "claim": "In 2019 the US Police were 20.8 times more likely to kill than be killed by a criminal",
+   "triage_class": "E2",
+   "subflags": [
+    "SPAN_TRUNCATION",
+    "BIBLIOGRAPHIC_ONLY"
+   ],
+   "draftability": "requires_store_passage_inclusion",
+   "rationale": "The decisive datum (Politifact title \"Yes, Police Were 20.8 More Likely to Kill than Be Killed by a Criminal in 2019\") sits inside a passage already retrieved for the Top-8, but the rendered span starts mid-title and cuts the number; Base therefore saw an unusable citation fragment. Store full passage (houstonlawreview.org footnotes) contains the complete title. Draftable with the store passage; note the ratio is attested bibliographically, not by primary data.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://houstonlawreview.org/article/22273.pdf",
+     "quote": "More Likely to Kill than Be Killed by a Criminal in 2019, POLITIFACT (Aug. 27, 2020)",
+     "span": [
+      110751,
+      112245
+     ],
+     "note": "Top-8 span begins mid-title; \"20.8\" falls before span start 110751"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "The 20.8 number occurs through a bibliographic title/URL fragment; other displayed ratios compare countries/races, not the claimed 2019 kill/be-killed denominator.",
+    "limitations": "Need actual paired 2019 counts/ratio in displayed evidence, not only a citation slug."
+   },
+   "store_probe": {
+    "sample_id": "train:17",
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-17/passages.jsonl",
+    "lines": 82965,
+    "bank_top8_passage_ids_present": 8,
+    "decisive_hits": [
+     {
+      "passage_id": "be6c1a25dd04",
+      "url": "https://houstonlawreview.org/article/22273.pdf",
+      "in_bank_top8": true,
+      "quote": "Madeline Heim, Yes, Police Were 20.8 More Likely to Kill than Be Killed by a Criminal in 2019, POLITIFACT (Aug. 27, 2020)"
+     }
+    ],
+    "corpus_probe": null
+   }
+  },
+  {
+   "sample_id": "train:18",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "A greater proportion of 16 year olds vote in elections in Scotland, Wales and Austria than 18 and 20 year olds.",
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "Both sides of the Conflicting reading were already displayed: the Zeglovits & Aichholzer (2014) bibliography title asserting the first-time voting boost [3], and the Wales caveat \"Austria has traditionally high turnout rates... which cannot be said for elections in Wales... typically below 50 per cent\" [6]. Base (NEI) failed to combine them. Store additionally holds direct comparative passages (vox: Scotland 16-year-olds \"75 percent turnout rate — higher than voters three times their age\"; viecer: findings \"corroborate earlier evidence reported by Zeglovits and Aichholzer\"). ONTOLOGY sign-off required for the three-jurisdiction scope.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 3,
+     "url": "https://repositorio.iscte-iul.pt/bitstream/10071/26790/1/article_90750.pdf",
+     "quote": "Evidence for the first-time voting boost among 16- to 25-year-olds in Austria",
+     "span": [
+      55592,
+      55962
+     ],
+     "note": "supporting title in bibliography"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 6,
+     "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2019-03/democratic-renewal-evidence-synthesis-to-support-local-government-electoral-reform_0.pdf",
+     "quote": "turnout across the country as a whole for National Assembly and local council elections are typically below 50 per cent",
+     "span": [
+      61279,
+      62396
+     ],
+     "note": "Wales caveat"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Evidence covers voting eligibility/first-time boosts and partial turnout data, not a matched 16-versus-18/20 comparison across all three jurisdictions.",
+    "limitations": "Missing common election/year/population comparisons prevents establishing the gold cherrypicking framing."
+   }
+  },
+  {
+   "sample_id": "train:19",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Refuted",
+   "claim": "Donald Trump has kept his promises to voters",
+   "triage_class": "E3",
+   "subflags": [],
+   "draftability": "pending_human_review",
+   "rationale": "Base read only the broken/stalled trackers. Kept-side evidence is displayed ([4]: \"decades of academic research has actually shown the opposite: that presidents try to keep an average of about two-thirds of their campaign pledges\"). Conflicting gold draftable from the mixed trackers + research framing.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://time.com/5175729/donald-trump-broken-promises/",
+     "quote": "33 are currently stalled and seven broken",
+     "span": [
+      865,
+      1968
+     ],
+     "note": "broken side"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 4,
+     "url": "https://time.com/5175729/donald-trump-broken-promises/",
+     "quote": "decades of academic research has actually shown the opposite",
+     "span": [
+      0,
+      1063
+     ],
+     "note": "kept side"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "A scorecard reports both kept and unkept promises; choosing Refuted versus Cherrypicking depends on the vague scope of kept his promises.",
+    "limitations": "Need claim context/quantifier and contemporaneous scorecard; do not choose the nuanced gold simply because some promises were kept."
+   }
+  },
+  {
+   "sample_id": "train:20",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Supported",
+   "claim": "The Edo Modular Refinery is Governor Obaseki's project.",
+   "triage_class": "E2",
+   "subflags": [
+    "RETRIEVAL_MISS"
+   ],
+   "draftability": "requires_store_passage_inclusion",
+   "rationale": "Top-8 is uniformly administration-PR framing (\"key legacy project by the Obaseki-led administration\"), with AIPCC appearing only as co-developer. The store’s aipccenergy.com/operations-projects page states the refinery is \"100% fully owned and developed by AIPCC\" at the same Ologbo site — decisive for gold Refuted (ownership is the consortium’s, not the Governor’s) and absent from the Top-8 span set.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 3,
+     "url": "https://www.asabametro.com/6000-bpd-facility-edo-modular-refinery-to-commence-operation-soon-obasekis-aide/",
+     "quote": "a project partly sponsored by the Governor Godwin Obaseki-led administration in Edo State and being developed by AIPCC Energy Limited",
+     "span": [
+      0,
+      1121
+     ],
+     "note": "Top-8 framing that masked the ownership fact"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Top-8 describe official promotion/MoU and call the refinery a legacy project, without decisive ownership/funding evidence establishing the Refuted gold.",
+    "limitations": "Distinguish facilitation, ownership and political credit; no gold-driven ownership explanation."
+   },
+   "store_probe": {
+    "sample_id": "train:20",
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-20/passages.jsonl",
+    "lines": 43100,
+    "bank_top8_passage_ids_present": 8,
+    "decisive_hits": [
+     {
+      "passage_id": "ad50e08df283538e9ef2d71c28d2bf4554d3138b8322c9ef9f09a5ae9e79ac38",
+      "url": "https://www.aipccenergy.com/operations-projects",
+      "in_bank_top8": false,
+      "quote": "A refinery 100% fully owned and developed by AIPCC. It is located in Ologbo, Ikpoba Okha LGA of Edo State."
+     }
+    ],
+    "corpus_probe": null
+   }
+  },
+  {
+   "sample_id": "train:21",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people in Kenya.",
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "Base (Supported) read [2]’s worldwide figure (\"On average, there are 15,000 inhabitants for every judge or magistrate across the globe\") as settling the claim; gold NEI. A grounded NEI draft exists from the displayed metric mismatches: judges-only ratios [1] (~75 per 1,000,000) vs judges+magistrates global figure [2] vs judicial-officer ratios [5] vs public-defender \"average of 17\" [7] use different denominators, and no passage evidences the specific relation the claim asserts. Human sign-off required; an alternative E1 reading (gold NEI not derivable) is recorded for transparency.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.unodc.org/pdf/crime/forum/forum3_Art2.pdf",
+     "quote": "On average, there are 15,000 inhabitants for every judge or magistrate across the globe",
+     "span": [
+      38148,
+      39346
+     ],
+     "note": "the figure Base leaned on"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://etheses.bham.ac.uk/3984/9/Ouma13PhD.pdf",
+     "quote": "about 75 judges 1,000,000 persons",
+     "span": [
+      577100,
+      578157
+     ],
+     "note": "Kenya judges-only ratio, different metric"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Displayed excerpts actually refer to global/regional averages as well as Kenyan ratios; they do not justify the particular official NEI interpretation unambiguously.",
+    "limitations": "Need a defined benchmark, population and interpretation; do not claim no average exists."
+   }
+  },
+  {
+   "sample_id": "train:24",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Supported",
+   "claim": "Anxiety levels among young teenagers dropped during the coronavirus pandemic, a study has suggested",
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "Both sides displayed: the Bristol study’s 13-14yo drop ([1][3]) vs general-population anxiety increases ([8] ONS 5.2/10 vs 3.0; [4][7]). Conflicting gold draftable; ONTOLOGY flag on whether \"a study has suggested\" scopes the claim to the study finding (Supported-reading) or the general assertion.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://www.newswise.com/articles/report-reveals-young-people-felt-less-anxious-and-more-connected-to-school-in-lockdown",
+     "quote": "felt less anxious and more connected to school when they were away from it",
+     "span": [
+      0,
+      1037
+     ],
+     "note": "study finding"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 8,
+     "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/articles/coronavirusandanxietygreatbritain/3april2020to10may2020",
+     "quote": "average anxiety scores were 5.2 out of 10, a marked increase from 3.0",
+     "span": [
+      3750,
+      4832
+     ],
+     "note": "ONS counter-side"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Displayed study directly reports lower anxiety in its specified adolescent cohort; other-age results do not establish the official cherrypicking label.",
+    "limitations": "Need original claim reach and study context; attribution to a study is not disproved by adult anxiety studies."
+   }
+  },
+  {
+   "sample_id": "train:26",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "claim": "I will raise taxes for anybody making over $400,000. … No new taxes for people making less than $400,000.",
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_READING_UNSUPPORTED"
+   ],
+   "draftability": "not_grounded",
+   "rationale": "Both pledge elements are directly evidenced ([1][2][3][7] \"no new taxes\" pledge; [4] hikes \"limited to people who make more than $400,000\"). The NEI gold rests on an unstated pledge-vs-enacted-incidence reading (original limitation: \"Need whether the claim verifies a speech act, proposed policy or enacted tax incidence\"); forcing NEI would be speculation.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://thehill.com/homenews/campaign/513319-biden-no-new-taxes-for-anyone-making-under-400k/",
+     "quote": "he will not raise taxes for Americans making less than $400,000",
+     "span": [
+      0,
+      1061
+     ],
+     "note": "pledge element 1"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 4,
+     "url": "https://www.kiplinger.com/taxes/income-tax/601108/2020-election-a-redo-on-taxes",
+     "quote": "tax hikes will be limited to people who make more than $400,000",
+     "span": [
+      0,
+      1015
+     ],
+     "note": "pledge element 2"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Several excerpts quote the tax pledge itself; the NEI gold cannot be derived by inventing a different policy-effect or household interpretation.",
+    "limitations": "Need whether the claim verifies a speech act, proposed policy or enacted tax incidence."
+   }
+  },
+  {
+   "sample_id": "train:27",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "claim": "The counties are striving to reach the 10% [allocation to agriculture] recommended by the Malabo declaration.",
+   "triage_class": "E3",
+   "subflags": [
+    "PROMISE_VS_PROGRESS"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "Displayed evidence documents commitments, not progress: counties \"made the following promises... to allocate at least 10% of national budgets to agriculture\" [2]; Malabo 10% target [1][4]; monitoring frameworks [5]. Base (Supported) equated the promise with striving-to-reach; a grounded NEI draft notes no county-level allocation/progress data is displayed.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.devolution.go.ke/wp-content/uploads/2020/02/Baringo-CIDP-2018-2022.pdf",
+     "quote": "made the following promises to their people: (a) to allocate at least 10% of national budgets to agriculture",
+     "span": [
+      302412,
+      303638
+     ],
+     "note": "commitment, not progress"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "National Malabo targets are shown but the county-specific effort/intent and exact allocation frame are not established consistently.",
+    "limitations": "Do not equate a national target or another country with the claimed counties striving toward it."
+   }
+  },
+  {
+   "sample_id": "train:29",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "The judiciary of Kenya have an average of 400,000 cases being filed in our courts every year.",
+   "triage_class": "E3",
+   "subflags": [
+    "PRECISION_DEMAND"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "Base demanded an exact 400,000 figure; [1] displays 397,243 cases filed in all Kenyan courts in FY 2013/14 — grounds the \"about 400,000 per year\" reading (gold Supported). Single-year caveat is the only residual limitation.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://pdf.usaid.gov/pdf_docs/PA00X5P4.pdf",
+     "quote": "there were 397,243 cases filed in all of the courts of Kenya during FY 2013/14",
+     "span": [
+      11647,
+      12744
+     ],
+     "note": "decisive figure"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "One total near 397243 and subset-court counts do not establish a multi-year all-courts annual average of 400000.",
+    "limitations": "Need the averaging interval and comparable annual totals; backlog is not filings."
+   }
+  },
+  {
+   "sample_id": "train:31",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Refuted",
+   "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people in Kenya.",
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "Mirror of train:21 (same claim, Base Refuted). Grounded NEI draft from the displayed metric mismatches ([1][5][7] vs [2]); human sign-off required; alternative E1 reading recorded.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 5,
+     "url": "http://judiciary.go.ug/files/downloads/Judicial%20Service%20Commission%20in%20Strengthening%20Ethics%20and%20Integrity%20by%20Hon.%20Justice%20Kabiito%20-%20AJC%202019.pdf",
+     "quote": "Kenya with a population of 48 million has a judge to population ratio of 1 judicial",
+     "span": [
+      4040,
+      5044
+     ],
+     "note": "Kenya ratio, judges-only metric"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 7,
+     "url": "https://reliefweb.int/report/guatemala/guatemalas-justice-system-evaluating-capacity-building-and-judicial-independence",
+     "quote": "well below the national global average of 17",
+     "span": [
+      2129,
+      3325
+     ],
+     "note": "unrelated public-defender average"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Benchmark mentions and national ratios cannot establish which interpretation yields official NEI rather than the Base Refuted choice.",
+    "limitations": "Lack of proof is not refutation; neither label should be forced without benchmark context."
+   }
+  },
+  {
+   "sample_id": "train:35",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "claim": "The current Ghana administration has resulted in a decline in unemployment rates from 11.9% in 2015 to 7.3% in 2019.",
+   "triage_class": "E3",
+   "subflags": [
+    "CAUSAL_ATTRIBUTION_MISSING",
+    "SERIES_DIVERGENCE"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "The 11.9%→7.3% GLSS series is displayed [8], but [4] shows a materially different ILO-modelled series (3.46% in 2019) and no passage attributes the decline to the administration’s policies. NEI gold (on the causal claim) draftable; ONTOLOGY sign-off on the causal scope.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 8,
+     "url": "https://www.gbcghanaonline.com/speeches-and-lectures/president-akufo-addos-2020-may-day-celebration-speech/2020/",
+     "quote": "the rate of unemployment, which stood at 11.9% in 2015, dropped to 7.3% in 2019",
+     "span": [
+      1753,
+      2790
+     ],
+     "note": "GLSS series"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 4,
+     "url": "https://www.macrotrends.net/countries/GHA/ghana/unemployment-rate",
+     "quote": "Ghana unemployment rate for 2019 was 3.46%",
+     "span": [
+      0,
+      409
+     ],
+     "note": "divergent series"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Reported GLSS decline and other unemployment series have incompatible scopes; the causal administration claim is not established by these observations.",
+    "limitations": "Need comparable definitions/years and attribution evidence; disagreement across series is not automatically factual conflict."
+   }
+  },
+  {
+   "sample_id": "train:37",
+   "gold_verdict": "Supported",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "claim": "Ghana's economy previously grew at 3.4% under the form President Mahama's government and on average, for three successive years, at 7% per year with the current administration.",
+   "triage_class": "E3",
+   "subflags": [],
+   "draftability": "pending_human_review",
+   "rationale": "The exact claimed figures are displayed verbatim in [5] (\"annual average of 7%, up from 3.4% in 2016, the lowest in nearly three decades\"); Base returned Conflicting by comparing unrelated indicators instead of the direct passage. Supported gold draftable.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 5,
+     "url": "https://www.ghanaweb.com/GhanaHomePage/NewsArchive/Full-text-Akufo-Addo-s-2020-address-on-State-of-the-Nation-872569",
+     "quote": "annual average of 7%, up from 3.4% in 2016, the lowest in nearly three decades",
+     "span": [
+      12508,
+      13650
+     ],
+     "note": "decisive passage"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Excerpts mix 2016 figures 3.4/3.7 and political reports of 7/7.3 averages without a complete common three-year series/definition.",
+    "limitations": "Need intended period and data vintage; do not convert a quoted political assertion into verified statistics."
+   }
+  },
+  {
+   "sample_id": "train:38",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "Kenya settles  about 300,000 court cases each year.",
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_BASELINE_ABSENT"
+   ],
+   "draftability": "not_grounded",
+   "rationale": "The store’s only ~300,000 figure is a backlog count, not annual settlements (\"the number of cases classified as back-log stood at just over 300,000\"; \"553,187 cases pending, 327,928 of which were backlogged\"); no passage gives an annual disposal total. Grounding the Supported gold would require turning backlog into settlements — speculation.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 8,
+     "url": "https://www.worldbank.org/en/news/feature/2017/10/05/court-annexed-mediation-offers-alternative-to-delayed-justice-for-kenyans",
+     "quote": "Kenya’s judiciary has a massive backlog of civil ca",
+     "span": [
+      0,
+      1159
+     ],
+     "note": "Top-8 [8] backlog framing"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "The 300000 figure refers to backlog rather than cases settled per year; mediation/subset figures do not provide the missing annual total.",
+    "limitations": "Need annual dispositions, not backlog or filings."
+   },
+   "store_probe": {
+    "sample_id": "train:38",
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-38/passages.jsonl",
+    "lines": 88907,
+    "bank_top8_passage_ids_present": 8,
+    "decisive_hits": [],
+    "negative_findings": "No Kenya annual case-disposal figure: all Kenya+300,000 co-occurrences are unrelated (SIM-card penalties, forest hectares, Adventists, abortions, displacement); corpus.jsonl (610 docs) only has backlog framing: \"the Kenyan Judiciary revealed that there were 553,187 cases pending, 327,928 of which were backlogged\" and \"the number of cases classified as back-log stood at just over 300,000\"."
+   }
+  },
+  {
+   "sample_id": "train:39",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people",
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_READING_UNSUPPORTED"
+   ],
+   "draftability": "not_grounded",
+   "rationale": "[4] explicitly reports \"the global average of 16\" (judges and magistrates per 100,000), which grounds the claim; the original assessor already concluded the NEI label \"is not entailed by denying all benchmark evidence\". A NEI draft would have to dismiss displayed benchmark evidence.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 4,
+     "url": "https://www.visionofhumanity.org/mexico-suffers-most-violent-year-on-record-at-a-cost-of-268-billion/",
+     "quote": "significantly below the global average of 16",
+     "span": [
+      891,
+      1996
+     ],
+     "note": "displayed global average"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "An excerpt explicitly reports a global average 16; the official NEI label is not entailed by denying all benchmark evidence.",
+    "limitations": "Need comparable coverage/definition and intended claim context; cannot invent absence of evidence."
+   }
+  },
+  {
+   "sample_id": "train:47",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "South African consume more alcohol per person on average than anywhere else in Africa.",
+   "triage_class": "E3",
+   "subflags": [],
+   "draftability": "pending_human_review",
+   "rationale": "Claim: SA consumes more per person than anywhere else in Africa; gold Refuted. [1] displays the ranking directly (\"third biggest drinking nation in Africa, and the 19th biggest... in the world\") — African countries rank above SA. Base returned NEI despite the direct statement. Refuted draftable.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://businesstech.co.za/news/lifestyle/124939/south-africa-alcohol-consumption-vs-the-world/",
+     "quote": "third biggest drinking nation in Africa, and the 19th biggest drinking nation in the world",
+     "span": [
+      0,
+      1058
+     ],
+     "note": "decisive ranking"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Rankings for drinkers-only, whole-population consumption, beer and different years are mixed; no same-denominator African counterexample establishes gold Refuted.",
+    "limitations": "Whole-world rank 52 does not alone prove not first in Africa; drinker-only comparators are not population averages."
+   }
+  },
+  {
+   "sample_id": "train:48",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "South Africans drink more per person than anywhere else in Africa",
+   "triage_class": "E3",
+   "subflags": [],
+   "draftability": "pending_human_review",
+   "rationale": "Same family as train:47; the Top-8 span displays the countries above SA (\"the fifth highest consumption rate in the world, below Namibia (31.3 litres), Eswatini (32.7 litres), Cook Islands (32.9 litres) and Tunisia (33.4 litres)\"), grounding Refuted (Namibia/Eswatini/Tunisia are African and higher). Base returned NEI.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 4,
+     "url": "https://businesstech.co.za/news/lifestyle/332909/south-africa-has-some-of-the-heaviest-drinkers-in-the-world/",
+     "quote": "below Namibia (31.3 litres), Eswatini (32.7 litres), Cook Islands (32.9 litres) and Tunisia (33.4 litres)",
+     "span": [
+      0,
+      1125
+     ],
+     "note": "countries above SA"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "The African comparators given are per-drinker while the claim says per-person; other snippets discuss beer or BRICS.",
+    "limitations": "Need a common population/year/total-alcohol table; do not silently change denominator."
+   }
+  },
+  {
+   "sample_id": "train:49",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "claim": "Only 31% of South African drink alcohol",
+   "triage_class": "E3",
+   "subflags": [
+    "SCOPE_QUALIFIER"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "Displayed figures genuinely diverge with different scopes: \"31% of the population aged 15 and older\" [1], \"only a third (31%) of adults report consuming alcohol in the past year\" [3], \"the 35% of the population that do consume alcohol\" [2], 33.1% [7]. A grounded NEI draft for the unqualified \"Only 31%\" notes the divergence/scope qualifiers; ONTOLOGY sign-off required.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://businesstech.co.za/news/lifestyle/332909/south-africa-has-some-of-the-heaviest-drinkers-in-the-world/",
+     "quote": "an estimated 31% of the population aged 15 and older consume alcohol",
+     "span": [
+      0,
+      1125
+     ],
+     "note": "qualified 31%"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "http://www.thedtic.gov.za/wp-content/uploads/nla_economic-impact-of-an-adban.pdf",
+     "quote": "of the 35% of the population that do consume alcohol",
+     "span": [
+      21978,
+      23147
+     ],
+     "note": "divergent figure"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Sources support 31% among adults 15+ over the past year, not the unqualified whole-population claim and not a unique NEI interpretation.",
+    "limitations": "Need age/time definitions and scope; do not convert adult survey prevalence to every South African."
+   }
+  },
+  {
+   "sample_id": "train:979",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "COVID-19 virus could be spread from shoes.",
+   "triage_class": "E3",
+   "subflags": [],
+   "draftability": "pending_human_review",
+   "rationale": "Both sides displayed: shoes as \"a potential source of contamination\" [4] / virus persistence on soles [7][8] vs \"the likelihood of spreading or contracting the virus from shoes is low\" [5] and NEJM-based \"unlikely that enough virus would land on the floor\" [6]. Base (NEI) ignored the contested possibility side; Conflicting gold draftable.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.huffpost.com/entry/coronavirus-on-shoes-brought-into-homes_l_5e7a5843c5b6f5b7c54c3786",
+     "quote": "shoes can be a potential source of contamination",
+     "span": [
+      890,
+      1966
+     ],
+     "note": "possibility side"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 5,
+     "url": "https://www.womenshealthmag.com/uk/health/a31937061/coronavirus-spread/",
+     "quote": "the likelihood of spreading or contracting the virus from shoes is low",
+     "span": [
+      838,
+      1936
+     ],
+     "note": "low-risk side"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Evidence distinguishes surface survival/potential contamination from very low transmission risk; this does not uniquely establish official cherrypicking for the weak could claim.",
+    "limitations": "Need claim context and inference standard; do not present low probability as impossibility or infer gold from risk wording."
+   }
+  },
+  {
+   "sample_id": "train:1863",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "claim": "President Buhari approves the creation of state police.",
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "draftability": "pending_human_review",
+   "rationale": "The displayed pair already contains the refutation chain: [3] carries the original \"approved the creation of state and local government police\" report and [1] the presidency’s dismissal of that report (\"The presidency has dismissed media reports claiming President Muhammadu Buhari approved...\"). Base returned Conflicting instead of weighting the denial; Refuted gold draftable. ONTOLOGY flag: denial-vs-report weighting.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://www.ripplesnigeria.com/tag/state-police/",
+     "quote": "The presidency has dismissed media reports claiming President Muhammadu Buhari approved the establishment of State and Local Government Police",
+     "span": [
+      5820,
+      6992
+     ],
+     "note": "denial"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 3,
+     "url": "https://www.thisdaylive.com/index.php/2019/06/03/buhari-approves-establishment-of-state-lg-police",
+     "quote": "President Muhammadu Buhari Monday in Abuja approved the creation of state and local government police",
+     "span": [
+      0,
+      422
+     ],
+     "note": "the misreported claim"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "An aggregator reports presidency denial, but another displayed news report asserts approval; absent aligned dates/context the gold Refuted cannot be grounded safely.",
+    "limitations": "Need the original presidential statement and whether reports address the same proposal/date."
+   }
+  },
+  {
+   "sample_id": "train:1873",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Supported",
+   "claim": "In an op-ed, then-sen. Joe Biden wrote that he believed that women working outside the home would, quote, \"create the deterioration of family.\" He also said that women who were working outside the home were, quote, \"avoiding responsibility.\"",
+   "triage_class": "E1",
+   "subflags": [
+    "PRIMARY_SOURCE_ABSENT"
+   ],
+   "draftability": "not_grounded",
+   "rationale": "The claim attributes quotes to a then-Sen. Biden op-ed; the op-ed is absent from the corpus (original limitation) and the quoted phrases do not appear in any displayed span, so the Refuted gold (quote attribution wrong) cannot be grounded without speculation.",
+   "decisive_evidence": [],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "The strongest snippets reproduce an opponent's allegation and Biden's incomplete response, not the original op-ed or decisive correction refuting the attribution.",
+    "limitations": "Need the primary op-ed/full context; reported allegation is not proof of either attribution or refutation."
+   }
+  },
+  {
+   "sample_id": "train:1881",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "claim": "Pinning Down Prescription Drug Prices",
+   "triage_class": "E1",
+   "subflags": [
+    "NON_PROPOSITIONAL_CLAIM"
+   ],
+   "draftability": "not_grounded",
+   "rationale": "The claim is a headline (\"Pinning Down Prescription Drug Prices\"), not a verifiable proposition; the displayed abstract supports a related thesis (\"prescription drugs are priced in the United States primarily on the basis of what the market will bear\") but the gold-Supported reading of the title itself cannot be grounded.",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://pubmed.ncbi.nlm.nih.gov/27552619/",
+     "quote": "prescription drugs are priced in the United States primarily on the basis of what the market will bear",
+     "span": [
+      1948,
+      3277
+     ],
+     "note": "related thesis, not the title claim"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Pinning Down Prescription Drug Prices is a topic/title without an explicit truth-evaluable proposition; related policy discussion cannot entail Supported.",
+    "limitations": "Need the actual proposition and its context; do not manufacture one from the gold label."
+   }
+  },
+  {
+   "sample_id": "train:2224",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "claim": "Kenyans with old generation passports will still be issued with U.S visas.",
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_READING_UNSUPPORTED"
+   ],
+   "draftability": "not_grounded",
+   "rationale": "Displayed [2] supports the claim (embassy \"reversed its earlier decision to ban visa applications by Kenyans without digital passport... will place a US visa in a non-digital passport until further notice\"); the Refuted gold rests on an unstated temporal scope (later policy change not in evidence).",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.standardmedia.co.ke/news/article/2001323537/kenyans-to-travel-to-us-with-old-passport-after-embassy-u-turn-on-directive",
+     "quote": "reversed its earlier decision to ban visa applications by Kenyans without digital passport",
+     "span": [
+      0,
+      1041
+     ],
+     "note": "supports the claim, conflicts with gold"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Top-8 includes both an earlier ban and an explicit embassy U-turn allowing visa placement in old passports until further notice.",
+    "limitations": "Need the claim date; do not ignore the later reversal or confuse application, issuance and travel."
+   }
+  },
+  {
+   "sample_id": "train:2449",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Refuted",
+   "claim": "Russia has a lower prison population than America because of the presence of telephone justice in Russia",
+   "triage_class": "E2",
+   "subflags": [
+    "RETRIEVAL_MISS",
+    "CAUSAL_LINK_UNEVIDENCED"
+   ],
+   "draftability": "requires_store_passage_inclusion",
+   "rationale": "Top-8 contains zero \"telephone\" passages while the retrieval store holds 60 telephone-justice passages (incl. the Russia-specific \"Telephone Law and the Rule of Law: The Russian Case\" with Ledeneva citations) and the raw corpus holds the Russia-specific ICJ profile (\"the phenomenon of “telephone justice” remained widespread: judges are often... directly instructed by the court president\"). The telephone-justice existence premise is recoverable from the store; the causal \"because\" element remains unevidenced, supporting a Conflicting draft (prison-rate comparability conflicts displayed in Top-8 [1][2][7]).",
+   "decisive_evidence": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.unodc.org/pdf/crime/forum/forum3_Art3.pdf",
+     "quote": "prison population is substantially inflated by the presence of drug smugglers who are nationals of other countries",
+     "span": [
+      2776,
+      3876
+     ],
+     "note": "Top-8 comparability conflict (UNODC)"
+    }
+   ],
+   "original_draft_assessment": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reason": "Prison totals/rates refer to different periods and contain no evidence for the telephone-justice causal link.",
+    "limitations": "Neither missing causation nor mismatched rates establish the particular cherrypicking gold."
+   },
+   "store_probe": {
+    "sample_id": "train:2449",
+    "store": "outputs/m161-source-batch25-v1/train-2449/retrieval-attempt-001/train-2449/passages.jsonl",
+    "lines": 96440,
+    "bank_top8_passage_ids_present": 8,
+    "decisive_hits": [
+     {
+      "passage_id": null,
+      "url": "https://media.law.wisc.edu/m/nmytc/telephone_law_and_rol.pdf",
+      "in_bank_top8": false,
+      "quote": "'Telephone Law' and the 'Rule of Law': The Russian Case (Alena V. Ledeneva, 'Telephone Justice in Russia', 24 Post-Soviet Affairs (2008))"
+     }
+    ],
+    "corpus_probe": "outputs/m161-source-batch25-v1/train-2449/candidates-attempt-001/train-2449/corpus.jsonl (1218 docs): 22x \"telephone justice\" hits incl. ICJ Russia profile \"A 2010 ICJ mission learned that the phenomenon of “telephone justice” remained widespread: reportedly, judges are often – as a matter of routine – directly instructed by the court president how to resolve a specific case\" (https://www.icj.org/cijlcountryprofiles/russian-federation/) and Cambridge \"Telephone justice in the global age\" chapter"
+   }
+  }
+ ]
+}

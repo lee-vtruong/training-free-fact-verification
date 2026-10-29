@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "repo_id": "chenxwh/AVeriTeC",
+  "repo_type": "model",
+  "split": "train",
+  "requested_revision": "main",
+  "resolved_revision": "2ca9dee23a2a6fa64c5bd918e0cd28ed0aa09031",
+  "archives": [
+    {
+      "path": "data_store/knowledge_store/train/train_0_999.zip",
+      "compressed_bytes": 20730339734,
+      "sha256": "389d2284c5f25410205ec530c2101c3e6d575eae460731e1909ad19192dcb810",
+      "url": "https://huggingface.co/chenxwh/AVeriTeC/resolve/2ca9dee23a2a6fa64c5bd918e0cd28ed0aa09031/data_store/knowledge_store/train/train_0_999.zip",
+      "uncompressed_bytes": null,
+      "member_count": null
+    },
+    {
+      "path": "data_store/knowledge_store/train/train_1000_1999.zip",
+      "compressed_bytes": 21273604733,
+      "sha256": "e2bf5c1dccc855cf3474ccd3f14678fe60f21e6c69685a34d7bc884996fec446",
+      "url": "https://huggingface.co/chenxwh/AVeriTeC/resolve/2ca9dee23a2a6fa64c5bd918e0cd28ed0aa09031/data_store/knowledge_store/train/train_1000_1999.zip",
+      "uncompressed_bytes": null,
+      "member_count": null
+    },
+    {
+      "path": "data_store/knowledge_store/train/train_2000_3067.zip",
+      "compressed_bytes": 21520772573,
+      "sha256": "d3e27cc4072cd085dbac44272f1ea918dd3ff970b39d94f143e40c51bbde43d0",
+      "url": "https://huggingface.co/chenxwh/AVeriTeC/resolve/2ca9dee23a2a6fa64c5bd918e0cd28ed0aa09031/data_store/knowledge_store/train/train_2000_3067.zip",
+      "uncompressed_bytes": null,
+      "member_count": null
+    }
+  ],
+  "total_compressed_bytes": 63524717040,
+  "total_compressed_GiB": 59.16200302541256,
+  "destination_filesystem_free_bytes": 133567811584,
+  "compressed_only_fits": true,
+  "archive_extraction_bytes": null,
+  "passage_cache_bytes": null,
+  "vector_cache_bytes": null,
+  "ready_for_bulk_download": false,
+  "download_executed": false,
+  "corpus_admitted": false,
+  "blockers": [
+    "ZIP member sizes and schema not inspected; extracted footprint unknown.",
+    "Local independent-corpus acquisition, filtering and claim-store mapping pending.",
+    "Need headroom for passage/vector artifacts; compressed-only fit is insufficient."
+  ],
+  "next_action": "Review this metadata plan, then design bounded archive inspection/acquisition; no automatic downloads.",
+  "metadata_sha256": "a7832a78ba3c6be2888706970a2388288a858636a05bd19e81df6eb18ee4a466",
+  "metadata_endpoint": "https://huggingface.co/api/models/chenxwh/AVeriTeC/revision/main?blobs=true",
+  "planner_sha256": "b9cd12078063c798ba534fda22f2f9b2f414653e7e3586f90f8dd668fce3cf34"
+}

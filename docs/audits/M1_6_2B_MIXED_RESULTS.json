@@ -1,0 +1,154 @@
+{
+  "claims": 50,
+  "comparisons": {
+    "MIXED_GOLD_ONLY_K2_vs_N0": {
+      "accuracy_bootstrap_ci95": [
+        0.0,
+        0.0
+      ],
+      "accuracy_delta": 0.0,
+      "bootstrap_samples": 10000,
+      "correction_ids": [],
+      "exact_mcnemar_p": 1.0,
+      "invalid_transitions": {
+        "CC": 35,
+        "WW": 15
+      },
+      "macro_f1_bootstrap_ci95": [
+        -0.0010925638324269453,
+        0.025224725070074526
+      ],
+      "macro_f1_delta": 0.007907796857246963,
+      "macro_f1_paired_swap_p": 0.4916,
+      "missing_class_bootstrap_frequency": 0.0166,
+      "permutations": 19999,
+      "regression_ids": [],
+      "transitions": {
+        "CC": 35,
+        "CW": 0,
+        "WC": 0,
+        "WW": 15
+      }
+    },
+    "MIXED_GOLD_ONLY_K2_vs_P2": {
+      "accuracy_bootstrap_ci95": [
+        -0.039999999999999925,
+        0.12
+      ],
+      "accuracy_delta": 0.039999999999999925,
+      "bootstrap_samples": 10000,
+      "correction_ids": [
+        "train:1853",
+        "train:627",
+        "train:1728"
+      ],
+      "exact_mcnemar_p": 0.625,
+      "invalid_transitions": {
+        "CC": 32,
+        "CW": 1,
+        "WC": 3,
+        "WW": 14
+      },
+      "macro_f1_bootstrap_ci95": [
+        -0.029970672378641372,
+        0.06394766862108552
+      ],
+      "macro_f1_delta": 0.015456356187082188,
+      "macro_f1_paired_swap_p": 0.62255,
+      "missing_class_bootstrap_frequency": 0.0166,
+      "permutations": 19999,
+      "regression_ids": [
+        "train:1935"
+      ],
+      "transitions": {
+        "CC": 32,
+        "CW": 1,
+        "WC": 3,
+        "WW": 14
+      }
+    }
+  },
+  "condition": "MIXED_GOLD_ONLY_K2",
+  "generation_wall_seconds": 100.29920738562942,
+  "gpu_active_seconds": null,
+  "metrics": {
+    "accuracy": 0.7,
+    "confusion_matrix": {
+      "Conflicting Evidence/Cherrypicking": {
+        "Conflicting Evidence/Cherrypicking": 0,
+        "Not Enough Evidence": 0,
+        "Refuted": 3,
+        "Supported": 1,
+        "Unparseable": 0
+      },
+      "Not Enough Evidence": {
+        "Conflicting Evidence/Cherrypicking": 0,
+        "Not Enough Evidence": 0,
+        "Refuted": 4,
+        "Supported": 2,
+        "Unparseable": 0
+      },
+      "Refuted": {
+        "Conflicting Evidence/Cherrypicking": 0,
+        "Not Enough Evidence": 0,
+        "Refuted": 31,
+        "Supported": 1,
+        "Unparseable": 0
+      },
+      "Supported": {
+        "Conflicting Evidence/Cherrypicking": 1,
+        "Not Enough Evidence": 0,
+        "Refuted": 3,
+        "Supported": 4,
+        "Unparseable": 0
+      }
+    },
+    "correct_claims": 35,
+    "macro_f1": 0.33732876712328763,
+    "macro_precision": 0.31402439024390244,
+    "macro_recall": 0.3671875,
+    "per_class": {
+      "Conflicting Evidence/Cherrypicking": {
+        "f1": 0.0,
+        "fn": 4,
+        "fp": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 4,
+        "tp": 0
+      },
+      "Not Enough Evidence": {
+        "f1": 0.0,
+        "fn": 6,
+        "fp": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 6,
+        "tp": 0
+      },
+      "Refuted": {
+        "f1": 0.8493150684931506,
+        "fn": 1,
+        "fp": 10,
+        "precision": 0.7560975609756098,
+        "recall": 0.96875,
+        "support": 32,
+        "tp": 31
+      },
+      "Supported": {
+        "f1": 0.5,
+        "fn": 4,
+        "fp": 4,
+        "precision": 0.5,
+        "recall": 0.5,
+        "support": 8,
+        "tp": 4
+      }
+    },
+    "total_claims": 50,
+    "valid_rate": 1.0
+  },
+  "output_tokens": 3515,
+  "prompt_tokens": 154232,
+  "scope": "EXPLORATORY_NOT_CONFIRMATORY"
+}

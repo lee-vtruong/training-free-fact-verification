@@ -1,0 +1,1628 @@
+{
+ "schema_version": "m162e-candidate-drafts-v1",
+ "generated_utc": "2026-10-28T04:45:48Z",
+ "scope": "M1.6.2e section C candidate correction drafts + two-reviewer review records. EXPLORATORY. No human decisions created; verified=false everywhere; assistant drafts are NOT human-verified.",
+ "counts": {
+  "original_drafts": 5,
+  "e3_candidates": 16,
+  "e2_candidates_quarantined": 4,
+  "e1_no_draft": 8
+ },
+ "review_protocol": {
+  "reviewers": [
+   "reviewer_1",
+   "reviewer_2"
+  ],
+  "decisions": [
+   "ACCEPT",
+   "ACCEPT_WITH_EDITS",
+   "REJECT"
+  ],
+  "blank_fields": [
+   "decision",
+   "edited_text",
+   "rationale",
+   "ontology_signoff",
+   "reviewed_at"
+  ],
+  "verification_rule": "A record counts as verified only after BOTH reviewers submit decisions and the human review bookkeeping records it. The assistant never fills these fields.",
+  "verified_count": 0,
+  "gate_note": "See docs/M1_6_2E_GATE_POLICY.md for the corrected two-tier gate."
+ },
+ "records": [
+  {
+   "record_kind": "ORIGINAL_DRAFT",
+   "sample_id": "train:6",
+   "claim": "35% of revenue goes to states. (In Nigeria)",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "The displayed federal-account formula allocates 26.72% to states, not 35%. A different excerpt places 35% in the VAT allocation to local government, a different recipient and revenue basket. The Base notices countervailing figures but treats lack of confirmation as unresolved; the stated formula contradicts 35% for states under this reading.",
+   "draft_text_provenance": "outputs/m1611-correction-audit-v3/memory75.json corrected_explanation (verbatim, untouched)",
+   "mechanism": "revenue_basket_recipient_disambiguation",
+   "limitations": null,
+   "ontology_note": null,
+   "decisive_quotes": [],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "ORIGINAL",
+   "author": "assistant (M1.6.1, untouched per M1.6.2e C.1)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-1:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "chat review table + revised corrections",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "26.72% differs from 35%, but scope, revenue type, and timing require qualification.",
+     "ontology_signoff": "QUALIFIED: use the stated scope limitation.",
+     "edited_text": "The Base returned Not Enough Evidence despite a displayed passage specifying that Nigerian state governments receive 26.72% of the Federation Account allocation. Under this statutory allocation context, the claim that 35% of revenue goes to states is contradicted by the documented state share. Another passage assigns 35% to local governments under a VAT distribution arrangement, which concerns a different recipient and revenue basket and must not be treated as support for the claim. The correction therefore supports Refuted specifically under the Federation Account interpretation. Because the claim does not explicitly specify the revenue basket or reference year, this scope qualification must be preserved rather than presenting 26.72% as a universal share of all Nigerian government revenue."
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-2:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "attached C1-C5 review packet",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "C1/C3/C4/C5 partial: preserves the Federation Account condition and flags the unqualified-denominator ontology issue.",
+     "ontology_signoff": "QUALIFIED: see Top-8 completion audit for resolved checks and residual scope."
+    }
+   },
+   "verification_scope": "Qualified human-reviewed correction: source evidence is limited to the rendered Top-8 and the stated scope; not a universal factual claim.",
+   "review_import_provenance": "Two human reviews supplied by the user in separate submissions; imported with opaque source labels, not fabricated personal identities."
+  },
+  {
+   "record_kind": "ORIGINAL_DRAFT",
+   "sample_id": "train:11",
+   "claim": "45% of Nigeria's revenue goes to the federal government.",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "The excerpt explicitly distinguishes an extant federal share of 52.68% of statutory/mineral revenue from a 15% VAT share. These are different baskets, not evidence that 45% is supported. Under the federation-account reading the stated 52.68% contradicts 45%, whereas the Base treats mismatched baskets as a reason to abstain.",
+   "draft_text_provenance": "outputs/m1611-correction-audit-v3/memory75.json corrected_explanation (verbatim, untouched)",
+   "mechanism": "revenue_basket_disambiguation",
+   "limitations": null,
+   "ontology_note": null,
+   "decisive_quotes": [],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "ORIGINAL",
+   "author": "assistant (M1.6.1, untouched per M1.6.2e C.1)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-1:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "chat review table + revised corrections",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "52.68% supports the statutory-formula reading; Nigeria revenue needs a denominator/basket qualifier.",
+     "ontology_signoff": "QUALIFIED: use the stated scope limitation.",
+     "edited_text": "The Base returned Not Enough Evidence even though a displayed source reports a federal government share of 52.68% under Nigeria's statutory revenue-allocation formula, rather than the claimed 45%. Other displayed percentages refer to different revenue streams, including VAT distributions, and are not directly interchangeable with the Federation Account allocation. Under the statutory allocation interpretation, 52.68% contradicts the claimed 45%, supporting the Refuted verdict. However, the phrase \"Nigeria's revenue\" does not explicitly identify the revenue basket, accounting period, or denominator. The correction must therefore be understood as conditional on the statutory Federation Account interpretation, not as proof that the federal government receives 52.68% of every category of Nigerian public revenue."
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-2:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "attached C1-C5 review packet",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "C1–C5 partial: numeric mismatch is conditional on the statutory allocation; alternative revenue baskets remain material.",
+     "ontology_signoff": "QUALIFIED: see Top-8 completion audit for resolved checks and residual scope."
+    }
+   },
+   "verification_scope": "Qualified human-reviewed correction: source evidence is limited to the rendered Top-8 and the stated scope; not a universal factual claim.",
+   "review_import_provenance": "Two human reviews supplied by the user in separate submissions; imported with opaque source labels, not fabricated personal identities."
+  },
+  {
+   "record_kind": "ORIGINAL_DRAFT",
+   "sample_id": "train:25",
+   "claim": "The Kenyan judiciary does not even get 1% of the national budget.",
+   "gold_verdict": "Supported",
+   "base_verdict": "Refuted",
+   "draft_text": "The Base correctly observes sub-1% allocations but interprets not even 1% as a minimum of 1%. Not even 1% means below 1%. The displayed 0.43% and 0.44% figures support that comparison rather than refute it.",
+   "draft_text_provenance": "outputs/m1611-correction-audit-v3/memory75.json corrected_explanation (verbatim, untouched)",
+   "mechanism": "negation_polarity",
+   "limitations": null,
+   "ontology_note": null,
+   "decisive_quotes": [],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "ORIGINAL",
+   "author": "assistant (M1.6.1, untouched per M1.6.2e C.1)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-1:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "chat review table + revised corrections",
+     "decision": "ACCEPT",
+     "rationale": "Sub-1% figures directly support “does not even get 1%”.",
+     "ontology_signoff": "QUALIFIED: use the stated scope limitation."
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-2:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "attached C1-C5 review packet",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "C1/C2 pass, remaining scope partial: reported sub-1% values support only their stated fiscal periods.",
+     "ontology_signoff": "QUALIFIED: see Top-8 completion audit for resolved checks and residual scope."
+    }
+   },
+   "verification_scope": "Qualified human-reviewed correction: source evidence is limited to the rendered Top-8 and the stated scope; not a universal factual claim.",
+   "review_import_provenance": "Two human reviews supplied by the user in separate submissions; imported with opaque source labels, not fabricated personal identities."
+  },
+  {
+   "record_kind": "ORIGINAL_DRAFT",
+   "sample_id": "train:978",
+   "claim": "In Serbia, the stricter Covid19 curfew measures prevented dog walking for up to 14 hours at a time.",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "The official Serbian notice gives weekend movement restrictions from 15.00 to 5.00 and withdraws the 20-minute pet-walk exception. Across midnight that interval is 14 hours. The Base considers only the weekday 17.00-to 5.00 interval, so its claim that no 14-hour interval is shown overlooks the weekend measure.",
+   "draft_text_provenance": "outputs/m1611-correction-audit-v3/memory75.json corrected_explanation (verbatim, untouched)",
+   "mechanism": "temporal_interval_integration",
+   "limitations": null,
+   "ontology_note": null,
+   "decisive_quotes": [],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "ORIGINAL",
+   "author": "assistant (M1.6.1, untouched per M1.6.2e C.1)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-1:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "chat review table + revised corrections",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "14-hour interval is arithmetically correct; contemporaneity was subsequently checked in Top-8.",
+     "ontology_signoff": "QUALIFIED: use the stated scope limitation.",
+     "edited_text": "The Base focused on the weekday curfew interval of 17:00–05:00, which lasts 12 hours, and therefore failed to identify the longer weekend restriction. The displayed Serbian government notice describes a weekend movement ban running from 15:00 to 05:00 the following morning, a continuous interval of 14 hours. The accompanying reporting states that the previously permitted 20-minute exception for dog walking was withdrawn during the stricter restrictions. When these measures apply to the same restriction period, dog owners could not walk their dogs for up to 14 consecutive hours, supporting the claim. The correction concerns this specific weekend measure and the withdrawal of the dog-walking exception; it does not imply that every Serbian curfew lasted 14 hours."
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-2:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "attached C1-C5 review packet",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "Provisional C1–C5 partial: weekend duration is correct; linkage to pet-walk withdrawal required Top-8 verification.",
+     "ontology_signoff": "QUALIFIED: see Top-8 completion audit for resolved checks and residual scope."
+    }
+   },
+   "verification_scope": "Qualified human-reviewed correction: source evidence is limited to the rendered Top-8 and the stated scope; not a universal factual claim.",
+   "review_import_provenance": "Two human reviews supplied by the user in separate submissions; imported with opaque source labels, not fabricated personal identities."
+  },
+  {
+   "record_kind": "ORIGINAL_DRAFT",
+   "sample_id": "train:1824",
+   "claim": "Former British Prime Minister Winston Churchill said, 'Courage is what it takes to stand up and speak; courage is also what it takes to sit down and listen'.",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "draft_text": "Generic quote pages repeat the Churchill attribution, but the displayed correction explicitly cites the Churchill Society's falsely-attributed list and says the quotation appears nowhere in the Churchill canon. Repetition is not independent authorship evidence. This specific attribution correction supports Refuted instead of treating all quote pages as equally reliable conflicting accounts.",
+   "draft_text_provenance": "outputs/m1611-correction-audit-v3/memory75.json corrected_explanation (verbatim, untouched)",
+   "mechanism": "source_authority_attribution",
+   "limitations": null,
+   "ontology_note": null,
+   "decisive_quotes": [],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "ORIGINAL",
+   "author": "assistant (M1.6.1, untouched per M1.6.2e C.1)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-1:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "chat review table + revised corrections",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "Attribution correction needs the specialist-source limitation stated precisely.",
+     "ontology_signoff": "QUALIFIED: use the stated scope limitation.",
+     "edited_text": "The Base treated repeated attribution of the quotation to Winston Churchill across general quotation pages as evidence of competing accounts. However, the displayed fact-checking material refers to the International Churchill Society's collection of quotations falsely attributed to Churchill and reports that the statement has not been located in Churchill's documented writings or interviews. The repeated attribution by secondary quotation websites does not establish authorship and is not equivalent to independent primary-source confirmation. Under the displayed attribution-checking evidence, the claim that Churchill said these exact words is therefore better classified as Refuted than as Conflicting Evidence/Cherrypicking. The conclusion rests on the documented lack of authenticated attribution and the specialist correction, not on independently proving that Churchill could never have spoken similar words."
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-2:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:30:20Z",
+     "submission_ref": "attached C1-C5 review packet",
+     "decision": "ACCEPT_WITH_EDITS",
+     "rationale": "C2/C5 pass, other criteria partial: conclusion depends on the specialist material applying to this exact quotation.",
+     "ontology_signoff": "QUALIFIED: see Top-8 completion audit for resolved checks and residual scope."
+    }
+   },
+   "verification_scope": "Qualified human-reviewed correction: source evidence is limited to the rendered Top-8 and the stated scope; not a universal factual claim.",
+   "review_import_provenance": "Two human reviews supplied by the user in separate submissions; imported with opaque source labels, not fabricated personal identities."
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:8",
+   "claim": "Joe Biden voted for the Irag War and supported war in Serbia, Syria and Libya.",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Supported",
+   "draft_text": "The claim mixes a documented vote with elements attested mainly in its own source. Independent passages confirm the Iraq vote and its later repudiation - CFR: \"supported the 2003 invasion of Iraq, but he now calls it a mistake\" - and describe an interventionist record (Jacobin: \"a reliable representative of the national security establishment\"; Arab Center: a \"mixed record\" on US interventions). But the \"Serbia, Syria, and Libya\" enumeration comes from the CNN passage quoting the attack speech itself, and no displayed passage evidences a Syria war position. The Iraq element is supported while the three-conflict enumeration is partially unevidenced and circularly sourced; that mixed state is Conflicting Evidence/Cherrypicking, not the Base's flat Supported.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "source_circularity",
+   "limitations": "Syria element unevidenced in displayed spans; Serbia/Libya supported only at general-intervention-record level.",
+   "ontology_note": "Conflicting retained: the dispute is over the same proposition set (Iraq vote; the three-conflict enumeration) across comparable-type sources; the enumeration itself originates in the claim-source speech, which is a sourcing defect, not source disagreement.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 3,
+     "url": "https://www.cfr.org/election2020/candidate-tracker",
+     "quote": "supported the 2003 invasion of Iraq, but he now calls it a “mistake”",
+     "span": [
+      11635,
+      12734
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "independent assessment"
+    },
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://www.cnn.com/2020/08/25/politics/rand-paul-speech-transcript/index.html",
+     "quote": "Joe Biden voted for the Iraq War, which President Trump has long called",
+     "span": [
+      2576,
+      3373
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "claim-source passage (circularity flag)"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "SOURCE_CIRCULARITY"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:12",
+   "claim": "Donald Trump inherited a stagnant economy and then rebuilt it.",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Refuted",
+   "draft_text": "Both sides of the dispute are displayed. Recovered-economy side: \"Donald Trump inherited an economy that had largely recovered, according to many indicators, by the time he took office\" (nwlc) and \"Trump inherited the longest economic expansion in\" modern history (medium). Stagnation-inheritance side: the White House archives passage frames the inheritance as stagnation - \"low growth, or \"secular stagnation,\" would plague the U.S. economy indefinitely\" - and the Detroit News passage credits the \"pro-growth policy agenda\" with policies that \"have inspired enormous confidence in the economy\". The Base read only the recovered side and returned Refuted. With the inherited-stagnation framing displayed in the administration's own material and the rebuild element contested, the verdict is Conflicting Evidence/Cherrypicking.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "selective_reading",
+   "limitations": "Both sides include partisan framing (administration archives vs advocacy outlets); tracker-level economic data not displayed.",
+   "ontology_note": "Conflicting retained: the disagreement is between comparable-type sources over the same propositions (inherited condition; rebuild effect). Both sides carry partisan provenance (WH archives vs nwlc/medium), noted; partisan symmetry is not itself grounds for a different verdict.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://nwlc.org/the-economy-isnt-broken-trump-just-wants-to-cut-taxes/",
+     "quote": "Donald Trump inherited an economy that had largely recovered",
+     "span": [
+      935,
+      2061
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "anti-claim side"
+    },
+    {
+     "source": "top8_span",
+     "rank": 4,
+     "url": "https://trumpwhitehouse.archives.gov/articles/trump-bump-real/",
+     "quote": "low growth, or “secular stagnation,” would plague the U.S. economy indefinitely",
+     "span": [
+      0,
+      1229
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "pro-claim side (WH archives)"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:18",
+   "claim": "A greater proportion of 16 year olds vote in elections in Scotland, Wales and Austria than 18 and 20 year olds.",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "Support exists for two of the three jurisdictions and a caution for the third, all inside the displayed spans. The bibliography cites Zeglovits & Aichholzer (2014), \"Are people more inclined to vote at 16 than at 18? Evidence for the first-time voting boost among 16- to 25-year-olds in Austria\", and the Wales passage itself continues: \"Evidence from Scotland shows that in the 2014 independence referendum where 16-17 year olds were enfranchised to vote, 75 per[cent]...\" The same passage warns that \"Austria has traditionally high turnout rates for elections (Zeglovits & Aichholzer, 2014), which cannot be said for elections in Wales\", where turnout is \"typically below 50 per cent\". The Base returned Not Enough Evidence without integrating the displayed title and caveat. The first-time-voting boost is evidenced for Austria and Scotland while the Wales leg rests on low-turnout context rather than a matched comparison - the three-jurisdiction generalization is supported in part and undermined in part, i.e., Conflicting Evidence/Cherrypicking.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "scope_integration",
+   "limitations": "Austria support is bibliography-title-level; no matched 16-vs-18/20 Wales comparison is displayed.",
+   "ontology_note": "Conflicting retained: the tension is about the claim's three-jurisdiction generalization (Austria/Scotland support vs a Wales-specific caution), i.e., claim-scope conflict, not mere source disagreement. Sign-off required.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 3,
+     "url": "https://repositorio.iscte-iul.pt/bitstream/10071/26790/1/article_90750.pdf",
+     "quote": "Evidence for the first-time voting boost among 16- to 25-year-olds in Austria",
+     "span": [
+      55592,
+      55962
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "supporting title in bibliography"
+    },
+    {
+     "source": "top8_span",
+     "rank": 6,
+     "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2019-03/democratic-renewal-evidence-synthesis-to-support-local-government-electoral-reform_0.pdf",
+     "quote": "turnout across the country as a whole for National Assembly and local council elections are typically below 50 per cent",
+     "span": [
+      61279,
+      62396
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "Wales caveat"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:19",
+   "claim": "Donald Trump has kept his promises to voters",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Refuted",
+   "draft_text": "Both directions are displayed. Broken/stalled side: \"Out of 102 promises on its Trump-o-Meter scorecard, 33 are currently stalled and seven broken, while only nine have been kept and seven ended with a compromise\" (Time/PolitiFact), and \"Only six promises are listed as \"kept,\" while 45 have seen no action\" (Denver Post). Kept-side framing: Time also reports \"decades of academic research has actually shown the opposite: that presidents try to keep an average of about two-thirds of their campaign pledges\". The Base read only the stalled/broken trackers and returned Refuted. With kept counts and the research framing displayed alongside the stalled counts, the mixed record supports Conflicting Evidence/Cherrypicking rather than outright refutation.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "selective_reading",
+   "limitations": "Tracker snapshots differ in date and methodology; \"try to keep\" (research) vs \"kept\" (trackers) is not a single metric.",
+   "ontology_note": "Conflicting retained: tracker snapshots and the research framing are same-type evidence about the same proposition and point in different directions; the mix is genuine, not manufactured.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://time.com/5175729/donald-trump-broken-promises/",
+     "quote": "33 are currently stalled and seven broken",
+     "span": [
+      865,
+      1968
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "broken side"
+    },
+    {
+     "source": "top8_span",
+     "rank": 4,
+     "url": "https://time.com/5175729/donald-trump-broken-promises/",
+     "quote": "decades of academic research has actually shown the opposite",
+     "span": [
+      0,
+      1063
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "kept side"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:21",
+   "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people in Kenya.",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "draft_text": "The displayed figures cannot be combined into the asserted comparison. The only global figure is UNODC's \"On average, there are 15,000 inhabitants for every judge or magistrate across the globe\" - a worldwide judges-and-magistrates ratio. The Kenya-side passages use different metrics: \"about 75 judges 1,000,000 persons\" (judges only, per million) and a judicial-officer ratio per 100,000. No displayed passage states a global average on the same metric as the Kenya figures, nor a Kenya figure on the global metric, so the claim's relation cannot be checked. The Base accepted the worldwide figure as if it settled the Kenya relation; the verdict is Not Enough Evidence.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "metric_mismatch",
+   "limitations": "Metric-comparability reading recorded for sign-off; an alternative reading (the UNODC figure itself answers the claim) is disclosed.",
+   "ontology_note": "NEI protected from auto-Conflicting: the displayed ratios (judges-only per million; judicial officers per 100,000; worldwide judges-and-magistrates per 15,000 inhabitants) are different measurements, not opposing verdicts on one proposition. Insufficiency is the ontology-correct reading. Sign-off required.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 2,
+     "url": "https://www.unodc.org/pdf/crime/forum/forum3_Art2.pdf",
+     "quote": "On average, there are 15,000 inhabitants for every judge or magistrate across the globe",
+     "span": [
+      38148,
+      39346
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "the figure Base leaned on"
+    },
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://etheses.bham.ac.uk/3984/9/Ouma13PhD.pdf",
+     "quote": "about 75 judges 1,000,000 persons",
+     "span": [
+      577100,
+      578157
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "Kenya judges-only ratio, different metric"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-3:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT",
+     "edited_text": null,
+     "rationale": "The UNODC passage provides a worldwide inhabitants-per-judge-or-magistrate figure, while the thesis passage gives a separate judges-to-persons figure. Neither quoted passage establishes a comparable Kenya judges-and-magistrates ratio or supplies a same-metric comparison sufficient to decide the claim. The stored Base verdict is Supported; the displayed evidence does not ground that verdict.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "YES. The claim is read as asserting a global average in relation to Kenya's judges-and-magistrates-to-population ratio, not merely asking whether a worldwide average exists. The UNODC worldwide figure alone establishes a global statistic but does not establish the comparable Kenya relation. On this reading, the quoted evidence is insufficient, supporting Not Enough Evidence rather than Supported.",
+     "submission_ref": "tier1-e3 user submission 3"
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-4:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT",
+     "edited_text": null,
+     "rationale": "The UNODC passage provides a worldwide inhabitants-per-judge-or-magistrate figure, while the thesis passage gives a separate judges-to-persons figure. Neither quoted passage establishes a comparable Kenya judges-and-magistrates ratio or supplies a same-metric comparison sufficient to decide the claim. The stored Base verdict is Supported; the displayed evidence does not ground that verdict.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "YES. The claim is read as asserting a global average in relation to Kenya's judges-and-magistrates-to-population ratio, not merely asking whether a worldwide average exists. The UNODC worldwide figure alone establishes a global statistic but does not establish the comparable Kenya relation. On this reading, the quoted evidence is insufficient, supporting Not Enough Evidence rather than Supported.",
+     "submission_ref": "tier1-e3 user submission 4"
+    }
+   },
+   "verification_scope": "Two user-attested independent human reviews; source-only rendered Top-8 evidence.",
+   "review_import_provenance": "Two separate user submissions; payload text was byte-identical (sha256 7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668), independence asserted by user."
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:24",
+   "claim": "Anxiety levels among young teenagers dropped during the coronavirus pandemic, a study has suggested",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Supported",
+   "draft_text": "The displayed evidence both supports the study finding and contradicts the broader trend. Study side: \"Younger teenagers in the South West of England felt less anxious and more connected to school when they were away from it during the COVID-19 global pandemic... a first-of-its-kind study has found\", with figures that \"dropped by nearly 10 per cent among girls to less than half (45 per cent) and to less than one in five of boys (18 per cent)\". Counter-side: \"average anxiety scores were 5.2 out of 10, a marked increase from 3.0 in the last quarter of 2019\" (ONS), and higher anxiety reported for the 21-40 age group. The Base read the study side alone as confirmation. Because the study-specific drop and the general-population increases are both displayed, the verdict is Conflicting Evidence/Cherrypicking; the claim's \"a study has suggested\" attribution is preserved in the reading.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "scope_conflation",
+   "limitations": "Sign-off required on the scope reading (study report vs general trend).",
+   "ontology_note": "Conflicting retained with scope note: the study finding (13-14-year-olds, South West of England) and the general-population increases (ONS adults; 21-40 age group) address different scopes; the gold reads the displayed tension as conflict. Sign-off required.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://www.newswise.com/articles/report-reveals-young-people-felt-less-anxious-and-more-connected-to-school-in-lockdown",
+     "quote": "felt less anxious and more connected to school when they were away from it",
+     "span": [
+      0,
+      1037
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "study finding"
+    },
+    {
+     "source": "top8_span",
+     "rank": 8,
+     "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/articles/coronavirusandanxietygreatbritain/3april2020to10may2020",
+     "quote": "average anxiety scores were 5.2 out of 10, a marked increase from 3.0",
+     "span": [
+      3750,
+      4832
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "ONS counter-side"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:27",
+   "claim": "The counties are striving to reach the 10% [allocation to agriculture] recommended by the Malabo declaration.",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "draft_text": "The displayed evidence documents commitments, not striving. Counties \"made the following promises to their people: (a) to allocate at least 10% of national budgets to agriculture; and (b) to achieve at least 6% annual agricultural growths\" - the 10% target itself being a commitment to double the then average. The Malabo 10% target and expenditure-monitoring frameworks are displayed, but no displayed passage reports county-level allocations or progress toward the 10% mark. The Base equated the promise with progress and returned Supported. With only commitments displayed, there is not enough evidence that the counties are striving to reach the target.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "promise_vs_progress",
+   "limitations": "No material limitation beyond the promise/progress gap itself.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 2,
+     "url": "https://www.devolution.go.ke/wp-content/uploads/2020/02/Baringo-CIDP-2018-2022.pdf",
+     "quote": "made the following promises to their people: (a) to allocate at least 10% of national budgets to agriculture",
+     "span": [
+      302412,
+      303638
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "commitment, not progress"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "PROMISE_VS_PROGRESS"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:29",
+   "claim": "The judiciary of Kenya have an average of 400,000 cases being filed in our courts every year.",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "The claimed magnitude is displayed directly: \"there were 397,243 cases filed in all of the courts of Kenya during FY 2013/14\". About 400,000 filings per year is what the claim asserts, and 397,243 is that figure within ordinary rounding of \"an average of 400,000\". The Base acknowledged the number but demanded an exact 400,000 and a multi-year average; the gold reading accepts the displayed magnitude. The single displayed fiscal year is the only limitation.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "precision_demand",
+   "limitations": "Single fiscal year (FY 2013/14) displayed; no multi-year average shown.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://pdf.usaid.gov/pdf_docs/PA00X5P4.pdf",
+     "quote": "there were 397,243 cases filed in all of the courts of Kenya during FY 2013/14",
+     "span": [
+      11647,
+      12744
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "decisive figure"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "PRECISION_DEMAND"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:31",
+   "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people in Kenya.",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Refuted",
+   "draft_text": "The Base refuted the claim by contrasting Kenya's ratio - \"Kenya with a population of 48 million has a judge to population ratio of 1 judicial officer\" - against other countries' ratios. But no displayed passage provides a global average for judges and magistrates on a comparable metric: the worldwide UNODC figure (\"15,000 inhabitants for every judge or magistrate across the globe\") uses a different denominator, and the \"global average of 17\" in the displayed reliefweb passage concerns public defenders per 100,000, a different officer class. With no comparable benchmark displayed, the claim can be neither confirmed nor refuted - Not Enough Evidence.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "metric_mismatch",
+   "limitations": "Sign-off required; metric-comparability reading disclosed.",
+   "ontology_note": "NEI protected from auto-Conflicting (mirror of train:21): divergent officer ratios are different measurements, not opposing verdicts. Sign-off required.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 5,
+     "url": "http://judiciary.go.ug/files/downloads/Judicial%20Service%20Commission%20in%20Strengthening%20Ethics%20and%20Integrity%20by%20Hon.%20Justice%20Kabiito%20-%20AJC%202019.pdf",
+     "quote": "Kenya with a population of 48 million has a judge to population ratio of 1 judicial",
+     "span": [
+      4040,
+      5044
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "Kenya ratio, judges-only metric"
+    },
+    {
+     "source": "top8_span",
+     "rank": 7,
+     "url": "https://reliefweb.int/report/guatemala/guatemalas-justice-system-evaluating-capacity-building-and-judicial-independence",
+     "quote": "well below the national global average of 17",
+     "span": [
+      2129,
+      3325
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "unrelated public-defender average"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-3:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT",
+     "edited_text": null,
+     "rationale": "The quoted Kenya passage concerns a judge-to-population ratio, while the ReliefWeb passage refers to a global average of 17 in a different professional category. The worldwide judges-and-magistrates figure also cannot resolve the claim without a comparable Kenya measure. The stored Base verdict is Refuted, but the displayed evidence does not establish a contradiction of the claim.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "YES. Metric mismatch means the quoted measures cannot establish the claimed relation; it does not itself create conflicting evidence. No comparable Kenya judges-and-magistrates measure is shown, and the public-defender statistic cannot be treated as a judges-and-magistrates statistic. The appropriate relation is Not Enough Evidence rather than Refuted.",
+     "submission_ref": "tier1-e3 user submission 3"
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-4:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT",
+     "edited_text": null,
+     "rationale": "The quoted Kenya passage concerns a judge-to-population ratio, while the ReliefWeb passage refers to a global average of 17 in a different professional category. The worldwide judges-and-magistrates figure also cannot resolve the claim without a comparable Kenya measure. The stored Base verdict is Refuted, but the displayed evidence does not establish a contradiction of the claim.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "YES. Metric mismatch means the quoted measures cannot establish the claimed relation; it does not itself create conflicting evidence. No comparable Kenya judges-and-magistrates measure is shown, and the public-defender statistic cannot be treated as a judges-and-magistrates statistic. The appropriate relation is Not Enough Evidence rather than Refuted.",
+     "submission_ref": "tier1-e3 user submission 4"
+    }
+   },
+   "verification_scope": "Two user-attested independent human reviews; source-only rendered Top-8 evidence.",
+   "review_import_provenance": "Two separate user submissions; payload text was byte-identical (sha256 7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668), independence asserted by user."
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:35",
+   "claim": "The current Ghana administration has resulted in a decline in unemployment rates from 11.9% in 2015 to 7.3% in 2019.",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "draft_text": "The decline numbers are displayed - \"the rate of unemployment, which stood at 11.9% in 2015, dropped to 7.3% in 2019\" (Ghana Living Standards Survey, quoted in the presidential-speech passage) - but the claim attributes the decline to the administration's policies. Two displayed facts block that attribution: the ILO-modelled series reports \"Ghana unemployment rate for 2019 was 3.46%\", materially below the GLSS 7.3%, so the level and size of any decline depend on which measured series is used; and no displayed passage attributes the movement to administration policy rather than survey methodology. The Base returned Conflicting by weighing the series against each other; divergent series are different measurements, not opposing verdicts. The causal claim is unevidenced: Not Enough Evidence.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "causal_attribution_missing",
+   "limitations": "Sign-off required; both series are displayed only at single-year resolution.",
+   "ontology_note": "NEI protected from auto-Conflicting: the GLSS series (11.9%->7.3%) and the ILO-modelled series (3.46% in 2019) are different measurements with different methodologies, not opposing verdicts; insufficiency of the causal claim is the ontology-correct reading. Sign-off required.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 8,
+     "url": "https://www.gbcghanaonline.com/speeches-and-lectures/president-akufo-addos-2020-may-day-celebration-speech/2020/",
+     "quote": "the rate of unemployment, which stood at 11.9% in 2015, dropped to 7.3% in 2019",
+     "span": [
+      1753,
+      2790
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "GLSS series"
+    },
+    {
+     "source": "top8_span",
+     "rank": 4,
+     "url": "https://www.macrotrends.net/countries/GHA/ghana/unemployment-rate",
+     "quote": "Ghana unemployment rate for 2019 was 3.46%",
+     "span": [
+      0,
+      409
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "divergent series"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "CAUSAL_ATTRIBUTION_MISSING",
+    "SERIES_DIVERGENCE"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:37",
+   "claim": "Ghana's economy previously grew at 3.4% under the form President Mahama's government and on average, for three successive years, at 7% per year with the current administration.",
+   "gold_verdict": "Supported",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "draft_text": "The claim's figures are displayed verbatim: \"annual average of 7%, up from 3.4% in 2016, the lowest in nearly three decades\" - matching the claimed 3.4% under the prior government and an average of 7% per year under the current one. The Base returned Conflicting Evidence/Cherrypicking by weighing this passage against unrelated indicators instead of reading the direct match. The gold reads the displayed statement as sufficient support for the claimed growth figures.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "missed_direct_match",
+   "limitations": "The figures appear in a presidential-speech report (ghanaweb column); single-source, government-attributed.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 5,
+     "url": "https://www.ghanaweb.com/GhanaHomePage/NewsArchive/Full-text-Akufo-Addo-s-2020-address-on-State-of-the-Nation-872569",
+     "quote": "annual average of 7%, up from 3.4% in 2016, the lowest in nearly three decades",
+     "span": [
+      12508,
+      13650
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "decisive passage"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:47",
+   "claim": "South African consume more alcohol per person on average than anywhere else in Africa.",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "The displayed ranking refutes the superlative: \"This pushes South Africa up to the third biggest drinking nation in Africa, and the 19th biggest drinking nation in the world, tied with Poland.\" Third in Africa entails that at least two African countries consume more per person, so South Africans do not consume more alcohol per person \"than anywhere else in Africa.\" The Base returned Not Enough Evidence despite the direct statement.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "missed_direct_ranking",
+   "limitations": "WHO 2015-data framing; per-capita basis.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://businesstech.co.za/news/lifestyle/124939/south-africa-alcohol-consumption-vs-the-world/",
+     "quote": "third biggest drinking nation in Africa, and the 19th biggest drinking nation in the world",
+     "span": [
+      0,
+      1058
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "decisive ranking"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-3:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT_WITH_EDITS",
+     "edited_text": "In the cited WHO-2015 per-capita ranking as reported by BusinessTech, South Africa is described as the third-biggest drinking nation in Africa. That ranking places at least two African countries ahead of South Africa, refuting the claim that South Africans consume more alcohol per person than anywhere else in Africa. This conclusion is limited to the cited ranking's year, measure, and reporting.",
+     "rationale": "If 'third biggest drinking nation in Africa' refers to the same per-capita consumption measure as the claim, third place contradicts an Africa-wide first-place superlative. The replacement makes that shared-measure assumption explicit and retains the source's stated temporal and measurement scope.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "N/A. The review concerns a direct ranking comparison, not the interpretation of a cross-metric relation.",
+     "submission_ref": "tier1-e3 user submission 3"
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-4:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT_WITH_EDITS",
+     "edited_text": "In the cited WHO-2015 per-capita ranking as reported by BusinessTech, South Africa is described as the third-biggest drinking nation in Africa. That ranking places at least two African countries ahead of South Africa, refuting the claim that South Africans consume more alcohol per person than anywhere else in Africa. This conclusion is limited to the cited ranking's year, measure, and reporting.",
+     "rationale": "If 'third biggest drinking nation in Africa' refers to the same per-capita consumption measure as the claim, third place contradicts an Africa-wide first-place superlative. The replacement makes that shared-measure assumption explicit and retains the source's stated temporal and measurement scope.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "N/A. The review concerns a direct ranking comparison, not the interpretation of a cross-metric relation.",
+     "submission_ref": "tier1-e3 user submission 4"
+    }
+   },
+   "verification_scope": "Two user-attested independent human reviews; source-only rendered Top-8 evidence.",
+   "review_import_provenance": "Two separate user submissions; payload text was byte-identical (sha256 7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668), independence asserted by user."
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:48",
+   "claim": "South Africans drink more per person than anywhere else in Africa",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "The displayed passage names the countries above South Africa: \"the fifth highest consumption rate in the world, below Namibia (31.3 litres), Eswatini (32.7 litres), Cook Islands (32.9 litres) and Tunisia (33.4 litres)\". Namibia, Eswatini and Tunisia are African and rank above South Africa, so South Africans do not drink more per person than anywhere else in Africa. The Base returned Not Enough Evidence despite the explicit comparison.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "missed_direct_ranking",
+   "limitations": "Passage mixes world-ranking (28.9 litres, 2005-era WHO figures) with the per-capita claim; ranking direction is unambiguous.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 4,
+     "url": "https://businesstech.co.za/news/lifestyle/332909/south-africa-has-some-of-the-heaviest-drinkers-in-the-world/",
+     "quote": "below Namibia (31.3 litres), Eswatini (32.7 litres), Cook Islands (32.9 litres) and Tunisia (33.4 litres)",
+     "span": [
+      0,
+      1125
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "countries above SA"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "VERIFIED",
+   "verified": true,
+   "reviews": {
+    "reviewer_1": {
+     "reviewer_id": "human-review-3:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT_WITH_EDITS",
+     "edited_text": "In the cited WHO/2005-era per-capita ranking reported by BusinessTech, South Africa is listed below Namibia (31.3 litres), Eswatini (32.7 litres), and Tunisia (33.4 litres). Because these countries are in Africa and are listed above South Africa on the cited per-capita measure, the ranking refutes the claim that South Africans drink more per person than anywhere else in Africa. This conclusion is limited to the source's stated ranking, period, and measure.",
+     "rationale": "Namibia, Eswatini, and Tunisia are African countries, and the quoted comparison places them above South Africa. The per-capita litres basis matches the claim's per-person scope, provided the quoted ordering and figures represent the same source-defined measure. The edited correction preserves the source's temporal and measurement limitations.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "N/A. The review concerns a direct ranking comparison, not the interpretation of a cross-metric relation.",
+     "submission_ref": "tier1-e3 user submission 3"
+    },
+    "reviewer_2": {
+     "reviewer_id": "human-review-4:user-submission",
+     "reviewer_type": "human",
+     "independent_review": true,
+     "reviewed_at": "2026-10-28T05:44:13Z",
+     "decision": "ACCEPT_WITH_EDITS",
+     "edited_text": "In the cited WHO/2005-era per-capita ranking reported by BusinessTech, South Africa is listed below Namibia (31.3 litres), Eswatini (32.7 litres), and Tunisia (33.4 litres). Because these countries are in Africa and are listed above South Africa on the cited per-capita measure, the ranking refutes the claim that South Africans drink more per person than anywhere else in Africa. This conclusion is limited to the source's stated ranking, period, and measure.",
+     "rationale": "Namibia, Eswatini, and Tunisia are African countries, and the quoted comparison places them above South Africa. The per-capita litres basis matches the claim's per-person scope, provided the quoted ordering and figures represent the same source-defined measure. The edited correction preserves the source's temporal and measurement limitations.",
+     "evidence_sufficient": true,
+     "gold_relation_supported": true,
+     "mechanism_confirmed": true,
+     "ontology_signoff": "N/A. The review concerns a direct ranking comparison, not the interpretation of a cross-metric relation.",
+     "submission_ref": "tier1-e3 user submission 4"
+    }
+   },
+   "verification_scope": "Two user-attested independent human reviews; source-only rendered Top-8 evidence.",
+   "review_import_provenance": "Two separate user submissions; payload text was byte-identical (sha256 7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668), independence asserted by user."
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:49",
+   "claim": "Only 31% of South African drink alcohol",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "draft_text": "The displayed estimates diverge by scope and denominator: \"an estimated 31% of the population aged 15 and older consume alcohol\" (WHO 2016 data), \"only a third (31%) of adults report consuming alcohol in the past year\", \"the 35% of the population that do consume alcohol\", and a 33.1% figure in the BMC passage. The unqualified \"Only 31% of South African drink alcohol\" specifies neither population, year nor survey; with scoped estimates spanning 31-35%, the unqualified figure is not settled. The Base accepted the first 31% without its scope qualifier. Not Enough Evidence.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "scope_qualifier",
+   "limitations": "Sign-off required on the scope reading.",
+   "ontology_note": "NEI protected from auto-Conflicting: the displayed estimates (31% of 15+; 31% of adults past-year; 35%; 33.1%) differ by scope and denominator, so they are not opposing verdicts on one proposition; insufficiency of the unqualified claim is the ontology-correct reading. Sign-off required.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://businesstech.co.za/news/lifestyle/332909/south-africa-has-some-of-the-heaviest-drinkers-in-the-world/",
+     "quote": "an estimated 31% of the population aged 15 and older consume alcohol",
+     "span": [
+      0,
+      1125
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "qualified 31%"
+    },
+    {
+     "source": "top8_span",
+     "rank": 2,
+     "url": "http://www.thedtic.gov.za/wp-content/uploads/nla_economic-impact-of-an-adban.pdf",
+     "quote": "of the 35% of the population that do consume alcohol",
+     "span": [
+      21978,
+      23147
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "divergent figure"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "SCOPE_QUALIFIER"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:979",
+   "claim": "COVID-19 virus could be spread from shoes.",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "The displayed evidence genuinely splits on the transmission question. Possibility side: \"shoes can be a potential source of contamination, according to family practitioner Georgine Nanos\"; persistence is displayed as \"coronavirus can remain active on some surfaces, like plastic, for up to two to three days\", with shoe soles discussed as virus carriers. Low-risk side: \"the likelihood of spreading or contracting the virus from shoes is low\", and the Stanford NEJM-based comment: \"it sees unlikely that enough virus would land on the floor, then get transmitted to shoes\". The Base collapsed this displayed tension into Not Enough Evidence. Both a transmission route treated as possible and an explicit low-likelihood assessment are displayed: Conflicting Evidence/Cherrypicking.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "incomplete_integration",
+   "limitations": "Risk assessments are expert commentary, not measurement; possibility vs probability framing disclosed.",
+   "ontology_note": "Conflicting retained: this is a genuinely contested possibility claim - surface persistence is displayed alongside explicit low-likelihood assessments. The tension is evidential, not a mere difference between source types.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 2,
+     "url": "https://www.huffpost.com/entry/coronavirus-on-shoes-brought-into-homes_l_5e7a5843c5b6f5b7c54c3786",
+     "quote": "shoes can be a potential source of contamination",
+     "span": [
+      890,
+      1966
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "possibility side"
+    },
+    {
+     "source": "top8_span",
+     "rank": 5,
+     "url": "https://www.womenshealthmag.com/uk/health/a31937061/coronavirus-spread/",
+     "quote": "the likelihood of spreading or contracting the virus from shoes is low",
+     "span": [
+      838,
+      1936
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "low-risk side"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E3_CANDIDATE_DRAFT",
+   "sample_id": "train:1863",
+   "claim": "President Buhari approves the creation of state police.",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "draft_text": "The refutation chain is displayed: the report - \"President Muhammadu Buhari Monday in Abuja approved the creation of state and local government police\" - and the same-day dismissal - \"The presidency has dismissed media reports claiming President Muhammadu Buhari approved the establishment of State and Local Government Police.\" The approval the claim asserts was reported and then dismissed by the presidency. The Base weighted the pair as mere tension and returned Conflicting Evidence/Cherrypicking; the gold reads the dismissal of the underlying report as refuting the claimed approval.",
+   "draft_text_provenance": "authored from exact Top-8 spans (M1.6.2e C.2)",
+   "mechanism": "misreport_denial_weighting",
+   "limitations": "Denial-weighting reading recorded for sign-off; no independent confirmation of the denial displayed.",
+   "ontology_note": "Refuted retained: the presidency denial directly addresses the reported approval - this is a refutation of the reported act, not a mere source disagreement. Sign-off required on denial-weighting.",
+   "decisive_quotes": [
+    {
+     "source": "top8_span",
+     "rank": 1,
+     "url": "https://www.ripplesnigeria.com/tag/state-police/",
+     "quote": "The presidency has dismissed media reports claiming President Muhammadu Buhari approved the establishment of State and Local Government Police",
+     "span": [
+      5820,
+      6992
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "denial"
+    },
+    {
+     "source": "top8_span",
+     "rank": 3,
+     "url": "https://www.thisdaylive.com/index.php/2019/06/03/buhari-approves-establishment-of-state-lg-police",
+     "quote": "President Muhammadu Buhari Monday in Abuja approved the creation of state and local government police",
+     "span": [
+      0,
+      422
+     ],
+     "verified_in": "bank_top8_asserted",
+     "note": "the misreported claim"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": false,
+   "triage_class": "E3",
+   "subflags": [
+    "ONTOLOGY"
+   ],
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E2_CANDIDATE_DRAFT_QUARANTINED",
+   "sample_id": "train:2",
+   "claim": "In Nigeria … in terms of revenue share, 20% goes to the local government.",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": "The target store contains the current statutory split: \"The Federation Account revenue sharing formula is as follows: FG (52.68%), SGs (26.72%) and LGs (20.60%)\" (CBN chapter five), and \"In the current revenue allocation formula, the FG gets 52.68%, State Governments get 26.72% and the Local Governments get 20.60%\" (LinkedIn explainer). A 20% share to local government is grounded by the current formula (20.60%); the Top-8 missed both passages, leaving only the historical 1976-1992 increase. Supported per the gold, conditional on including the store passages.",
+   "draft_text_provenance": "authored from server store-probe passages (M1.6.2e C.6)",
+   "mechanism": "retrieval_rank_miss",
+   "limitations": "Formula vintage: the LinkedIn \"current\" is undated and the CBN chapter is 2013-era; the claim itself is undated.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "store_probe",
+     "url": "https://www.cbn.gov.ng/out/2013/ccd/chapter%20five.pdf",
+     "quote": "The Federation Account revenue sharing formula is as follows: FG (52.68%), SGs (26.72%) and LGs (20.60%)",
+     "passage_id": "d9f3169eb0c4492d2cefb8276b4d7d98a7974de1f2d921de6a69aaf6a4fa77af",
+     "in_bank_top8": false,
+     "verified_in": "server_store_probe_20261028"
+    },
+    {
+     "source": "store_probe",
+     "url": "https://www.linkedin.com/pulse/how-revenue-being-shared-from-federation-account-victor-ejechi",
+     "quote": "In the current revenue allocation formula, the FG gets 52.68%, State Governments get 26.72% and the Local Governments get 20.60%",
+     "passage_id": "480c026c8564c9434a3234e70e28727b312d8755da21a2174751736a3c8fc22e",
+     "in_bank_top8": false,
+     "verified_in": "server_store_probe_20261028"
+    }
+   ],
+   "evidence_availability_change": true,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E2",
+   "subflags": [
+    "RETRIEVAL_MISS"
+   ],
+   "store_probe": {
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-2/passages.jsonl",
+    "lines": 32979,
+    "corpus_probe": "outputs/m11-candidates-pilot100-20261023-161557/train-2/corpus.jsonl (423 docs): 5x 20.60 hits, 8x 52.68 hits incl. UBE doc \"allocates 52.68 percent to the federal government, 26.72 percent to state governments, and 20.6 percent to local governments\""
+   },
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E2_CANDIDATE_DRAFT_QUARANTINED",
+   "sample_id": "train:17",
+   "claim": "In 2019 the US Police were 20.8 times more likely to kill than be killed by a criminal",
+   "gold_verdict": "Supported",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "draft_text": "The retrieved law-review passage contains the complete citation: \"Madeline Heim, Yes, Police Were 20.8 More Likely to Kill than Be Killed by a Criminal in 2019, POLITIFACT (Aug. 27, 2020)\". The ratio the claim asserts is attested bibliographically; the rendered span began mid-title and cut the number, which is why the Base saw no usable figure. Supported per the gold, conditional on reading the full passage rather than the truncated span.",
+   "draft_text_provenance": "authored from server store-probe passages (M1.6.2e C.6)",
+   "mechanism": "span_truncation",
+   "limitations": "Attestation is a fact-check title cited inside a law review; not primary 2019 data.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "store_probe",
+     "url": "https://houstonlawreview.org/article/22273.pdf",
+     "quote": "Madeline Heim, Yes, Police Were 20.8 More Likely to Kill than Be Killed by a Criminal in 2019, POLITIFACT (Aug. 27, 2020)",
+     "passage_id": "be6c1a25dd04",
+     "in_bank_top8": true,
+     "verified_in": "server_store_probe_20261028"
+    }
+   ],
+   "evidence_availability_change": true,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E2",
+   "subflags": [
+    "SPAN_TRUNCATION",
+    "BIBLIOGRAPHIC_ONLY"
+   ],
+   "store_probe": {
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-17/passages.jsonl",
+    "lines": 82965,
+    "corpus_probe": null
+   },
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E2_CANDIDATE_DRAFT_QUARANTINED",
+   "sample_id": "train:20",
+   "claim": "The Edo Modular Refinery is Governor Obaseki's project.",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Supported",
+   "draft_text": "The operator's own project page states: \"A refinery 100% fully owned and developed by AIPCC. It is located in Ologbo, Ikpoba Okha LGA of Edo State.\" The Ologbo modular refinery is AIPCC's project; the displayed Top-8 framing (\"partly sponsored by the Governor Godwin Obaseki-led administration... being developed by AIPCC Energy Limited\") describes sponsorship and facilitation, not ownership. \"Governor Obaseki's project\" is refuted by the ownership statement. Refuted per the gold, conditional on including the store passage.",
+   "draft_text_provenance": "authored from server store-probe passages (M1.6.2e C.6)",
+   "mechanism": "retrieval_rank_miss",
+   "limitations": "Company self-report; the state-sponsored framing coexists and the ownership/sponsorship line is the decisive distinction.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "store_probe",
+     "url": "https://www.aipccenergy.com/operations-projects",
+     "quote": "A refinery 100% fully owned and developed by AIPCC. It is located in Ologbo, Ikpoba Okha LGA of Edo State.",
+     "passage_id": "ad50e08df283538e9ef2d71c28d2bf4554d3138b8322c9ef9f09a5ae9e79ac38",
+     "in_bank_top8": false,
+     "verified_in": "server_store_probe_20261028"
+    }
+   ],
+   "evidence_availability_change": true,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E2",
+   "subflags": [
+    "RETRIEVAL_MISS"
+   ],
+   "store_probe": {
+    "store": "outputs/m11-store-r14-pilot100-20261023-162716/train-20/passages.jsonl",
+    "lines": 43100,
+    "corpus_probe": null
+   },
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E2_CANDIDATE_DRAFT_QUARANTINED",
+   "sample_id": "train:2449",
+   "claim": "Russia has a lower prison population than America because of the presence of telephone justice in Russia",
+   "gold_verdict": "Conflicting Evidence/Cherrypicking",
+   "base_verdict": "Refuted",
+   "draft_text": "The causal premise's existence is recoverable: the ICJ Russia profile reports \"the phenomenon of \"telephone justice\" remained widespread: reportedly, judges are often - as a matter of routine - directly instructed by the court president how to resolve a specific case\", and the retrieved \"Telephone Law and the Rule of Law: The Russian Case\" material cites Ledeneva's \"Telephone Justice in Russia\" (Post-Soviet Affairs, 2008). But the displayed prison-rate passages show Russia's rates high and period-dependent (\"The incarceration rate (per 100,000 of the population) was 528 in 2004\"), with no passage linking telephone justice to prison population. The premise is real while the because-clause is unevidenced: Conflicting Evidence/Cherrypicking per the gold, conditional on including the store/corpus passages.",
+   "draft_text_provenance": "authored from server store-probe passages (M1.6.2e C.6)",
+   "mechanism": "retrieval_miss",
+   "limitations": "Causal link unevidenced; telephone-justice evidence is qualitative; rate comparisons span different years/definitions.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "store_probe",
+     "url": "https://media.law.wisc.edu/m/nmytc/telephone_law_and_rol.pdf",
+     "quote": "'Telephone Law' and the 'Rule of Law': The Russian Case (Alena V. Ledeneva, 'Telephone Justice in Russia', 24 Post-Soviet Affairs (2008))",
+     "passage_id": null,
+     "in_bank_top8": false,
+     "verified_in": "server_store_probe_20261028"
+    }
+   ],
+   "evidence_availability_change": true,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E2",
+   "subflags": [
+    "RETRIEVAL_MISS",
+    "CAUSAL_LINK_UNEVIDENCED"
+   ],
+   "store_probe": {
+    "store": "outputs/m161-source-batch25-v1/train-2449/retrieval-attempt-001/train-2449/passages.jsonl",
+    "lines": 96440,
+    "corpus_probe": "outputs/m161-source-batch25-v1/train-2449/candidates-attempt-001/train-2449/corpus.jsonl (1218 docs): 22x \"telephone justice\" hits incl. ICJ Russia profile \"A 2010 ICJ mission learned that the phenomenon of “telephone justice” remained widespread: reportedly, judges are often – as a matter of routine – directly instructed by the court president how to resolve a specific case\" (https://www.icj.org/cijlcountryprofiles/russian-federation/) and Cambridge \"Telephone justice in the global age\" chapter"
+   },
+   "author": "assistant (M1.6.2e, CPU only)",
+   "drafted_at": "2026-10-28T04:45:48Z",
+   "review_status": "PENDING_REVIEW",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E1_NO_DRAFT",
+   "sample_id": "train:3",
+   "claim": "Biden has pledged to stop border wall construction and give amnesty and health care to all illegal immigrants.",
+   "gold_verdict": "Supported",
+   "base_verdict": "Refuted",
+   "draft_text": null,
+   "mechanism": null,
+   "limitations": "Gold Supported is not derivable from the evidence: the displayed NBC fact-check (\"This is misleading\") and the store’s own full text (\"he has hardly proposed amnesty and free health care for all undocumented immigrants; Biden supports allowing undocumented immigrants to purchase health care with their own money\") support a mixed/refuted reading of the health-care element. A Supported draft would contradict the store’s decisive passage.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.nbcnews.com/politics/2020-election/fact-checking-night-2-republican-national-convention-n1238108",
+     "quote": "Eric Trump says Biden wants 'amnesty and health care' for undocumented immigrants. That's misleading.",
+     "span": [
+      2834,
+      3993
+     ],
+     "note": "displayed fact-check framing"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.nbcnews.com/politics/2020-election/fact-checking-night-2-republican-national-convention-n1238108",
+     "quote": "While it's true that Biden has pledged to stop construction of the border",
+     "span": [
+      2834,
+      3993
+     ],
+     "note": "partial-support element only"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_TENSION"
+   ],
+   "review_status": "NOT_DRAFTABLE",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E1_NO_DRAFT",
+   "sample_id": "train:14",
+   "claim": "President Muhammadu Buhari sign a new Police bill to allow officers arrest without a warrant",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": null,
+   "mechanism": null,
+   "limitations": "Claim elements (Buhari signing; new Police bill; warrantless-arrest power) never appear together: Top-8 has generic warrantless-arrest law fragments [2][7] and a 2017/2019 gunshot-treatment bill [1]; store and raw corpus contain no Buhari+Police-Act-2020+arrest link. Gold Supported cannot be grounded without speculation.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.thisdaylive.com/index.php/2016/10/17/judges-arrest-report-from-presidency-says-dss-acted-in-accordance-with-law",
+     "quote": "any police officer may, without an order from a magistrate and without a warrant, arrest",
+     "span": [
+      6050,
+      7095
+     ],
+     "note": "generic CPL fragment, not the named bill"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E1",
+   "subflags": [
+    "EVIDENCE_ELEMENTS_SPLIT"
+   ],
+   "review_status": "NOT_DRAFTABLE",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E1_NO_DRAFT",
+   "sample_id": "train:26",
+   "claim": "I will raise taxes for anybody making over $400,000. … No new taxes for people making less than $400,000.",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "draft_text": null,
+   "mechanism": null,
+   "limitations": "Both pledge elements are directly evidenced ([1][2][3][7] \"no new taxes\" pledge; [4] hikes \"limited to people who make more than $400,000\"). The NEI gold rests on an unstated pledge-vs-enacted-incidence reading (original limitation: \"Need whether the claim verifies a speech act, proposed policy or enacted tax incidence\"); forcing NEI would be speculation.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "bank_top8",
+     "rank": 1,
+     "url": "https://thehill.com/homenews/campaign/513319-biden-no-new-taxes-for-anyone-making-under-400k/",
+     "quote": "he will not raise taxes for Americans making less than $400,000",
+     "span": [
+      0,
+      1061
+     ],
+     "note": "pledge element 1"
+    },
+    {
+     "source": "bank_top8",
+     "rank": 4,
+     "url": "https://www.kiplinger.com/taxes/income-tax/601108/2020-election-a-redo-on-taxes",
+     "quote": "tax hikes will be limited to people who make more than $400,000",
+     "span": [
+      0,
+      1015
+     ],
+     "note": "pledge element 2"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_READING_UNSUPPORTED"
+   ],
+   "review_status": "NOT_DRAFTABLE",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E1_NO_DRAFT",
+   "sample_id": "train:38",
+   "claim": "Kenya settles  about 300,000 court cases each year.",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": null,
+   "mechanism": null,
+   "limitations": "The store’s only ~300,000 figure is a backlog count, not annual settlements (\"the number of cases classified as back-log stood at just over 300,000\"; \"553,187 cases pending, 327,928 of which were backlogged\"); no passage gives an annual disposal total. Grounding the Supported gold would require turning backlog into settlements — speculation.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "bank_top8",
+     "rank": 8,
+     "url": "https://www.worldbank.org/en/news/feature/2017/10/05/court-annexed-mediation-offers-alternative-to-delayed-justice-for-kenyans",
+     "quote": "Kenya’s judiciary has a massive backlog of civil ca",
+     "span": [
+      0,
+      1159
+     ],
+     "note": "Top-8 [8] backlog framing"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_BASELINE_ABSENT"
+   ],
+   "review_status": "NOT_DRAFTABLE",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E1_NO_DRAFT",
+   "sample_id": "train:39",
+   "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people",
+   "gold_verdict": "Not Enough Evidence",
+   "base_verdict": "Supported",
+   "draft_text": null,
+   "mechanism": null,
+   "limitations": "[4] explicitly reports \"the global average of 16\" (judges and magistrates per 100,000), which grounds the claim; the original assessor already concluded the NEI label \"is not entailed by denying all benchmark evidence\". A NEI draft would have to dismiss displayed benchmark evidence.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "bank_top8",
+     "rank": 4,
+     "url": "https://www.visionofhumanity.org/mexico-suffers-most-violent-year-on-record-at-a-cost-of-268-billion/",
+     "quote": "significantly below the global average of 16",
+     "span": [
+      891,
+      1996
+     ],
+     "note": "displayed global average"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_READING_UNSUPPORTED"
+   ],
+   "review_status": "NOT_DRAFTABLE",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E1_NO_DRAFT",
+   "sample_id": "train:1873",
+   "claim": "In an op-ed, then-sen. Joe Biden wrote that he believed that women working outside the home would, quote, \"create the deterioration of family.\" He also said that women who were working outside the home were, quote, \"avoiding responsibility.\"",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Supported",
+   "draft_text": null,
+   "mechanism": null,
+   "limitations": "The claim attributes quotes to a then-Sen. Biden op-ed; the op-ed is absent from the corpus (original limitation) and the quoted phrases do not appear in any displayed span, so the Refuted gold (quote attribution wrong) cannot be grounded without speculation.",
+   "ontology_note": null,
+   "decisive_quotes": [],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E1",
+   "subflags": [
+    "PRIMARY_SOURCE_ABSENT"
+   ],
+   "review_status": "NOT_DRAFTABLE",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E1_NO_DRAFT",
+   "sample_id": "train:1881",
+   "claim": "Pinning Down Prescription Drug Prices",
+   "gold_verdict": "Supported",
+   "base_verdict": "Not Enough Evidence",
+   "draft_text": null,
+   "mechanism": null,
+   "limitations": "The claim is a headline (\"Pinning Down Prescription Drug Prices\"), not a verifiable proposition; the displayed abstract supports a related thesis (\"prescription drugs are priced in the United States primarily on the basis of what the market will bear\") but the gold-Supported reading of the title itself cannot be grounded.",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://pubmed.ncbi.nlm.nih.gov/27552619/",
+     "quote": "prescription drugs are priced in the United States primarily on the basis of what the market will bear",
+     "span": [
+      1948,
+      3277
+     ],
+     "note": "related thesis, not the title claim"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E1",
+   "subflags": [
+    "NON_PROPOSITIONAL_CLAIM"
+   ],
+   "review_status": "NOT_DRAFTABLE",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  },
+  {
+   "record_kind": "E1_NO_DRAFT",
+   "sample_id": "train:2224",
+   "claim": "Kenyans with old generation passports will still be issued with U.S visas.",
+   "gold_verdict": "Refuted",
+   "base_verdict": "Conflicting Evidence/Cherrypicking",
+   "draft_text": null,
+   "mechanism": null,
+   "limitations": "Displayed [2] supports the claim (embassy \"reversed its earlier decision to ban visa applications by Kenyans without digital passport... will place a US visa in a non-digital passport until further notice\"); the Refuted gold rests on an unstated temporal scope (later policy change not in evidence).",
+   "ontology_note": null,
+   "decisive_quotes": [
+    {
+     "source": "bank_top8",
+     "rank": 2,
+     "url": "https://www.standardmedia.co.ke/news/article/2001323537/kenyans-to-travel-to-us-with-old-passport-after-embassy-u-turn-on-directive",
+     "quote": "reversed its earlier decision to ban visa applications by Kenyans without digital passport",
+     "span": [
+      0,
+      1041
+     ],
+     "note": "supports the claim, conflicts with gold"
+    }
+   ],
+   "evidence_availability_change": false,
+   "excluded_from_primary_experiment": true,
+   "triage_class": "E1",
+   "subflags": [
+    "GOLD_READING_UNSUPPORTED"
+   ],
+   "review_status": "NOT_DRAFTABLE",
+   "verified": false,
+   "reviews": {
+    "reviewer_1": null,
+    "reviewer_2": null
+   }
+  }
+ ],
+ "review_import": {
+  "imported_at": "2026-10-28T05:30:20Z",
+  "source": "two human-review submissions provided in conversation",
+  "imported_ids": [
+   "train:6",
+   "train:11",
+   "train:25",
+   "train:978",
+   "train:1824"
+  ],
+  "verified_count": 5,
+  "note": "No assistant decision was created; all five records retain qualified limitations."
+ },
+ "tier1_e3_review_import": {
+  "imported_at": "2026-10-28T05:44:13Z",
+  "ids": [
+   "train:21",
+   "train:31",
+   "train:47",
+   "train:48"
+  ],
+  "two_submission_text_sha256": "7769b128b5f7037512d40ca64f8fcdc695e7f3b57bffa39f98b812b99c394668",
+  "textual_identity": "byte-identical",
+  "independence_basis": "user attestation"
+ }
+}

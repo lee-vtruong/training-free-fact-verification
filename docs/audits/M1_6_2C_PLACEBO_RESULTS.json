@@ -1,0 +1,187 @@
+{
+  "claims": 50,
+  "comparisons": {
+    "COV_PLACEBO_G3_vs_MIXED_GOLD_ONLY_K2": {
+      "accuracy_bootstrap_ci95": [
+        0.0,
+        0.0
+      ],
+      "accuracy_delta": 0.0,
+      "bootstrap_samples": 10000,
+      "correction_ids": [],
+      "exact_mcnemar_p": 1.0,
+      "invalid_transitions": {
+        "CC": 35,
+        "WW": 15
+      },
+      "macro_f1_bootstrap_ci95": [
+        -0.008562583695112223,
+        0.01981140553121981
+      ],
+      "macro_f1_delta": 0.0026712328767123372,
+      "macro_f1_paired_swap_p": 1.0,
+      "missing_class_bootstrap_frequency": 0.0166,
+      "permutations": 19999,
+      "regression_ids": [],
+      "transitions": {
+        "CC": 35,
+        "CW": 0,
+        "WC": 0,
+        "WW": 15
+      }
+    },
+    "COV_PLACEBO_G3_vs_N0": {
+      "accuracy_bootstrap_ci95": [
+        0.0,
+        0.0
+      ],
+      "accuracy_delta": 0.0,
+      "bootstrap_samples": 10000,
+      "correction_ids": [],
+      "exact_mcnemar_p": 1.0,
+      "invalid_transitions": {
+        "CC": 35,
+        "WW": 15
+      },
+      "macro_f1_bootstrap_ci95": [
+        -0.008004926108374388,
+        0.03659531872116881
+      ],
+      "macro_f1_delta": 0.0105790297339593,
+      "macro_f1_paired_swap_p": 0.2433,
+      "missing_class_bootstrap_frequency": 0.0166,
+      "permutations": 19999,
+      "regression_ids": [],
+      "transitions": {
+        "CC": 35,
+        "CW": 0,
+        "WC": 0,
+        "WW": 15
+      }
+    },
+    "COV_PLACEBO_G3_vs_P2": {
+      "accuracy_bootstrap_ci95": [
+        -0.039999999999999925,
+        0.12
+      ],
+      "accuracy_delta": 0.039999999999999925,
+      "bootstrap_samples": 10000,
+      "correction_ids": [
+        "train:1853",
+        "train:627",
+        "train:1728"
+      ],
+      "exact_mcnemar_p": 0.625,
+      "invalid_transitions": {
+        "CC": 32,
+        "CW": 1,
+        "WC": 3,
+        "WW": 14
+      },
+      "macro_f1_bootstrap_ci95": [
+        -0.030555555555555558,
+        0.07142480762327816
+      ],
+      "macro_f1_delta": 0.018127589063794525,
+      "macro_f1_paired_swap_p": 0.5006,
+      "missing_class_bootstrap_frequency": 0.0166,
+      "permutations": 19999,
+      "regression_ids": [
+        "train:1935"
+      ],
+      "transitions": {
+        "CC": 32,
+        "CW": 1,
+        "WC": 3,
+        "WW": 14
+      }
+    }
+  },
+  "condition": "COV_PLACEBO_G3",
+  "generation_wall_seconds": 100.26143288891762,
+  "gpu_active_seconds": null,
+  "metrics": {
+    "accuracy": 0.7,
+    "confusion_matrix": {
+      "Conflicting Evidence/Cherrypicking": {
+        "Conflicting Evidence/Cherrypicking": 0,
+        "Not Enough Evidence": 0,
+        "Refuted": 3,
+        "Supported": 1,
+        "Unparseable": 0
+      },
+      "Not Enough Evidence": {
+        "Conflicting Evidence/Cherrypicking": 0,
+        "Not Enough Evidence": 0,
+        "Refuted": 5,
+        "Supported": 1,
+        "Unparseable": 0
+      },
+      "Refuted": {
+        "Conflicting Evidence/Cherrypicking": 0,
+        "Not Enough Evidence": 0,
+        "Refuted": 31,
+        "Supported": 1,
+        "Unparseable": 0
+      },
+      "Supported": {
+        "Conflicting Evidence/Cherrypicking": 0,
+        "Not Enough Evidence": 0,
+        "Refuted": 4,
+        "Supported": 4,
+        "Unparseable": 0
+      }
+    },
+    "correct_claims": 35,
+    "macro_f1": 0.33999999999999997,
+    "macro_precision": 0.3230897009966777,
+    "macro_recall": 0.3671875,
+    "per_class": {
+      "Conflicting Evidence/Cherrypicking": {
+        "f1": 0.0,
+        "fn": 4,
+        "fp": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 4,
+        "tp": 0
+      },
+      "Not Enough Evidence": {
+        "f1": 0.0,
+        "fn": 6,
+        "fp": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 6,
+        "tp": 0
+      },
+      "Refuted": {
+        "f1": 0.8266666666666667,
+        "fn": 1,
+        "fp": 12,
+        "precision": 0.7209302325581395,
+        "recall": 0.96875,
+        "support": 32,
+        "tp": 31
+      },
+      "Supported": {
+        "f1": 0.5333333333333333,
+        "fn": 4,
+        "fp": 3,
+        "precision": 0.5714285714285714,
+        "recall": 0.5,
+        "support": 8,
+        "tp": 4
+      }
+    },
+    "total_claims": 50,
+    "valid_rate": 1.0
+  },
+  "output_tokens": 3487,
+  "predicted_verdict_prior": {
+    "Refuted": 43,
+    "Supported": 7
+  },
+  "prompt_tokens": 165186,
+  "scope": "EXPLORATORY_NOT_CONFIRMATORY"
+}
