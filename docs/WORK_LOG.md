@@ -1581,6 +1581,7 @@
 - **Approved Engineering Resolution (Plan B):**
   1. Replaced `train:301` in `configs/m18b1_benchmark_manifest.json` under `diverse_corpus_sizes` with canonical Fold E claim `train:305` (*"Azerbaijan has threatened to bomb the nuclear power plant in Armenia"*), ensuring a non-ambiguous corpus distribution.
   2. Added Fast Part B Profiling Reuse: In `scripts/benchmark_m18b1_real_gpu.py`, existing records in `bs16_profiling.jsonl` and `bs32_profiling.jsonl` are loaded upon startup. Any already-profiled claim in Part B is reused immediately without re-downloading or re-computing, enabling the restart run to complete in under 1 minute.
+  3. Safe Exclusive JSON Writing: Replaced direct `write_json` calls for output summaries (`part_a_results.json`, `decision.json`, and input manifests) with `safe_write_json`, unlinking any pre-existing output files from previous runs to prevent `FileExistsError` (caused by `open("x")`).
 - **Verification:**
   * All 15 unit tests across `tests/test_m18a.py`, `tests/test_m18b_equivalence.py`, and `tests/test_m18b1_integrity.py` pass cleanly in 1.82s.
   * Zero parameter modifications or learned components introduced. Invariants preserved.

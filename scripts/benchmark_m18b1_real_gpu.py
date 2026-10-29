@@ -34,6 +34,14 @@ from tffv.retrieval.prepare_store_candidates import prepare_candidates
 from tffv.retrieval.synthetic import SyntheticEncoder, SyntheticReranker
 
 
+def safe_write_json(path: Path, value: Any) -> None:
+    """Write JSON with exclusive write semantics, unlinking pre-existing file if present."""
+    p = Path(path)
+    if p.exists():
+        p.unlink()
+    write_json(p, value)
+
+
 CANONICAL_CACHE_ROOTS = [
     ROOT / "outputs/m11-store-r14-pilot100-20261023-162716",
     ROOT / "outputs/m141-confirmatory-r4",
@@ -137,7 +145,7 @@ def prepare_claim_input_and_candidates(
         json.dumps({"sample_id": sid, "dataset": "AVeriTeC", "split": "train", "claim": claim_text}) + "\n",
         encoding="utf-8",
     )
-    write_json(
+    safe_write_json(
         inp_dir / "claims_manifest.json",
         {
             "dataset": "AVeriTeC",
@@ -370,7 +378,7 @@ def run_benchmark_m18b1(
                 status_str = "PASS" if comp["status"] == "MATCH" else "FAIL"
                 print(f"   --> {status_str}: {sid} (max_score_diff={comp['max_score_diff']:.2e})", flush=True)
 
-            write_json(part_a_dir / "part_a_results.json", part_a_results)
+            safe_write_json(part_a_dir / "part_a_results.json", part_a_results)
         finally:
             part_a_runner.close()
     else:
@@ -660,7 +668,7 @@ def run_benchmark_m18b1(
     }
 
     # Write summary.json
-    write_json(out / "decision.json", summary)
+    safe_write_json(out / "decision.json", summary)
 
     # Emit Markdown Report
     report_md = generate_decision_markdown_report(summary)
