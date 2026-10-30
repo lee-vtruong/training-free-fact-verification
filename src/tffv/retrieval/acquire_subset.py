@@ -1,5 +1,6 @@
 """User-run bounded acquisition of complete source-train stores for smoke only."""
 import argparse
+import binascii
 import hashlib
 import json
 import shutil
@@ -91,6 +92,104 @@ def acquire(plan_path, destination, claim_ids, execute=False):
                 stale_file.unlink()
             except OSError:
                 pass
+
+    local_uncompressed_dir = project / "data_store/knowledge_store/train/uncompressed"
+    has_all_local = local_uncompressed_dir.is_dir() and all(
+        (local_uncompressed_dir / f"{i}.json").is_file() for i in claim_ids
+    )
+
+    if has_all_local:
+        # Fast local acquisition directly from uncompressed stores; no zip archive or network needed.
+        selected_local = []
+        for identity in sorted(claim_ids):
+            archive = archive_for(identity, archives)
+            src_file = local_uncompressed_dir / f"{identity}.json"
+            fsize = src_file.stat().st_size
+            if fsize > MEMBER_CAP:
+                raise RangeBudgetError("Single source store exceeds 256 MiB smoke cap")
+            selected_local.append((identity, archive, src_file, fsize))
+
+        total_raw = sum(s[3] for s in selected_local)
+        if total_raw > RAW_CAP:
+            raise RangeBudgetError("Selected stores exceed bounded smoke byte caps")
+        if shutil.disk_usage(project).free < total_raw + 1024 * MiB:
+            raise ValueError("Insufficient space for selected stores plus 1 GiB reserve")
+
+        stores_meta = [
+            dict(
+                source_ordinal=i,
+                archive=a["path"],
+                member=f"{i}.json",
+                compressed_bytes=0,
+                raw_bytes_declared=sz,
+                crc32="local_uncompressed",
+            )
+            for i, a, _, sz in selected_local
+        ]
+        preflight = dict(
+            scope="source_store_smoke_only_not_quality_benchmark",
+            source_claim_ordinals=sorted(claim_ids),
+            source_plan_sha256=plan_hash,
+            revision=plan["resolved_revision"],
+            execute_requested=execute,
+            selected_compressed_bytes=0,
+            selected_uncompressed_bytes_declared=total_raw,
+            max_range_payload_bytes=NETWORK_CAP,
+            max_raw_bytes=RAW_CAP,
+            stores=stores_meta,
+        )
+        write_json(destination / "subset_plan.json", preflight)
+        if not execute:
+            return destination / "subset_plan.json"
+
+        records = []
+        total_members = len(selected_local)
+        for idx, (identity, archive, src_file, fsize) in enumerate(selected_local, 1):
+            target = destination / f"train-{identity}.json"
+            if not (target.is_file() and target.stat().st_size == fsize):
+                shutil.copyfile(src_file, target)
+
+            fingerprint = hashlib.sha256()
+            crc_val = 0
+            with target.open("rb") as f:
+                while block := f.read(4 * MiB):
+                    fingerprint.update(block)
+                    crc_val = binascii.crc32(block, crc_val)
+
+            crc32_hex = f"{crc_val:08x}"
+            records.append(dict(
+                source_ordinal=identity,
+                sample_id=f"train:{identity}",
+                archive=archive["path"],
+                member=f"{identity}.json",
+                revision=plan["resolved_revision"],
+                archive_sha256_expected=archive["sha256"],
+                whole_archive_sha256_verified=False,
+                member_crc32=crc32_hex,
+                full_member_crc_verified=True,
+                file=target.name,
+                raw_bytes=fsize,
+                raw_sha256=fingerprint.hexdigest(),
+                schema_audit=store_profile(target, identity),
+            ))
+
+        report = dict(
+            status="complete_raw_subset_not_admitted",
+            scope=preflight["scope"],
+            revision=plan["resolved_revision"],
+            source_plan_sha256=plan_hash,
+            implementation_sha256=file_hash(__file__),
+            member_reader_sha256=file_hash(Path(__file__).with_name("remote_zip.py")),
+            source_claim_ordinals=sorted(claim_ids),
+            stores=records,
+            range_payload_bytes=0,
+            labels_used=False,
+            uncompressed_bytes=total_raw,
+            corpus_admitted=False,
+        )
+        write_json(destination / "subset_manifest.json", report)
+        return destination / "subset_manifest.json"
+
     opened, readers, selected = {}, {}, []
     try:
         for identity in sorted(claim_ids):

@@ -1594,10 +1594,9 @@
   * Decompressed all 3,068 official knowledge store records into `data_store/knowledge_store/train/uncompressed/` (`0.json` to `3067.json`).
 - **Engineering Optimization (`src/tffv/retrieval/acquire_subset.py`):**
   * Added instant local filesystem store resolution:
-    1. Checks if local uncompressed JSON store exists (`data_store/knowledge_store/train/uncompressed/{identity}.json`) with matching size. If present, instantly copies locally (~0.001s).
-    2. Checks if local `.zip` archive exists on disk (`data_store/knowledge_store/train/{archive}.zip`). If present, opens `zipfile.ZipFile` directly from local NVMe SSD instead of creating `HTTPRangeReader`.
-    3. Retains graceful fallback to `HTTPRangeReader` if run in environments without pre-downloaded local stores.
+    1. Checks if local uncompressed JSON store exists (`data_store/knowledge_store/train/uncompressed/{identity}.json`) with matching size. If present, instantly acquires and computes CRC32/SHA-256 directly on local SSD (~0.001s), completely eliminating the need for `.zip` files or network.
+    2. Gracefully falls back to reading local zip archives, or `HTTPRangeReader` if run on minimal test environments.
   * Preserved 100% provenance verification, file size checking, CRC32 assertions, and schema audits (`store_profile`).
 - **Verification:**
-  * All 15 unit tests pass in 0.90s.
-  * Complete 3,068-claim dataset is 100% offline and localized. Network bandwidth bottlenecks and HTTP 429 / EOF errors are completely eliminated.
+  * All 15 unit tests pass in 0.77s.
+  * The user is now free to delete the ~63.5 GB `.zip` archives safely without impacting retrieval.
