@@ -122,7 +122,10 @@ class QwenFrozen:
             with self.torch.inference_mode():
                 hidden = self.model(**inputs).last_hidden_state[:, -1]
                 vectors.append(self.torch.nn.functional.normalize(hidden.float(), p=2, dim=1).cpu().numpy())
+            del inputs, hidden
             self.forward_passes += 1
+            if self.device == "cuda" and self.forward_passes % 10 == 0:
+                self.torch.cuda.empty_cache()
         return np.concatenate(vectors) if vectors else np.empty((0, 1024), dtype=np.float32)
 
     def score(self, claim, texts):

@@ -165,7 +165,7 @@ def run_full_retrieval(
     acq_plan_path: str = "configs/m161_acquisition_plan.json",
     output_dir: str = "outputs/m18c-full-retrieval",
     batch_size: int = 16,
-    dense_batch_size: int = 128,
+    dense_batch_size: int = 48,
     reuse_canonical: bool = True,
     synthetic: bool = False,
     progress_interval: int = 10,
@@ -327,12 +327,14 @@ def run_full_retrieval(
 
             # 4. Execute fresh retrieval on GPU
             t0 = time.perf_counter()
+            t_prep_start = time.perf_counter()
             claim_meta, documents = prepare_claim_input_and_candidates(
                 sid=sid,
                 raw_train=raw_train,
                 acq_plan_path=ROOT / acq_plan_path,
                 claim_work_dir=claim_work_dir,
             )
+            t_prep = time.perf_counter() - t_prep_start
 
             rec, prof = runner.retrieve_claim(
                 claim=claim_meta,
@@ -361,10 +363,14 @@ def run_full_retrieval(
             remaining_claims = len(target_ordinals) - idx
             eta_hours = (remaining_claims * avg_lat) / 3600.0
 
+            dense_t = prof.get('dense_retrieval_seconds', 0.0)
+            rerank_t = prof.get('cross_encoder_reranking_seconds', 0.0)
+            bm25_t = prof.get('bm25_seconds', 0.0)
+
             print(
-                f"[{idx}/{len(target_ordinals)}] {sid}: elapsed={elapsed:.2f}s "
-                f"(rerank={prof.get('cross_encoder_reranking_seconds', 0.0):.2f}s, "
-                f"passages={len(documents)}) | avg={avg_lat:.1f}s/c | ETA={eta_hours:.1f}h",
+                f"[{idx}/{len(target_ordinals)}] {sid}: total={elapsed:.2f}s "
+                f"[prep={t_prep:.2f}s, bm25={bm25_t:.2f}s, dense={dense_t:.2f}s, rerank={rerank_t:.2f}s, "
+                f"docs={len(documents)}] | avg={avg_lat:.1f}s/c | ETA={eta_hours:.1f}h",
                 flush=True,
             )
 
@@ -428,7 +434,7 @@ def main():
     parser.add_argument("--acq-plan", default="configs/m161_acquisition_plan.json", help="Path to acquisition plan")
     parser.add_argument("--output-dir", default="outputs/m18c-full-retrieval", help="Output directory")
     parser.add_argument("--batch-size", type=int, default=16, help="Cross-encoder batch size (default 16)")
-    parser.add_argument("--dense-batch-size", type=int, default=128, help="Dense embedding batch size (default 128)")
+    parser.add_argument("--dense-batch-size", type=int, default=48, help="Dense embedding batch size (default 48)")
     parser.add_argument("--synthetic", action="store_true", help="Run with synthetic test double models on CPU")
     parser.add_argument("--no-canonical-reuse", action="store_true", help="Disable canonical cache reuse")
     parser.add_argument("--interval", type=int, default=10, help="Progress log interval")

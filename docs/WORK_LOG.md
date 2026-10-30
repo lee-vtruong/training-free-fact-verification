@@ -1610,7 +1610,7 @@
   3. *Zero-Network NVMe Stores:* Uses local `data_store/knowledge_store/train/uncompressed/` verified stores (~2.6s per claim overhead vs 60–120s over HTTP Range requests).
   4. *Claim-Level Checkpointing & Crash Resilience:* Every claim writes its own `R4.jsonl`, atomically appends to `all_train_r4.jsonl`, and updates `state.json`. If terminated or interrupted at any point, restarts instantly resume from the exact next unprocessed claim.
   5. *Invalid Claim Exclusion:* Automatically skips `train:1948` (only train claim with empty claim text `""`).
-  6. *Dense Embedding Throughput Scaling:* Added configurable `--dense-batch-size` (default: 128) for `Qwen3-Embedding-0.6B` on RTX 5090. Eliminates the ~1,250 sequential batch bottleneck on large 15k–25k passage corpora, accelerating per-claim latency from ~200s down to ~20–30s without modifying reranker batching.
+  6. *Dense Embedding Throughput Scaling:* Added configurable `--dense-batch-size` (default: 48) for `Qwen3-Embedding-0.6B` on RTX 5090. Tuned down from 128 to 48 with periodic `empty_cache()` to prevent quadratic attention OOM on long-context passages while retaining a 3x throughput speedup over canonical batch_size=16.
 - **Unit Tests (`tests/test_m18c_retrieval.py`):**
   * Verified invalid sample ID invariants.
   * Verified canonical cache scanner with mock directory roots.
