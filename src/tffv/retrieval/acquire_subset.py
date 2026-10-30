@@ -97,8 +97,12 @@ def acquire(plan_path, destination, claim_ids, execute=False):
             archive = archive_for(identity, archives)
             key = archive["path"]
             if key not in opened:
-                readers[key] = HTTPRangeReader(archive["url"], archive["compressed_bytes"], budget=4 * MiB)
-                opened[key] = zipfile.ZipFile(readers[key])
+                local_archive = project / key
+                if local_archive.is_file():
+                    opened[key] = zipfile.ZipFile(local_archive)
+                else:
+                    readers[key] = HTTPRangeReader(archive["url"], archive["compressed_bytes"], budget=4 * MiB)
+                    opened[key] = zipfile.ZipFile(readers[key])
             candidates = [i for i in opened[key].infolist() if PurePosixPath(i.filename).name in {f"{identity}.json", f"{identity}.jsonl"}]
             if len(candidates) != 1 or candidates[0].is_dir() or unsafe_member(candidates[0]):
                 raise ValueError("Expected one safe store member for source ordinal")
@@ -129,14 +133,20 @@ def acquire(plan_path, destination, claim_ids, execute=False):
         remaining = NETWORK_CAP - sum(reader.bytes_read for reader in readers.values())
         records = []
         for key, zipped in opened.items():
-            reader = readers[key]
-            reader.budget = reader.bytes_read + remaining
-            reader.max_requests = max(2048, len(selected) * 512)
-            before = reader.bytes_read
+            if key in readers:
+                reader = readers[key]
+                reader.budget = reader.bytes_read + remaining
+                reader.max_requests = max(2048, len(selected) * 512)
+                before = reader.bytes_read
             members_in_archive = [item for item in selected if item[1]["path"] == key]
             total_members = len(members_in_archive)
             for idx, (identity, archive, info) in enumerate(members_in_archive, 1):
                 target = destination / f"train-{identity}.json"
+                local_uncompressed = project / "data_store/knowledge_store/train/uncompressed" / f"{identity}.json"
+                if not target.is_file() and local_uncompressed.is_file():
+                    if local_uncompressed.stat().st_size == info.file_size:
+                        shutil.copyfile(local_uncompressed, target)
+
                 if target.is_file() and target.stat().st_size == info.file_size:
                     if idx % 10 == 0 or idx == 1 or idx == total_members:
                         print(f"[acquire_subset] Reusing existing verified store [{idx}/{total_members}] train:{identity} ({target.stat().st_size / MiB:.1f} MiB raw)...", flush=True)

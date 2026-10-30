@@ -1585,3 +1585,19 @@
 - **Verification:**
   * All 15 unit tests across `tests/test_m18a.py`, `tests/test_m18b_equivalence.py`, and `tests/test_m18b1_integrity.py` pass cleanly in 1.82s.
   * Zero parameter modifications or learned components introduced. Invariants preserved.
+
+## 2026-10-30 09:30 +07:00 — M1.8b.1 Local Knowledge Store Uncompression & Zero-Network Retrieval Optimization
+
+- **Incident & Context:**
+  * Disk on `hvtham-server` was extended to 2TB (1020 GB available on NVMe SSD `/dev/sda3`).
+  * Downloaded and verified all 3 pinned knowledge store archives (`train_0_999.zip`, `train_1000_1999.zip`, `train_2000_3067.zip`) matching SHA-256 hashes defined in `configs/m161_acquisition_plan.json`.
+  * Decompressed all 3,068 official knowledge store records into `data_store/knowledge_store/train/uncompressed/` (`0.json` to `3067.json`).
+- **Engineering Optimization (`src/tffv/retrieval/acquire_subset.py`):**
+  * Added instant local filesystem store resolution:
+    1. Checks if local uncompressed JSON store exists (`data_store/knowledge_store/train/uncompressed/{identity}.json`) with matching size. If present, instantly copies locally (~0.001s).
+    2. Checks if local `.zip` archive exists on disk (`data_store/knowledge_store/train/{archive}.zip`). If present, opens `zipfile.ZipFile` directly from local NVMe SSD instead of creating `HTTPRangeReader`.
+    3. Retains graceful fallback to `HTTPRangeReader` if run in environments without pre-downloaded local stores.
+  * Preserved 100% provenance verification, file size checking, CRC32 assertions, and schema audits (`store_profile`).
+- **Verification:**
+  * All 15 unit tests pass in 0.90s.
+  * Complete 3,068-claim dataset is 100% offline and localized. Network bandwidth bottlenecks and HTTP 429 / EOF errors are completely eliminated.
