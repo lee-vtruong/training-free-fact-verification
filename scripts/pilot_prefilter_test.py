@@ -17,9 +17,7 @@ import sys
 sys.path.insert(0, str(ROOT / "src"))
 
 from tffv.provenance import canonical, write_json
-from tffv.retrieval.bm25 import BM25
-from tffv.retrieval.dense import dense_search
-from tffv.retrieval.fusion import Hit, ordered, rrf
+from tffv.retrieval.ranking import BM25, Hit, dense_search, ordered, rrf
 from tffv.retrieval.optimized_runner import OptimizedRetrievalRunner
 from scripts.benchmark_m18b1_real_gpu import compare_r4_equivalence, load_canonical_r4_cache, prepare_claim_input_and_candidates
 
