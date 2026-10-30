@@ -1617,3 +1617,44 @@
   * Verified canonical cache scanner with mock directory roots.
   * Verified synthetic runner end-to-end execution, master JSONL generation, and checkpointing resumption.
   * All 18 unit tests across `test_m18a.py`, `test_m18b_equivalence.py`, `test_m18b1_integrity.py`, and `test_m18c_retrieval.py` pass cleanly in 4.80s.
+
+## 2026-10-30 17:45 +07:00 — M1.8d Automated Retrieval Benchmark & Model Selection Implementation
+
+- **Objective:** Implement a fully automated, reproducible end-to-end benchmark and model selection framework comparing 9 retrieval arms (R0..R8) to answer RQ1 (Efficiency), RQ2 (Evidence Quality), RQ3 (Downstream Fact Verification), and RQ4 (Resource Scaling). Executable on `hvtham-server` with ONE Bash command.
+- **Architectural Design & Core Components:**
+  1. *Stratified Manifest Sampling (`src/tffv/retrieval/m18d_manifest.py`):*
+     - Generates disjoint Pilot ($N=50$) and Holdout ($N=200$) splits from official AVeriTeC Train, stratified by Gold Label and Knowledge Store Size strata (`small`, `medium`, `large`, `huge`).
+     - Strictly asserts zero overlap between Pilot and Holdout.
+     - Strictly excludes all contaminated train-dev text/URL overlap claims (`train:1340`, `train:1341`, `train:1536`, `train:1539`, `train:1568`, `train:2790`, `train:2990`) and invalid empty sample `train:1948`.
+     - Output manifests: `configs/m18d_manifests/pilot_manifest.json` and `holdout_manifest.json`.
+  2. *Statistical Analysis Module (`src/tffv/retrieval/m18d_stats.py`):*
+     - Exact McNemar test: Computes two-sided binomial test ($p$-value) on discordant verdict pairs ($b$ vs $c$) between candidate and reference models.
+     - Paired Bootstrap testing ($B=2000$, seed=2026): Computes 95% Confidence Intervals for $\Delta$-Macro-F1 and $\Delta$-Accuracy.
+     - Holm-Bonferroni correction: Controls Family-Wise Error Rate (FWER) across candidate arms at $\alpha=0.05$.
+  3. *Unified Retrieval Arms Engine (`src/tffv/retrieval/m18d_arms.py`):*
+     - Standardized interface evaluating all 9 comparison arms:
+       * `R0_CANONICAL_R4`: Official frozen pipeline (BM25 Top-200 + Qwen3-Embedding Top-200 -> RRF -> Qwen3-Reranker -> Top-8). Reuses canonical verified cache when available.
+       * `R1_QWEN3_DENSE_OPT`: Resident GPU worker + SDPA attention kernel, eliminating model reload.
+       * `R2_E5_HYBRID`: BM25 Top-200 + `intfloat/e5-base-v2` Dense Top-200 (with query/passage prefixes) -> RRF -> Qwen3 Reranker -> Top-8.
+       * `R3_BGE_HYBRID`: BM25 Top-200 + `BAAI/bge-base-en-v1.5` Dense Top-200 (with BGE instruction prompt) -> RRF -> Qwen3 Reranker -> Top-8.
+       * `R4_BM25_PF1000`: BM25 Pre-filtering Top-1,000 before dense embedding.
+       * `R5_BM25_PF2000`: BM25 Pre-filtering Top-2,000 before dense embedding.
+       * `R6_BM25_PF5000`: BM25 Pre-filtering Top-5,000 before dense embedding.
+       * `R7_BM25_PF10000`: BM25 Pre-filtering Top-10,000 before dense embedding.
+       * `R8_SPLADE_HYBRID`: Learned sparse hybrid (handled fail-closed: flags `SKIPPED_WITH_REASON` if weights not present offline).
+  4. *Benchmark Orchestrator & CLI Runner (`src/tffv/retrieval/m18d_orchestrator.py`, `scripts/run_m18d_benchmark.py`, `scripts/run_m18d_benchmark.sh`):*
+     - Orchestrates 6 sequential stages:
+       * Stage 1: Preflight verification (manifest integrity, hardware audit, model specs).
+       * Stage 2: Pilot run ($N=50$ claims) across all available candidate arms.
+       * Stage 3: Multi-objective Pareto selection (retains Canonical R0 control + automatically selects top 3 noncanonical arms balancing agreement and speedup).
+       * Stage 4: Confirmatory holdout retrieval ($N=200$ claims) on selected arms.
+       * Stage 5: Downstream frozen `Qwen3-8B` neutral zero-shot verification inference on Top-8 evidence.
+       * Stage 6: Statistical hypothesis testing, scaling projections, `decision_manifest.json`, and comprehensive `DECISION_REPORT.md` generation.
+- **Verification & Testing (`tests/test_m18d_benchmark.py`):**
+  * `test_manifest_disjointness_and_exclusions`: PASSED (verified disjointness, dev overlap exclusions, size strata).
+  * `test_mcnemar_exact_binomial`: PASSED (verified exact binomial $p$-values on discordant pairs).
+  * `test_paired_bootstrap_test`: PASSED (verified bootstrap bounds on accuracy and macro-F1).
+  * `test_holm_bonferroni_correction`: PASSED (verified FWER step-down monotonicity).
+  * `test_arm_runner_synthetic`: PASSED (verified synthetic hits, R4 schema format, and R8 skip handling).
+  * `test_orchestrator_synthetic_end_to_end`: PASSED (verified full 6-stage execution cycle in 1.11s).
+  * All 24 unit tests across the entire test suite (`test_m18a`, `test_m18b_equivalence`, `test_m18b1_integrity`, `test_m18c_retrieval`, `test_m18d_benchmark`) pass cleanly in 7.32s with zero regressions.
