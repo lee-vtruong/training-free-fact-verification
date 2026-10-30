@@ -1658,3 +1658,4 @@
   * `test_arm_runner_synthetic`: PASSED (verified synthetic hits, R4 schema format, and R8 skip handling).
   * `test_orchestrator_synthetic_end_to_end`: PASSED (verified full 6-stage execution cycle in 1.11s).
   * All 24 unit tests across the entire test suite (`test_m18a`, `test_m18b_equivalence`, `test_m18b1_integrity`, `test_m18c_retrieval`, `test_m18d_benchmark`) pass cleanly in 7.32s with zero regressions.
+  * Resolved resume idempotence: replaced strict exclusive-mode `write_json` calls with `safe_write_json` across `preflight_summary.json`, `pilot_metrics.json`, `selected_arms.json`, `holdout_metrics.json`, and `decision_manifest.json` to prevent `FileExistsError` on restarts.

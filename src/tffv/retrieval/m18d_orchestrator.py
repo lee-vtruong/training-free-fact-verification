@@ -85,6 +85,14 @@ DEV_OVERLAP_SIDS = {
 INVALID_SIDS = {"train:1948"}
 
 
+def safe_write_json(path: Path, value: Any) -> None:
+    """Write JSON with exclusive write semantics, unlinking pre-existing file on resume."""
+    p = Path(path)
+    if p.exists():
+        p.unlink()
+    write_json(p, value)
+
+
 def load_canonical_r4_cache(roots: Optional[List[Path]] = None) -> Dict[str, Dict[str, Any]]:
     """Scan canonical directories for existing verified R4 outputs."""
     cache = {}
@@ -165,11 +173,8 @@ def prepare_claim_input_and_candidates(
         json.dumps({"sample_id": sid, "dataset": "AVeriTeC", "split": "train", "claim": claim_text}) + "\n",
         encoding="utf-8",
     )
-    p = inp_dir / "claims_manifest.json"
-    if p.exists():
-        p.unlink()
-    write_json(
-        p,
+    safe_write_json(
+        inp_dir / "claims_manifest.json",
         {
             "dataset": "AVeriTeC",
             "split": "train",
@@ -321,7 +326,7 @@ class BenchmarkOrchestrator:
             "rerank_batch_size": self.rerank_batch_size,
             "candidate_arms": self.active_arms,
         }
-        write_json(self.stage1_dir / "preflight_summary.json", summary)
+        safe_write_json(self.stage1_dir / "preflight_summary.json", summary)
         print(f"Preflight verification passed successfully. Pilot={len(pilot_sids)}, Holdout={len(holdout_sids)}")
         return summary
 
@@ -379,7 +384,7 @@ class BenchmarkOrchestrator:
             if not runner.available:
                 print(f"  ⚠️ Skipping arm {arm_id}: {runner.skip_reason}")
                 arm_status[arm_id] = f"SKIPPED: {runner.skip_reason}"
-                write_json(arm_dir / "skipped.json", {"reason": runner.skip_reason, "arm_id": arm_id})
+                safe_write_json(arm_dir / "skipped.json", {"reason": runner.skip_reason, "arm_id": arm_id})
                 continue
 
             arm_status[arm_id] = "COMPLETED"
@@ -466,7 +471,7 @@ class BenchmarkOrchestrator:
             if m["avg_latency_s"] > 0:
                 m["speedup_vs_r0"] = round(r0_lat / m["avg_latency_s"], 2)
 
-        write_json(self.stage2_dir / "pilot_metrics.json", pilot_metrics)
+        safe_write_json(self.stage2_dir / "pilot_metrics.json", pilot_metrics)
 
         # Output CSV
         csv_file = self.output_dir / "pilot_results.csv"
@@ -568,7 +573,7 @@ class BenchmarkOrchestrator:
             },
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
-        write_json(self.stage3_dir / "selected_arms.json", selection_manifest)
+        safe_write_json(self.stage3_dir / "selected_arms.json", selection_manifest)
         print(f"Pareto Selection Complete. Confirmatory arms selected for holdout: {selected}")
         return selected
 
@@ -673,7 +678,7 @@ class BenchmarkOrchestrator:
                 "mean_canonical_recall": round(float(np.mean(recalls)), 4) if recalls else 0.0,
             }
 
-        write_json(self.stage4_dir / "holdout_metrics.json", holdout_metrics)
+        safe_write_json(self.stage4_dir / "holdout_metrics.json", holdout_metrics)
         return holdout_results
 
     # -------------------------------------------------------------------------
@@ -932,7 +937,7 @@ class BenchmarkOrchestrator:
             "scaling_projections": scaling_projections,
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
-        write_json(self.output_dir / "decision_manifest.json", decision_manifest)
+        safe_write_json(self.output_dir / "decision_manifest.json", decision_manifest)
 
         # Write markdown DECISION_REPORT.md
         report_md = f"""# Milestone M1.8d — Automated Retrieval Benchmark & Model Selection Report
