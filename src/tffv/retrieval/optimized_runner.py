@@ -37,11 +37,13 @@ class OptimizedRetrievalRunner:
         config: Dict[str, Any],
         synthetic: bool = False,
         reranker_batch_size: int = 16,
+        dense_batch_size: Optional[int] = None,
         index_cache_dir: Optional[str] = None,
     ):
         self.config = dict(config)
         self.synthetic = synthetic
         self.reranker_batch_size = reranker_batch_size
+        self.dense_batch_size = dense_batch_size or self.config.get("batch_size", 16)
         self.index_cache_dir = Path(index_cache_dir).expanduser().resolve() if index_cache_dir else None
         if self.index_cache_dir:
             self.index_cache_dir.mkdir(parents=True, exist_ok=True)
@@ -80,7 +82,7 @@ class OptimizedRetrievalRunner:
                 device=self.device,
                 dtype=self.dtype,
                 max_length=self.config.get("max_length", 1024),
-                batch_size=self.config.get("batch_size", 16),
+                batch_size=self.dense_batch_size,
             )
 
             # Initialize Cross-Encoder Reranker with optimized batch size

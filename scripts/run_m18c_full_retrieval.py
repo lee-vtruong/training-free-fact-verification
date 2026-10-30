@@ -165,6 +165,7 @@ def run_full_retrieval(
     acq_plan_path: str = "configs/m161_acquisition_plan.json",
     output_dir: str = "outputs/m18c-full-retrieval",
     batch_size: int = 16,
+    dense_batch_size: int = 128,
     reuse_canonical: bool = True,
     synthetic: bool = False,
     progress_interval: int = 10,
@@ -256,6 +257,7 @@ def run_full_retrieval(
         config=retrieval_cfg,
         synthetic=synthetic,
         reranker_batch_size=batch_size,
+        dense_batch_size=dense_batch_size,
         index_cache_dir=str(out / "index_cache"),
     )
 
@@ -426,6 +428,7 @@ def main():
     parser.add_argument("--acq-plan", default="configs/m161_acquisition_plan.json", help="Path to acquisition plan")
     parser.add_argument("--output-dir", default="outputs/m18c-full-retrieval", help="Output directory")
     parser.add_argument("--batch-size", type=int, default=16, help="Cross-encoder batch size (default 16)")
+    parser.add_argument("--dense-batch-size", type=int, default=128, help="Dense embedding batch size (default 128)")
     parser.add_argument("--synthetic", action="store_true", help="Run with synthetic test double models on CPU")
     parser.add_argument("--no-canonical-reuse", action="store_true", help="Disable canonical cache reuse")
     parser.add_argument("--interval", type=int, default=10, help="Progress log interval")
@@ -439,6 +442,7 @@ def main():
         acq_plan_path=args.acq_plan,
         output_dir=args.output_dir,
         batch_size=args.batch_size,
+        dense_batch_size=args.dense_batch_size,
         reuse_canonical=not args.no_canonical_reuse,
         synthetic=args.synthetic,
         progress_interval=args.interval,
