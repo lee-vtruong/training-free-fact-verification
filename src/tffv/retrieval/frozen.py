@@ -77,8 +77,14 @@ class QwenFrozen:
         self.truncated_inputs = 0
         self.tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True, trust_remote_code=False, padding_side="left")
         loader = AutoModelForCausalLM if causal else AutoModel
-        self.model = loader.from_pretrained(path, local_files_only=True, trust_remote_code=False,
-                                           torch_dtype=getattr(torch, dtype), attn_implementation="eager")
+        # Use sdpa (FlashAttention / Scaled Dot Product Attention) on CUDA for maximum performance and minimum memory footprint
+        attn_impl = "sdpa" if device == "cuda" else "eager"
+        try:
+            self.model = loader.from_pretrained(path, local_files_only=True, trust_remote_code=False,
+                                               torch_dtype=getattr(torch, dtype), attn_implementation=attn_impl)
+        except Exception:
+            self.model = loader.from_pretrained(path, local_files_only=True, trust_remote_code=False,
+                                               torch_dtype=getattr(torch, dtype), attn_implementation="eager")
         self.model.to(device).eval()
         self.model.requires_grad_(False)
         if any(p.requires_grad for p in self.model.parameters()):
@@ -115,8 +121,6 @@ class QwenFrozen:
             batch = texts[start:start + self.batch_size]
             if query:
                 batch = [f"Instruct: {TASK}\nQuery:{s}" for s in batch]
-            raw = self.tokenizer(batch, add_special_tokens=True, truncation=False)["input_ids"]
-            self.truncated_inputs += sum(len(ids) > self.max_length for ids in raw)
             inputs = self.tokenizer(batch, padding=True, truncation=True, max_length=self.max_length, return_tensors="pt").to(self.device)
             self.token_count += int(inputs["attention_mask"].sum().item())
             with self.torch.inference_mode():
@@ -124,7 +128,7 @@ class QwenFrozen:
                 vectors.append(self.torch.nn.functional.normalize(hidden.float(), p=2, dim=1).cpu().numpy())
             del inputs, hidden
             self.forward_passes += 1
-            if self.device == "cuda" and self.forward_passes % 10 == 0:
+            if self.device == "cuda" and self.forward_passes % 20 == 0:
                 self.torch.cuda.empty_cache()
         return np.concatenate(vectors) if vectors else np.empty((0, 1024), dtype=np.float32)
 
