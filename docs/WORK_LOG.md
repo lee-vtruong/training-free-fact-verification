@@ -1600,3 +1600,18 @@
 - **Verification:**
   * All 15 unit tests pass in 0.77s.
   * The user is now free to delete the ~63.5 GB `.zip` archives safely without impacting retrieval.
+
+## 2026-10-30 11:25 +07:00 — M1.8c Implementation & Launch of Full-Train R4 Retrieval Pipeline
+
+- **Objective:** Implement and verify the production batch runner for full R4 retrieval across all remaining eligible AVeriTeC train claims (`train:0..3067`) on `hvtham-server` (RTX 5090).
+- **Core Design & Safety Invariants (`scripts/run_m18c_full_retrieval.py`):**
+  1. *Strict Scope Adherence:* Strictly retrieval only (BM25 -> Dense Qwen3-Embedding-0.6B -> RRF Hybrid -> Cross-Encoder Qwen3-Reranker-0.6B Top-8). Zero Qwen3-8B verification model inference or parameter updates per project rules.
+  2. *High-Speed Canonical Cache Reuse:* Scans existing verified caches (`m11-store-r14-pilot100`, `m141-confirmatory-r4`, `m141-retrieval-foldc`, `m142-foldd-r4`, `m15-folde-r4`). Automatically reuses the 350 pre-existing canonical claims (`train:0..349`) in < 1 second without wasting GPU cycles.
+  3. *Zero-Network NVMe Stores:* Uses local `data_store/knowledge_store/train/uncompressed/` verified stores (~2.6s per claim overhead vs 60–120s over HTTP Range requests).
+  4. *Claim-Level Checkpointing & Crash Resilience:* Every claim writes its own `R4.jsonl`, atomically appends to `all_train_r4.jsonl`, and updates `state.json`. If terminated or interrupted at any point, restarts instantly resume from the exact next unprocessed claim.
+  5. *Invalid Claim Exclusion:* Automatically skips `train:1948` (only train claim with empty claim text `""`).
+- **Unit Tests (`tests/test_m18c_retrieval.py`):**
+  * Verified invalid sample ID invariants.
+  * Verified canonical cache scanner with mock directory roots.
+  * Verified synthetic runner end-to-end execution, master JSONL generation, and checkpointing resumption.
+  * All 18 unit tests across `test_m18a.py`, `test_m18b_equivalence.py`, `test_m18b1_integrity.py`, and `test_m18c_retrieval.py` pass cleanly in 4.80s.
