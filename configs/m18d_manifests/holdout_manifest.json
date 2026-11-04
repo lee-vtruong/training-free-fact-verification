@@ -1,1618 +1,1818 @@
 {
   "claims": [
     {
-      "claim": "Donald Trump delivered the largest tax cuts in American history.",
-      "gold_label": "Refuted",
-      "ordinal": 1,
-      "sample_id": "train:1",
+      "sample_id": "train:2",
+      "ordinal": 2,
+      "claim": "In Nigeria … in terms of revenue share, 20% goes to the local government.",
+      "gold_label": "Supported",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:3",
+      "ordinal": 3,
+      "claim": "Biden has pledged to stop border wall construction and give amnesty and health care to all illegal immigrants.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:4",
+      "ordinal": 4,
+      "claim": "After the police shooting of Jacob Blake, Gov. Tony Evers & Lt. Gov. Mandela Barnes did not call for peace or encourage calm.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:6",
+      "ordinal": 6,
       "claim": "35% of revenue goes to states. (In Nigeria)",
       "gold_label": "Refuted",
-      "ordinal": 6,
-      "sample_id": "train:6",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:10",
+      "ordinal": 10,
+      "claim": "Biden has pledged to defund the police",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:11",
+      "ordinal": 11,
+      "claim": "45% of Nigeria's revenue goes to the federal government.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:12",
+      "ordinal": 12,
+      "claim": "Donald Trump inherited a stagnant economy and then rebuilt it.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:15",
+      "ordinal": 15,
+      "claim": "Plant Seeds Can Restructure Their Own DNA Through Human Saliva",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:16",
+      "ordinal": 16,
+      "claim": "We actually saw revenues to the Treasury increase after we lowered taxes in 2017. Rest assured the Democrats do not want you to know that.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:17",
+      "ordinal": 17,
+      "claim": "In 2019 the US Police were 20.8 times more likely to kill than be killed by a criminal",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:18",
+      "ordinal": 18,
+      "claim": "A greater proportion of 16 year olds vote in elections in Scotland, Wales and Austria than 18 and 20 year olds.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:19",
+      "ordinal": 19,
+      "claim": "Donald Trump has kept his promises to voters",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:20",
+      "ordinal": 20,
+      "claim": "The Edo Modular Refinery is Governor Obaseki's project.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:21",
+      "ordinal": 21,
       "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people in Kenya.",
       "gold_label": "Not Enough Evidence",
-      "ordinal": 21,
-      "sample_id": "train:21",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:22",
+      "ordinal": 22,
+      "claim": "In Kenya now with a population of about 48 million, there is one judge serving over 300,000 people.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:23",
+      "ordinal": 23,
+      "claim": "Kenya had a population of about 48 million with one judge serving over 300,000 people in 2019.",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:25",
+      "ordinal": 25,
+      "claim": "The Kenyan judiciary does not even get 1% of the national budget.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:28",
+      "ordinal": 28,
+      "claim": "Kenya only disposes of about 300,000 cases.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:29",
+      "ordinal": 29,
+      "claim": "The judiciary of Kenya have an average of 400,000 cases being filed in our courts every year.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:30",
+      "ordinal": 30,
       "claim": "There is an average of 400,000 cases being filed in Kenya's courts every year.",
       "gold_label": "Supported",
-      "ordinal": 30,
-      "sample_id": "train:30",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "South Africans drink more per person than anywhere else in Africa.",
+      "sample_id": "train:31",
+      "ordinal": 31,
+      "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people in Kenya.",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:34",
+      "ordinal": 34,
+      "claim": "All government schools in India are being privatised.",
       "gold_label": "Refuted",
-      "ordinal": 50,
-      "sample_id": "train:50",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:35",
+      "ordinal": 35,
+      "claim": "The current Ghana administration has resulted in a decline in unemployment rates from 11.9% in 2015 to 7.3% in 2019.",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:36",
+      "ordinal": 36,
+      "claim": "If one gets the Spanish flu you have a 50% chance of dying",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:39",
+      "ordinal": 39,
+      "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:40",
+      "ordinal": 40,
+      "claim": "Kenya's judiciary does not even get 1% of the national budget",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:43",
+      "ordinal": 43,
+      "claim": "No Democrats have condemned the rioting that has occurred alongside recent protests.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:46",
+      "ordinal": 46,
+      "claim": "South Africans are among the top drinkers in the world.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:47",
+      "ordinal": 47,
+      "claim": "South African consume more alcohol per person on average than anywhere else in Africa.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:49",
+      "ordinal": 49,
+      "claim": "Only 31% of South African drink alcohol",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:53",
+      "ordinal": 53,
+      "claim": "Only 31% of South Africans drink alcohol",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:54",
+      "ordinal": 54,
+      "claim": "Only 31% of South Africans drink alcohol.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:55",
+      "ordinal": 55,
+      "claim": "Joe Biden officiated a gay wedding at the White House in 2016.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:56",
+      "ordinal": 56,
+      "claim": "Democratic Arizona Superintendent of Public Instruction Kathy Hoffman is “pushing” for sex education that would teach kindergartners about masturbation and sexual positions.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:57",
+      "ordinal": 57,
+      "claim": "The interface of the COVID-19 Exposure Notification System, a contact tracing programme developed by Apple and Google has been secretly inserted onto phones and tracks user’s location.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:61",
+      "ordinal": 61,
+      "claim": "Democratic VP candidate Kamala Harris called young voters stupid.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:62",
+      "ordinal": 62,
       "claim": "Israel has developed super-quick saliva test for COVID-19.",
       "gold_label": "Supported",
-      "ordinal": 62,
-      "sample_id": "train:62",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Drinking vodka protects an individual against COVID-19.",
+      "sample_id": "train:63",
+      "ordinal": 63,
+      "claim": "Children are silent super-spreaders of coronavirus.",
       "gold_label": "Refuted",
-      "ordinal": 75,
-      "sample_id": "train:75",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "In 2016, 33 million Americans voted by mail.",
+      "sample_id": "train:64",
+      "ordinal": 64,
+      "claim": "Social Security checks do not go through the U.S. postal service since 2013 because it's not secure",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:66",
+      "ordinal": 66,
+      "claim": "President Trump is the most pro-gay president in American history.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:68",
+      "ordinal": 68,
+      "claim": "Messages in Google Earth show the \"Deep States New Home,\" which shows up on the map as \"Setatspeed Emohwen Gardens\" near Guantanamo Bay, Cuba.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:70",
+      "ordinal": 70,
+      "claim": "The USA has only 4% of the worlds population but has 25% of the worlds Covid-19 Cases.",
       "gold_label": "Supported",
-      "ordinal": 79,
-      "sample_id": "train:79",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "In Michigan, US one of the three key states that enabled Donald Trump to win the presidential election in 2016, the winning margin averaged out to just over two votes per precinct.",
+      "sample_id": "train:72",
+      "ordinal": 72,
+      "claim": "Mughal Gardens Renamed To Dr. Rajendra Prasad Garden",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:74",
+      "ordinal": 74,
+      "claim": "Raising the US federally required minimum wage to $15 an hour would give 40 million workers a pay raise and push the wage scale up for everyone else.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:77",
+      "ordinal": 77,
+      "claim": "Drinking traditional Chinese medicine (TCM) or steroids, along with antibiotics at the onset of symptoms cures COVID-19.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:78",
+      "ordinal": 78,
+      "claim": "The Sarang Jeil Church of Jesus took preventative measure against coronavirus but the government spread the virus to prevent Rev. Jeon Kwang-hun attending the anti-government demonstration on August 15th.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:81",
+      "ordinal": 81,
+      "claim": "The Trump administration disbanded the pandemic response team that was given to them.",
       "gold_label": "Supported",
-      "ordinal": 80,
-      "sample_id": "train:80",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:83",
+      "ordinal": 83,
+      "claim": "Vice President Biden and President Obama assembled a pandemic playbook to make sure that America was prepared and protected.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:84",
+      "ordinal": 84,
       "claim": "Nigeria is the largest producer of rice in Africa, ranking 14th in the world.",
       "gold_label": "Supported",
-      "ordinal": 84,
-      "sample_id": "train:84",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "In the US, envelopes used for mail-in ballots in general elections reveal the party affiliation of the voter allowing postal workers to toss votes.",
+      "sample_id": "train:85",
+      "ordinal": 85,
+      "claim": "There are many scientific studies saying masks should be worn only in enclosed spaces, such as in elevators and conference rooms, and not outdoors",
       "gold_label": "Refuted",
-      "ordinal": 86,
-      "sample_id": "train:86",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:87",
+      "ordinal": 87,
+      "claim": "In one of the states that determined the outcome\" of the 2016 presidential race, \"the winning margin averaged out to just two votes per precinct — two votes.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:89",
+      "ordinal": 89,
       "claim": "President Donald Trump threatened to delay the election and suggested that he will not leave office if he loses.",
       "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 89,
-      "sample_id": "train:89",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:90",
+      "ordinal": 90,
+      "claim": "Social Security beneficiaries count on the post office to get their checks",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:92",
+      "ordinal": 92,
       "claim": "Vice President Biden and President Obama assembled a pandemic playbook to make sure that America was prepared and protected. The Trump administration disbanded the pandemic response team that was given to them.",
       "gold_label": "Supported",
-      "ordinal": 92,
-      "sample_id": "train:92",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "President Trump Says He Hopes The NFL Season Gets Canceled Due To Coronavirus",
+      "sample_id": "train:93",
+      "ordinal": 93,
+      "claim": "Sweden, which does not require the wearing of masks in public, has had few deaths due to COVID-19",
       "gold_label": "Refuted",
-      "ordinal": 125,
-      "sample_id": "train:125",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:96",
+      "ordinal": 96,
+      "claim": "warm water is effective in curing joint pain",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:97",
+      "ordinal": 97,
+      "claim": "Walmart stores have stopped accepting cash payments.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:102",
+      "ordinal": 102,
+      "claim": "Cold water affects the internal walls of the stomach. It affects the large intestine and results in cancer",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:103",
+      "ordinal": 103,
+      "claim": "Late actor Sushant Singh Rajput developed an app which could detect Covid-19 infection just through a person's breathing.",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:104",
+      "ordinal": 104,
+      "claim": "warm water is effective in curing migraine",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:105",
+      "ordinal": 105,
+      "claim": "Sweden, despite never having had lockdown, has a lower COVID-19 death rate than Spain, Italy, and the United Kingdom.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:106",
+      "ordinal": 106,
+      "claim": "warm water is effective in curing epilepsy",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:108",
+      "ordinal": 108,
+      "claim": "Tricolour to be hoisted for first time at Niagara Falls to mark 74th Indian Independence Day.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:110",
+      "ordinal": 110,
+      "claim": "The United States has reached herd immunity for COVID-19",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:111",
+      "ordinal": 111,
+      "claim": "The Annabelle doll escaped from the Warren's Occult Museum on 14th August 2020 at 3am.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:113",
+      "ordinal": 113,
+      "claim": "Vitamin D prevents COVID-19 infection and reduces severity.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:114",
+      "ordinal": 114,
+      "claim": "The media is ignoring the tragic death of a 5-year-old boy who was fatally shot by a neighbor in Wilson, North Carolina, on August 9, 2020.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:116",
+      "ordinal": 116,
+      "claim": "Former president Pranab Mukherjee from India has passed away.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:117",
+      "ordinal": 117,
+      "claim": "Kamala Harris called Joe Biden 'A Racist And A Rapist'",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:118",
+      "ordinal": 118,
+      "claim": "COVID-19 has caused more casualties than WWI; the Korean, Vietnam, Iraq, and Afghanistan-US wars; and 9/11.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:120",
+      "ordinal": 120,
+      "claim": "Kamala Harris said \"And once Trump’s gone and we have regained our rightful place in the White House, look out if you supported him and endorsed his actions, because we’ll be coming for you next\".",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:122",
+      "ordinal": 122,
+      "claim": "Kamala Harris was descended from enslavers, and this is an inconvenient part of her history and this is a deep dark secret.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:123",
+      "ordinal": 123,
+      "claim": "Democratic California Sen. Kamala Harris was the Alameda County district attorney when Oscar Grant, a 22-year-old black man, was shot and killed in Oakland, California.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:124",
+      "ordinal": 124,
+      "claim": "Sarah Huckabee Sanders said \"it's not the government's job to protect my health\" and that \"when you trade liberty for safety, you end up losing both\"",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:126",
+      "ordinal": 126,
+      "claim": "Russia has developed a new vaccine to fight COVID-19.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:128",
+      "ordinal": 128,
       "claim": "COVID-19 virus is airborne.",
       "gold_label": "Supported",
-      "ordinal": 128,
-      "sample_id": "train:128",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Balbir Singh converted to Islam after he participated in the demolition of Babri Masjid",
+      "sample_id": "train:129",
+      "ordinal": 129,
+      "claim": "LITTLE CAESARS IS OFFERING FREE PIZZA TO ANYONE WHO SHARES AND COMMENTS ON A FACEBOOK POST",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:133",
+      "ordinal": 133,
+      "claim": "Vaccines have caused deaths in the Philippines.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:134",
+      "ordinal": 134,
+      "claim": "Amid the coronavirus pandemic, Facebook has changed its privacy rules, allowing it to use pictures and posts shared by users in lawsuits against them.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:136",
+      "ordinal": 136,
+      "claim": "Donald Trump's payroll tax deferral could leave American workers liable for thousands of dollars during tax season and could potentially leave programs like Social Security and Medicare weakened.",
       "gold_label": "Supported",
-      "ordinal": 143,
-      "sample_id": "train:143",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:137",
+      "ordinal": 137,
+      "claim": "Choluteca bridge was built in 1996.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:141",
+      "ordinal": 141,
+      "claim": "The Australian govt is handing out $25,000 to all nursing homes who label covid as the main cause of deaths on death certificates.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:144",
+      "ordinal": 144,
+      "claim": "82% of the public are wearing face masks on Translink buses and trains.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:145",
+      "ordinal": 145,
+      "claim": "330,000 people a day are being tested for Covid-19 under the Test and Trace programme in the United Kingdom",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:146",
+      "ordinal": 146,
+      "claim": "Madagascar has found a coronavirus medicine that can wipe out the virus at any stage within a period of six days.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:147",
+      "ordinal": 147,
+      "claim": "The GOP lawyer who helped Kanye West get on the ballot in Wisconsin USA is actively working for Donald Trump's campaign.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:149",
+      "ordinal": 149,
+      "claim": "Large country-randomized controlled trial in 2.7 billion people shows 79.1% lower death rate in COVID-19 patients treated with hydroxychloroquine",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:150",
+      "ordinal": 150,
+      "claim": "The U.S. Health and Human Services Secretary Alex Azar's visit to Taiwan in August 2020 is a breach of international rules.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:153",
+      "ordinal": 153,
+      "claim": "At Trump’s Tulsa rally there were 12000 people, not 6000 as reported by Axios and others.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:156",
+      "ordinal": 156,
+      "claim": "You can test too much for Covid-19.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:157",
+      "ordinal": 157,
+      "claim": "Trump did more for the Black community than anybody with the possible exception of Abraham Lincoln.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:159",
+      "ordinal": 159,
+      "claim": "The late Rep. John Lewis, D-Ga., didn't come to Trump's inauguration. He didn't come to Trump's State of the Union speeches.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:161",
+      "ordinal": 161,
+      "claim": "Covid deaths are way down from where it was … It spiked, but now it's going down again. It's going down in Arizona. It's going down in Florida. It's going down in Texas.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:162",
+      "ordinal": 162,
+      "claim": "Ghislaine Maxwell's boyfriend Jeffrey Epstein died in jail and people are still trying to figure out how did it happened, was it suicide, was he killed.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:166",
+      "ordinal": 166,
+      "claim": "The violence in Portland is getting better since federal agents went in. They've arrested a lot of people.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:168",
+      "ordinal": 168,
+      "claim": "South Korea have spikes of Covid cases and nobody knows if they only had 300 deaths.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:169",
+      "ordinal": 169,
+      "claim": "Devender Sharma fabricated false covid-19 positive reports for patients  in order to get them admitted for kidney harvesting.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:171",
+      "ordinal": 171,
+      "claim": "US Washington mayor exempted members of Congress from the mandatory 14 day quarantine, after travelling to a coronavirus high risk area to attend the funeral of John Lewis.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:173",
+      "ordinal": 173,
+      "claim": "The COVID-19 vaccine developed by Bharat Biotech will be available on the market on August 15, 2020.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:176",
+      "ordinal": 176,
       "claim": "A married couple in Florida, Tito and Amanda Watts, was arrested for selling fake golden tickets to heaven to hundreds of people.",
       "gold_label": "Refuted",
-      "ordinal": 176,
-      "sample_id": "train:176",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:177",
+      "ordinal": 177,
+      "claim": "There is a ‘global average’ for the number of judges and magistrates to number of people",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:178",
+      "ordinal": 178,
+      "claim": "Michigan Senator Gary Peters is known for doing nothing, where he has skipped 84% of small business hearings and 89% of hearings on China.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:179",
+      "ordinal": 179,
+      "claim": "Kenya's courts dispose of about 300,000 cases every year",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:180",
+      "ordinal": 180,
+      "claim": "In Kenya now with a population of about 48 million, we have one judge serving over 300,000 people",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:182",
+      "ordinal": 182,
+      "claim": "Kenya has one magistrate serving over 77,000 people",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:183",
+      "ordinal": 183,
+      "claim": "With a population of about 48 million, Kenya has only one judge serving over 300,000 people",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:184",
+      "ordinal": 184,
+      "claim": "1.110,000 Delicious Laddus are being prepared for the Bhoomi Poojan Ceremony at Sri Ramachandra Janmabhoomi Ayodhya",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:185",
+      "ordinal": 185,
+      "claim": "Kenya has an average of 400,000 cases being filed in our courts every year",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:186",
+      "ordinal": 186,
+      "claim": "Kenya has one magistrate serving over 77,000 people",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:187",
+      "ordinal": 187,
+      "claim": "an average of 400,000 cases being filed in Kenya's courts every year",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:190",
+      "ordinal": 190,
+      "claim": "Since 2002 South Africa’s police force has grown by 50%",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:191",
+      "ordinal": 191,
+      "claim": "The South African Police Service kills three times more people per capita than the United States police force",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:192",
+      "ordinal": 192,
+      "claim": "face coverings/masks became “mandatory” in shops and indoor public spaces in Northern Ireland on 1 August 2020",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:193",
+      "ordinal": 193,
+      "claim": "Social distancing, to prevent the spread of coronavirus was not practiced at the funeral of civil rights icon, John Lewis.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:194",
+      "ordinal": 194,
+      "claim": "In the UK the new daily allowance for peers in the House of Lords in 2020 is £323.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:196",
+      "ordinal": 196,
       "claim": "COVID-19 cases in the Baranguay UP campus increased due to the SONAgkaisa rally held there on July 27 2020.",
       "gold_label": "Refuted",
-      "ordinal": 196,
-      "sample_id": "train:196",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Reports as recent as 2017 reported 92% prevalence of blood lead poisoning in children from some villages in the Nigerian state of Zamfara.",
+      "sample_id": "train:198",
+      "ordinal": 198,
+      "claim": "Ratneshwar temple leans at an angle higher than the Leaning Tower of Pisa.",
       "gold_label": "Supported",
-      "ordinal": 216,
-      "sample_id": "train:216",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "APC is luring Abubakar Shekau with Vice Presidential ticket  as an inducement to end Boko-Haram War.",
+      "sample_id": "train:199",
+      "ordinal": 199,
+      "claim": "3.8% of Wisconsin’s coronavirus funding has been spent.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:203",
+      "ordinal": 203,
+      "claim": "The Philippines, during the Marcos dictatorship, developed a missile system before China did.",
       "gold_label": "Refuted",
-      "ordinal": 232,
-      "sample_id": "train:232",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:204",
+      "ordinal": 204,
+      "claim": "Tint Tint Htun, a former Myanmar actress and singer who became a Buddhist nun, has died.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:205",
+      "ordinal": 205,
+      "claim": "Congress-led government closed Rafale deal in 2012.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:208",
+      "ordinal": 208,
+      "claim": "John Mahama presided over higher inflation. Nana Akufo-Addo has reduced inflation.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:211",
+      "ordinal": 211,
+      "claim": "Republican bill says no medical malpractice suits until 2024.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:212",
+      "ordinal": 212,
+      "claim": "The New York state Labor Department is giving essential workers $4,800 in hazard pay.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:213",
+      "ordinal": 213,
+      "claim": "Actor Sonu Sood launched a toll-free number on May 26 to facilitate migrants to reach their home. Through this toll-free number, one can easily reach out to Sonu Sood’s team for help.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:215",
+      "ordinal": 215,
+      "claim": "John Mahama presided over low industrial growth during his four years in office. Nana Akufo-Addo has increased industrial growth.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:217",
+      "ordinal": 217,
+      "claim": "Tom Hanks went on on national TV to say he had COVID 19",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:218",
+      "ordinal": 218,
+      "claim": "USA is largely out of Afghanistan.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:219",
+      "ordinal": 219,
+      "claim": "Four Ukrainian soldiers died after taking part in Covid-19 vaccine trials conducted by USA.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:222",
+      "ordinal": 222,
+      "claim": "The United Nations delivered a formal stand down order to the Trump administration in July 2020, ordering the President to stop Federal officers from using non-lethal force against peaceful protesters in Portland.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:224",
+      "ordinal": 224,
+      "claim": "Nigeria recorded 1.25 million abortion cases in 2012 alone, but that this figure represented double the 1996 figures.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:225",
+      "ordinal": 225,
+      "claim": "Your face will become exposed to the virus if you wear your mask on your chin.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:226",
+      "ordinal": 226,
+      "claim": "Florida is doing over five times better” than New Jersey and New York in COVID-19 deaths per million people",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:227",
+      "ordinal": 227,
+      "claim": "UNICEF stated that Coronavirus (COVID-19) is large in size where the cell diameter is 400-500 micro and for this reason any mask prevents its entry.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:228",
+      "ordinal": 228,
+      "claim": "5G towers unleash severely damaging level of radiation to DNA",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:229",
+      "ordinal": 229,
+      "claim": "Those most susceptible to the radiation from 5G technology are fetuses in utero and children.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:231",
+      "ordinal": 231,
+      "claim": "US healthcare workers still don't have enough PPE during the COVID-19 pandemic",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:235",
+      "ordinal": 235,
+      "claim": "Clint Eastwood endorsed Donald Trump.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:236",
+      "ordinal": 236,
+      "claim": "Wisconsin Democrats say lawmakers in neighbouring states have implemented more safety precautions against the spread of COVID-19 than state GOP.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:239",
+      "ordinal": 239,
+      "claim": "US drug prices in 2019 went down for the first time in 51 years.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:240",
+      "ordinal": 240,
+      "claim": "PM Modi has not imposed President’s rule even a single time since 2014.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:241",
+      "ordinal": 241,
+      "claim": "Counties in Kenya allocated an average of 7.3% of budgets to agriculture in 2019/20.",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:243",
+      "ordinal": 243,
+      "claim": "Target ended its “Heroes & Helpers” program that pairs children with police officers for holiday shopping trips",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:244",
+      "ordinal": 244,
+      "claim": "Kenya's sanitation coverage is now at 25%, up from 16%.",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:248",
+      "ordinal": 248,
+      "claim": "Counties in Kenya have over the past year sustained an average allocation of 24% of their total budgets to the health sector",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:256",
+      "ordinal": 256,
+      "claim": "Kenya's county governments have continued to adhere to the two-thirds gender principle. Four counties, Mombasa, Kilifi, Nyeri, and Migori, have gone higher and have a 50/50 representation of male and female CECs.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:257",
+      "ordinal": 257,
+      "claim": "Two-thirds of the debt in the Australian budget was borrowed before the start of the pandemic",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:260",
+      "ordinal": 260,
+      "claim": "Joe Biden owns island next to sex offender Jeffrey Epstein’s hideaway.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:261",
+      "ordinal": 261,
+      "claim": "Counties allocated an average of 7.3% of budgets to agriculture in 2019/20",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:263",
+      "ordinal": 263,
+      "claim": "Little girl shown lying in a casket in a photo died from COVID-19.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:267",
+      "ordinal": 267,
+      "claim": "Water coverage in Kenya now stands at 63% from 57%.",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:268",
+      "ordinal": 268,
+      "claim": "Man dies at the R N Cooper Hospital in Mumbai due to medical negligence.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:271",
+      "ordinal": 271,
+      "claim": "US Home Health workers receive low pay, Limited benefits and 40% of them are on SNAP or Medicaid.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:272",
+      "ordinal": 272,
+      "claim": "Indiana woman charged for mail in voter fraud, delivered 400 ballots with Democrat box prechecked",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:274",
+      "ordinal": 274,
+      "claim": "Mel Gibson accused Hollywood of child sacrifices and paedophillia.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:275",
+      "ordinal": 275,
+      "claim": "A study finds a diet heavy with kimchi—spiced fermented cabbage and other vegetables—helps lower South Korea's COVID-19 fatalities.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:276",
+      "ordinal": 276,
+      "claim": "Greenhouse gases emitted into the ocean are causing more holes in the ozone layer; the ozone layer has holes in it, causing global temperatures to rise.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:281",
+      "ordinal": 281,
+      "claim": "As of July 2020 Covid-19 vaccines are not safe, because of the accelerated pace of their development",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:283",
+      "ordinal": 283,
+      "claim": "United States space agency NASA has added a 13th Zodiac sign named “Ophiuchus” to the list of existing 12 Zodiac signs.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:285",
+      "ordinal": 285,
+      "claim": "COVID-19 vaccine is DNA-altering and has been fast-tracked through safety qualifications.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:288",
+      "ordinal": 288,
+      "claim": "President Trump tweeted  'Child Lifes Matter' Should Be Painted On Hollywood Streets",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:293",
+      "ordinal": 293,
+      "claim": "The Governor of Osun State, Gboyega Oyetola, was in Abuja for three days and was not able to see Governor Mai Mala Buni, who is the Chairman of the All Progressives Congress (APC) National Caretaker Committee.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:295",
+      "ordinal": 295,
+      "claim": "Hackers in China hide phishing codes inside WhatsApp good morning and good night images or videos, to steal personal information, such as bank card information and other data.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:296",
+      "ordinal": 296,
+      "claim": "Shanghai China International News asked all subscribers not to send good morning and good night images or videos on WhatsApp",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:297",
+      "ordinal": 297,
+      "claim": "A covid patient died outside a medical shop in Siwan India, which is the constituency of Bihar's Health Minister.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:301",
+      "ordinal": 301,
+      "claim": "A motorcycle fatality in Orlando Florida was counted as a COVID death.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:303",
+      "ordinal": 303,
+      "claim": "All workers at Gardenia, a bread-manufacturing factory in the Philippines, had tested positive for COVID-19.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:304",
+      "ordinal": 304,
+      "claim": "Nigeria, Ghana, Cote d’Ivoire, Senegal and Guinea are responsible for over 80 per cent of COVID-19 cases in West Africa.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:308",
+      "ordinal": 308,
       "claim": "Free federal housing for former inmates.",
       "gold_label": "Refuted",
-      "ordinal": 308,
-      "sample_id": "train:308",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:309",
+      "ordinal": 309,
+      "claim": "Betting on online slot machines has increased by 25% during lockdown.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:311",
+      "ordinal": 311,
       "claim": "The Democrats want to abolish US police departments. They want to abolish our prisons, I guess.",
       "gold_label": "Refuted",
-      "ordinal": 311,
-      "sample_id": "train:311",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:313",
+      "ordinal": 313,
+      "claim": "Vaccines were responsible for 50 million deaths during the Spanish flu pandemic in 1918.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:321",
+      "ordinal": 321,
       "claim": "Abolish immigration detention. No more detention. You come in here illegally, no more detention.",
       "gold_label": "Refuted",
-      "ordinal": 321,
-      "sample_id": "train:321",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
+      "sample_id": "train:323",
+      "ordinal": 323,
+      "claim": "Under Biden’s policy, immigrants in the country illegally \"get welfare benefits. United States citizens don't get what they're looking to give illegal immigrants.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:324",
+      "ordinal": 324,
+      "claim": "People Not Wearing Masks Can Be Reported to (281) 330-8004",
+      "gold_label": "Not Enough Evidence",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:327",
+      "ordinal": 327,
+      "claim": "The Biden-Sanders agenda proposes to end cash bail, releasing dangerous criminals onto US streets.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:330",
+      "ordinal": 330,
       "claim": "Former Indian Deputy Chief Minister and rebel Congress leader Sachin Pilot has joined the Bharatiya Janata Party.",
       "gold_label": "Refuted",
-      "ordinal": 330,
-      "sample_id": "train:330",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "South Africa “has an established vaccine manufacturing capability”",
+      "sample_id": "train:331",
+      "ordinal": 331,
+      "claim": "Philippine Depositary Receipts are equal to actual ownership in the Philippines.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:332",
+      "ordinal": 332,
+      "claim": "Clinical trials have been completed for potential Russian COVID-19 vaccine.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:335",
+      "ordinal": 335,
+      "claim": "Russia's Sechenov University has completed clinical trails of COVID-19 vaccine.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:337",
+      "ordinal": 337,
+      "claim": "Sarah Sachin Pilot attacks Gehlot in a tweet saying that even \"big magicians\" will start sweating when they turn to Delhi.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:338",
+      "ordinal": 338,
+      "claim": "An Indian student finds a Home remedy cure for Covid-19 and it is accepted by WHO (World Health organization)",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:341",
+      "ordinal": 341,
+      "claim": "A cobbler in West Bengal, Sanjoy Rabidas, scored 93% in West Bengal board exams. He is also an RSS member.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:342",
+      "ordinal": 342,
+      "claim": "Answering a call from '+140' will empty your bank account.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:343",
+      "ordinal": 343,
+      "claim": "Prof Stephen Adei praises Prof Naana Opoku-Agyeman as a great leader",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:426",
+      "ordinal": 426,
+      "claim": "Most Americans support Roe v. Wade.",
+      "gold_label": "Supported",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:694",
+      "ordinal": 694,
+      "claim": "The F.D.A. did not say that hydroxychloroquine should not be used outside of a hospital setting or outside of a research study",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:903",
+      "ordinal": 903,
+      "claim": "Bill Gates is a partner in the lab in Wuhan, China.",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:979",
+      "ordinal": 979,
+      "claim": "COVID-19 virus could be spread from shoes.",
       "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 340,
-      "sample_id": "train:340",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Shanghai-based clothing company La Chapelle Closed 4391 stores due to effects the covid19 pandemic had on the \neconomy",
+      "sample_id": "train:1288",
+      "ordinal": 1288,
+      "claim": "NZ cricket captain said \" I request to NZ government please cancel KL Rahul's visa immediately.\"",
       "gold_label": "Refuted",
-      "ordinal": 382,
-      "sample_id": "train:382",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "An image purported to show a political billboard from the young arm of New Zealand National Party shows a culturally insensitive slogan towards Māoris.",
+      "sample_id": "train:1402",
+      "ordinal": 1402,
+      "claim": "NASA had 58% Indian employees",
       "gold_label": "Refuted",
-      "ordinal": 406,
-      "sample_id": "train:406",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "PLA released names of 56 Chinese soldiers who died in Galwan Valley face-off",
-      "gold_label": "Refuted",
-      "ordinal": 483,
-      "sample_id": "train:483",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Pregnant women are not more susceptible to COVID-19.",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 497,
-      "sample_id": "train:497",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The low-cost steroid dexamethasone is a “life-saving” drug for COVID-19 patients.",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 500,
-      "sample_id": "train:500",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Establishing A One World Government is Part Of UN's 'mission goals.",
-      "gold_label": "Refuted",
-      "ordinal": 504,
-      "sample_id": "train:504",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Five Chinese soldiers were killed in a border dispute with India in June 2020.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 512,
-      "sample_id": "train:512",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "An Expansion of Mail-in Ballots would increase the chance of theft in the USA.",
-      "gold_label": "Refuted",
-      "ordinal": 514,
-      "sample_id": "train:514",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "President Muhammadu Buhari of Nigeria said Nigeria is now rated as one of the top ten reforming countries.",
+      "sample_id": "train:1429",
+      "ordinal": 1429,
+      "claim": "Donald Trump is rated international public opinion polls below Xi Jinping.",
       "gold_label": "Supported",
-      "ordinal": 544,
-      "sample_id": "train:544",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "A phishing attack, that CERT-in issued a warning about, was sponsored by the Chinese army.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 587,
-      "sample_id": "train:587",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The Duke and Duchess of Sussex left the British Royal Family due to the family being Satan-worshipping child traffickers.",
+      "sample_id": "train:1644",
+      "ordinal": 1644,
+      "claim": "134ft Anaconda snake found in the Amazon has killed 257 human beings and 2325 animals.",
       "gold_label": "Refuted",
-      "ordinal": 600,
-      "sample_id": "train:600",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Former Minneapolis Police Officer Derek Chauvin, who is accused in the death of George Floyd has committed suicide in prison.",
+      "sample_id": "train:1817",
+      "ordinal": 1817,
+      "claim": "Donald Trump's fuel efficiency plan would reduce the cost of cars “by more than $3000” and make them “substantially safer.”",
       "gold_label": "Refuted",
-      "ordinal": 647,
-      "sample_id": "train:647",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Italy violated WHO rule and conducted an autopsy of a COVID-19 patient.",
+      "sample_id": "train:1824",
+      "ordinal": 1824,
+      "claim": "Former British Prime Minister Winston Churchill said, 'Courage is what it takes to stand up and speak; courage is also what it takes to sit down and listen'.",
       "gold_label": "Refuted",
-      "ordinal": 671,
-      "sample_id": "train:671",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Anthony Fauci director of the National Institute of Allergy and Infectious Diseases in the United States said “Just because thousands of independent doctors are saying Hydroxychloroquine cures all Covid-19 patients, it is not valid until we have a major study done.”",
+      "sample_id": "train:1863",
+      "ordinal": 1863,
+      "claim": "President Buhari approves the creation of state police.",
       "gold_label": "Refuted",
-      "ordinal": 674,
-      "sample_id": "train:674",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "There is a correlation between vitamin D deficiencies and higher COVID-19 mortality rates",
+      "sample_id": "train:1873",
+      "ordinal": 1873,
+      "claim": "In an op-ed, then-sen. Joe Biden wrote that he believed that women working outside the home would, quote, \"create the deterioration of family.\" He also said that women who were working outside the home were, quote, \"avoiding responsibility.\"",
+      "gold_label": "Refuted",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "sample_id": "train:1881",
+      "ordinal": 1881,
+      "claim": "Pinning Down Prescription Drug Prices",
       "gold_label": "Supported",
-      "ordinal": 682,
-      "sample_id": "train:682",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Russia sent a plane with domestic medical items and equipment to New York whilst the coronavirus situation was stressful. Russia and the U.S each paid their respective costs for the equipment they supplied.",
-      "gold_label": "Supported",
-      "ordinal": 685,
-      "sample_id": "train:685",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Rwanda gets its electricity from 70% renewable energy",
-      "gold_label": "Refuted",
-      "ordinal": 708,
-      "sample_id": "train:708",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Nigeria does not produce any vaccines in 2020",
-      "gold_label": "Supported",
-      "ordinal": 711,
-      "sample_id": "train:711",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "US Democratic California Sen. Dianne Feinstein once said, “All vets are mentally ill in some way and the (US)  government should prevent them from owning firearms.”",
-      "gold_label": "Refuted",
-      "ordinal": 740,
-      "sample_id": "train:740",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Thrombosis is The Leading Cause Of COVID-19 Deaths",
-      "gold_label": "Refuted",
-      "ordinal": 763,
-      "sample_id": "train:763",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "NASCAR ELIMINATED PRE-RACE PRAYERS, MILITARY FLYOVERS AND NATIONAL ANTHEM PERFORMANCES",
-      "gold_label": "Refuted",
-      "ordinal": 766,
-      "sample_id": "train:766",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The Irish Government's roadmap to ease Covid-19 restrictions will be set out in 5 phases. These phases will be on 3 week review process, the current phases would commence on the following dates:\nPhase 1 - 18th May\nPhase 2 - 8th June\nPhase 3 - 29th June\nPhase 4 - 20th July\nPhase 5 - 10th August",
-      "gold_label": "Supported",
-      "ordinal": 776,
-      "sample_id": "train:776",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "5G plays a part in this ‘plandemic’” The cases of COVID-19 are “directly related to electromagnetic radiation exposure by 5G",
-      "gold_label": "Refuted",
-      "ordinal": 778,
-      "sample_id": "train:778",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "New York’s Andrew Cuomo and California’s Gavin Newsom, praise Trump amid the pandemic.",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 785,
-      "sample_id": "train:785",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "US President Donald Trump tried to defund the National Institute of Health.",
-      "gold_label": "Supported",
-      "ordinal": 818,
-      "sample_id": "train:818",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The Supreme Leader of North Korea, Kim Jung Un, is seriously ill.",
-      "gold_label": "Refuted",
-      "ordinal": 823,
-      "sample_id": "train:823",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Coronavirus started spreading in the US in November 2019.",
-      "gold_label": "Refuted",
-      "ordinal": 839,
-      "sample_id": "train:839",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Nigeria's debt had been paid off by the time former President Obasanjo and VP Abubakar exited office in 2007.",
-      "gold_label": "Refuted",
-      "ordinal": 840,
-      "sample_id": "train:840",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Former President Olusegun Obasanjo donated 5000 naira each to Nigerians.",
-      "gold_label": "Refuted",
-      "ordinal": 857,
-      "sample_id": "train:857",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Chinese products can be identified by the first three digits of a barcode",
-      "gold_label": "Refuted",
-      "ordinal": 863,
-      "sample_id": "train:863",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The drug Diamox, often used as treatment for high-altitude sickness, can cure the Coronavirus.",
-      "gold_label": "Refuted",
-      "ordinal": 879,
-      "sample_id": "train:879",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Aadhaar Enabled Payments Will Not Work Till April 14 in India",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 897,
-      "sample_id": "train:897",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The Nigerian Finance Minister claims that Nigeria lost N700 billion Naira COVID-19 Relief Funds due to a fire.",
-      "gold_label": "Refuted",
-      "ordinal": 908,
-      "sample_id": "train:908",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Before the novel coronavirus pandemic hit the globe, Nigeria spent 42% of its earnings on debt servicing.",
-      "gold_label": "Supported",
-      "ordinal": 921,
-      "sample_id": "train:921",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "British author David Icke claimed that the Covid-19 pandemic was orchestrated by supernatural forces attempting to “dismantle” the world economic system and “control” the population using new technologies like 5G.",
-      "gold_label": "Refuted",
-      "ordinal": 933,
-      "sample_id": "train:933",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "British author David Icke claimed that Microscope images of exosomes and of the virus that causes Covid-19 are “exactly the same",
-      "gold_label": "Refuted",
-      "ordinal": 936,
-      "sample_id": "train:936",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Dr Charles Lieber of Harvard University was arrested for manufacturing the novel coronavirus in collusion with China.",
-      "gold_label": "Refuted",
-      "ordinal": 943,
-      "sample_id": "train:943",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Jio is giving Indian users a free recharge of ₹498.",
-      "gold_label": "Refuted",
-      "ordinal": 976,
-      "sample_id": "train:976",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "In Serbia, the stricter Covid19 curfew measures prevented dog walking for up to 14 hours at a time.",
-      "gold_label": "Supported",
-      "ordinal": 978,
-      "sample_id": "train:978",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Illinois banned the sale of alcohol on March 30 2020",
-      "gold_label": "Refuted",
-      "ordinal": 986,
-      "sample_id": "train:986",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "PM Narendra Modi has given the contract for Coronavirus testing kits to a Gujurati company selling them for Rs4,500.",
-      "gold_label": "Refuted",
-      "ordinal": 994,
-      "sample_id": "train:994",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "French astrologer Nostradamus had predicted the outbreak of coronavirus in his book “Les Prophéties”.",
-      "gold_label": "Refuted",
-      "ordinal": 1022,
-      "sample_id": "train:1022",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "People Clapping together at 5pm during Janta Curfew will kill coronavirus.",
-      "gold_label": "Refuted",
-      "ordinal": 1031,
-      "sample_id": "train:1031",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The Australian state of Western Australia has recently passed a “COVID-19 Emergency Powers Act” that authorises forcible medical examination and vaccination in schools.",
-      "gold_label": "Refuted",
-      "ordinal": 1054,
-      "sample_id": "train:1054",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The United States has had 4700 deaths from Flu between January 22nd 2020 and march 17 2020",
-      "gold_label": "Refuted",
-      "ordinal": 1073,
-      "sample_id": "train:1073",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "\"You have been on the floor of the Senate time and time again talking about the need to cut Social Security, Medicare and veterans' programs.\"",
-      "gold_label": "Supported",
-      "ordinal": 1086,
-      "sample_id": "train:1086",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "A Dallas student celebrating Spring Break on South Padre Island collapsed from symptoms resembling coronavirus in March 2020",
-      "gold_label": "Refuted",
-      "ordinal": 1101,
-      "sample_id": "train:1101",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "As of 6th March 2020 there is no coronavirus testing kit shortage in the United States, nor has there ever been prior to this date.",
-      "gold_label": "Refuted",
-      "ordinal": 1149,
-      "sample_id": "train:1149",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Kim Jong Un, Supreme Leader of North Korea, rejected calls from the Obama administration",
-      "gold_label": "Refuted",
-      "ordinal": 1153,
-      "sample_id": "train:1153",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Pope Francis and two aides have tested positive for Coronavirus.",
-      "gold_label": "Refuted",
-      "ordinal": 1184,
-      "sample_id": "train:1184",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The first case of Covid19 reported in Australia  was from the New South Wales town of Dubbo",
-      "gold_label": "Refuted",
-      "ordinal": 1191,
-      "sample_id": "train:1191",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "US President Trump called for reduced funding for the Centre for Disease Control and Prevention.",
-      "gold_label": "Supported",
-      "ordinal": 1211,
-      "sample_id": "train:1211",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Congress files charges against speaker of the U.S House of Representatives Nancy Pelosi, for tearing up her copy of the State of the Union speech.",
-      "gold_label": "Refuted",
-      "ordinal": 1213,
-      "sample_id": "train:1213",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "There has been no load shedding since August last 2015",
-      "gold_label": "Refuted",
-      "ordinal": 1248,
-      "sample_id": "train:1248",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Sri Lanka is the first country in the world to completely eradicate the coronavirus.",
-      "gold_label": "Refuted",
-      "ordinal": 1283,
-      "sample_id": "train:1283",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Google threatened to shut down search in Australia if they pass a digital news code.",
-      "gold_label": "Supported",
-      "ordinal": 1331,
-      "sample_id": "train:1331",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Nigeria has a population exceeding 200 million.",
-      "gold_label": "Supported",
-      "ordinal": 1345,
-      "sample_id": "train:1345",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "A casting call for crisis actors coincided with a pro-gun rally in Virginia on 16th January 2020.",
-      "gold_label": "Refuted",
-      "ordinal": 1351,
-      "sample_id": "train:1351",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "MSMEs create around 75% of the jobs in the Kenyan economy.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 1353,
-      "sample_id": "train:1353",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "MSMEs create around 75% of the jobs in the economy in Kenya.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 1360,
-      "sample_id": "train:1360",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "There are 64 mental health beds in the state of Iowa.",
-      "gold_label": "Supported",
-      "ordinal": 1397,
-      "sample_id": "train:1397",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The MSME (Micro and Small Enterprises) sector accounts for more than 80% of all businesses in Kenya.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 1407,
-      "sample_id": "train:1407",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Hong Kong uses AI technology using facial recognition to identify protesters if they so much as do anything on the street, so they can follow up with them and detain them later.",
-      "gold_label": "Supported",
-      "ordinal": 1424,
-      "sample_id": "train:1424",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "50 Journalists who were in Mangaluru to cover anti-Citizenship Amendment Act protests were fake journalists that had come from Kerala and have been arrested.",
-      "gold_label": "Refuted",
-      "ordinal": 1426,
-      "sample_id": "train:1426",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "95% percent of America's customers are outside it's borders.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 1431,
-      "sample_id": "train:1431",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Heavy Artillery in Donbas comes from sympathetic governments and not Russia.",
-      "gold_label": "Refuted",
-      "ordinal": 1432,
-      "sample_id": "train:1432",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The ExIm Bank provided taxpayer-backed handouts to foreign companies such as Air China and Saudi Aramco.”",
-      "gold_label": "Supported",
-      "ordinal": 1455,
-      "sample_id": "train:1455",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Dominic Raab posted and then deleted a tweet describing Scotland as a region of England.",
-      "gold_label": "Refuted",
-      "ordinal": 1494,
-      "sample_id": "train:1494",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "CNN admitted the Entire Russian Collusion Theory Was A Hoax",
-      "gold_label": "Refuted",
-      "ordinal": 1498,
-      "sample_id": "train:1498",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Northern Ireland has the highest femicide rate in Western Europe",
-      "gold_label": "Refuted",
-      "ordinal": 1502,
-      "sample_id": "train:1502",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The U.S. Constitution sets up the  election redistricting process to be partisan.",
-      "gold_label": "Refuted",
-      "ordinal": 1510,
-      "sample_id": "train:1510",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "After losing 60,000 factories America is now gaining over 10,000 brand-new, beautiful factories.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 1525,
-      "sample_id": "train:1525",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Over the past five years the South African government has invested in electrifying more than a million homes.",
-      "gold_label": "Supported",
-      "ordinal": 1547,
-      "sample_id": "train:1547",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Obama tweeted on Al Baghdad \"he was a great man, an innocent man and my friend\".",
-      "gold_label": "Refuted",
-      "ordinal": 1581,
-      "sample_id": "train:1581",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Mombasa is Kenya’s oldest town.",
-      "gold_label": "Refuted",
-      "ordinal": 1596,
-      "sample_id": "train:1596",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "US White House did not withhold security aid to Ukraine, in part, because the administration wanted Ukraine to investigate Democrats and the 2016 election.",
-      "gold_label": "Refuted",
-      "ordinal": 1599,
-      "sample_id": "train:1599",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Trump has sent 14,000 troops to Middle East since May.",
-      "gold_label": "Supported",
-      "ordinal": 1607,
-      "sample_id": "train:1607",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Asaduddin Owaisi, president of All India Majlis-e-Ittehadul Muslimeen (AIMIM)\ndanced at an election rally to celebrate the murder of Hindu Samaj leader, Kamlesh Tiwari.",
-      "gold_label": "Refuted",
-      "ordinal": 1618,
-      "sample_id": "train:1618",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Rapper Kurtis Blow is In Critical Condition After Emergency Heart Surgery",
-      "gold_label": "Refuted",
-      "ordinal": 1637,
-      "sample_id": "train:1637",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Nigeria has Africa's highest rate of depression.",
-      "gold_label": "Refuted",
-      "ordinal": 1657,
-      "sample_id": "train:1657",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The Amazon river is in Africa",
-      "gold_label": "Refuted",
-      "ordinal": 1660,
-      "sample_id": "train:1660",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Nigeria ranks fifth in the world in the frequency of suicide",
-      "gold_label": "Refuted",
-      "ordinal": 1663,
-      "sample_id": "train:1663",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "\"New Starbucks CEO\" Rosalind Brewer admits she doesn't like white people?",
-      "gold_label": "Refuted",
-      "ordinal": 1695,
-      "sample_id": "train:1695",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "During his telephone call with Ukrainian President Zelensky on 25th July 2019 Donald Trump said the United States had been good to Ukraine.",
-      "gold_label": "Supported",
-      "ordinal": 1727,
-      "sample_id": "train:1727",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Thousands of companies are leaving China because they can’t pay the tariffs.",
-      "gold_label": "Refuted",
-      "ordinal": 1762,
-      "sample_id": "train:1762",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "China lost 3 million jobs as a result of the US-China trade war.",
-      "gold_label": "Refuted",
-      "ordinal": 1764,
-      "sample_id": "train:1764",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Andrew Jackson said “One man with courage makes a majority.”",
-      "gold_label": "Refuted",
-      "ordinal": 1825,
-      "sample_id": "train:1825",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "In the weeks following El Paso and Dayton, evidence of an impending mass shooting spread on Snapchat and iMessage.",
-      "gold_label": "Refuted",
-      "ordinal": 1841,
-      "sample_id": "train:1841",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Republicans voted to allow people with pre-existing mental illness to buy firearms.",
-      "gold_label": "Supported",
-      "ordinal": 1857,
-      "sample_id": "train:1857",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The common theme with mass shooters is that the assailants were on psychotropic drugs.",
-      "gold_label": "Refuted",
-      "ordinal": 1858,
-      "sample_id": "train:1858",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Rep. Ilhan Omar \"voted yes\" to \"provide further funding for the 9/11 First Responders Victims Fund",
-      "gold_label": "Supported",
-      "ordinal": 1910,
-      "sample_id": "train:1910",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "If you’re a black woman in America today — in New York City, you’re 12 times more likely to die in childbirth, four times more likely nationwide.",
-      "gold_label": "Supported",
-      "ordinal": 1922,
-      "sample_id": "train:1922",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "President Trump Said \"I Will Pay For July 4 Parade Out Of My Own Pocket\"",
-      "gold_label": "Refuted",
-      "ordinal": 1971,
-      "sample_id": "train:1971",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "One in four South African employees have been diagnosed with depression.",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 1974,
-      "sample_id": "train:1974",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "as of 2019, 47 Kenyan counties has met the two-thirds threshold on the appointment of the county executive committee members, with three counties of Kilifi, Nyeri and Kericho attaining a 50-50 representation.",
-      "gold_label": "Supported",
-      "ordinal": 1992,
-      "sample_id": "train:1992",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Smallpox Treatment MR-VAC Is A Slow Poison For Children",
-      "gold_label": "Refuted",
-      "ordinal": 2018,
-      "sample_id": "train:2018",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Purdue Pharma has had to pay no consequences for their connection to the opioid crisis and overdose deaths in the US",
-      "gold_label": "Refuted",
-      "ordinal": 2021,
-      "sample_id": "train:2021",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Companies like Halliburton and Amazon pay nothing in US taxes",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 2027,
-      "sample_id": "train:2027",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Russia violated South Korean airspace",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2054,
-      "sample_id": "train:2054",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Pakistan cricketers were out till late at night smoking hookah before their match against India which led to their loss",
-      "gold_label": "Refuted",
-      "ordinal": 2066,
-      "sample_id": "train:2066",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "A little girl photographed in a hospital bed receives a dollar for a kidney transplant every time someone shares a Facebook post.",
-      "gold_label": "Refuted",
-      "ordinal": 2069,
-      "sample_id": "train:2069",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "School Kids Touching A Soldier's Feet Is From India",
-      "gold_label": "Refuted",
-      "ordinal": 2073,
-      "sample_id": "train:2073",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Sri Lanka has been ranked in the top four most corrupt nations in the world",
-      "gold_label": "Refuted",
-      "ordinal": 2074,
-      "sample_id": "train:2074",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "This [6.3%] growth is the highest to have been recorded for the past 8 years says Kenya’s finance minister Henry Rotich",
-      "gold_label": "Supported",
-      "ordinal": 2085,
-      "sample_id": "train:2085",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The public sector wage bill in Kenya continues to rise.",
-      "gold_label": "Supported",
-      "ordinal": 2086,
-      "sample_id": "train:2086",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Being vegan for a year saves 3,320kg of CO2.",
-      "gold_label": "Refuted",
-      "ordinal": 2125,
-      "sample_id": "train:2125",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Tariffs are now being paid to the United States by China of 25% on 250 Billion Dollars worth of goods & products. These massive payments go directly to the Treasury of the U.S.",
-      "gold_label": "Refuted",
-      "ordinal": 2170,
-      "sample_id": "train:2170",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Gombe state had a debt profile of N110 billion as at December 2018.",
-      "gold_label": "Refuted",
-      "ordinal": 2191,
-      "sample_id": "train:2191",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "China hurts U.S. farmers by not buying their produce.",
-      "gold_label": "Supported",
-      "ordinal": 2197,
-      "sample_id": "train:2197",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "US President Donald Trump says four hundred miles of wall are getting built along the US-Mexico border.",
-      "gold_label": "Refuted",
-      "ordinal": 2201,
-      "sample_id": "train:2201",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Joe Biden was one of the first to introduce a climate change bill to the US Houses of Congress.",
-      "gold_label": "Supported",
-      "ordinal": 2221,
-      "sample_id": "train:2221",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The War Powers Act has been invoked for the first time.",
-      "gold_label": "Supported",
-      "ordinal": 2262,
-      "sample_id": "train:2262",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The number of electricity connections in Kenya rose from 2.2 million in March 2013 to 7.1 million as at March 2019.",
-      "gold_label": "Supported",
-      "ordinal": 2313,
-      "sample_id": "train:2313",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Kenyatta administrations broad-based economic growth averaged 5.6% over the last five years.",
-      "gold_label": "Supported",
-      "ordinal": 2317,
-      "sample_id": "train:2317",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Kenya's economic growth averaged 5.6% across the five years 2013 to 2017.",
-      "gold_label": "Supported",
-      "ordinal": 2335,
-      "sample_id": "train:2335",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The micro, small and medium enterprises (MSME) sector employs approximately 14.9 million Kenyans.",
-      "gold_label": "Supported",
-      "ordinal": 2343,
-      "sample_id": "train:2343",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "2.5 million passengers have travelled using Kenyan Madaraka Express since its inception in May 2018.",
-      "gold_label": "Supported",
-      "ordinal": 2366,
-      "sample_id": "train:2366",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "People living in Labour councils pay on average £351 less council tax than those living in Tory councils.",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 2398,
-      "sample_id": "train:2398",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "This year alone, MPs have cost the British taxpayer £92,993,748 in expenses.",
-      "gold_label": "Refuted",
-      "ordinal": 2401,
-      "sample_id": "train:2401",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "US President Trump's political opponents launched the probe into Russia's presidential election interference as revenge for losing the 2016 election.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2416,
-      "sample_id": "train:2416",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Eight Democratic candidates ‘boycott’ the AIPAC conference",
-      "gold_label": "Supported",
-      "ordinal": 2433,
-      "sample_id": "train:2433",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "American middle schools caught forcing students to do Muslim prayers 5 times a day.",
-      "gold_label": "Refuted",
-      "ordinal": 2441,
-      "sample_id": "train:2441",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "President Donald Trump gave John McCain the kind of funeral he wanted, which as president he had to approve but got no thanks for.",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 2442,
-      "sample_id": "train:2442",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Women in Russia get paid less than men for the same work.",
-      "gold_label": "Supported",
-      "ordinal": 2444,
-      "sample_id": "train:2444",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Lagos has an estimated 21 million inhabitants",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 2464,
-      "sample_id": "train:2464",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The Indian government has issued an order against sharing political posts online.",
-      "gold_label": "Refuted",
-      "ordinal": 2465,
-      "sample_id": "train:2465",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Donald Trumps tax cut was about 1.5 trillion dollars scored. It has been virtually paid for, at least 80 percent paid for and that’s by the CBO’s own numbers.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2481,
-      "sample_id": "train:2481",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The BJP government published an infographic on the 48-months portal that makes four claims about the Jan Suraksha Yojana. This article is a fact check of those claims.",
-      "gold_label": "Supported",
-      "ordinal": 2504,
-      "sample_id": "train:2504",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The BJP government has uploaded an infographic on their 48-months portal that makes claims about the Pradhan Mantri Krishi Sinchai Yojana (PMKSY). one such claim is - Dedicated micro irrigation fund of 5000 crore rupees.",
-      "gold_label": "Supported",
-      "ordinal": 2533,
-      "sample_id": "train:2533",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "French President Emmanuel Macron said the UK will only be allowed to stay in the EU if they fully adopt all EU rules and regulations including adopting the Euro within six months of stopping Brexit.",
-      "gold_label": "Refuted",
-      "ordinal": 2534,
-      "sample_id": "train:2534",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "[Funding] to the clothing and textile competitiveness programme… will support 35,500 existing job.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2544,
-      "sample_id": "train:2544",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Farmers are declaring bankruptcy \"in record numbers\" and \"the median income for U.S. farm households was -$1,548 in 2018.\"",
-      "gold_label": "Refuted",
-      "ordinal": 2554,
-      "sample_id": "train:2554",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "In China, a drug dealer gets the death penalty. In America, a drug dealer gets a fine.",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 2561,
-      "sample_id": "train:2561",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "When countries put people into the diversity visa lottery program, they’re putting some very bad people in the lottery",
-      "gold_label": "Refuted",
-      "ordinal": 2564,
-      "sample_id": "train:2564",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Drug loads can't enter the US through US ports of entry.",
-      "gold_label": "Refuted",
-      "ordinal": 2567,
-      "sample_id": "train:2567",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "In the US a drug dealer gets a fine.",
-      "gold_label": "Refuted",
-      "ordinal": 2575,
-      "sample_id": "train:2575",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Net migration to the UK could be 100,000 higher after Brexit under the government’s plans.",
-      "gold_label": "Refuted",
-      "ordinal": 2584,
-      "sample_id": "train:2584",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "There were 1,200 murders in 2018 in Juarez, Mexico compared with 23 just across the border in El Paso, Texas, US, due to the construction of the border fence.",
-      "gold_label": "Refuted",
-      "ordinal": 2590,
-      "sample_id": "train:2590",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The Kenyan government has built a standard-gauge railway of 600 kilometres between 2014 and 2019.",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 2601,
-      "sample_id": "train:2601",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "In Kenya it is a constitutional requirement that when the president is away, the deputy president must be in the country",
-      "gold_label": "Supported",
-      "ordinal": 2603,
-      "sample_id": "train:2603",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "For 50 years only 2.3 million Kenyans were connected to electricity.",
-      "gold_label": "Supported",
-      "ordinal": 2604,
-      "sample_id": "train:2604",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The number of people on health insurance in Kenya increased from 3 million to 7 million in the period 2014 to 2019.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2605,
-      "sample_id": "train:2605",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Diaspora remittances contributed upwards of KSh290.",
-      "gold_label": "Refuted",
-      "ordinal": 2611,
-      "sample_id": "train:2611",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Kenya has built a standard-gauge railway of 600 kilometres in the last five years.",
-      "gold_label": "Refuted",
-      "ordinal": 2620,
-      "sample_id": "train:2620",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The World Bank's annual Doing Business Report currently puts South Africa number 82 out of 190 countries that they have tracked with regard to being able to do business in an efficient way.",
-      "gold_label": "Supported",
-      "ordinal": 2642,
-      "sample_id": "train:2642",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "The World Bank's annual Doing Business Report puts South Africa number 82 out of 190 countries with regard to being able to do business in an efficient way",
-      "gold_label": "Supported",
-      "ordinal": 2652,
-      "sample_id": "train:2652",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "In 2017, South Africa recorded an inflow of foreign direct investment amounting to R17 billion.",
-      "gold_label": "Supported",
-      "ordinal": 2671,
-      "sample_id": "train:2671",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "In 2017, South Africa recorded an inflow of foreign direct investment amounting to R17 billion",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2680,
-      "sample_id": "train:2680",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Trump tweeted on February 6, 2019 that he was “extremely happy with the leadership of President Ramaphosa, he is a great deal! Business community is happy too! And don’t make mistakes by voting useless leadership on this coming election!!”",
-      "gold_label": "Refuted",
-      "ordinal": 2714,
-      "sample_id": "train:2714",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "According to a 2017 Doctors Without Borders Report, more than 30 percent of women are sexually assaulted on the trek to the border.",
-      "gold_label": "Supported",
-      "ordinal": 2717,
-      "sample_id": "train:2717",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "We have created 5.3 million new jobs and importantly added 600,000 new manufacturing jobs.",
-      "gold_label": "Refuted",
-      "ordinal": 2721,
-      "sample_id": "train:2721",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "In 2016-17, 62% of income received by farmers in Northern Ireland came from the European Union.",
-      "gold_label": "Supported",
-      "ordinal": 2724,
-      "sample_id": "train:2724",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Wages are rising at the fastest pace in decades with President Donald Trump in 2019.",
-      "gold_label": "Refuted",
-      "ordinal": 2737,
-      "sample_id": "train:2737",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "When the Buhari administration came in, Boko Haram was holding 17 local governments in the northeast of Nigeria, they are not holding any local governments now",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2741,
-      "sample_id": "train:2741",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "School attendance in South Africa increased “from 51% in 1994 to 99% today.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2773,
-      "sample_id": "train:2773",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Samora Machel said “The day you hear the whites speak of me in good terms, don’t share your secrets with me, because that means I would have betrayed you already.”",
-      "gold_label": "Refuted",
-      "ordinal": 2794,
-      "sample_id": "train:2794",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Black Friday originated with the practice of selling off slaves on the day after Thanksgiving.",
-      "gold_label": "Refuted",
-      "ordinal": 2795,
-      "sample_id": "train:2795",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "A video claiming to show “shocking secrets of the food industry” said You can check whether honey has been diluted with sugar syrup by washing it in water to reveal a honeycomb pattern and the honey’s genetic memory.",
-      "gold_label": "Refuted",
-      "ordinal": 2810,
-      "sample_id": "train:2810",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Iain Duncan Smith gets free accommodation as a financial benefit for being an MP in the UK House of Commons",
-      "gold_label": "Refuted",
-      "ordinal": 2825,
-      "sample_id": "train:2825",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Overall inflation in India is falling: 8.48% (2014) to 4.87% (2015) to 5.47% (2016) to 2.99% (2017) to 4.58% (2018).",
-      "gold_label": "Supported",
-      "ordinal": 2850,
-      "sample_id": "train:2850",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Nearly 1.5 crore doses of Rotavirus vaccine launched in India in March 2016 have been administered to India's children.",
-      "gold_label": "Supported",
-      "ordinal": 2859,
-      "sample_id": "train:2859",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Garlic can kill brain cancer cells",
-      "gold_label": "Conflicting Evidence/Cherrypicking",
-      "ordinal": 2881,
-      "sample_id": "train:2881",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Wetting your head before your body while showering can lead to a stroke.",
-      "gold_label": "Refuted",
-      "ordinal": 2892,
-      "sample_id": "train:2892",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Dog meat was seized at Nashik railway station in India",
-      "gold_label": "Refuted",
-      "ordinal": 2907,
-      "sample_id": "train:2907",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Musician Prince recruited Michael Jordan to the company Nike in 1983.",
-      "gold_label": "Refuted",
-      "ordinal": 2924,
-      "sample_id": "train:2924",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "During Mike Bloomberg's  tenure, street homelessness in NYC decreased by 28%.",
-      "gold_label": "Supported",
-      "ordinal": 2945,
-      "sample_id": "train:2945",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Eating black garlic reduces the chances of developing cancer.",
-      "gold_label": "Not Enough Evidence",
-      "ordinal": 2947,
-      "sample_id": "train:2947",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Patanjali CEO, Acharya Balkrishna, never claimed that its Coronil kit was a cure for COVID-19.",
-      "gold_label": "Refuted",
-      "ordinal": 2961,
-      "sample_id": "train:2961",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "There is pork in Covid-19 vaccines.",
-      "gold_label": "Refuted",
-      "ordinal": 2973,
-      "sample_id": "train:2973",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "24,641 die of heart disease every day.",
-      "gold_label": "Refuted",
-      "ordinal": 2984,
-      "sample_id": "train:2984",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Covid-19 cases are way down from where they were two weeks ago, this weekend is one of the lowest the United States have had.",
-      "gold_label": "Refuted",
-      "ordinal": 2992,
-      "sample_id": "train:2992",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Abortion has been legalised in Indonesia by President Joko Widodo",
-      "gold_label": "Refuted",
-      "ordinal": 3003,
-      "sample_id": "train:3003",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "If you have been recently vaccinated you need to stay away from babies, young children, pregnant women, immunocompromised people, the elderly, and terminally ill people for at least two weeks minimum.",
-      "gold_label": "Refuted",
-      "ordinal": 3044,
-      "sample_id": "train:3044",
-      "size_stratum": "small",
-      "store_bytes": 0
-    },
-    {
-      "claim": "Posting on social media such as Instagram for Blackout Tuesday dilutes feeds and erases protesters’ posts burying the voices it's meant to amplify.",
+      "sample_id": "train:2055",
+      "ordinal": 2055,
+      "claim": "Russian Mercenaries in Syria are Private Contractors and They Are Not Engaged in Combat",
       "gold_label": "Refuted",
-      "ordinal": 3046,
-      "sample_id": "train:3046",
       "size_stratum": "small",
       "store_bytes": 0
     },
     {
-      "claim": "Australian Prime Minister Scott Morrison stands alone during the 2019 G7 Leaders’ Summit in France",
+      "sample_id": "train:2224",
+      "ordinal": 2224,
+      "claim": "Kenyans with old generation passports will still be issued with U.S visas.",
       "gold_label": "Refuted",
-      "ordinal": 3054,
-      "sample_id": "train:3054",
       "size_stratum": "small",
       "store_bytes": 0
     }
   ],
+  "sample_ids": [
+    "train:2",
+    "train:3",
+    "train:4",
+    "train:6",
+    "train:10",
+    "train:11",
+    "train:12",
+    "train:15",
+    "train:16",
+    "train:17",
+    "train:18",
+    "train:19",
+    "train:20",
+    "train:21",
+    "train:22",
+    "train:23",
+    "train:25",
+    "train:28",
+    "train:29",
+    "train:30",
+    "train:31",
+    "train:34",
+    "train:35",
+    "train:36",
+    "train:39",
+    "train:40",
+    "train:43",
+    "train:46",
+    "train:47",
+    "train:49",
+    "train:53",
+    "train:54",
+    "train:55",
+    "train:56",
+    "train:57",
+    "train:61",
+    "train:62",
+    "train:63",
+    "train:64",
+    "train:66",
+    "train:68",
+    "train:70",
+    "train:72",
+    "train:74",
+    "train:77",
+    "train:78",
+    "train:81",
+    "train:83",
+    "train:84",
+    "train:85",
+    "train:87",
+    "train:89",
+    "train:90",
+    "train:92",
+    "train:93",
+    "train:96",
+    "train:97",
+    "train:102",
+    "train:103",
+    "train:104",
+    "train:105",
+    "train:106",
+    "train:108",
+    "train:110",
+    "train:111",
+    "train:113",
+    "train:114",
+    "train:116",
+    "train:117",
+    "train:118",
+    "train:120",
+    "train:122",
+    "train:123",
+    "train:124",
+    "train:126",
+    "train:128",
+    "train:129",
+    "train:133",
+    "train:134",
+    "train:136",
+    "train:137",
+    "train:141",
+    "train:144",
+    "train:145",
+    "train:146",
+    "train:147",
+    "train:149",
+    "train:150",
+    "train:153",
+    "train:156",
+    "train:157",
+    "train:159",
+    "train:161",
+    "train:162",
+    "train:166",
+    "train:168",
+    "train:169",
+    "train:171",
+    "train:173",
+    "train:176",
+    "train:177",
+    "train:178",
+    "train:179",
+    "train:180",
+    "train:182",
+    "train:183",
+    "train:184",
+    "train:185",
+    "train:186",
+    "train:187",
+    "train:190",
+    "train:191",
+    "train:192",
+    "train:193",
+    "train:194",
+    "train:196",
+    "train:198",
+    "train:199",
+    "train:203",
+    "train:204",
+    "train:205",
+    "train:208",
+    "train:211",
+    "train:212",
+    "train:213",
+    "train:215",
+    "train:217",
+    "train:218",
+    "train:219",
+    "train:222",
+    "train:224",
+    "train:225",
+    "train:226",
+    "train:227",
+    "train:228",
+    "train:229",
+    "train:231",
+    "train:235",
+    "train:236",
+    "train:239",
+    "train:240",
+    "train:241",
+    "train:243",
+    "train:244",
+    "train:248",
+    "train:256",
+    "train:257",
+    "train:260",
+    "train:261",
+    "train:263",
+    "train:267",
+    "train:268",
+    "train:271",
+    "train:272",
+    "train:274",
+    "train:275",
+    "train:276",
+    "train:281",
+    "train:283",
+    "train:285",
+    "train:288",
+    "train:293",
+    "train:295",
+    "train:296",
+    "train:297",
+    "train:301",
+    "train:303",
+    "train:304",
+    "train:308",
+    "train:309",
+    "train:311",
+    "train:313",
+    "train:321",
+    "train:323",
+    "train:324",
+    "train:327",
+    "train:330",
+    "train:331",
+    "train:332",
+    "train:335",
+    "train:337",
+    "train:338",
+    "train:341",
+    "train:342",
+    "train:343",
+    "train:426",
+    "train:694",
+    "train:903",
+    "train:979",
+    "train:1288",
+    "train:1402",
+    "train:1429",
+    "train:1644",
+    "train:1817",
+    "train:1824",
+    "train:1863",
+    "train:1873",
+    "train:1881",
+    "train:2055",
+    "train:2224"
+  ],
   "count": 200,
   "excluded_overlaps_count": 8,
   "label_distribution": {
+    "Supported": 60,
+    "Refuted": 115,
     "Conflicting Evidence/Cherrypicking": 13,
-    "Not Enough Evidence": 18,
-    "Refuted": 114,
-    "Supported": 55
+    "Not Enough Evidence": 12
   },
   "schema_version": "m18d-manifest-v1",
   "seed": 42,
-  "size_strata_distribution": {
-    "small": 200
-  },
-  "split_name": "holdout_200"
+  "split_name": "holdout_200_cached_optimal",
+  "all_canonical_r4_cached": true
 }

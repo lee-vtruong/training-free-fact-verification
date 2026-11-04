@@ -121,9 +121,15 @@ def mcnemar_test(
         p_val = 1.0
     else:
         # Exact two-tailed binomial test under H0: p = 0.5
-        from scipy.stats import binomtest
-        res = binomtest(min(b, c), n=discordant, p=0.5, alternative="two-sided")
-        p_val = float(res.pvalue)
+        try:
+            from scipy.stats import binomtest
+            res = binomtest(min(b, c), n=discordant, p=0.5, alternative="two-sided")
+            p_val = float(res.pvalue)
+        except ImportError:
+            import math
+            k = min(b, c)
+            p_half = sum(math.comb(discordant, i) for i in range(k + 1)) * (0.5 ** discordant)
+            p_val = min(1.0, 2.0 * p_half)
 
     return {
         "contingency_table": {

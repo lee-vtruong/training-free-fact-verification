@@ -23,6 +23,8 @@ fi
 
 export PYTHONPATH="src:${PROJECT_ROOT}:${PYTHONPATH:-}"
 export TOKENIZERS_PARALLELISM=false
+export HF_HOME="${HF_HOME:-/home/stackops/whale/cache/huggingface}"
+export HF_HUB_OFFLINE=1
 export HF_HUB_ENABLE_HF_TRANSFER=0
 export PYTHONUNBUFFERED=1
 

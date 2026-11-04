@@ -15,5 +15,6 @@ outputs/*
 *.sqlite*
 
 temp_pytest/
+tmp_pytest/
 cache/
 
