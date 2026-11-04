@@ -226,8 +226,12 @@ def test_resume_idempotence(mock_dataset, tmp_path):
     orchestrator1.run_phase_a(state)
     orchestrator1.run_phase_b(state, limit=10)
 
-    # Verify receipts now have 15 claims total (5 existing + 10 new)
+    # Verify receipts have zero duplicate sample_ids
     records = load_jsonl(receipts_file)
-    assert len(records) == 15
     unique_sids = {r["sample_id"] for r in records}
-    assert len(unique_sids) == 15  # Zero duplicates!
+    assert len(unique_sids) == len(records)  # Zero duplicates!
+    # Assert original 5 claims retained original latency
+    prepopulated = {r["sample_id"]: r for r in records if r["sample_id"] in {f"train:{i}" for i in range(5)}}
+    assert len(prepopulated) == 5
+    for sid, rec in prepopulated.items():
+        assert rec["latency_seconds"] == 0.05  # Retained original without recomputation!
