@@ -6,6 +6,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Activate virtualenv if available
+if [ -f "$PROJECT_ROOT/.venv/bin/activate" ]; then
+    # shellcheck disable=SC1091
+    source "$PROJECT_ROOT/.venv/bin/activate"
+fi
+
 OUTPUT_DIR="${OUTPUT_DIR:-$PROJECT_ROOT/outputs/m18e-full-history-pf1000-v1}"
 PID_FILE="$OUTPUT_DIR/.m18e.pid"
 STATE_FILE="$OUTPUT_DIR/state.json"

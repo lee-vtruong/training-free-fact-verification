@@ -527,11 +527,13 @@ class M18eOrchestrator:
         emb_spec = {
             "model_id": self.config.embedding_model_id,
             "revision": self.config.embedding_revision,
+            "snapshot_sha256": "667106c1965ebad2038f612af424b1990ab6e6dabcee5cf20f45ed5c4dee071a",
             "local_path": f"/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Embedding-0.6B/snapshots/{self.config.embedding_revision}",
         }
         rerank_spec = {
             "model_id": self.config.reranker_model_id,
             "revision": self.config.reranker_revision,
+            "snapshot_sha256": "5219a20fa423e1054c34b93a5a8c0ffa640ca52320181603be32d7afe26de353",
             "local_path": f"/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-Reranker-0.6B/snapshots/{self.config.reranker_revision}",
         }
         qwen_enc = QwenFrozen(emb_spec, device="cuda", dtype="float16", batch_size=32)
@@ -559,24 +561,41 @@ class M18eOrchestrator:
                 }
                 for i in range(12)
             ]
-        # On server, knowledge stores are located in ERRORFlow/data/raw/averitec/train_knowledge_store or similar
-        store_path = Path("/home/stackops/whale/ERRORFlow/data/raw/averitec/knowledge_store/train") / f"{sid}.json"
-        if store_path.exists():
-            docs = json.loads(store_path.read_text(encoding="utf-8"))
-            # Ensure required schema fields exist
-            normalized_docs = []
-            for d in docs:
-                nd = dict(d)
-                if "source_url" not in nd:
-                    nd["source_url"] = nd.get("url", f"https://example.org/{sid}")
-                if "source_kind" not in nd:
-                    nd["source_kind"] = "web"
-                if "retrieved_at" not in nd:
-                    nd["retrieved_at"] = "2026-11-04T00:00:00Z"
-                if "acquisition_id" not in nd:
-                    nd["acquisition_id"] = f"acq_{sid}"
-                normalized_docs.append(nd)
-            return normalized_docs
+        # On server, knowledge stores are located in data_store/knowledge_store/train/uncompressed/{ordinal}.json
+        ordinal = sid.split(":")[1] if ":" in sid else sid
+        candidate_paths = [
+            ROOT / "data_store" / "knowledge_store" / "train" / "uncompressed" / f"{ordinal}.json",
+            Path("/home/stackops/whale/training-free-fact-verification/data_store/knowledge_store/train/uncompressed") / f"{ordinal}.json",
+            Path("/home/stackops/whale/ERRORFlow/data/raw/averitec/knowledge_store/train") / f"{sid}.json",
+        ]
+        for cp in candidate_paths:
+            if cp.exists():
+                normalized_docs = []
+                with cp.open("r", encoding="utf-8-sig") as f:
+                    for line_no, line in enumerate(f, 1):
+                        line = line.strip()
+                        if not line:
+                            continue
+                        try:
+                            row = json.loads(line)
+                            url = row.get("url") or row.get("source_url") or f"https://example.org/{sid}/{line_no}"
+                            u2t = row.get("url2text", [])
+                            text = "\n".join(u2t) if isinstance(u2t, list) else str(row.get("text", ""))
+                            if not text.strip():
+                                continue
+                            doc_id = row.get("document_id") or digest(f"{sid}:{line_no}:{url}")
+                            normalized_docs.append({
+                                "document_id": doc_id,
+                                "source_url": url,
+                                "source_kind": "web_document",
+                                "retrieved_at": "unknown",
+                                "acquisition_id": f"acq_{sid}",
+                                "text": text,
+                            })
+                        except Exception:
+                            continue
+                if normalized_docs:
+                    return normalized_docs
         # Fallback to local test document
         return [
             {
