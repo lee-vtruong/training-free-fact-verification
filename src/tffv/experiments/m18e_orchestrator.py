@@ -101,6 +101,9 @@ class ProcessLock:
         if self.lock_file.exists():
             try:
                 pid = int(self.lock_file.read_text().strip())
+                if pid == os.getpid():
+                    self.acquired = True
+                    return True
                 if self._pid_is_running(pid):
                     return False
             except Exception:
