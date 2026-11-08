@@ -51,6 +51,12 @@ def parse_args() -> argparse.Namespace:
         help="Path to official dev.json.",
     )
     parser.add_argument(
+        "--model-path",
+        type=str,
+        default="",
+        help="Custom path to Qwen3-8B checkpoint.",
+    )
+    parser.add_argument(
         "--run-gpu",
         action="store_true",
         help="Launch live GPU inference using frozen Qwen3-8B BF16.",
@@ -169,6 +175,7 @@ def main() -> None:
         source_train_records=None,  # Uses sealed Train Fold-1 seed patterns
         run_gpu=args.run_gpu,
         smoke_only=args.smoke_only,
+        model_path=Path(args.model_path) if args.model_path else None,
     )
 
 

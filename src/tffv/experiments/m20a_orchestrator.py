@@ -38,7 +38,9 @@ from tffv.experiments.m20a_schemas import (
     RuleSet,
 )
 
-SERVER_DEFAULT_MODEL_PATH = "/home/stackops/whale/checkpoints/Qwen/Qwen3-8B-Instruct"
+SERVER_DEFAULT_MODEL_PATH = Path(
+    "/home/stackops/whale/cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots/b968826d9c46dd6066d109eabc6255188de91218"
+)
 
 
 class MockVerifierRunner:
@@ -136,6 +138,7 @@ class M20aOrchestrator:
         source_train_records: Optional[List[Dict[str, Any]]] = None,
         run_gpu: bool = False,
         smoke_only: bool = False,
+        model_path: Optional[str | Path] = None,
     ) -> Dict[str, Any]:
         """Runs the 5-arm M2.0-A pipeline."""
         start_time = time.time()
@@ -209,7 +212,7 @@ class M20aOrchestrator:
         }
         (self.output_dir / "config_lock.json").write_text(json.dumps(config_lock, indent=2), encoding="utf-8")
 
-        verifier = Qwen3GPUVerifier() if run_gpu else MockVerifierRunner()
+        verifier = Qwen3GPUVerifier(model_path=model_path) if run_gpu else MockVerifierRunner()
 
         predictions_file = self.output_dir / "predictions.jsonl"
         prompt_receipts_file = self.output_dir / "prompt_receipts.jsonl"
