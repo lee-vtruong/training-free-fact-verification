@@ -2208,6 +2208,28 @@
   * Phân hoạch chống rò rỉ: Train Fold-1 (1.534 claims) trích xuất tri thức, Train Fold-2 (1.534 claims) kiểm thử pilot, Official Dev 500 niêm phong tuyệt đối cho confirmatory test.
   * Toàn bộ mã nguồn và cấu hình M2.0 chỉ dừng ở mức thiết kế/chuẩn bị, không tự ý chạy GPU hoặc suy luận.
 
+## 2026-11-08 15:45 +07:00 (08:45 UTC) — Hoàn Thành Thực Thi Chẩn Đoán M1.9h Trên hvtham-server & Niêm Phong Toàn Bộ Kết Quả
+
+- **Thao tác Đồng bộ & Triển khai Máy chủ:**
+  * Đồng bộ commit `2775f5d` từ local lên nhánh `codex/m16-heal-design-integrity` trên remote GitHub.
+  * Đăng nhập `hvtham-server`, cập nhật mã nguồn qua `git reset --hard origin/codex/m16-heal-design-integrity`.
+  * Cài đặt bổ sung thư viện `scikit-learn` trong môi trường ảo `.venv` phục vụ tính toán các đường cong ROC/PR và AUROC/AUPRC.
+  * Khởi chạy pipeline chẩn đoán CPU hoàn chỉnh qua lệnh `bash scripts/run_m19h_diagnostics.sh`.
+  * Thời gian hoàn thành: **40.49 giây** (CPU-only, không yêu cầu GPU).
+- **Kết quả Kiểm định & Niêm phong Dữ liệu (outputs/m19h-error-diagnostics-v1/):**
+  * **Tiền kiểm Tính Toàn vẹn (Preflight):** Đạt trạng thái **GO / VERIFIED** (500 claims, 6 arms, tái lập chính xác 100% Macro-F1 và Accuracy của M1.9g).
+  * **Ma trận Chuyển dịch Lỗi đã Xác thực:**
+    - $H2 \text{ vs } B1$: 256 cả hai đúng, 183 cả hai sai, **41 harmed, 20 corrected**, net **$-21$** ($-4.20\%$, exact McNemar $p = 0.00985$).
+    - $H2 \text{ vs } B0$: 250 cả hai đúng, 174 cả hai sai, **50 harmed, 26 corrected**, net **$-24$** ($-4.80\%$, exact McNemar $p = 0.00791$).
+    - $H1 \text{ vs } B0$: 265 cả hai đúng, 161 cả hai sai, **35 harmed, 39 corrected**, net **$+4$** ($+0.80\%$, exact McNemar $p = 0.72755$).
+    - $H3 \text{ vs } B2$: 274 cả hai đúng, 164 cả hai sai, **38 harmed, 24 corrected**, net **$-14$** ($-2.80\%$, exact McNemar $p = 0.09795$).
+    - $H3 \text{ vs } B0$: 256 cả hai đúng, 158 cả hai sai, **44 harmed, 42 corrected**, net **$-2$** ($-0.40\%$, exact McNemar $p = 0.91421$).
+  * **Đồ thị Chẩn đoán (outputs/figures/):** Đã xuất thành công 5 biểu đồ:
+    `fig1_error_transitions.png`, `fig2_per_class_f1_shift.png`, `fig3_similarity_vs_error_rate.png`, `fig4_risk_precision_recall_curves.png`, `fig5_selective_routing_tradeoffs.png`.
+  * **Biên lai & Báo cáo:** Đã niêm phong đầy đủ 13 tệp artifacts bao gồm `PREFLIGHT_REPORT.md`, `ROOT_CAUSE_ANALYSIS.md`, `DECISION_REPORT.md`, `M20_METHOD_PROPOSAL.md`, `run_receipt.json`.
+- **Trạng thái Milestone:** **M1.9h HOÀN THÀNH TOÀN DIỆN & NIÊM PHONG (100% COMPLETE)**. Đã sẵn sàng bước tiếp theo theo chỉ thị của người dùng.
+
+
 
 
 
