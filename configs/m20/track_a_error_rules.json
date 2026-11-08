@@ -1,30 +1,68 @@
 {
   "track_id": "Track-A",
   "name": "Error-Derived Verification Rules",
-  "hypothesis": "Explicit verification rules mined from historical failure modes reduce ambiguity errors without prompt exemplars.",
-  "source_data": "train_fold_1",
+  "milestone": "M2.0-A",
+  "hypothesis": "Explicit symbolic verification rules mined from historical failure modes reduce systematic polarity inversions and abstention bias without fine-tuning or few-shot exemplar overhead.",
+  "target_model": "Qwen/Qwen3-8B-Instruct (Frozen BF16)",
+  "retrieval_contract": "R4-PF1000-v1 (8 passages/claim)",
+  "ontology": "AVeriTeC Official 4-Class",
+  "data_partitioning": {
+    "source_knowledge_fold": "train_fold_1",
+    "pilot_evaluation_fold": "train_fold_2",
+    "confirmatory_evaluation_set": "AVeriTeC Official Dev 500 (dev:0 .. dev:499)",
+    "isolation_policy": "Strict zero-leakage: Dev/Test claims are never used in pattern mining, rule synthesis, or prompt calibration."
+  },
   "arms": [
     {
-      "arm_id": "A0_ZeroShot_Control",
-      "description": "Frozen Base Qwen3-8B Zero-Shot (Anchor control)",
-      "rules_applied": []
+      "arm_id": "B0",
+      "name": "Zero-Shot Base Control",
+      "description": "Frozen Qwen3-8B BF16 direct verification without injected rules.",
+      "rule_set_id": "rules_b0_v1",
+      "control_role": "Anchor baseline"
     },
     {
-      "arm_id": "A1_Generic_Rules_Control",
-      "description": "Generic fact-checking guidelines (Matched control without historical error mining)",
-      "rules_applied": [
-        "Rule G1: Demand direct corroboration before marking Supported.",
-        "Rule G2: Check entity and number matches carefully."
-      ]
+      "arm_id": "G1",
+      "name": "Generic Rules Control",
+      "description": "Standard high-level fact-checking best practices (Corroboration, Contradiction, Sufficiency).",
+      "rule_set_id": "rules_g1_v1",
+      "control_role": "Standard generic guideline control"
     },
     {
-      "arm_id": "A2_Error_Derived_Rules",
-      "description": "Rules derived from top historical error categories in Train Fold-1",
-      "rules_applied": [
-        "Rule E1 (Temporal Mismatch): If an event year in evidence contradicts the claim year, mark Refuted, not Conflicting.",
-        "Rule E2 (Partial Support): If only 1 out of multiple factual sub-claims is backed by evidence, mark Conflicting Evidence/Cherrypicking, not Supported.",
-        "Rule E3 (Abstention Threshold): Do not default to Not Enough Evidence if any sentence directly negates the primary predicate."
-      ]
+      "arm_id": "G2",
+      "name": "Length-Matched Generic Control",
+      "description": "Elaborated methodological guidelines matching E1 token count (+/- 15%) to isolate length and structural complexity effects.",
+      "rule_set_id": "rules_g2_v1",
+      "control_role": "Matched-length structural control"
+    },
+    {
+      "arm_id": "E1",
+      "name": "Error-Derived Rules",
+      "description": "Rules mined from historical Train Fold-1 failure patterns targeting Temporal Mismatch, Partial Support, Direct Negation, and Numerical Precision.",
+      "rule_set_id": "rules_e1_v1",
+      "control_role": "Primary experimental arm"
+    },
+    {
+      "arm_id": "E2",
+      "name": "Shuffled / Irrelevant Rules Control",
+      "description": "Matched-length negative control containing linguistic/stylistic rules irrelevant to factual correctness.",
+      "rule_set_id": "rules_e2_v1",
+      "control_role": "Negative placebo / distraction control"
     }
-  ]
+  ],
+  "evaluation_protocol": {
+    "primary_metric": "Macro-F1 (Unweighted mean across 4 official classes)",
+    "secondary_metrics": [
+      "Accuracy",
+      "Balanced Accuracy",
+      "Per-class F1",
+      "Harm-to-Correction Ratio (Harmed / Corrected < 0.8)",
+      "McNemar exact paired test p-value",
+      "5,000-iteration Paired Bootstrap 95% Confidence Intervals"
+    ],
+    "invariant_assertions": [
+      "Delta Accuracy == (Corrected - Harmed) / N",
+      "Identical evidence rendering across all 5 arms per claim",
+      "Zero Dev gold label exposure in rule sets"
+    ]
+  }
 }

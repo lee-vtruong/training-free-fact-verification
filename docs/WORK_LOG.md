@@ -2229,6 +2229,58 @@
   * **Biên lai & Báo cáo:** Đã niêm phong đầy đủ 13 tệp artifacts bao gồm `PREFLIGHT_REPORT.md`, `ROOT_CAUSE_ANALYSIS.md`, `DECISION_REPORT.md`, `M20_METHOD_PROPOSAL.md`, `run_receipt.json`.
 - **Trạng thái Milestone:** **M1.9h HOÀN THÀNH TOÀN DIỆN & NIÊM PHONG (100% COMPLETE)**. Đã sẵn sàng bước tiếp theo theo chỉ thị của người dùng.
 
+## 2026-11-08 16:25 +07:00 (09:25 UTC) — Hoàn Thành Triển Khai Milestone M2.0-A: Error-Derived Verification Rules (CPU Code & Tests)
+
+- **Mục tiêu & Phạm vi Nghiên cứu:**
+  * Triển khai hoàn chỉnh Track A của đề xuất M2.0: Biến các dự đoán đúng/sai trong quá khứ thành các quy tắc kiểm chứng hình thức (symbolic verification rules) để cải thiện mô hình đóng băng `Qwen3-8B-Instruct` BF16 mà không can thiệp trọng số hay dùng few-shot exemplars cồng kềnh.
+  * Kiểm tra Git branch hiện tại: Đang ở branch `codex/m16-heal-design-integrity` (commit `70f506b`).
+- **Phân định Rạch ròi Lỗi Quan sát vs Giả thuyết Nguyên nhân:**
+  * Module `src/tffv/experiments/m20a_pattern_extractor.py`:
+    - `ObservedError`: Ghi nhận dữ kiện khách quan đo lường được (sample_id, claim_text, gold_verdict, base_verdict, transition_type, evidence_count, evidence_snippets, discrepancy_signals).
+    - `HypothesizedCause`: Định danh phân loại quy nạp (ErrorTaxonomyCategory: Temporal Contradiction, Partial Support Cherrypicking, Predicate Negation Overlooked, Numerical Precision, Abstention Threshold Bias), cơ chế giả thuyết và giải pháp đề xuất. Luôn gắn nhãn bất biến `is_hypothesized = True`.
+- **Ràng buộc Cách ly Tuyệt đối (Fold Isolation Guard):**
+  * Hàm `validate_isolation()` nghiêm cấm mọi dữ liệu thuộc Official Dev (`dev:*`) hoặc Test (`test:*`) tham gia vào quá trình trích xuất mẫu lỗi hoặc tạo rules. Ném ngoại lệ `ValueError: [ISOLATION VIOLATION]` nếu phát hiện rò rỉ.
+  * Nguồn dữ liệu tri thức chỉ khai thác từ `train_fold_1` (hoặc `SOURCE` partition được niêm phong).
+- **Hệ thống 5 Nhánh Thực nghiệm Đóng băng (5 Experimental Arms):**
+  1. `B0` (Zero-Shot Base): Anchor đối chứng gốc, không bổ sung rules.
+  2. `G1` (Generic Rules): Quy tắc kiểm chứng tiêu chuẩn cấp cao (~150-200 tokens: Corroboration, Contradiction, Sufficiency).
+  3. `G2` (Length-Matched Generic): Quy tắc chung mở rộng, có cấu trúc Condition - Directive - Protocol - Guidance đối sánh độ dài khớp với E1 (309 tokens vs 338 tokens của E1, chênh lệch 8.5% <= 15%).
+  4. `E1` (Error-Derived Rules): Nhánh thực nghiệm chính, chứa 4 quy tắc chắt lọc trực tiếp từ mẫu lỗi của Train Fold-1 (338 tokens):
+     - `E1-R1 (Temporal Contradiction Scrutiny)`: Chống lỗi lệch mốc thời gian bị gán nhầm sang Conflicting hoặc Supported.
+     - `E1-R2 (Compound Claim Partial Support Guard)`: Chống cherrypicking khi chỉ 1 vế được chứng minh mà vế khác bị mâu thuẫn.
+     - `E1-R3 (Direct Negation Abstention Guard)`: Chống hiện tượng thoái lui quá mức (abstention) về NEI khi đã có câu phủ định trực tiếp.
+     - `E1-R4 (Numerical Precision & Quantity Discrepancy)`: Chống bỏ qua sai lệch số liệu, tỷ lệ phần trăm.
+  5. `E2` (Shuffled / Irrelevant Rules): Nhánh đối chứng âm / giả dược độ dài (318 tokens, chênh lệch 5.9% <= 15%), chứa các chỉ dẫn phong cách ngữ pháp/văn phong không liên quan đến tính chân thực thông tin.
+- **Thiết kế Prompt & Bất biến Kết xuất Bằng chứng:**
+  * Module `src/tffv/experiments/m20a_prompts.py`:
+    - Phần mục tiêu kiểm chứng (`### Target Verification Task: Claim... Evidence... Verdict...`) hoàn toàn đồng nhất 100% từng byte giữa 5 arms.
+    - Bắt buộc kiểm tra `validate_evidence_rendering()`: ném lỗi nếu evidence bị rỗng.
+- **Hệ thống Đánh giá & Định luật Bảo toàn Chuyển dịch:**
+  * Module `src/tffv/experiments/m20a_evaluator.py`:
+    - Tính toán 4-class Macro-F1, Accuracy, Balanced Accuracy, Per-class F1.
+    - Tính toán chuyển dịch cặp cho: $E1 \text{ vs } G1$, $E1 \text{ vs } G2$, $E1 \text{ vs } B0$, $E1 \text{ vs } E2$, $G1 \text{ vs } B0$, $G2 \text{ vs } B0$.
+    - Bắt buộc bảo toàn chuyển dịch: `assert net_benefit == cand_correct - base_correct` ($\Delta\text{Accuracy} = \frac{\text{Corrected} - \text{Harmed}}{N}$).
+    - Kiểm định McNemar chính xác 2 phía (`exact_mcnemar_test`).
+    - Tính khoảng tin cậy 95% Paired Bootstrap (5.000 lượt) cho cả $\Delta\text{Macro-F1}$ và $\Delta\text{Accuracy}$.
+- **Mã nguồn, Cấu hình & Scripts Tạo mới:**
+  * `src/tffv/experiments/m20a_schemas.py`
+  * `src/tffv/experiments/m20a_pattern_extractor.py`
+  * `src/tffv/experiments/m20a_rule_generator.py`
+  * `src/tffv/experiments/m20a_prompts.py`
+  * `src/tffv/experiments/m20a_orchestrator.py`
+  * `src/tffv/experiments/m20a_evaluator.py`
+  * `configs/m20/track_a_error_rules.json`
+  * `scripts/run_m20a_experiment.py`
+  * `scripts/launch_m20a.sh`
+  * `tests/test_m20a_error_rules.py`
+- **Kết quả Kiểm thử Tự động (CPU Tests trên Windows):**
+  * `tests/test_m20a_error_rules.py`: **8 / 8 passed in 1.16s** (100% PASSED).
+  * `tests/test_m19h_diagnostics.py`: **11 / 11 passed in 13.57s** (100% PASSED, không bị ảnh hưởng).
+- **Tuân thủ Tuyệt đối Quy tắc Làm việc:**
+  * Toàn bộ công việc thực hiện cục bộ trên Windows bằng CPU. Không tự ý SSH, không commit/push, không tải checkpoints, không chạy GPU jobs.
+- **Trạng thái Milestone:** **M2.0-A HOÀN TẤT CHUẨN BỊ MÃ NGUỒN & TESTS (READY FOR DEPLOYMENT)**.
+
+
 
 
 
