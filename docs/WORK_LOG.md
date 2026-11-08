@@ -2278,7 +2278,14 @@
   * `tests/test_m19h_diagnostics.py`: **11 / 11 passed in 13.57s** (100% PASSED, không bị ảnh hưởng).
 - **Tuân thủ Tuyệt đối Quy tắc Làm việc:**
   * Toàn bộ công việc thực hiện cục bộ trên Windows bằng CPU. Không tự ý SSH, không commit/push, không tải checkpoints, không chạy GPU jobs.
-- **Trạng thái Milestone:** **M2.0-A HOÀN TẤT CHUẨN BỊ MÃ NGUỒN & TESTS (READY FOR DEPLOYMENT)**.
+- **Triển khai Thực thi Trực tiếp trên hvtham-server:**
+  * Đồng bộ các commits `792e51b`, `2552d58`, `410f45b`, `e327d9b` lên nhánh `codex/m16-heal-design-integrity`.
+  * Trên server, chạy kiểm thử `pytest tests/test_m20a_error_rules.py` đạt **8 / 8 passed in 0.86s**.
+  * Chạy smoke test CPU (`--smoke-only`) thành công 100% trong 1.0 giây, xác nhận toàn bộ đường dẫn và cấu trúc dữ liệu `dev_retrieval_receipts.jsonl` và `dev.json`.
+  * Khởi chạy chính thức toàn diện 5 arms x 500 claims ($2.500$ calls) trên GPU NVIDIA RTX 5090 32GB qua `scripts/launch_m20a.sh`.
+  * Tiến trình nền đang chạy ổn định dưới **PID: 1154065** (GPU Utilization: 54%, VRAM: 16.927 MiB / 32.607 MiB, Nhiệt độ: 39°C).
+  * Tiêu chuẩn giám sát: `bash scripts/status_m20a.sh`.
+- **Trạng thái Milestone:** **M2.0-A ĐANG CHẠY TRỰC TIẾP TRÊN GPU (EXECUTION IN PROGRESS)**.
 
 
 
