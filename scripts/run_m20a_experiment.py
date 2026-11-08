@@ -126,8 +126,8 @@ def load_retrieval_receipts(receipts_path: Path) -> Dict[str, List[Dict[str, Any
             if line.strip():
                 row = json.loads(line)
                 sid = row["sample_id"]
-                # Supports either passages list or result_record passages
-                passages = row.get("passages", row.get("retrieved_passages", []))
+                # Supports evidence list, passages list, or result_record passages
+                passages = row.get("evidence", row.get("passages", row.get("retrieved_passages", [])))
                 receipts[sid] = passages
     return receipts
 
