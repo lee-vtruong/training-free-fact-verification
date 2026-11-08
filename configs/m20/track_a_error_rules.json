@@ -1,0 +1,30 @@
+{
+  "track_id": "Track-A",
+  "name": "Error-Derived Verification Rules",
+  "hypothesis": "Explicit verification rules mined from historical failure modes reduce ambiguity errors without prompt exemplars.",
+  "source_data": "train_fold_1",
+  "arms": [
+    {
+      "arm_id": "A0_ZeroShot_Control",
+      "description": "Frozen Base Qwen3-8B Zero-Shot (Anchor control)",
+      "rules_applied": []
+    },
+    {
+      "arm_id": "A1_Generic_Rules_Control",
+      "description": "Generic fact-checking guidelines (Matched control without historical error mining)",
+      "rules_applied": [
+        "Rule G1: Demand direct corroboration before marking Supported.",
+        "Rule G2: Check entity and number matches carefully."
+      ]
+    },
+    {
+      "arm_id": "A2_Error_Derived_Rules",
+      "description": "Rules derived from top historical error categories in Train Fold-1",
+      "rules_applied": [
+        "Rule E1 (Temporal Mismatch): If an event year in evidence contradicts the claim year, mark Refuted, not Conflicting.",
+        "Rule E2 (Partial Support): If only 1 out of multiple factual sub-claims is backed by evidence, mark Conflicting Evidence/Cherrypicking, not Supported.",
+        "Rule E3 (Abstention Threshold): Do not default to Not Enough Evidence if any sentence directly negates the primary predicate."
+      ]
+    }
+  ]
+}

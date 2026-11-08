@@ -1,0 +1,25 @@
+{
+  "track_id": "Track-B",
+  "name": "Error-Conditioned ICL with Grounded Explanations",
+  "hypothesis": "Providing grounded, sentence-level counterfactual rationales for historical errors overcomes the negative transfer of raw error labels.",
+  "source_data": "train_fold_1",
+  "exemplar_k": 2,
+  "arms": [
+    {
+      "arm_id": "B0_ZeroShot_Control",
+      "description": "Zero-shot baseline"
+    },
+    {
+      "arm_id": "B1_Grounded_Gold_Control",
+      "description": "Exemplars of correct predictions with explicit sentence attribution rationales"
+    },
+    {
+      "arm_id": "B2_Raw_Error_ICL_Control",
+      "description": "The M1.9g H2 configuration (raw error label + 'Do NOT repeat' warning, ungrounded)"
+    },
+    {
+      "arm_id": "B3_Grounded_Error_ICL",
+      "description": "Error exemplars with sentence-level attribution explaining why the prior prediction failed"
+    }
+  ]
+}

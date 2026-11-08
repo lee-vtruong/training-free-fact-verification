@@ -1242,13 +1242,21 @@ class SyntheticJudgeEvaluator:
 
 
 class ServiceJudgeEvaluator:
-    """Evaluates claims by communicating with Qwen3-14B-AWQ judge service or local engine."""
+    """Evaluates claims by communicating with Qwen3-14B-AWQ judge service or direct model."""
 
     def __init__(self, port: int = 17171):
         self.port = port
+        self.use_direct = False
+        try:
+            import urllib.request
+            req_http = urllib.request.Request(f"http://127.0.0.1:{self.port}/judge")
+            with urllib.request.urlopen(req_http, timeout=2) as resp:
+                pass
+        except Exception:
+            print(f"[M1.8e] Judge service not running on port {self.port}. Using direct in-process Qwen3-14B-AWQ judge.")
+            self.use_direct = True
 
     def evaluate_claim(self, cand: Dict[str, Any], evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
-        import urllib.request
         sid = cand["sample_id"]
         claim_text = cand["claim"]
         gold_verdict = cand["gold_verdict"]
@@ -1315,6 +1323,17 @@ class ServiceJudgeEvaluator:
         }
 
     def _query_service(self, req: Dict[str, Any]) -> Dict[str, Any]:
+        if self.use_direct:
+            try:
+                from scripts.m17_qwen14b_judge import evaluate_request
+                return evaluate_request(req)
+            except Exception as e:
+                return {
+                    "decision": "REJECT",
+                    "rationale": f"Direct judge evaluation failed: {e}",
+                    "evidence_supported": False,
+                }
+
         import urllib.request
         data = json.dumps(req, ensure_ascii=False).encode("utf-8")
         req_http = urllib.request.Request(
@@ -1326,12 +1345,24 @@ class ServiceJudgeEvaluator:
             with urllib.request.urlopen(req_http, timeout=120) as resp:
                 return json.loads(resp.read().decode("utf-8"))
         except Exception as e:
-            # Fallback heuristic if judge service offline
-            return {
-                "decision": "REJECT",
-                "rationale": f"Judge service unreachable on port {self.port}: {e}",
-                "evidence_supported": False,
-            }
+            try:
+                from scripts.m17_qwen14b_judge import evaluate_request
+                self.use_direct = True
+                return evaluate_request(req)
+            except Exception as e2:
+                return {
+                    "decision": "REJECT",
+                    "rationale": f"Judge service unreachable ({e}) and direct execution failed ({e2})",
+                    "evidence_supported": False,
+                }
 
     def close(self):
-        pass
+        try:
+            import scripts.m17_qwen14b_judge as judge_mod
+            judge_mod._LOADED_MODEL = None
+            judge_mod._LOADED_TOKENIZER = None
+            import torch
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception:
+            pass
