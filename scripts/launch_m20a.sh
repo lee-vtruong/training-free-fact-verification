@@ -9,7 +9,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 OUTPUT_DIR="${OUTPUT_DIR:-$PROJECT_ROOT/outputs/m20a-error-rules-v1}"
 RECEIPTS_PATH="${RECEIPTS_PATH:-$PROJECT_ROOT/outputs/m19g-evidence-complete-v1/dev_retrieval_receipts.jsonl}"
-DEV_CLAIMS_PATH="${DEV_CLAIMS_PATH:-$PROJECT_ROOT/data_store/averitec/data_averitec/dev.json}"
+DEV_CLAIMS_PATH="${DEV_CLAIMS_PATH:-}"
 PID_FILE="$OUTPUT_DIR/.m20a.pid"
 LOG_DIR="$OUTPUT_DIR/logs"
 

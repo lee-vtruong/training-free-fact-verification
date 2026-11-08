@@ -47,7 +47,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dev-claims-file",
         type=str,
-        default=str(PROJECT_ROOT / "data_store" / "averitec" / "data_averitec" / "dev.json"),
+        default="",
         help="Path to official dev.json.",
     )
     parser.add_argument(
@@ -68,28 +68,42 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_dev_claims(dev_path: Path) -> List[Dict[str, Any]]:
-    if not dev_path.exists():
-        # Fallback to loading from m19g predictions or receipts if raw dev.json not present locally
-        m19g_preds = dev_path.parent.parent / "outputs" / "m19g-evidence-complete-v1" / "predictions.jsonl"
-        if m19g_preds.exists():
-            seen = set()
-            claims = []
-            with open(m19g_preds, "r", encoding="utf-8") as f:
-                for line in f:
-                    if line.strip():
-                        r = json.loads(line)
-                        if r["sample_id"] not in seen:
-                            seen.add(r["sample_id"])
-                            claims.append({
-                                "sample_id": r["sample_id"],
-                                "claim": r["claim"],
-                                "gold_verdict": r["gold_verdict"],
-                            })
-            return claims
-        raise FileNotFoundError(f"Dev claims not found at: {dev_path}")
+def load_dev_claims(dev_path_str: str) -> List[Dict[str, Any]]:
+    candidates = []
+    if dev_path_str:
+        candidates.append(Path(dev_path_str))
+    candidates.extend([
+        PROJECT_ROOT / "data" / "raw" / "averitec" / "dev.json",
+        PROJECT_ROOT / "data_store" / "averitec" / "data_averitec" / "dev.json",
+        PROJECT_ROOT / "outputs" / "m19g-evidence-complete-v1" / "predictions.jsonl",
+    ])
 
-    with open(dev_path, "r", encoding="utf-8") as f:
+    resolved_path = None
+    for cand in candidates:
+        if cand.exists():
+            resolved_path = cand
+            break
+
+    if not resolved_path:
+        raise FileNotFoundError(f"Dev claims not found in candidates: {candidates}")
+
+    if resolved_path.name.endswith(".jsonl"):
+        seen = set()
+        claims = []
+        with open(resolved_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    r = json.loads(line)
+                    if r["sample_id"] not in seen:
+                        seen.add(r["sample_id"])
+                        claims.append({
+                            "sample_id": r["sample_id"],
+                            "claim": r["claim"],
+                            "gold_verdict": r["gold_verdict"],
+                        })
+        return claims
+
+    with open(resolved_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     claims = []
@@ -140,7 +154,7 @@ def main() -> None:
         print(f"[M2.0-A] Evaluation complete. Results saved in {out_dir}")
         return
 
-    dev_claims = load_dev_claims(Path(args.dev_claims_file))
+    dev_claims = load_dev_claims(args.dev_claims_file)
     retrieval_receipts = load_retrieval_receipts(Path(args.evidence_receipts))
 
     orchestrator = M20aOrchestrator(
