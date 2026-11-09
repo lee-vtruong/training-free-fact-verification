@@ -2747,3 +2747,42 @@
 - **Trạng thái Milestone:** **Milestone M2.0f COMPLETE**.
 
 
+## 2026-11-10 05:40 +07:00 — M2.0g: Triển Khai Kiểm Chứng Độ Bền Vững & Bóc Tách Thành Phần Tri Thức Lỗi Lịch Sử (Robustness & Attribution)
+
+- **Mục tiêu:** Kiểm chứng tính bền vững thực nghiệm (robustness) và bóc tách thành phần tri thức lỗi lịch sử nhằm trả lời dứt điểm câu hỏi khoa học: Liệu bước nhảy vọt hiệu năng của A3 (Accuracy 56.55%, Macro-F1 0.4129 ở M2.0f) đến từ tri thức đối chiếu lỗi lịch sử thực sự, hay chỉ là sự ngẫu nhiên của 2 exemplars cụ thể (`train:2956`, `train:2961`) và cách diễn đạt prompt?
+- **Ba Trục Thực Nghiệm Cốt Lõi:**
+  1. **E1 — Exemplar Robustness & Multi-Seed Sensitivity:**
+     * Đánh giá trên 5 seeds độc lập (Seeds 1, 2, 3, 4, 5) với số lượng demonstrations thay đổi $k \in \{2, 4, 6\}$.
+     * So sánh trực tiếp Historical Error ICL ($K4$) vs Matched Gold ICL ($K2$) trên cùng tập exemplar IDs ở từng seed.
+     * Kiểm soát chặt chẽ phân phối nhãn (label balance across classes), độ dài và ngân sách token.
+     * Tính toán Mean, Standard Deviation, Min, Max và paired delta qua các seeds.
+  2. **E2 — Knowledge Component Ablation:**
+     * Phân rã 4 cấp độ thành phần tri thức trên cùng nguồn exemplars:
+       - `K1_GOLD_ONLY`: Chỉ đưa nhãn vàng (Claim + Evidence $\to$ `Verdict: <Gold>`).
+       - `K2_GOLD_NEUTRAL_EXPL`: Nhãn vàng + giải thích trung tính (`[VERIFICATION REASONING]\n- Factual Basis: ...`).
+       - `K3_WRONG_PRED_GOLD_CORR`: Nhãn sai quá khứ + nhãn đúng chuẩn (`- Prior Baseline Verdict: <Wrong>\n- Correct Verdict: <Gold>`).
+       - `K4_FULL_GROUNDED_ERROR`: Đối chiếu lỗi hoàn chỉnh (`[HISTORICAL ERROR CONTRAST]\n- Observed Mistake: ...\n- Corrective Resolution: ...`).
+     * Xác định thành phần nào mang lại bước nhảy vọt hiệu năng: việc nhìn thấy nhãn sai (K3) hay phân tích định tính về cơ chế sai lầm (K4).
+  3. **E3 — Source-Fold Generalization:**
+     * Thiết lập tập đánh giá outer fold độc lập từ Train Fold-1 gồm 500 claims, đảm bảo 100% cách ly theo nhóm (`group_id`) với kho exemplar (zero near-duplicate groups).
+     * Không sử dụng 550 claims M2.0f hay Official Dev/Test để tinh chỉnh hay tuyên bố blind test.
+     * Đánh giá khái quát hóa out-of-sample giữa B0, Matched Gold ICL (K2), và Historical Error ICL (K4).
+- **Hợp Đồng Dữ Liệu & Cách Ly Nhóm (Group-Safety Verification):**
+  * Xây dựng `CERTIFIED_EXEMPLAR_BANK` gồm 10 ca minh họa được chứng thực từ Train Fold-1 bao phủ toàn diện 4 lớp.
+  * Kiểm toán phân vùng xác nhận: 100% (6/6) nhóm của exemplar bank hoàn toàn cách ly với 550 evaluation claims và 500 outer-fold claims.
+- **Mã Nguồn & Mô-đun Đã Xây Dựng:**
+  * `src/tffv/experiments/m20g_schemas.py`: Định nghĩa schemas cho E1, E2, E3 (`ExperimentPhase`, `KnowledgeComponent`, `ExemplarItem`, `M20gPredictionRecord`).
+  * `src/tffv/experiments/m20g_exemplars.py`: Kho exemplars chứng thực và bộ chọn đa seed cân bằng `ExemplarManager`.
+  * `src/tffv/experiments/m20g_prompts.py`: Bộ sinh prompt chuẩn hóa cho 4 cấp độ tri thức và 6 arms.
+  * `src/tffv/experiments/m20g_evaluator.py`: Bộ đánh giá thống kê tính mean/std cho E1, đối chiếu thành phần E2, đánh giá outer fold E3, xuất `FINAL_REPORT.md` và `DECISION_REPORT.md`.
+  * `src/tffv/experiments/m20g_runner.py`: Runner đa năng hỗ trợ `--preflight-only`, `--smoke-only`, `--experiment {e1,e2,e3,all}`, `--run-gpu`.
+  * Shell scripts: `scripts/run_m20g_preflight.sh`, `scripts/run_m20g_smoke.sh`, `scripts/launch_m20g.sh`, `scripts/status_m20g.sh`, `scripts/stop_m20g.sh`.
+- **Kết Quả Kiểm Thử Phần Mềm (Local Windows CPU):**
+  * `M20gPreflightAuditor`: Đạt `PASSED` 100% trên cả 4 điều kiện bất biến (`EXEMPLAR_BANK_COMPLETENESS`, `BENCHMARK_GROUP_ISOLATION`, `OUTER_FOLD_GROUP_ISOLATION`, `RETRIEVAL_COVERAGE`).
+  * Unit tests: `tests/test_m20g_robustness.py` (10/10 PASSED).
+  * Toàn bộ test suite: 26/26 tests PASSED (`test_m20e`, `test_m20f`, `test_m20g`) trong 17.48s.
+  * Pipeline end-to-end CPU smoke test (`--smoke-only --overwrite`): Hoàn thành 185/185 calls, sinh đầy đủ 13 artifacts trong `outputs/m20g-robustness-attribution-v1/`.
+- **Trạng thái Milestone:** **M2.0g SẴN SÀNG THỰC THI (CODE SEALED, CPU TESTS PASSED, PREFLIGHT PASSED, CHỜ CHẠY GPU TRÊN SERVER)**.
+
+
+
