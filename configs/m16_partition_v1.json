@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "protocol": "HEAL-M16-partition-v1",
+  "seed": "HEAL-M16-partition-v1-20261026",
+  "official_split": "train",
+  "expected_train_sha256": "ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c",
+  "legacy_source_ordinals": [0, 50],
+  "legacy_exploratory_ordinals": [50, 350],
+  "token_jaccard_threshold": 0.6,
+  "symmetric_token_trigram_containment_threshold": 0.5,
+  "assignment_intervals": {"SOURCE": [0.0, 0.3], "DEVELOPMENT": [0.3, 0.5], "TEST_SEALED": [0.5, 1.0]},
+  "exposure_policy": "All A-E outcomes exposed; propagate artifact outcome exposure and duplicate/event components. Prior claim-only export is text exposure, not proof of label/outcome exposure. No untouched certification without external exposure attestation.",
+  "event_rules": {
+    "canonical_fact_check_article_url": true,
+    "canonical_original_claim_url": true,
+    "speaker_month_anchor": true,
+    "claim_date_formats": ["%d-%m-%Y", "%Y-%m-%d"],
+    "anchors": {
+      "covid": ["covid", "coronavirus", "sars cov 2"],
+      "vaccine": ["vaccine", "vaccination", "vaccinated"],
+      "election": ["election", "ballot", "voting", "voter"],
+      "budget": ["budget", "allocation", "allocated"],
+      "unemployment": ["unemployment", "unemployed"],
+      "gdp": ["gdp", "gross domestic product"],
+      "police": ["police", "policing"]
+    }
+  },
+  "group_policy": "Connected components over exact/lexical/URL/event edges; no outcome-based edge edits, no target label stratification. All members stay in one partition; memory eligibility is a separate per-record restriction.",
+  "external_exposure_attestation": "USER_REPORTS_NO_OWN_METHOD_USE_TRAIN_350_PLUS_COLLABORATOR_HISTORY_UNVERIFIED_2026_10_27",
+  "unverified_external_history_policy": "UNKNOWN; no confirmatory eligibility until documented exposure clearance. Allocation may be sealed as candidate reservoir only.",
+  "test_use": "Sealed candidate reservoir; zero retrieval/inference now. Confirmatory subset/size and decision follow development-based power, before any test outcomes."
+}

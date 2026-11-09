@@ -1,0 +1,54 @@
+{
+  "schema_version": "m162e-tier1-e3-review-v1",
+  "reviewer_id": null,
+  "reviewer_type": "human",
+  "independent_review": true,
+  "reviewed_at": null,
+  "instructions": "Make an independent SOURCE-only review. Fill every field. decision is ACCEPT, ACCEPT_WITH_EDITS, or REJECT. edited_text is required for ACCEPT_WITH_EDITS and must be a complete replacement correction.",
+  "records": [
+    {
+      "sample_id": "train:21",
+      "mechanism": "metric_mismatch",
+      "decision": null,
+      "edited_text": null,
+      "rationale": null,
+      "evidence_sufficient": null,
+      "gold_relation_supported": null,
+      "mechanism_confirmed": null,
+      "ontology_signoff": null
+    },
+    {
+      "sample_id": "train:31",
+      "mechanism": "metric_mismatch",
+      "decision": null,
+      "edited_text": null,
+      "rationale": null,
+      "evidence_sufficient": null,
+      "gold_relation_supported": null,
+      "mechanism_confirmed": null,
+      "ontology_signoff": null
+    },
+    {
+      "sample_id": "train:47",
+      "mechanism": "missed_direct_ranking",
+      "decision": null,
+      "edited_text": null,
+      "rationale": null,
+      "evidence_sufficient": null,
+      "gold_relation_supported": null,
+      "mechanism_confirmed": null,
+      "ontology_signoff": "Not required; write N/A after checking scope."
+    },
+    {
+      "sample_id": "train:48",
+      "mechanism": "missed_direct_ranking",
+      "decision": null,
+      "edited_text": null,
+      "rationale": null,
+      "evidence_sufficient": null,
+      "gold_relation_supported": null,
+      "mechanism_confirmed": null,
+      "ontology_signoff": "Not required; write N/A after checking scope."
+    }
+  ]
+}

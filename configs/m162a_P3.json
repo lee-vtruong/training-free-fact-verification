@@ -1,0 +1,7 @@
+{
+  "condition": "P3",
+  "template": "wrong_gold",
+  "max_new_tokens": 512,
+  "enable_thinking": false,
+  "do_sample": false
+}

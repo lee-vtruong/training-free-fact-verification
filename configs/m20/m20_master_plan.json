@@ -1,0 +1,39 @@
+{
+  "milestone": "M2.0",
+  "title": "Error-Derived Knowledge for Training-Free Fact Verification",
+  "research_question": "Can historical correct/wrong predictions become reusable inference-time knowledge that improves frozen fact verification?",
+  "status": "DESIGN_AND_FEASIBILITY_PREPARATION",
+  "target_model": "Qwen/Qwen3-8B-Instruct (Frozen BF16)",
+  "retrieval_contract": "R4-PF1000-v1",
+  "ontology": "AVeriTeC Official 4-Class",
+  "data_partitioning": {
+    "knowledge_derivation_fold": "Official Train Fold-1 (N=1,534 claims)",
+    "pilot_validation_fold": "Official Train Fold-2 (N=1,534 claims)",
+    "confirmatory_evaluation_set": "AVeriTeC Official Dev (N=500 claims, sealed until confirmation)",
+    "leakage_guard": "Strict isolation: zero Dev gold in knowledge, rules, or exemplars"
+  },
+  "primary_endpoint": "Macro-F1",
+  "secondary_endpoints": ["Accuracy", "Balanced Accuracy", "Harm-to-Correction Ratio", "Per-class F1"],
+  "tracks": [
+    {
+      "track_id": "Track-A",
+      "name": "Error-Derived Verification Rules",
+      "config_file": "configs/m20/track_a_error_rules.json"
+    },
+    {
+      "track_id": "Track-B",
+      "name": "Error-Conditioned ICL with Grounded Explanations",
+      "config_file": "configs/m20/track_b_grounded_error_icl.json"
+    },
+    {
+      "track_id": "Track-C",
+      "name": "Contrastive Correct-Wrong Demonstrations",
+      "config_file": "configs/m20/track_c_contrastive_pairs.json"
+    },
+    {
+      "track_id": "Track-D",
+      "name": "Error-Guided Evidence Decomposition & Multi-Step Verification",
+      "config_file": "configs/m20/track_d_error_guided_decomposition.json"
+    }
+  ]
+}

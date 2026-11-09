@@ -1,0 +1,13 @@
+{
+  "reviewer_id": null,
+  "reviewer_type": null,
+  "independent_review": null,
+  "reviewed_at": null,
+  "decision": null,
+  "reason": null,
+  "evidence_sufficient": null,
+  "correction_grounded": null,
+  "gold_relation_supported": null,
+  "failure_category": null,
+  "confirmed_mechanisms": []
+}

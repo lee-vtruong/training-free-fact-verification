@@ -1,0 +1,25 @@
+{
+  "track_id": "Track-C",
+  "name": "Contrastive Correct-Wrong Demonstrations",
+  "hypothesis": "Paired contrastive demonstrations (one correct, one wrong on structurally similar claims) sharpen decision boundaries between subtle classes.",
+  "source_data": "train_fold_1",
+  "pair_selection_criterion": "Shared topic/entity cluster + opposing verdict correctness",
+  "arms": [
+    {
+      "arm_id": "C0_ZeroShot_Control",
+      "description": "Zero-shot baseline"
+    },
+    {
+      "arm_id": "C1_NonContrastive_Pairs_Control",
+      "description": "Pairs of independent correct exemplars (no contrast)"
+    },
+    {
+      "arm_id": "C2_Random_Pairs_Control",
+      "description": "Pairs of unaligned, random exemplars"
+    },
+    {
+      "arm_id": "C3_Contrastive_Pairs",
+      "description": "Aligned (Correct, Wrong) demonstration pairs explicitly contrasting decision boundaries"
+    }
+  ]
+}

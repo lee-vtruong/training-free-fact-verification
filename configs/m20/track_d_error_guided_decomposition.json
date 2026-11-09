@@ -1,0 +1,29 @@
+{
+  "track_id": "Track-D",
+  "name": "Error-Guided Evidence Decomposition & Multi-Step Verification",
+  "hypothesis": "Decomposing claims into sub-assertions and checking them against evidence guided by known error categories prevents abstention shift.",
+  "source_data": "train_fold_1",
+  "steps": [
+    "Step 1: Sub-claim entity and predicate atomization",
+    "Step 2: Sentence-level evidence mapping and polarity assignment",
+    "Step 3: Error-targeted sanity check (addressing high-risk error modes)"
+  ],
+  "arms": [
+    {
+      "arm_id": "D0_ZeroShot_Control",
+      "description": "Zero-shot baseline"
+    },
+    {
+      "arm_id": "D1_Generic_CoT_Control",
+      "description": "Standard chain-of-thought without error-guided structuring"
+    },
+    {
+      "arm_id": "D2_Independent_Subclaim_Control",
+      "description": "Sub-claim decomposition without error taxonomy check"
+    },
+    {
+      "arm_id": "D3_Error_Guided_Decomposition",
+      "description": "Sub-claim decomposition paired with error-taxonomy verification checklist"
+    }
+  ]
+}

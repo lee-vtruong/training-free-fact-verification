@@ -1,0 +1,418 @@
+{
+  "claims": [
+    {
+      "claim": "Democrats recited the US Pledge of Allegiance tonight and took out \"under God\".",
+      "gold_label": "Refuted",
+      "ordinal": 60,
+      "sample_id": "train:60",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Communist government in Kerala India impose a blackout on August 5 to prevent people from watching the Ram Mandir bhoomi pujan ceremony.",
+      "gold_label": "Refuted",
+      "ordinal": 148,
+      "sample_id": "train:148",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "With African Americans, Trump is doing very well. They had the best employment numbers they’ve ever had. ... They were making more money than they ever made.",
+      "gold_label": "Supported",
+      "ordinal": 158,
+      "sample_id": "train:158",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Due to their exterior anatomy, male testicles are especially susceptible to 5G radiation, which lowers sperm count. Just the same, cellular radiation kills off irreplaceable eggs in females.",
+      "gold_label": "Refuted",
+      "ordinal": 230,
+      "sample_id": "train:230",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Sanitation coverage in Kenya is now at 25%, from 16%.",
+      "gold_label": "Not Enough Evidence",
+      "ordinal": 245,
+      "sample_id": "train:245",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Kenyan counties have over the past year sustained an average allocation of 24% of their total budgets to the health sector.",
+      "gold_label": "Supported",
+      "ordinal": 266,
+      "sample_id": "train:266",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Cal Cunningham, North Carolina’s 2020 Democratic Senate candidate, voted to raise taxes in the state by over $1 billion in 2001.",
+      "gold_label": "Supported",
+      "ordinal": 289,
+      "sample_id": "train:289",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "South Africa has expertise in the development and trial of a range of vaccines.",
+      "gold_label": "Supported",
+      "ordinal": 336,
+      "sample_id": "train:336",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "In 1920 #Mahashivratri was celebrated at Karachi. It just took 100 years to completely eradicate the festival. This decades-old Mahashivratri celebration held annually in Karachi was cancelled in 2020.",
+      "gold_label": "Not Enough Evidence",
+      "ordinal": 344,
+      "sample_id": "train:344",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Muslims failing to understand government messaging were responsible for Leicester’s local outbreak.",
+      "gold_label": "Refuted",
+      "ordinal": 370,
+      "sample_id": "train:370",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "The first Prime Minister of India, Pt. Jawaharlal Nehru gave an interview to Playboy magazine and the article was published in 1963.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "ordinal": 582,
+      "sample_id": "train:582",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "UV Rays from sunlight kill Corona virus.",
+      "gold_label": "Refuted",
+      "ordinal": 593,
+      "sample_id": "train:593",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Thousands of arrests have been made in the US for child trafficking, human trafficking and sex abuse but the media is not reporting it. Nurses are coming forward speaking publicly about the fact they're treating hundreds of children in hospitals right now, not for Coronavirus but for malnutrition, some extremely deformed, and all with extreme psychiatric damage due to trauma.",
+      "gold_label": "Not Enough Evidence",
+      "ordinal": 607,
+      "sample_id": "train:607",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "The COVID-19 pandemic has helped bolster the relationship between China and Middle Eastern countries.",
+      "gold_label": "Supported",
+      "ordinal": 611,
+      "sample_id": "train:611",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "In the first six years of life your child receives 26 substances in vaccines; some that are toxic or carcinogenic.",
+      "gold_label": "Refuted",
+      "ordinal": 739,
+      "sample_id": "train:739",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Sam's Club is giving away $250 coupons to everyone",
+      "gold_label": "Refuted",
+      "ordinal": 808,
+      "sample_id": "train:808",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Free Netflix Account for All",
+      "gold_label": "Refuted",
+      "ordinal": 1009,
+      "sample_id": "train:1009",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Neem leaves can cure the novel coronavirus and relieve its symptoms.",
+      "gold_label": "Refuted",
+      "ordinal": 1024,
+      "sample_id": "train:1024",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "temples ring bells “not only to bring the disciples into prayer mode but also to kill viruses and bacteria surrounding the temple.",
+      "gold_label": "Refuted",
+      "ordinal": 1045,
+      "sample_id": "train:1045",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Children can’t get COVID-19.",
+      "gold_label": "Refuted",
+      "ordinal": 1160,
+      "sample_id": "train:1160",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Doctors have expressed fears that the entire population of the Chinese city of Wuhan will die following the global outbreak of the 2019 Novel Coronavirus (2019-nCoV).",
+      "gold_label": "Refuted",
+      "ordinal": 1323,
+      "sample_id": "train:1323",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Amy Klobuchar has won Michele Bachmann's district every one of her 3 U.S Senate campaigns.",
+      "gold_label": "Supported",
+      "ordinal": 1390,
+      "sample_id": "train:1390",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "In US \"160 million people like their private insurance.\"",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "ordinal": 1501,
+      "sample_id": "train:1501",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Every UK taxpayer  will have an additional bill of £2,400 per year under a Labour  Government.",
+      "gold_label": "Refuted",
+      "ordinal": 1524,
+      "sample_id": "train:1524",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Over the past five years the SA government has  invested in building hundreds of thousands of new homes.",
+      "gold_label": "Supported",
+      "ordinal": 1552,
+      "sample_id": "train:1552",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "The World Health Organization is still pushing this [MMR vaccine] depopulation agenda throughout Africa",
+      "gold_label": "Refuted",
+      "ordinal": 1570,
+      "sample_id": "train:1570",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Over the last six years, the counties of Kilifi, Kwale, Lamu, Mombasa, Taita Taveta and Tana River, have cumulatively received close to KSh190 billion from the national treasury.",
+      "gold_label": "Supported",
+      "ordinal": 1605,
+      "sample_id": "train:1605",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Nigeria is fifth in the world rankings for the frequency of suicides.",
+      "gold_label": "Refuted",
+      "ordinal": 1710,
+      "sample_id": "train:1710",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "The Nationals party, represents the poorest electorates in Australia.",
+      "gold_label": "Conflicting Evidence/Cherrypicking",
+      "ordinal": 1886,
+      "sample_id": "train:1886",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "The European Union asked for a 100 billion euro settlement for the UK to leave the EU.",
+      "gold_label": "Refuted",
+      "ordinal": 1894,
+      "sample_id": "train:1894",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Obama ‘Yanked’ Citizenship Question From Census",
+      "gold_label": "Refuted",
+      "ordinal": 1916,
+      "sample_id": "train:1916",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Bombardier to open rail car assembly plant in the USA due to Trump’s reduced corporate tax rate.",
+      "gold_label": "Refuted",
+      "ordinal": 1918,
+      "sample_id": "train:1918",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "The U.S. is using SWIFT as a political weapon in its foreign policy.",
+      "gold_label": "Refuted",
+      "ordinal": 1976,
+      "sample_id": "train:1976",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Kenya experienced an increase in the number of functional health facilities growing from 9,858 to 10,820 in 2018 across all counties.",
+      "gold_label": "Not Enough Evidence",
+      "ordinal": 1993,
+      "sample_id": "train:1993",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "In 2018/2019 in Kenya, all county governments allocated at least 20% of their budgets to health.",
+      "gold_label": "Refuted",
+      "ordinal": 2012,
+      "sample_id": "train:2012",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "The U.S. women’s soccer team bring in more revenue but get paid less than the men",
+      "gold_label": "Supported",
+      "ordinal": 2108,
+      "sample_id": "train:2108",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Jailing parents was an unintended consequence of a 2010 state truancy law Kamala Harris sponsored.",
+      "gold_label": "Supported",
+      "ordinal": 2189,
+      "sample_id": "train:2189",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "More than 10.2 million children are out of school in Nigeria.",
+      "gold_label": "Refuted",
+      "ordinal": 2216,
+      "sample_id": "train:2216",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Salman Rushdie said that 99% of Muslims are terrorists by thought.",
+      "gold_label": "Refuted",
+      "ordinal": 2220,
+      "sample_id": "train:2220",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "The Kenyan law states that if you are allocated a piece of land you must develop it within two years or it reverts to the government.",
+      "gold_label": "Supported",
+      "ordinal": 2288,
+      "sample_id": "train:2288",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Previous claims that one or two drinks a day might protect against stroke are not true.",
+      "gold_label": "Supported",
+      "ordinal": 2309,
+      "sample_id": "train:2309",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Donald trump claims Mexico only this week started to detain thousands of Central Americans at its southern border.",
+      "gold_label": "Refuted",
+      "ordinal": 2382,
+      "sample_id": "train:2382",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "In 2017, there were more marijuana arrests in the US, than all violent crime arrests combined.",
+      "gold_label": "Supported",
+      "ordinal": 2427,
+      "sample_id": "train:2427",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Four members of the Congress and Samajwadi Party assaulted two Kashmiri dry fruit sellers in Lucknow, India in March 2019.",
+      "gold_label": "Refuted",
+      "ordinal": 2483,
+      "sample_id": "train:2483",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "In North Carolina, US absentee voters had no way to track whether their ballots were ever delivered in the November US 2018 congressional election.",
+      "gold_label": "Refuted",
+      "ordinal": 2519,
+      "sample_id": "train:2519",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "More than 12.5 crore Soil Health Cards have been distributed in India.",
+      "gold_label": "Supported",
+      "ordinal": 2718,
+      "sample_id": "train:2718",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "IF any Nigerian Bank fails to return your money within 24 hours of a failed online transfer, they will be fined 10,000 naira. The money goes to YOU! All you need to do is report the issue to Central Bank (cpd@cbn.gov.ng) and they will surely take it up.",
+      "gold_label": "Not Enough Evidence",
+      "ordinal": 2811,
+      "sample_id": "train:2811",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Cyril Ramaphosa retorted to Donald Trump’s  2018 comments on land reform in South Africa on Twitter",
+      "gold_label": "Refuted",
+      "ordinal": 2819,
+      "sample_id": "train:2819",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Late musician Prince designed the first Nike Air Jordans.",
+      "gold_label": "Refuted",
+      "ordinal": 2922,
+      "sample_id": "train:2922",
+      "size_stratum": "small",
+      "store_bytes": 0
+    },
+    {
+      "claim": "Kenyans working at Mara North private wildlife park have been made to carry white tourists in sedan chairs depicting modern 'slavery'",
+      "gold_label": "Refuted",
+      "ordinal": 3055,
+      "sample_id": "train:3055",
+      "size_stratum": "small",
+      "store_bytes": 0
+    }
+  ],
+  "count": 50,
+  "excluded_overlaps_count": 8,
+  "label_distribution": {
+    "Conflicting Evidence/Cherrypicking": 3,
+    "Not Enough Evidence": 5,
+    "Refuted": 28,
+    "Supported": 14
+  },
+  "schema_version": "m18d-manifest-v1",
+  "seed": 42,
+  "size_strata_distribution": {
+    "small": 50
+  },
+  "split_name": "pilot_50"
+}

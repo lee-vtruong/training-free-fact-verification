@@ -1,0 +1,191 @@
+﻿{
+  "status": "ESTIMATES_ONLY_NO_NEW_GPU_RUN",
+  "cold_seconds_per_claim_range": [
+    268.8107965187542,
+    378.0277445316035
+  ],
+  "cold_reference_paths": [
+    "outputs/m11-store-r14-pilot100-20261023-162716/summary.json",
+    "outputs/m141-retrieval-foldc-20261025-055810/summary.json",
+    "outputs/m142-retrieval-foldd-20261025-105806/summary.json"
+  ],
+  "cached_reference_seconds_per_claim": 21.765210411921142,
+  "cache_reuse_verified_for_new_groups": false,
+  "assumptions": [
+    "Historical end-to-end time includes CPU/I/O and GPU; not measured active GPU-hours.",
+    "Input/output token counts are planning assumptions, not new measurements.",
+    "No 64-token cap; every core arm retains 512-token cap. E5 may take longer.",
+    "Confirmation scenario is per-100 scaling only; eligible current train test N=0."
+  ],
+  "budgets_proposed_hours": {
+    "source_gpu_session": 12,
+    "development_gpu_session": 24,
+    "confirmation": null
+  },
+  "money_cost": null,
+  "new_measured_gpu_hours": 0,
+  "scenarios": [
+    {
+      "stage": "source_initial",
+      "new_retrieval_claims_assumed": 25,
+      "verifier_calls_assumed": 25,
+      "retrieval_wall_hours_range": [
+        1.8667416424913488,
+        2.625192670358358
+      ],
+      "verifier_wall_hours_range": [
+        0.010416666666666666,
+        0.03611111111111111
+      ],
+      "planning_total_hours_range": [
+        1.8771583091580155,
+        2.661303781469469
+      ],
+      "conservative_reservation_hours": 5.572607562938938,
+      "input_tokens_assumed_range": [
+        62500,
+        87500
+      ],
+      "output_tokens_assumed_range": [
+        1600,
+        5000
+      ],
+      "output_tokens_hard_ceiling_at_512": 12800
+    },
+    {
+      "stage": "source_example_50",
+      "new_retrieval_claims_assumed": 50,
+      "verifier_calls_assumed": 50,
+      "retrieval_wall_hours_range": [
+        3.7334832849826975,
+        5.250385340716716
+      ],
+      "verifier_wall_hours_range": [
+        0.020833333333333332,
+        0.07222222222222222
+      ],
+      "planning_total_hours_range": [
+        3.754316618316031,
+        5.322607562938938
+      ],
+      "conservative_reservation_hours": 10.895215125877876,
+      "input_tokens_assumed_range": [
+        125000,
+        175000
+      ],
+      "output_tokens_assumed_range": [
+        3200,
+        10000
+      ],
+      "output_tokens_hard_ceiling_at_512": 25600
+    },
+    {
+      "stage": "source_example_100",
+      "new_retrieval_claims_assumed": 100,
+      "verifier_calls_assumed": 100,
+      "retrieval_wall_hours_range": [
+        7.466966569965395,
+        10.500770681433432
+      ],
+      "verifier_wall_hours_range": [
+        0.041666666666666664,
+        0.14444444444444443
+      ],
+      "planning_total_hours_range": [
+        7.508633236632062,
+        10.645215125877876
+      ],
+      "conservative_reservation_hours": 21.54043025175575,
+      "input_tokens_assumed_range": [
+        250000,
+        350000
+      ],
+      "output_tokens_assumed_range": [
+        6400,
+        20000
+      ],
+      "output_tokens_hard_ceiling_at_512": 51200
+    },
+    {
+      "stage": "pilot_initial_nine_arms",
+      "new_retrieval_claims_assumed": 50,
+      "verifier_calls_assumed": 450,
+      "retrieval_wall_hours_range": [
+        3.7334832849826975,
+        5.250385340716716
+      ],
+      "verifier_wall_hours_range": [
+        0.1875,
+        0.65
+      ],
+      "planning_total_hours_range": [
+        3.9209832849826975,
+        5.900385340716716
+      ],
+      "conservative_reservation_hours": 12.05077068143343,
+      "input_tokens_assumed_range": [
+        1125000,
+        1575000
+      ],
+      "output_tokens_assumed_range": [
+        28800,
+        90000
+      ],
+      "output_tokens_hard_ceiling_at_512": 230400
+    },
+    {
+      "stage": "development_upper_example",
+      "new_retrieval_claims_assumed": 200,
+      "verifier_calls_assumed": 2800,
+      "retrieval_wall_hours_range": [
+        14.93393313993079,
+        21.001541362866863
+      ],
+      "verifier_wall_hours_range": [
+        1.1666666666666667,
+        4.044444444444444
+      ],
+      "planning_total_hours_range": [
+        16.100599806597458,
+        25.045985807311308
+      ],
+      "conservative_reservation_hours": 50.341971614622615,
+      "input_tokens_assumed_range": [
+        7000000,
+        9800000
+      ],
+      "output_tokens_assumed_range": [
+        179200,
+        560000
+      ],
+      "output_tokens_hard_ceiling_at_512": 1433600
+    },
+    {
+      "stage": "confirmation_per_100_claims",
+      "new_retrieval_claims_assumed": 100,
+      "verifier_calls_assumed": 400,
+      "retrieval_wall_hours_range": [
+        7.466966569965395,
+        10.500770681433432
+      ],
+      "verifier_wall_hours_range": [
+        0.16666666666666666,
+        0.5777777777777777
+      ],
+      "planning_total_hours_range": [
+        7.633633236632062,
+        11.07854845921121
+      ],
+      "conservative_reservation_hours": 22.40709691842242,
+      "input_tokens_assumed_range": [
+        1000000,
+        1400000
+      ],
+      "output_tokens_assumed_range": [
+        25600,
+        80000
+      ],
+      "output_tokens_hard_ceiling_at_512": 204800
+    }
+  ]
+}

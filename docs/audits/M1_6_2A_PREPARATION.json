@@ -1,0 +1,62 @@
+{
+  "P4": "BLOCKED",
+  "code_sha256": "fb7df67ea4d086813977f7ed1ac26be90dd76b6898c6e7b010b6e9aff2c07212",
+  "cpu_actual_tokenizer_software_fixture_layout": "PASS; not actual DEV retrieval, prompt-token totals or quality evidence",
+  "cpu_implementation": "COMPLETE",
+  "development_claims": 50,
+  "gpu_calls_by_agent": 0,
+  "gpu_verifier": "CONDITIONAL_ON_REAL_R4_PROMPT_SEAL_AND_RUNTIME_PREFLIGHT",
+  "human_review": "PENDING",
+  "independent_target_groups": 50,
+  "matched_control_ids": [
+    "train:10",
+    "train:718"
+  ],
+  "partition_seal_sha256": "53e1409c29a545d6d32fb40e2bd3e3f2ed814856a94607c106efc5a5f5a96be0",
+  "pilot_results": null,
+  "protocol_sha256": "38a30db82576dc0ee736bb1e0600b8e4542678d42a9dc27323c02fcbc85524da",
+  "real_target_prompt_tokens": null,
+  "retrieved_development_claims_this_task": 0,
+  "schedule_sha256": "4c90f0ed1768f2d628ac23d0d7a3e0d3f73eb89ed333749e40d07d1a4a367b92",
+  "scope": "EXPLORATORY_PREPARATION_ONLY",
+  "shard_counts": {
+    "data_store/knowledge_store/train/train_0_999.zip": 11,
+    "data_store/knowledge_store/train/train_1000_1999.zip": 25,
+    "data_store/knowledge_store/train/train_2000_3067.zip": 14
+  },
+  "slates_sha256": "715a8a435471273d6b632f9f5d73c10ba08e198149be6f04345362cf20ce31d6",
+  "source_bank_sha256": "b3f7275112aa49b71595d94c7313a4ae101b3ed263c277bb277f97def2565581",
+  "source_gold_demonstration_counts": {
+    "Refuted": 24,
+    "Supported": 26
+  },
+  "status": {
+    "P4": "BLOCKED",
+    "P4_reason": "Selected same-ID exemplars lack two real human approvals",
+    "active_conditions": [
+      "P0",
+      "P1",
+      "P2",
+      "P3",
+      "N0"
+    ],
+    "control_human_review_pending": 50,
+    "k": 1,
+    "matched_control_coverage": 1.0,
+    "seed": 42,
+    "selected_error_counts": {
+      "train:1824": 14,
+      "train:25": 12,
+      "train:6": 10,
+      "train:978": 14
+    },
+    "selected_error_groups": 4,
+    "source_eligible_ids": [
+      "train:1824",
+      "train:25",
+      "train:6",
+      "train:978"
+    ]
+  },
+  "user_retrieval_preparation": "READY"
+}

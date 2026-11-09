@@ -1,0 +1,7 @@
+{
+  "condition": "P4",
+  "template": "wrong_gold_verified",
+  "max_new_tokens": 512,
+  "enable_thinking": false,
+  "do_sample": false
+}

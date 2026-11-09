@@ -1,0 +1,958 @@
+{
+  "batch25_shard_counts": {
+    "train_0_999.zip": 8,
+    "train_1000_1999.zip": 12,
+    "train_2000_3067.zip": 5
+  },
+  "cache_audit": {
+    "candidate_cache_names_by_id": {
+      "train:1231": [],
+      "train:1236": [],
+      "train:1288": [],
+      "train:1402": [],
+      "train:1429": [],
+      "train:1644": [],
+      "train:1817": [],
+      "train:1824": [],
+      "train:1847": [],
+      "train:1863": [],
+      "train:1873": [],
+      "train:1881": [],
+      "train:2055": [],
+      "train:2224": [],
+      "train:2449": [],
+      "train:2811": [],
+      "train:3012": [],
+      "train:426": [],
+      "train:467": [],
+      "train:694": [],
+      "train:718": [],
+      "train:828": [],
+      "train:903": [],
+      "train:978": [],
+      "train:979": []
+    },
+    "existing_cache_file_count": 350,
+    "fixed_batch_ids": [
+      "train:1873",
+      "train:1644",
+      "train:1863",
+      "train:426",
+      "train:1288",
+      "train:467",
+      "train:1429",
+      "train:694",
+      "train:2224",
+      "train:1236",
+      "train:1231",
+      "train:3012",
+      "train:2055",
+      "train:1402",
+      "train:978",
+      "train:2811",
+      "train:828",
+      "train:979",
+      "train:1817",
+      "train:2449",
+      "train:903",
+      "train:1881",
+      "train:1824",
+      "train:718",
+      "train:1847"
+    ],
+    "policy": "No bare npy cache reuse without complete input/model/config and byte-hash provenance; complete sealed retrieval steps can be reused.",
+    "reusable_cache_entries_verified": 0
+  },
+  "clean_confirmatory_test_claims": 0,
+  "confusion_counts_wrong_to_gold": {
+    "Conflicting Evidence/Cherrypicking -> Not Enough Evidence": 1,
+    "Conflicting Evidence/Cherrypicking -> Supported": 2,
+    "Not Enough Evidence -> Conflicting Evidence/Cherrypicking": 1,
+    "Not Enough Evidence -> Refuted": 4,
+    "Not Enough Evidence -> Supported": 4,
+    "Refuted -> Conflicting Evidence/Cherrypicking": 2,
+    "Refuted -> Not Enough Evidence": 1,
+    "Refuted -> Supported": 2,
+    "Supported -> Conflicting Evidence/Cherrypicking": 2,
+    "Supported -> Not Enough Evidence": 5,
+    "Supported -> Refuted": 1
+  },
+  "date": "2026-10-27",
+  "legacy_source_file_hashes": {
+    "data\\raw\\averitec\\train.json": "ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c",
+    "outputs\\m161-legacy-inputs\\b1\\manifest.json": "925c0d9bc842e0b5dcfaae597f476eede5634540553785a622ff5244bfcc3bcf",
+    "outputs\\m161-legacy-inputs\\b1\\predictions.jsonl": "83d5b6a9f7828b51796691afcbc2c79211dc966a228e532cc5ffa11257e02af6",
+    "outputs\\m161-legacy-inputs\\retrieval\\R4.jsonl": "f5e47540925d0b7e635d5c906aa12723d2fab04eb704449e83686375b5c11cb1",
+    "outputs\\m161-legacy-inputs\\retrieval\\manifest.json": "868d785dea491115e0caab8765247735d120b70039d80c8c35a8540adce7520f"
+  },
+  "limits": [
+    "No human evidence-sufficiency or correction decisions yet.",
+    "Runtime weight/effective-token fingerprints absent from original legacy generation.",
+    "Original raw stores/document offsets not reaudited.",
+    "No new acquisition/retrieval/inference or HEAL evaluation.",
+    "New server hardware preflight has NOT RUN."
+  ],
+  "local_output_paths": {
+    "memory": "outputs/m161-legacy-audit-v3/memory.json",
+    "reviews": "outputs/m161-legacy-review-v2"
+  },
+  "m162_readiness": "MODIFY",
+  "memory_file_sha256": "de20ee361f3deae79c9b54089e8c36db0e484aac873571c986f71b93ec141728",
+  "old_memory_sha256": "453b0277be834adc0469f9e43ec3174d5049ce5194fee379dadae7f9b1e4958a",
+  "old_unconditionally_verified_flag_count": 50,
+  "per_source_audit": [
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "7487485f44ebcc9e80f7c9c89242228e640d1ea8fa3be80c6e86cb9bd06608de",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": false,
+      "record_id": "d104f7feacfbba6e176ca66e0be9f067db9278248ea460bd2294793915bffe0b",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:0"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "14c7cf059306a037a4db80a85fb48af9d998c46c0073361de7c853ee7ec6c444",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": false,
+      "record_id": "9d214dd0d7893cb207fcb285fe7379fafb0231ceda21a98ae10c0c0c8778b55c",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:1"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "adde9908b69bc427bad056a45f2d84b965284cd840bd37f67cca0b58a3895e9c",
+      "group_id": "grp-ccb9a4adef6135a1",
+      "is_base_error": true,
+      "record_id": "2e2cf52e00c090e79c1d3134674b87743017bd5075c8b38401aab423dbda4aad",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:2"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "3743d4b3a9a7d78931031e055517530b01e792ad9f202b4a77b90a975be3a237",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": true,
+      "record_id": "d3116caf29e812bd0c33bf2a65c8096a47b52e70af22b80b9ef5381c6b753081",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:3"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "6cdc0705e56d63b843a4448b73d5f80b555ecffbaa5a08b5bc9223ac9d5b49a3",
+      "group_id": "grp-85a917eae49304d4",
+      "is_base_error": false,
+      "record_id": "f2b9dc4aa4aa08cc38fc348f53957b38ba84e8e41b9832ae4d205d115bc503cd",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:4"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "d29ae331251882d5ad70ed8f2f434e76c109b19460a40d685be3de25947e7728",
+      "group_id": "grp-f43207eceb9ff1f6",
+      "is_base_error": false,
+      "record_id": "ec83750c94cde8868f7f55c53fc16c3a50f72d10260e1e2ef498a4338ee2834b",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:5"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "514e144bb345c286b8c93b171744b1add5e243fc36c48814a446b39a0e309b79",
+      "group_id": "grp-ccb9a4adef6135a1",
+      "is_base_error": true,
+      "record_id": "a398113140376fb2ebf8c44e396654b6288f84630ca9233a52ce5f194ee9ee60",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:6"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "b1c1158d87d6046681b48bec592110d058dac669865519ff29ecf43a9b0b122c",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": false,
+      "record_id": "5c05e8a045ecee0e8cb04410bd0c4328b48a1837f58fe182fe667ab1e0c7f4cb",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:7"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "9dece6693d023a833578d7fffab50ceec1d77e5f24b5d55168230fa809ce9f02",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": true,
+      "record_id": "66ebd72d0f0aebff9e6c7175710282b7d2775debf16e9c42b7d98d2053580915",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:8"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "e0efc6d3832bb645757421bafff388337df94fc36d9d7bc91437713876dfe9ee",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": false,
+      "record_id": "634f0f3fbc586b12aead56138f8db811e4e70da805feff5b0cbea46b6ede3873",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:9"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "507a7664b3b948fb96c961ed938f20d6e8663f32c4c8244361d029bc4b6d9aab",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": false,
+      "record_id": "0a01ec103d3e02fa2fdafbb1f9f68924915a0d334fd37c97a454dc8e32c47085",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:10"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "92b4a2f071785866ea310f3fd1a270439f5e57ee8a6b082447b1986836fd549e",
+      "group_id": "grp-ccb9a4adef6135a1",
+      "is_base_error": true,
+      "record_id": "0e5922c4af2fbaf0daa406e8f2d967187cd335b73480a995e09373e7e645c2af",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:11"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "3993da6eba52c63109c60c1bc23978d209f07a991d038dce8fd50a71c34ec7e5",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": true,
+      "record_id": "269085094e8797c0e7cb436df059aa5905d17f7c737c4106c7a84cb2194d0368",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:12"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "7f055f6df96a39365a73e2a86fff8f18beb9df3734697775e4544f3a2eaa83f4",
+      "group_id": "grp-89b80b7304ffaec0",
+      "is_base_error": false,
+      "record_id": "33924fc2bac5e3467629da4e0da124efd4a453fa7e62c6748552d3aaed9e8cb7",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:13"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "cd4a32ebb8bdeb0fb0a3e7a155052b9affcd3710e7e2bb0ab39b5461552461c3",
+      "group_id": "grp-5708c4b64ca9ffd0",
+      "is_base_error": true,
+      "record_id": "315a880db43cf5e9986a48c14bd4133c2db751dc0e90892494657bbfae617c63",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:14"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "f1a007f21a9292ce3818e5a087ec82051b441a5d77551211105eb5f2b59147c9",
+      "group_id": "grp-44a19f77fe1a253d",
+      "is_base_error": false,
+      "record_id": "ce5bbbb8c84e8ac098fda6596baef601c87dd35e7ebd7b09f91585a070cb428e",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:15"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "d1aa34dcef17277da788866099113404a3b0893b3ee0c7715dbfe999698eecb3",
+      "group_id": "grp-46568d45e4c1cf4b",
+      "is_base_error": false,
+      "record_id": "dd130bc42e96c620de607748f7159b5b2c8242f06bbdd83a90c614f86c149155",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:16"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "2196b2c58a46c06afec305ce20ec139f8135140af2963b7cd8d31b7c4ce06996",
+      "group_id": "grp-95f2ada50bd10d14",
+      "is_base_error": true,
+      "record_id": "a90968c0a8ceb489430bd7bbecbfca6d6eed96bc2b9cbfb35ea561a4635e1089",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:17"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "f1ecf0cd62baefca4da2e41ce512820d46f0ff104578b4c896e70763500b4493",
+      "group_id": "grp-c458c19cc873ac1a",
+      "is_base_error": true,
+      "record_id": "d014b2544f7e3b68381ad81a3a1ae68c788032f5e2e221db4fc6de0364fe98d7",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:18"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "dd1e30b58cad1e2655bd5813c743dca1210ccd862abc590cc54c6cf6a65e5308",
+      "group_id": "grp-219d02477aeb7ccb",
+      "is_base_error": true,
+      "record_id": "a9727b7edd19fbac6bb644f2dfd6615538a96499fa0f358394f1e1ca02f38c2d",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:19"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "6a93397e30a3380db3530d676c1550307f36c49eee80893cd5e22522aaa0d1f2",
+      "group_id": "grp-c29b498f8aa0b2dd",
+      "is_base_error": true,
+      "record_id": "20c68216be40f1872f053bd2843acfb10e6b364e4fbdb47bc4d9203915c6e245",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:20"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "0aeec3e9eed826895fd4254f1dd41998c07f57200aef2d7eed590c64d97f9476",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": true,
+      "record_id": "7dc5cb52fc6404861c8d40c31b8d82f0329ff36527bbbf4460def436af2b44b3",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:21"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "3dfc405cfb3998e9720820f49dea9dd51ca3a2b5e7fb5084aeb3a50a2851699c",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "a853e75aa383f2f45ef568cbf37c6f54c4876399201c2518f45eb52a9a74b7e3",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:22"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "3a09d61b8dba03d3a58467bc793d417ec6074453d3473ffedc1862c3684e1f82",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "a5820833ecde9e07b244f77c1fedb4131784cdf43bc176a0cbe8a554a7a9a6a4",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:23"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "2d6eac2549329b45d8a1cb59e3734292368b4f978424abd6b4c5540b9df4d465",
+      "group_id": "grp-e53ccd2c0a857099",
+      "is_base_error": true,
+      "record_id": "9ffbf7a8c004b36e6128d64268f1f6ba0a88626f5afead34fcccd360c9ac8a80",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:24"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "8377f089fd3248b18bb4256b86685f3a09bf62843f2a102848dec98b98502b61",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": true,
+      "record_id": "5d7d7dc67b80e485931221ef0cc5a4498c1c8212a19e9c4be7ca891052ba2f01",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:25"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "4b4e32d8033d0da290364b9dc816851110676431a491473b61300742cf2da2a2",
+      "group_id": "grp-024082d2ca3a432f",
+      "is_base_error": true,
+      "record_id": "a479c28b49a40c0e0e8ae5db275ca6d2edd1b70947ef648579f2dba913e2b4de",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:26"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "7f6fa04b80e481f6b2eaa9dece6bda59a8ec8985001c3f867b192a71e1550aef",
+      "group_id": "grp-20b9666da673974a",
+      "is_base_error": true,
+      "record_id": "3558faf95159f1a1e6ee4f93997bfd831a6da13144aca010ecc56fe4b4ea1c3f",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:27"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "240d57b9779f4ef322413423759750a3543c9ffaa231d22500efeac35eb3e2ad",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "bf1c26fac17c7ab10e83fc664b5e373c075b5d65c9b4de25b6b4f405987ce32d",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:28"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "cdecd7585c34088f7f2a63e567d6033671b9b754fa213e20ac4e4496f81a8f1e",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": true,
+      "record_id": "11c4797bc40af289d6a22871fe567dc1dd563eb8a6a56adcec6b112ed908408f",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:29"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "3b97474c9639d3c012ea8f5a87d7a4e461d74b2869ec0f709006973fa9703a41",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "18851ec3b851196728c0e7ae4fe64bcfbeb8ca99251d1726d3406a29c7949e5e",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:30"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "42c3d6c3dab322e8b947bea25edaf0523c2e04876d4e5c40fdd768d2918f9505",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": true,
+      "record_id": "702082d630079167c3faf91139db5f80a3b9dfe7dd6dd5490b7aa56e37031ca0",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:31"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "f6e997192897fb433550c9f922f3b5ba0667437eaa72d11e42c81e6929a43db4",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "1fec89dda79b9299892e35d82b4602ab09e3965727b615390026168fc6c9077a",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:32"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "7f1a22906a1d1d208ea5a5fb6fd4e485b773b4b9af963c67646593be12488167",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "688e12b7209dec609c048ba350eb6be0f8ae804208dea8c5184d1d1be7c03e64",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:33"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "1057ab97ff73a5a3090b66878b91713dd9f83618a78fe6aa88f6b79d6d2bd625",
+      "group_id": "grp-8ecdc4ee1ae284a1",
+      "is_base_error": false,
+      "record_id": "1f4e8426744712d45498fb051219d737bc735d1dc1c60be089c164cc224491ae",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:34"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "71b4cac1b35e1d8352b2d5355ca59245dd66431f802fee7194a9e0c6c324242d",
+      "group_id": "grp-d131cd3e0c0942e2",
+      "is_base_error": true,
+      "record_id": "fce2725ce8093f9d68ce416e5316123f786222ac3d1d262e4ae1e29e5e22d043",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:35"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "e95d093f74502691e9747ced30f11446fd8f7096bef9ad0d4a0631527115d968",
+      "group_id": "grp-d21f1472cb216d1e",
+      "is_base_error": false,
+      "record_id": "f98c6d1c3afe3996a0a5ccef20a4ec634d345df401e14ba0d805e7146a9e9b6d",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:36"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "ff9f34a94329c0ad4070a9a7377f5d07cb36e8ab6290a0a8d0c1a5857eda7762",
+      "group_id": "grp-d131cd3e0c0942e2",
+      "is_base_error": true,
+      "record_id": "2ef32aa76bfe9354533c1b4525ecc483ffcf93fa6d1e61dba0370602acb2db83",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:37"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "7655734a25b970b64d12acb90e72938abacca3618a2224f77c892f5b9ef82b67",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": true,
+      "record_id": "b97a8e00e0c0258af1c6804d3465942c6bda9b80d34676b5a402bc5046e90e23",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:38"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "68360d58d6d9ec3750ac042190319550d2c064ec1401c6280516699e7358693d",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": true,
+      "record_id": "644f2f566fd6db635e723c3678695952e8df614e3b88d3e2edda673406b22193",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:39"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "81d13e02eb8640a68975a7204bad9b8745203815dc904334682a3e0eb80a7a71",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "bc5ef2a0b87e59bf736e9cd09d12233a1bd96a03370d799da6011e608365d0d3",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:40"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "12cd588995594649939577d7c6b06cdd502a82e659e6a0e96fb581e7a50c055d",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "3ba06bafc0f76646ed93b4fa2a545eb127e15b5e17b701fb82a7e09e5cb78b12",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:41"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "37615586a6b2946c8dd9542798c694a1f3da0c5bdaebe72dc43c4962684a7d7b",
+      "group_id": "grp-16097fa1c40f653a",
+      "is_base_error": false,
+      "record_id": "80ff3d96c968f82491db5b31b45d8aa9b8e3436c02330b3f37434d2bb196a203",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:42"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "ff86a67509ea917df91b957dfe21663d94c02b259e7ad162fe604f5832a9a157",
+      "group_id": "grp-4cdef95fc3e3ceb2",
+      "is_base_error": false,
+      "record_id": "fd23032cec04133ad1eff68b2e8ac6b324f12a5e8083eecaa70f212ed56ac92a",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:43"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "23961e659230edc4a4e9ec88a3d3db36a698b139cf30077a9fe80de3acb71b9d",
+      "group_id": "grp-8adaa3d93f67e06f",
+      "is_base_error": false,
+      "record_id": "2577bb9b447ddb6e643df8cfa27bc34a4625d3ee977fb7fbec1b13c6c0e9b662",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:44"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "bcde82e443c5bbbb4e2bc7e7651a8aaf54d4f602eb89608618bf5ae06c5eb369",
+      "group_id": "grp-ad2fe96a6908a131",
+      "is_base_error": false,
+      "record_id": "1f75a19d15661456abdeae60e432070fd64e4b277f0f78206163299c533bd96f",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:45"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "c78d62c821d4f057ab3844d4052fd33672f49b349fe6afff2c01060ef8e2fa71",
+      "group_id": "grp-ad2fe96a6908a131",
+      "is_base_error": false,
+      "record_id": "b80accb79fee214c1635f86903a062102c3d8828b6c4f9bbbddc190ac8c346fb",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:46"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "5029ae2d01db57bf1ee3d41c08e8de1cbcc62bd995fdd50880ca55206f1f0b19",
+      "group_id": "grp-ad2fe96a6908a131",
+      "is_base_error": true,
+      "record_id": "8f99c1198d0a9e6b17e61783fb93ff9994abb9e9ca12196731d6d9c6e183fb69",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:47"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "7fc2ab8fc6492f19d292c210ae91ab09f42f76321766d34401b2644bcd01cd3e",
+      "group_id": "grp-ad2fe96a6908a131",
+      "is_base_error": true,
+      "record_id": "85d0d2aa7364018870976df1887344c83e6465cf18302cb902b4c551744fd363",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:48"
+    },
+    {
+      "checks": {
+        "claim": true,
+        "decoder": true,
+        "evidence_hashes": true,
+        "passage_ids": true,
+        "prompt": true,
+        "source_urls": true
+      },
+      "content_sha256": "3925838085c5d76702b0e57feb7ece95ef8977398bdcc2ac8bfe0f0c855bb2dd",
+      "group_id": "grp-ad2fe96a6908a131",
+      "is_base_error": true,
+      "record_id": "f6aa28a2c4058a868858e73ec790cbe9e3706d42523c5846822d8ec9cab5191b",
+      "review_status": "PENDING_REVIEW",
+      "sample_id": "train:49"
+    }
+  ],
+  "review_file_hashes": {
+    "candidate_annotations_template.json": "3214727d2834b624b99a09fa7bcbb37f2bf1cefbc78bf73bc0c3be7b38c9fac0",
+    "reviewer_1.json": "cd96d76e47902b2ffac7f9d00012a1473eb33c4a5a56188b832999ccad453b43",
+    "reviewer_2.json": "cd96d76e47902b2ffac7f9d00012a1473eb33c4a5a56188b832999ccad453b43"
+  },
+  "scope": "EXPLORATORY, own-project Fold A only",
+  "summary": {
+    "artifact_chain_checked_records": 50,
+    "base_correct_verdicts": 25,
+    "base_incorrect_verdicts": 25,
+    "candidate_mechanism_flags_not_verified": {
+      "attribution": 2,
+      "evidence_sufficiency": 11,
+      "negation_polarity": 21,
+      "partial_truth_context": 8,
+      "reported_conflict": 6,
+      "scope_quantifier": 19
+    },
+    "completed_new_source_predictions": 0,
+    "evidence_sufficiency_unreviewed": 50,
+    "human_reviews": 0,
+    "incomplete_evidence_cases": 0,
+    "new_gpu_calls_during_memory_build": 0,
+    "parser_errors": 0,
+    "retained_prediction_costs_not_new_build_costs": {
+      "generated_tokens": 12248,
+      "latency_seconds": 283.08815168682486,
+      "prompt_tokens": 130570
+    },
+    "source_gpu_active_seconds": 0,
+    "source_records": 50,
+    "statuses": {
+      "PENDING_REVIEW": 50
+    },
+    "verified_correct_control_rationales": 0,
+    "verified_corrective_rationales": 0,
+    "verified_mechanism_support": {},
+    "verified_reasoning_failures": 0
+  },
+  "unverified_assistant_candidate": {
+    "annotation_path": "outputs/m161-assistant-candidates-v1.json",
+    "annotation_sha256": "cd57e895ddb47a78d4eb3f3321d234907fdd35a8c5442fe3182e85ccc89a5793",
+    "bank_path": "outputs/m161-candidate-bank-v1.json",
+    "bank_sha256": "d46d5bd87fe929e169d300e0189faa9d7c263c2d1880b2d7b0f8a95e03e14b5c",
+    "candidate_count": 1,
+    "human_reviews": 0,
+    "note": "Assistant draft from exact source evidence and raw Base negation interpretation. Not a human decision; current period/denominator require independent review.",
+    "review_path": "outputs/m161-candidate-review-v1",
+    "sample_ids": [
+      "train:25"
+    ],
+    "verified_count": 0
+  }
+}

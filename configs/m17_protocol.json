@@ -1,0 +1,13 @@
+{
+  "version": "m17-judge-feasibility-v1",
+  "scope": "EXPLORATORY_SOURCE_ONLY",
+  "candidate_kinds": ["ORIGINAL_DRAFT", "E3_CANDIDATE_DRAFT"],
+  "excluded_triage_classes": ["E1", "E2"],
+  "stages": ["evidence_assessment", "correction_validation"],
+  "judge_generation": {"temperature": 0.0, "do_sample": false, "max_new_tokens": 768},
+  "acceptance": {"required_decision": "ACCEPT", "require_evidence_supported": true, "require_gold_match": true, "require_exact_quotes": true, "require_no_unsupported_facts": true},
+  "memory_status": "LLM_VALIDATED",
+  "human_gate_unchanged": true,
+  "development": {"forbid_dev50": true, "test_quarantine_access": false, "target_selection": "sealed unused DEVELOPMENT groups; no target gold in selection"},
+  "arms": {"A": "gold_only", "B": "gold_llm_correction", "C": "wrong_gold_llm_correction", "D": "gold_generic_length_matched"}
+}

@@ -1,0 +1,73 @@
+{
+  "certified_confirmatory_claims": 0,
+  "certified_confirmatory_groups": 0,
+  "claims": 3068,
+  "config_sha256": "e7735b1058d9bd08eb70776b72526e4b54f3f6d56401db00bfbe5ae8ee46fdae",
+  "confirmation_ready": false,
+  "dataset_sha256": "ae5eda7c42ddf1695ef185a7ba1bc716928f5adf57103e4f78aae5f9afe00f9c",
+  "duplicate_groups": 2647,
+  "edge_counts": {
+    "fact_checking_article": 1067,
+    "lexical": 868,
+    "original_claim_url": 396,
+    "speaker_month_anchor": 104
+  },
+  "external_exposure_attestation": "USER_REPORTS_NO_OWN_METHOD_USE_TRAIN_350_PLUS_COLLABORATOR_HISTORY_UNVERIFIED_2026_10_27",
+  "files_sha256": {
+    "claims_manifest.json": "476888b7522347f0ff62453d9e07a38f0dd7c8804e14cf13f52970b7a763a70f",
+    "development_manifest.json": "d6524e37aa7826ecc326fb41348d889f067d8d4536b83cf3ff64cb7993ec8c91",
+    "group_edges.json": "c2078dae57c3866e3328275728d9af527301080582d32c132e447c8b4655a8c0",
+    "groups_manifest.json": "5e041cb6b1c180d23f7d17a1666c7b7a7fd1e32d0d4e7c3ecba45f26e11c2718",
+    "legacy_exploratory_manifest.json": "55841c4d4fb034aea2eee31e9c34eaec6a635afa780c06ff3d8175a490d3a4c5",
+    "protocol.json": "202445033bc747e195361b2440c5cb45958f5036284e2c4da82de1f812c0a9f8",
+    "quarantine_invalid_manifest.json": "c8f0994867365084bfb49b74c077b2e99a1f7942a82f1e814be87451477ee468",
+    "source_manifest.json": "dfab46c4e99f7b5be6a319114a20aede5d63387405609bef2cb97b15de94884d",
+    "test_sealed_manifest.json": "ea887b484bf2052bbe563b3031bdc5d94207a8589ec567eb790c3ad2493ceb34"
+  },
+  "gpu_calls": 0,
+  "inventory_sha256": "b821e63f3425e39dd81fe37ae29b469ede8396cebed75c11d2ab85d9c39746e6",
+  "largest_block_claims": 102,
+  "leakage_blocks": 1952,
+  "leakage_checks": {
+    "cross_partition_edges": 0,
+    "label_fields_in_projection": 0,
+    "test_or_dev_exposed_components": 0,
+    "test_or_dev_memory_eligible": 0
+  },
+  "limits": [
+    "Leakage blocks are operational groups, not proof of statistical independence.",
+    "All prior claim-text exports remain explicitly disclosed.",
+    "No gold labels accessed for grouping/assignment; no test class counts computed.",
+    "Candidate TEST reservoir sealed, confirmatory size and power decision deferred."
+  ],
+  "partitions": {
+    "DEVELOPMENT": {
+      "claims": 541,
+      "groups": 364,
+      "source_memory_eligible": 0
+    },
+    "LEGACY_EXPLORATORY": {
+      "claims": 283,
+      "groups": 202,
+      "source_memory_eligible": 0
+    },
+    "QUARANTINE_INVALID": {
+      "claims": 1,
+      "groups": 1,
+      "source_memory_eligible": 0
+    },
+    "SOURCE": {
+      "claims": 1013,
+      "groups": 550,
+      "source_memory_eligible": 973
+    },
+    "TEST_SEALED": {
+      "claims": 1230,
+      "groups": 835,
+      "source_memory_eligible": 0
+    }
+  },
+  "projection_sha256": "5f834b8516e237b7af12b9a8e2cc63b67eabc1ba6cdc1420f86f6bac5d35eb14",
+  "protocol": "HEAL-M16-partition-v1",
+  "script_sha256": "04e5df9014d51dc1b4e9930739ace32a91b2d408aa14b84320d84ee4b2e23342"
+}

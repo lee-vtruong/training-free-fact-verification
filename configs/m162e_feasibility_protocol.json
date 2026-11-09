@@ -1,0 +1,81 @@
+{
+  "version": "m162e-feasibility-v1",
+  "scope": "EXPLORATORY",
+  "locked_before_new_population_outcomes": true,
+  "gate": {
+    "full_memory_gate_verified": 30,
+    "max_plausible_candidates_pre_rejection": 25,
+    "unchanged_top8_ceiling": 21,
+    "feasibility_min_verified": 4,
+    "feasibility_min_classes": 2,
+    "feasibility_min_per_class": 2,
+    "threshold_basis": "design requirements (same-exemplar identity, class coverage, identity rotation) + paired-stats target minimum; NOT expected accuracy",
+    "e2_excluded_from_primary_experiment": true,
+    "verification_source": "human review bookkeeping only; assistant drafts never verified"
+  },
+  "arms": {
+    "A": "gold_only",
+    "B": "gold_verified",
+    "C": "wrong_gold_verified",
+    "D": "gold_filler_length_matched",
+    "shared_skeleton": true,
+    "exemplar_ids_identical_across_arms": true,
+    "exemplar_evidence_identical_across_arms": true,
+    "exemplar_order_frozen": "ascending sample_id ordinal"
+  },
+  "decoding": {
+    "temperature": 0.0,
+    "max_new_tokens": 512,
+    "greedy": true
+  },
+  "target_selection": {
+    "frame": "unused development claims in fully-unused leakage groups (outputs/m16-partitions-v1)",
+    "excluded_unconditionally": [
+      "DEV50 members",
+      "claims whose leakage group intersects DEV50"
+    ],
+    "class_source": "frozen non-learned heuristic of the M1.6.2 triage lineage (no gold, no learned router)",
+    "class_match_required": true,
+    "n_per_class": 6,
+    "min_total_targets": 12,
+    "ordering": "count-then-ID: per covered class, ascending sample_id ordinal",
+    "honor_manifest_flags": [
+      "artifact_outcome_exposed_directly",
+      "artifact_outcome_exposure_propagated"
+    ]
+  },
+  "assignment": {
+    "rule": "within-class rank i receives class exemplar at position i mod pool_size",
+    "randomness": "none"
+  },
+  "stats": {
+    "contrasts": ["A_vs_B", "A_vs_C", "B_vs_D"],
+    "test": "exact_mcnemar_two_sided",
+    "bootstrap_resamples": 10000,
+    "seed": 20261028,
+    "metrics": ["accuracy", "macro_f1"],
+    "interpretation": "exploratory only; positive signal justifies Tier-2 planning, never M1.6.3 activation"
+  },
+  "environment_lock": {
+    "gpu_executions_in_m162e": 0,
+    "new_retrieval_in_m162e": 0,
+    "single_retrieval_pass_for_new_population": "step-4 only, requires Tier-1 + human authorization",
+    "test_sealed_access": false,
+    "m163_activation": false,
+    "prompt_sweeps": false,
+    "development50_tuning": false
+  },
+  "artifacts": {
+    "gate_policy": "docs/M1_6_2E_GATE_POLICY.md",
+    "protocol": "docs/M1_6_2E_PROTOCOL.md",
+    "candidate_drafts": "docs/audits/M1_6_2E_CANDIDATE_DRAFTS.json",
+    "reviewed_records": "docs/audits/M1_6_2E_REVIEWED_RECORDS.json",
+    "review_records": [
+      "docs/audits/M1_6_2E_REVIEW_RECORDS_REVIEWER1.json",
+      "docs/audits/M1_6_2E_REVIEW_RECORDS_REVIEWER2.json"
+    ],
+    "readiness": "docs/M1_6_2E_READINESS.md",
+    "mechanism_support": "docs/M1_6_2E_MECHANISM_SUPPORT.md",
+    "decision": "docs/M1_6_2E_DECISION.md"
+  }
+}

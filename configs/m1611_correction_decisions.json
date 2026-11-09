@@ -1,0 +1,323 @@
+{
+  "author_type": "assistant",
+  "errors": {
+    "train:11": {
+      "citations": [
+        {
+          "passage_index": 4,
+          "quote": "the Federal Government takes 52.68 per cent"
+        }
+      ],
+      "explanation": "The excerpt explicitly distinguishes an extant federal share of 52.68% of statutory/mineral revenue from a 15% VAT share. These are different baskets, not evidence that 45% is supported. Under the federation-account reading the stated 52.68% contradicts 45%, whereas the Base treats mismatched baskets as a reason to abstain.",
+      "limitations": "Review the intended revenue basket/year; the separate 44-cent oil example is not interchangeable with the quoted statutory formula.",
+      "mechanisms": [
+        "scope_quantifier",
+        "evidence_sufficiency"
+      ],
+      "reason": "Assistant source-only draft with explicit cited relation; not a human or verified decision.",
+      "record_id": "0e5922c4af2fbaf0daa406e8f2d967187cd335b73480a995e09373e7e645c2af",
+      "status": "PENDING_REVIEW"
+    },
+    "train:12": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Political praise/disagreement alone is not conflicting factual evidence; need economic series and claim framing.",
+      "reason": "Evidence disputes stagnation but does not settle the full two-part inherited-and-rebuilt proposition under one consistent period/indicator.",
+      "record_id": "269085094e8797c0e7cb436df059aa5905d17f7c737c4106c7a84cb2194d0368",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:14": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Cannot fill the missing bill identity/date from the gold label or from current web sources.",
+      "reason": "Excerpts describe a 2017 gunshot-treatment bill and generic warrantless-arrest law, not the named new Buhari Police bill and its signing/provision together.",
+      "record_id": "315a880db43cf5e9986a48c14bd4133c2db751dc0e90892494657bbfae617c63",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:17": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need actual paired 2019 counts/ratio in displayed evidence, not only a citation slug.",
+      "reason": "The 20.8 number occurs through a bibliographic title/URL fragment; other displayed ratios compare countries/races, not the claimed 2019 kill/be-killed denominator.",
+      "record_id": "a90968c0a8ceb489430bd7bbecbfca6d6eed96bc2b9cbfb35ea561a4635e1089",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:18": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Missing common election/year/population comparisons prevents establishing the gold cherrypicking framing.",
+      "reason": "Evidence covers voting eligibility/first-time boosts and partial turnout data, not a matched 16-versus-18/20 comparison across all three jurisdictions.",
+      "record_id": "d014b2544f7e3b68381ad81a3a1ae68c788032f5e2e221db4fc6de0364fe98d7",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:1824": {
+      "citations": [
+        {
+          "passage_index": 3,
+          "quote": "appears nowhere in the Churchill canon."
+        }
+      ],
+      "explanation": "Generic quote pages repeat the Churchill attribution, but the displayed correction explicitly cites the Churchill Society's falsely-attributed list and says the quotation appears nowhere in the Churchill canon. Repetition is not independent authorship evidence. This specific attribution correction supports Refuted instead of treating all quote pages as equally reliable conflicting accounts.",
+      "limitations": "The corrective excerpt is a secondary quotation of an attribution authority; reviewers should assess provenance and coverage. It does not establish who originally coined the phrase.",
+      "mechanisms": [
+        "attribution",
+        "reported_conflict"
+      ],
+      "reason": "Assistant source-only draft with explicit cited relation; not a human or verified decision.",
+      "record_id": "64a72871b3705078344e408285bc788619b3c4fe79882bc0e756f01fa7639f17",
+      "status": "PENDING_REVIEW"
+    },
+    "train:1863": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need the original presidential statement and whether reports address the same proposal/date.",
+      "reason": "An aggregator reports presidency denial, but another displayed news report asserts approval; absent aligned dates/context the gold Refuted cannot be grounded safely.",
+      "record_id": "45c113cfd0ee0dddb77a549b4cc07fcbaf96e4d511fe811644ccd9333e36b89f",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:1873": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need the primary op-ed/full context; reported allegation is not proof of either attribution or refutation.",
+      "reason": "The strongest snippets reproduce an opponent's allegation and Biden's incomplete response, not the original op-ed or decisive correction refuting the attribution.",
+      "record_id": "645e456637bd20b2db28a806feb174e58a43341ee382d6ef458a39aa918a0379",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:1881": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need the actual proposition and its context; do not manufacture one from the gold label.",
+      "reason": "Pinning Down Prescription Drug Prices is a topic/title without an explicit truth-evaluable proposition; related policy discussion cannot entail Supported.",
+      "record_id": "67e9ee44d8fd16c7c15d17d3a7aeb5687fc0b30f1ff3763ef7815b55fa7a6c69",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:19": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need claim context/quantifier and contemporaneous scorecard; do not choose the nuanced gold simply because some promises were kept.",
+      "reason": "A scorecard reports both kept and unkept promises; choosing Refuted versus Cherrypicking depends on the vague scope of kept his promises.",
+      "record_id": "a9727b7edd19fbac6bb644f2dfd6615538a96499fa0f358394f1e1ca02f38c2d",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:2": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need the intended year and revenue basket; do not turn historical mention into current gold entailment.",
+      "reason": "The only explicit 20% excerpt is historical (1976-1992); other baskets/years and fragmented formulas do not settle the undated current claim.",
+      "record_id": "2e2cf52e00c090e79c1d3134674b87743017bd5075c8b38401aab423dbda4aad",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:20": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Distinguish facilitation, ownership and political credit; no gold-driven ownership explanation.",
+      "reason": "Top-8 describe official promotion/MoU and call the refinery a legacy project, without decisive ownership/funding evidence establishing the Refuted gold.",
+      "record_id": "20c68216be40f1872f053bd2843acfb10e6b364e4fbdb47bc4d9203915c6e245",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:21": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need a defined benchmark, population and interpretation; do not claim no average exists.",
+      "reason": "Displayed excerpts actually refer to global/regional averages as well as Kenyan ratios; they do not justify the particular official NEI interpretation unambiguously.",
+      "record_id": "7dc5cb52fc6404861c8d40c31b8d82f0329ff36527bbbf4460def436af2b44b3",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:2224": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need the claim date; do not ignore the later reversal or confuse application, issuance and travel.",
+      "reason": "Top-8 includes both an earlier ban and an explicit embassy U-turn allowing visa placement in old passports until further notice.",
+      "record_id": "bdcb1ff038881c33d26a8e7561428466212631bfa6abde09367c839f94389fd7",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:24": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need original claim reach and study context; attribution to a study is not disproved by adult anxiety studies.",
+      "reason": "Displayed study directly reports lower anxiety in its specified adolescent cohort; other-age results do not establish the official cherrypicking label.",
+      "record_id": "9ffbf7a8c004b36e6128d64268f1f6ba0a88626f5afead34fcccd360c9ac8a80",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:2449": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Neither missing causation nor mismatched rates establish the particular cherrypicking gold.",
+      "reason": "Prison totals/rates refer to different periods and contain no evidence for the telephone-justice causal link.",
+      "record_id": "833e55862724e3604287c90423f24e25cd7cd956abfa1a52c14f50190b4a7b65",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:25": {
+      "citations": [
+        {
+          "passage_index": 0,
+          "quote": "0.43%  of the total national \nbudget"
+        },
+        {
+          "passage_index": 3,
+          "quote": "Judiciary receives a meagre 0.44% of the national budget"
+        }
+      ],
+      "explanation": "The Base correctly observes sub-1% allocations but interprets not even 1% as a minimum of 1%. Not even 1% means below 1%. The displayed 0.43% and 0.44% figures support that comparison rather than refute it.",
+      "limitations": "Intended financial year and budget denominator still require reviewer confirmation; an earlier 1.1% figure is a different period.",
+      "mechanisms": [
+        "negation_polarity"
+      ],
+      "reason": "Assistant source-only draft with explicit cited relation; not a human or verified decision.",
+      "record_id": "5d7d7dc67b80e485931221ef0cc5a4498c1c8212a19e9c4be7ca891052ba2f01",
+      "status": "PENDING_REVIEW"
+    },
+    "train:26": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need whether the claim verifies a speech act, proposed policy or enacted tax incidence.",
+      "reason": "Several excerpts quote the tax pledge itself; the NEI gold cannot be derived by inventing a different policy-effect or household interpretation.",
+      "record_id": "a479c28b49a40c0e0e8ae5db275ca6d2edd1b70947ef648579f2dba913e2b4de",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:27": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Do not equate a national target or another country with the claimed counties striving toward it.",
+      "reason": "National Malabo targets are shown but the county-specific effort/intent and exact allocation frame are not established consistently.",
+      "record_id": "3558faf95159f1a1e6ee4f93997bfd831a6da13144aca010ecc56fe4b4ea1c3f",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:29": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need the averaging interval and comparable annual totals; backlog is not filings.",
+      "reason": "One total near 397243 and subset-court counts do not establish a multi-year all-courts annual average of 400000.",
+      "record_id": "11c4797bc40af289d6a22871fe567dc1dd563eb8a6a56adcec6b112ed908408f",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:3": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need primary policy commitments and interpretation of all/amnesty; retrieved material can support the Base objection.",
+      "reason": "Evidence disputes amnesty for all and distinguishes health-care access from free care; a repeated partisan allegation is not proof of the Supported gold compound.",
+      "record_id": "d3116caf29e812bd0c33bf2a65c8096a47b52e70af22b80b9ef5381c6b753081",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:31": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Lack of proof is not refutation; neither label should be forced without benchmark context.",
+      "reason": "Benchmark mentions and national ratios cannot establish which interpretation yields official NEI rather than the Base Refuted choice.",
+      "record_id": "702082d630079167c3faf91139db5f80a3b9dfe7dd6dd5490b7aa56e37031ca0",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:35": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need comparable definitions/years and attribution evidence; disagreement across series is not automatically factual conflict.",
+      "reason": "Reported GLSS decline and other unemployment series have incompatible scopes; the causal administration claim is not established by these observations.",
+      "record_id": "fce2725ce8093f9d68ce416e5316123f786222ac3d1d262e4ae1e29e5e22d043",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:37": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need intended period and data vintage; do not convert a quoted political assertion into verified statistics.",
+      "reason": "Excerpts mix 2016 figures 3.4/3.7 and political reports of 7/7.3 averages without a complete common three-year series/definition.",
+      "record_id": "2ef32aa76bfe9354533c1b4525ecc483ffcf93fa6d1e61dba0370602acb2db83",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:38": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need annual dispositions, not backlog or filings.",
+      "reason": "The 300000 figure refers to backlog rather than cases settled per year; mediation/subset figures do not provide the missing annual total.",
+      "record_id": "b97a8e00e0c0258af1c6804d3465942c6bda9b80d34676b5a402bc5046e90e23",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:39": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need comparable coverage/definition and intended claim context; cannot invent absence of evidence.",
+      "reason": "An excerpt explicitly reports a global average 16; the official NEI label is not entailed by denying all benchmark evidence.",
+      "record_id": "644f2f566fd6db635e723c3678695952e8df614e3b88d3e2edda673406b22193",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:47": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Whole-world rank 52 does not alone prove not first in Africa; drinker-only comparators are not population averages.",
+      "reason": "Rankings for drinkers-only, whole-population consumption, beer and different years are mixed; no same-denominator African counterexample establishes gold Refuted.",
+      "record_id": "8f99c1198d0a9e6b17e61783fb93ff9994abb9e9ca12196731d6d9c6e183fb69",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:48": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need a common population/year/total-alcohol table; do not silently change denominator.",
+      "reason": "The African comparators given are per-drinker while the claim says per-person; other snippets discuss beer or BRICS.",
+      "record_id": "85d0d2aa7364018870976df1887344c83e6465cf18302cb902b4c551744fd363",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:49": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need age/time definitions and scope; do not convert adult survey prevalence to every South African.",
+      "reason": "Sources support 31% among adults 15+ over the past year, not the unqualified whole-population claim and not a unique NEI interpretation.",
+      "record_id": "f6aa28a2c4058a868858e73ec790cbe9e3706d42523c5846822d8ec9cab5191b",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:6": {
+      "citations": [
+        {
+          "passage_index": 4,
+          "quote": "the states share 26.72%"
+        }
+      ],
+      "explanation": "The displayed federal-account formula allocates 26.72% to states, not 35%. A different excerpt places 35% in the VAT allocation to local government, a different recipient and revenue basket. The Base notices countervailing figures but treats lack of confirmation as unresolved; the stated formula contradicts 35% for states under this reading.",
+      "limitations": "This requires the claim to mean the statutory federation-account allocation and the same period; it does not establish every possible meaning of total Nigerian revenue.",
+      "mechanisms": [
+        "scope_quantifier",
+        "evidence_sufficiency"
+      ],
+      "reason": "Assistant source-only draft with explicit cited relation; not a human or verified decision.",
+      "record_id": "a398113140376fb2ebf8c44e396654b6288f84630ca9233a52ce5f194ee9ee60",
+      "status": "PENDING_REVIEW"
+    },
+    "train:8": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Do not infer the official nuanced class solely from opposing narratives; human ontology/context adjudication is required.",
+      "reason": "Sources both report intervention support and explicitly report opposition to Libya; the gold cherrypicking judgment depends on temporal/contextual framing and near-duplicate source 13 has a different gold.",
+      "record_id": "66ebd72d0f0aebff9e6c7175710282b7d2775debf16e9c42b7d98d2053580915",
+      "status": "INSUFFICIENT_EVIDENCE"
+    },
+    "train:978": {
+      "citations": [
+        {
+          "passage_index": 1,
+          "quote": "on Saturdays and Sundays from 15.00 to 5.00."
+        },
+        {
+          "passage_index": 1,
+          "quote": "withdraw the decision on the allowed walk of pets for 20 minutes between 20.00 and 21.00."
+        }
+      ],
+      "explanation": "The official Serbian notice gives weekend movement restrictions from 15.00 to 5.00 and withdraws the 20-minute pet-walk exception. Across midnight that interval is 14 hours. The Base considers only the weekday 17.00-to 5.00 interval, so its claim that no 14-hour interval is shown overlooks the weekend measure.",
+      "limitations": "Applies to the dated weekend restrictions, not every day or the separate later 60-hour weekend lockdown.",
+      "mechanisms": [
+        "scope_quantifier",
+        "evidence_sufficiency"
+      ],
+      "reason": "Assistant source-only draft with explicit cited relation; not a human or verified decision.",
+      "record_id": "678398abb357b9cc2e55f92dc1ad35f7b7d8ee40fed5e98a1af78d04a946c3d7",
+      "status": "PENDING_REVIEW"
+    },
+    "train:979": {
+      "citations": [],
+      "explanation": null,
+      "limitations": "Need claim context and inference standard; do not present low probability as impossibility or infer gold from risk wording.",
+      "reason": "Evidence distinguishes surface survival/potential contamination from very low transmission risk; this does not uniquely establish official cherrypicking for the weak could claim.",
+      "record_id": "c84b5649820d59a3c791ad17fc4aa2a665fe6181f343484fddb2bd41fe98eba6",
+      "status": "INSUFFICIENT_EVIDENCE"
+    }
+  },
+  "schema_version": "source-correction-screen-v1",
+  "scope": "SOURCE75 only; no target data or human review"
+}

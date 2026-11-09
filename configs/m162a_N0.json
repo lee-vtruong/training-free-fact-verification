@@ -1,0 +1,7 @@
+{
+  "condition": "N0",
+  "template": "non_error_gold_only",
+  "max_new_tokens": 512,
+  "enable_thinking": false,
+  "do_sample": false
+}
