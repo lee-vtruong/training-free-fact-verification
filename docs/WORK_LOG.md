@@ -2283,9 +2283,38 @@
   * Trên server, chạy kiểm thử `pytest tests/test_m20a_error_rules.py` đạt **8 / 8 passed in 0.86s**.
   * Chạy smoke test CPU (`--smoke-only`) thành công 100% trong 1.0 giây, xác nhận toàn bộ đường dẫn và cấu trúc dữ liệu `dev_retrieval_receipts.jsonl` và `dev.json`.
   * Khởi chạy chính thức toàn diện 5 arms x 500 claims ($2.500$ calls) trên GPU NVIDIA RTX 5090 32GB qua `scripts/launch_m20a.sh`.
-  * Tiến trình nền đang chạy ổn định dưới **PID: 1154065** (GPU Utilization: 54%, VRAM: 16.927 MiB / 32.607 MiB, Nhiệt độ: 39°C).
-  * Tiêu chuẩn giám sát: `bash scripts/status_m20a.sh`.
-- **Trạng thái Milestone:** **M2.0-A ĐANG CHẠY TRỰC TIẾP TRÊN GPU (EXECUTION IN PROGRESS)**.
+  * Tổng thời gian hoàn thành: **13.041,04 giây (~3,62 giờ)** end-to-end, kết thúc lúc 13:08:52 UTC (20:08:52 giờ VN ngày 08/11/2026).
+- **Kết quả Thực nghiệm Đóng băng Toàn diện (AVeriTeC Official Dev N=500):**
+  * **B0 (Zero-Shot Base):** Accuracy = **54.00%** (270/500), Macro-F1 = **0.4192**, Balanced Acc = 0.4545, Valid = 100.0%
+  * **G1 (Generic Rules Control):** Accuracy = 51.60% (258/500), Macro-F1 = 0.4088, Balanced Acc = 0.4496, Valid = 100.0%
+  * **G2 (Length-Matched Generic Control):** Accuracy = **55.60%** (278/500), Macro-F1 = **0.4260**, Balanced Acc = 0.4591, Valid = 100.0%
+  * **E1 (Error-Derived Rules - Primary Arm):** Accuracy = **54.00%** (270/500), Macro-F1 = **0.4053**, Balanced Acc = 0.4267, Valid = 99.8%
+  * **E2 (Shuffled / Irrelevant Control):** Accuracy = 55.20% (276/500), Macro-F1 = **0.4364**, Balanced Acc = 0.4884, Valid = 100.0%
+- **Kiểm định Thống kê & Phân tích Chuyển dịch Lỗi (5.000 Lượt Paired Bootstrap & Exact McNemar):**
+  * **$E1 \text{ vs } G1$ (Primary Comparison):**
+    - Corrected = **63**, Harmed = **51**, Net Benefit = **+12 claims** (+2.40% Accuracy).
+    - McNemar exact $p = 0.30288$ (không có ý nghĩa thống kê ở mức $\alpha = 0.05$).
+    - $\Delta\text{Macro-F1} = -0.0035$, 95% Paired Bootstrap CI: `[-0.0465, +0.0401]`.
+  * **$E1 \text{ vs } G2$ (Length-Matched Control):**
+    - Corrected = **50**, Harmed = **58**, Net Benefit = **-8 claims** (-1.60% Accuracy).
+    - McNemar exact $p = 0.50077$.
+    - $\Delta\text{Macro-F1} = -0.0207$, 95% Paired Bootstrap CI: `[-0.0620, +0.0190]`.
+  * **$E1 \text{ vs } B0$ (Zero-Shot Anchor):**
+    - Corrected = **54**, Harmed = **54**, Net Benefit = **0 claims** (Cân bằng tuyệt đối, McNemar $p = 1.00000$).
+    - $\Delta\text{Macro-F1} = -0.0139$, 95% Paired Bootstrap CI: `[-0.0511, +0.0227]`.
+  * **$E1 \text{ vs } E2$ (Ablation Control):**
+    - Corrected = **51**, Harmed = **57**, Net Benefit = **-6 claims** (-1.20% Accuracy).
+    - McNemar exact $p = 0.63063$.
+    - $\Delta\text{Macro-F1} = -0.0311$, 95% Paired Bootstrap CI: `[-0.0735, +0.0084]`.
+- **Phân tích Cơ chế & Kết luận Khoa học:**
+  * *Tác động tích cực cục bộ:* $E1$ giúp tăng đáng kể Recall lớp `Refuted` từ 54.43% ($B0$) lên **60.33%** ($E1$) và F1 tăng từ 0.6574 lên **0.6930** nhờ các quy tắc kiểm tra niên đại và phủ định trực tiếp.
+  * *Tổn hại bù trừ (Collateral Over-rejection):* Tuy nhiên, các quy tắc nghiêm ngặt trên lại khiến mô hình thận trọng quá mức đối với các mệnh đề đúng, làm Recall lớp `Supported` sụt giảm mạnh từ 67.21% ($B0$) xuống **53.28%** ($E1$) và F1 sút từ 0.6667 xuống **0.5909**.
+  * *Kết luận Track A:* Quy tắc kiểm chứng hình thức mang tính khái quát (symbolic general rules) không cải thiện được Macro-F1 toàn cục vì tạo ra sự đánh đổi triệt tiêu (zero-sum trade-off) giữa độ nhạy của lớp này và độ đặc hiệu của lớp khác khi thiếu sự neo giữ theo từng trường hợp cụ thể (instance grounding).
+  * *Định hướng chuyển tiếp sang Track B & Track C:* Tri thức từ lỗi bắt buộc phải được neo giữ cụ thể theo từng dẫn chứng bằng chứng (evidence-grounded rationales) và ví dụ tương phản (contrastive boundaries), không thể chỉ dừng lại ở chỉ dẫn quy tắc trừu tượng.
+- **Hồ sơ Kết quả Đã Niêm phong:**
+  * Toàn bộ 11 artifacts đồng bộ tại `outputs/m20a-error-rules-v1/`:
+    `FINAL_REPORT.md`, `DECISION_REPORT.md`, `metrics_by_arm.csv`, `per_class_metrics.csv`, `statistical_tests.json`, `confusion_matrices.json`, `rules_manifest.json`, `predictions.jsonl` (2.500 records), `prompt_receipts.jsonl` (2.500 records), `config_lock.json`, `run_receipt.json`.
+- **Trạng thái Milestone:** **M2.0-A HOÀN THÀNH TOÀN DIỆN & NIÊM PHONG (100% COMPLETE)**. Sẵn sàng báo cáo và chuyển sang bước tiếp theo.
 
 
 
