@@ -2708,5 +2708,42 @@
   * `M20fPreflightAuditor`: Đạt `PASSED` 100% trên cả 3 điều kiện bất biến (`EXEMPLAR_ISOLATION`, `RETRIEVAL_COVERAGE`, `TOKEN_BUDGET_BALANCE`).
   * Unit tests: `tests/test_m20f_factorial.py` (11/11 PASSED) + `tests/test_m20e_diagnostics.py` (5/5 PASSED) -> **16/16 tests PASSED**.
   * Pipeline end-to-end CPU smoke test (`--smoke-only --overwrite`): Hoàn thành 30/30 inferences, sinh trọn vẹn 13 artifacts trong `outputs/m20f-factorial-ablation-v1/`.
-- **Trạng thái Milestone:** **M2.0f SẴN SÀNG THỰC THI (CODE SEALED, CPU TESTS PASSED, PREFLIGHT PASSED, CHỜ CHẠY GPU TRÊN SERVER)**.
+- **Thực Thi Live GPU Server (`hvtham-server` - RTX 5090 32GB):**
+  * Script thực thi: `bash scripts/launch_m20f.sh --overwrite` (PID: 1165197).
+  * Thời gian hoàn thành: ~2.4 giờ, tổng cộng 3.300 predictions (550 claims x 6 arms).
+  * Tỷ lệ parse hợp lệ: 99.8% – 100.0% trên toàn bộ 6 arms.
+- **Bảng Tổng Hợp Kết Quả Thực Nghiệm 6 Arms:**
+
+| Arm | Phương pháp | Accuracy | Macro-F1 | Balanced Acc | Parse Rate | Net vs B0 |
+|:---|:---|---:|---:|---:|---:|---:|
+| **B0** | Canonical Zero-Shot Baseline | 48.18% (265/550) | 0.3669 | 0.3953 | 100.0% | - |
+| **G2** | Generic Rules Control | 44.18% (243/550) | 0.3471 | 0.4087 | 100.0% | -22 |
+| **A1** | Matched Gold ICL (No Forced Attr) | 45.64% (251/550) | 0.3830 | 0.4396 | 99.8% | -14 |
+| **A2** | Matched Gold ICL + Forced Attr | 38.55% (212/550) | 0.3378 | 0.4044 | 100.0% | -53 |
+| **`A3`** | **Historical Error ICL (No Forced Attr)** | **56.55% (311/550)** | **0.4129** | **0.4328** | 99.8% | **+46** |
+| **A4** | Historical Error ICL + Forced Attr | 46.73% (257/550) | 0.3648 | 0.4034 | 100.0% | -8 |
+
+- **Phân Tích Hiệu Ứng Nhân Tố $2 \times 2$ (Factorial Analysis Results):**
+  1. **Hiệu ứng chính của Forced Evidence Attribution (Nhân tố B):**
+     * $\Delta\text{Accuracy} = \mathbf{-0.0845}$ (-8.45%), 95% Paired Bootstrap CI: `[-0.1136, -0.0555]`, $p = 0.0000$.
+     * $\Delta\text{Macro-F1} = \mathbf{-0.0467}$, 95% Paired Bootstrap CI: `[-0.0729, -0.0205]`.
+     * *Kết luận:* **ATTRIBUTION DISTORTION CONFIRMED**. Toàn bộ khoảng tin cậy 95% hoàn toàn âm. Bản thân cấu trúc ép buộc trích xuất ID và phân tích scope/sufficiency gây sụt giảm nghiêm trọng hiệu năng của cả Gold ICL (-7.09%) và Error ICL (-9.82%).
+  2. **Hiệu ứng chính của Historical Error Knowledge (Nhân tố A):**
+     * $\Delta\text{Accuracy} = \mathbf{+0.0955}$ (+9.55%), 95% Paired Bootstrap CI: `[+0.0645, +0.1255]`, $p = 0.0000$.
+     * $\Delta\text{Macro-F1} = \mathbf{+0.0284}$, 95% Paired Bootstrap CI: `[-0.0007, +0.0567]`.
+     * *Kết luận:* **HISTORICAL ERROR KNOWLEDGE IS SIGNIFICANTLY SUPERIOR**. Tri thức lỗi lịch sử (cặp đối chiếu lỗi quan sát được + hướng dẫn khắc phục) vượt trội có ý nghĩa thống kê cực kỳ rõ ràng so với suy luận đúng chuẩn (Matched Gold ICL) khi token budget đã được cân bằng chính xác.
+  3. **Hiệu ứng tương tác ($A \times B$):**
+     * Interaction on Accuracy: $-0.0273$ (95% CI `[-0.0745, +0.0200]`, $p = 0.2616$, không có tương tác phi tuyến đáng kể; hai hiệu ứng hoạt động độc lập).
+- **So Sánh Trực Tiếp A3 vs Baseline B0:**
+  * Đúng cả hai: 227 | Sai cả hai: 201.
+  * Corrected: **84 claims** | Harmed: **38 claims**.
+  * **Net Claim Benefit:** **+46 claims** (Odds Ratio = 2.21, McNemar $p = 0.00004 < 10^{-4}$).
+  * Accuracy: **56.55% vs 48.18%** (+8.37 điểm %).
+  * Macro-F1: **0.4129 vs 0.3669** (+0.0460 điểm).
+- **Chẩn Đoán Bẫy Mâu Thuẫn (Contradiction Trap Diagnostics):**
+  * Tỷ lệ dính bẫy mâu thuẫn ở A3 chỉ là **10.34%** (48/464 claims nhị phân), giảm hơn 50% so với B0 (23.92%) và G2 (33.62%).
+  * Khi ép buộc Attribution (A2, A4), mô hình không chỉ dính bẫy Conflicting mà còn rơi vào bẫy ngộ nhận thiếu chứng cứ (`Not Enough Evidence`), khiến số lượng ca `Refuted` đoán thành `NEI` tăng vọt từ 39 ca (ở A3) lên 119 ca (ở A2) và 79 ca (ở A4).
+- **Quyết Định Tiêu Chuẩn Thực Nghiệm:** **`ATTRIBUTION_DISTORTION_CONFIRMED__ERROR_SUPERIOR`**
+- **Trạng thái Milestone:** **Milestone M2.0f COMPLETE**.
+
 
