@@ -2403,6 +2403,51 @@
     `BASELINE_AUDIT.md`, `baseline_per_claim_diff.csv`, `TRACK_A_ERROR_ANALYSIS.md`, `track_a_transitions.json`, `development_manifest.json`, `memory_eligibility_manifest.json`, `selection_traces.jsonl`, `grounding_audit.json`, `config_lock.json`, `predictions.jsonl` (300 records), `metrics_by_arm.csv`, `per_class_metrics.csv`, `confusion_matrices.json`, `statistical_tests.json`, `DECISION_REPORT.md`, `run_receipt.json`.
 - **Trạng thái Milestone:** **M2.0b PILOT THỰC NGHIỆM ĐÃ HOÀN TẤT VÀ NIÊM PHONG (100% EXECUTED & SEALED)**.
 
+## 2026-11-09 09:47 +07:00 — Triển khai M2.0c: Independent Holdout Evaluation of Instance-Grounded Error Intervention
+
+- **Mục tiêu:** Kiểm chứng hiệu quả Track B (Instance-Grounded Error Intervention) trên tập độc lập chưa từng sử dụng để phát triển phương pháp (unexposed holdout partition), với frozen Qwen3-8B BF16 và bộ nhớ lịch sử không rò rỉ dữ liệu.
+- **Phase A (Audit M2.0b Pilot Results — CPU-only):**
+  * Tái tính toán toàn bộ số liệu trực tiếp từ 300 raw predictions tại `outputs/m20b-instance-grounded-v1/predictions.jsonl`:
+    - $B0$: Acc 50.00% (25/50), Macro-F1 0.3138.
+    - $G2$: Acc 46.00% (23/50), Macro-F1 0.2962.
+    - $E1$: Acc 48.00% (24/50), Macro-F1 0.3327.
+    - $B1$: Acc 52.00% (26/50), Macro-F1 0.3078.
+    - $B2$: Acc 52.00% (26/50), Macro-F1 0.3166.
+    - $B3$: Acc 50.00% (25/50), Macro-F1 0.2949.
+  * Xác minh chuyển dịch $B1 \text{ vs } B2$: Corrected = 1, Harmed = 1, Net Benefit = 0 claims, $\Delta\text{Accuracy} = 0.00\%$, exact McNemar $p = 1.00000$ (bảo toàn tuyệt đối $25 + 23 + 1 + 1 = 50$).
+  * Phân tích phân nhóm: 27 claims `INTERVENE` (54.0%) và 23 claims `NO_INTERVENTION` (46.0%).
+  * **Kiểm toán Invariant Rút lui:** 23/23 claims `NO_INTERVENTION` (100.0%) có prompt SHA-256 trùng khớp từng byte với Canonical $B0$ và cho ra verdict giống hệt 100%. Không có bất kỳ nhiễu loạn ngoài ý muốn nào.
+  * Xuất: `outputs/m20c-independent-holdout-v1/PILOT_AUDIT.md`. Trạng thái: **GO**.
+- **Phase B (Construct Independent Holdout Partition):**
+  * Kiểm tra nguồn gốc 603 claims thuộc `development_pilot_fold` (Train Fold-2):
+    - 50 claims pilot đã dùng trong M2.0b bị **cách ly triệt để (Quarantined as exposed data)**.
+    - 553 claims còn lại được đưa vào rà soát trùng lặp và rò rỉ.
+  * Kiểm toán rò rỉ chéo:
+    - Rà soát Jaccard $\ge 0.85$ với 50 pilot claims, 2.460 memory claims (Train Fold-1) và 500 Official Dev claims.
+    - Phát hiện 3 claims có dấu hiệu cận trùng lặp với Dev 500 $\rightarrow$ loại bỏ vào danh sách cách ly.
+    - Tập holdout độc lập cuối cùng: đúng **550 claims hoàn toàn sạch, chưa từng tiếp xúc**.
+  * Xuất: `holdout_manifest.json`, `memory_eligibility_manifest.json`, `partition_audit.md`.
+- **Phase C & D (Freeze Protocol & Mandatory Preflight):**
+  * Đóng băng hoàn toàn giao thức M2.0b: greedy decoding, $T=0$, BF16, `enable_thinking=False`, `max_new_tokens=512`, `R4-PF1000-v1` Top-8 passages, hardened parser.
+  * Bộ nhớ lịch sử (Train Fold-1, 2.460 claims) loại trừ 100% holdout IDs và pilot IDs trước khi dựng index.
+  * Đảm bảo dẫn chứng mục tiêu byte-for-byte identical giữa 6 arms.
+  * Chạy Preflight tự động kiểm tra tính hợp lệ dữ liệu, schema, hash, và cách ly nhãn vàng mục tiêu. Xuất `PREFLIGHT_REPORT.md` (PASSED) và `config_lock.json`.
+- **Phase F & G (Evaluator & Decision Battery):**
+  * Triển khai `M20cEvaluator` hỗ trợ:
+    - Primary comparison: $\Delta\text{Macro-F1}$ của $B1 - B2$ (Bootstrap 95% CI với 5.000 resamples).
+    - Secondary comparisons: $B1$ vs $B0, E1, G2, B3$ kèm hiệu chỉnh Holm-Bonferroni.
+    - Exact McNemar tests trên paired correctness.
+    - Đánh giá phân nhóm riêng cho `INTERVENE` và `NO_INTERVENTION`.
+    - Xuất `metrics_by_arm.csv`, `per_class_metrics.csv`, `confusion_matrices.json`, `paired_transitions.csv`, `statistical_tests.json`, `FINAL_REPORT.md`, `DECISION_REPORT.md`.
+- **Triển khai Scripts:**
+  * `scripts/run_m20c_holdout.py`: CLI Runner hỗ trợ `--audit-only`, `--dry-run`, `--smoke-only`, `--eval-only`, `--run-gpu`.
+  * `scripts/run_m20c_holdout.sh`, `scripts/launch_m20c.sh`, `scripts/status_m20c.sh`, `scripts/stop_m20c.sh`: Bộ scripts quản lý thực thi nền trên server.
+- **Kiểm thử & Xác minh:**
+  * 11/11 tests PASSED (bao gồm 4 unit tests mới tại `tests/test_m20c_holdout.py` và 7 tests tại `test_m20b_intervention.py`).
+  * Dry-run và smoke test chạy thành công 100% trên CPU Windows.
+- **Trạng thái Milestone:** **M2.0c SẴN SÀNG THỰC THI TRÊN SERVER (PREFLIGHT PASSED, 550 HOLDOUT CLAIMS SEALED)**.
+
+
 
 
 
