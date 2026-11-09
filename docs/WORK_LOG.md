@@ -2468,3 +2468,55 @@
 
 
 
+
+
+## 2026-11-09 16:30 +07:00 — M2.0c: Kết Quả Đánh Giá Độc Lập Instance-Grounded Error Intervention trên Tập Holdout 550 Claims
+
+- **Mục tiêu:** Đánh giá phương pháp Instance-Grounded Error Intervention (Track B) trên tập holdout độc lập 550 claims (Train Fold-2), hoàn toàn chưa tiếp xúc, đối chiếu với 5 arms kiểm soát (`B0`, `G2`, `E1`, `B2`, `B3`) sử dụng Frozen Qwen3-8B BF16 và frozen evidence `R4-PF1000-v1`.
+- **Thực thi GPU Server (`hvtham-server` - RTX 5090 32GB):**
+  * Script thực thi: `python scripts/run_m20c_holdout.py --run-gpu` (PID: 1156264).
+  * Thời gian hoàn thành: 17.822,52 giây (~4,95 giờ).
+  * Tổng số suy luận: 3.300 predictions (550 claims × 6 arms), 0 lỗi ngoại lệ.
+  * Tỷ lệ parse thành công: 98,18% – 100,00% qua các arms (B0: 100%, G2: 99.82%, E1: 98.18%, B1: 99.64%, B2: 99.64%, B3: 99.82%).
+- **Bảng Tổng Hợp Kết Quả Thực Nghiệm 6 Arms:**
+
+| Arm | Phương pháp | Macro-F1 | Accuracy | Balanced Acc | Correct / Total | Parseable |
+|:---|:---|---:|---:|---:|---:|---:|
+| **B0** | Canonical Zero-Shot Baseline | 0.3690 | 50.36% | 0.3813 | 277 / 550 | 100.0% |
+| **G2** | Length-Matched Generic Rules | **0.4159** | **54.18%** | **0.4427** | **298 / 550** | 99.8% |
+| **E1** | Global Error-Derived Rules | 0.3898 | 52.18% | 0.4004 | 287 / 550 | 98.2% |
+| **B1** | **Instance-Grounded Error (Primary)** | **0.3839** | **51.45%** | **0.4041** | **283 / 550** | 99.6% |
+| **B2** | Instance-Grounded Generic Control | 0.3893 | 51.64% | 0.4089 | 284 / 550 | 99.6% |
+| **B3** | Irrelevant Historical Control | 0.3756 | 51.82% | 0.3892 | 285 / 550 | 99.8% |
+
+- **Kiểm Định Thống Kê Cặp (Paired Statistical Battery):**
+  1. **Primary Hypothesis ($B1$ vs $B2$ - Grounded Error vs Grounded Generic):**
+     * Corrected claims: 26 | Harmed claims: 27.
+     * **Net Claim Benefit: -1 claim**.
+     * Exact McNemar test $p$-value: **1.00000** (Odds Ratio: 0.963).
+     * $\Delta\text{Macro-F1}$: -0.0055 (95% Paired Bootstrap CI: `[-0.0373, +0.0265]`).
+     * $\Delta\text{Accuracy}$: -0.0018 (95% Paired Bootstrap CI: `[-0.0273, +0.0236]`).
+     * *Kết luận:* Không có bằng chứng thống kê nào cho thấy historical error cases vượt trội hơn generic guidance tương đồng về vị trí và ngân sách token. Thậm chí hiệu ứng ròng là âm (-1 claim).
+  2. **Secondary Hypotheses (Hiệu chỉnh Holm-Bonferroni, FWER $\alpha=0.05$):**
+     * $B1$ vs $B0$: Net benefit +6 claims, McNemar $p=0.55600$, $\Delta\text{Macro-F1} = +0.0149$ (95% CI `[-0.0138, +0.0444]`), không có ý nghĩa thống kê sau hiệu chỉnh.
+     * $B1$ vs $E1$: Net benefit -4 claims, McNemar $p=0.77696$, $\Delta\text{Macro-F1} = -0.0057$, không có ý nghĩa thống kê.
+     * $B1$ vs $G2$: Net benefit -15 claims, McNemar $p=0.12840$, $\Delta\text{Macro-F1} = -0.0318$ (95% CI `[-0.0661, +0.0013]`), $G2$ vượt trội rõ rệt.
+     * $B1$ vs $B3$: Net benefit -2 claims, McNemar $p=0.91421$, $\Delta\text{Macro-F1} = +0.0083$, không có ý nghĩa thống kê.
+- **Phân Tích Phân Nhóm (Subgroup Diagnostics):**
+  * Tổng tập holdout: 550 claims.
+  * Phân nhóm `INTERVENE` (đủ ngưỡng tương đồng và evidence grounding): 387 claims (70,4%).
+    - B0 (Zero-Shot): Accuracy 50.90%, Macro-F1 0.3767.
+    - **B1 (Grounded Error): Accuracy 52.45%, Macro-F1 0.3944**.
+    - B2 (Grounded Generic): Accuracy 52.71%, Macro-F1 0.4061.
+    - *Nhận xét:* Ngay trong nhóm được can thiệp, B1 vẫn thấp hơn B2 cả về Accuracy lẫn Macro-F1.
+  * Phân nhóm `NO_INTERVENTION` (quay về Canonical B0): 163 claims (29,6%).
+    - B0, B1, B2: Accuracy 49.08%, Macro-F1 0.3434 (100% bảo toàn prompt hash và prediction).
+- **Phân Tích Chi Tiết Per-Class F1:**
+  * Supported ($N=147$): B0: 0.6129, G2: 0.6301, E1: 0.6133, B1: 0.5735, B2: 0.5811.
+  * Refuted ($N=317$): B0: 0.6374, G2: 0.6804, E1: 0.6667, B1: 0.6571, B2: 0.6629.
+  * Not Enough Evidence ($N=46$): B0: 0.1148, G2: 0.1324, E1: 0.1351, B1: 0.1008, B2: 0.1538.
+  * Conflicting Evidence ($N=40$): B0: 0.1111, G2: 0.2206, E1: 0.1441, B1: 0.2041, B2: 0.1594.
+- **Quyết Định Tiêu Chuẩn Thực Nghiệm:** **NO-GO**
+  * *Lý do:* $B1$ (Instance-Grounded Error Intervention) tạo hiệu ứng ròng tiêu cực so với đối chứng $B2$ (-1 claim, $\Delta\text{Macro-F1} = -0.0055$), không đạt điều kiện tiên quyết để trở thành giải pháp cốt lõi cho Milestone tiếp theo.
+  * *Hàm ý khoa học:* Việc truy xuất trực tiếp các case lỗi cụ thể từ quá khứ (instance-level error memory) không mang lại năng lực sửa sai khái quát hóa trên holdout so với generic reasoning rules ($G2$, Macro-F1: 0.4159). Nguy cơ gây nhiễu và over-correction ở các case cụ thể làm triệt tiêu lợi ích sửa lỗi.
+- **Artifacts Đã Niêm Phong:** Toàn bộ lưu tại `outputs/m20c-independent-holdout-v1/` bao gồm `DECISION_REPORT.md`, `FINAL_REPORT.md`, `metrics_by_arm.csv`, `per_class_metrics.csv`, `paired_transitions.csv`, `statistical_tests.json`, `predictions.jsonl`, `selection_traces.jsonl`, `prompt_receipts.jsonl`.
