@@ -356,8 +356,12 @@ def run_pipeline(args: argparse.Namespace) -> None:
 
     # Step 8: Multi-arm execution loop
     pred_path = out_dir / "predictions.jsonl"
+    if args.overwrite and pred_path.exists():
+        pred_path.unlink()
+        print(f"[M2.0f] Overwrite enabled: removed existing {pred_path}")
+
     existing_records: Set[Tuple[str, str]] = set()
-    if pred_path.exists() and not args.overwrite:
+    if pred_path.exists():
         with open(pred_path, "r", encoding="utf-8") as f:
             for line in f:
                 if line.strip():
