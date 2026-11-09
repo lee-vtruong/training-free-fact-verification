@@ -2573,3 +2573,49 @@
   * 17/17 tests PASSED (bao gồm 6 unit tests mới tại `tests/test_m20d_contrastive.py`).
   * Preflight verification đạt `PASSED` và smoke test trên 20 development claims hoàn tất thành công 100% trên CPU.
 - **Trạng thái Milestone:** **M2.0d SẴN SÀNG THỰC THI (PREFLIGHT PASSED, CODE SEALED, CHỜ LỆNH CHẠY GPU)**.
+
+
+## 2026-11-09 21:50 +07:00 — M2.0d: Kết Quả Đánh Giá Contrastive Evidence Verification (Track C) trên 550 Claims Benchmark
+
+- **Thực thi GPU Server (`hvtham-server` - RTX 5090 32GB):**
+  * Script thực thi: `bash scripts/launch_m20d.sh` (PID: 1162873).
+  * Thời gian hoàn thành: 10.896,94 giây (~3,03 giờ).
+  * Tổng số suy luận: 3.300 predictions (550 claims × 6 arms), 0 lỗi ngoại lệ.
+  * Tỷ lệ parse thành công: **100,00%** trên toàn bộ 6 arms (0/3.300 unparseable).
+  * Tỷ lệ trích xuất bằng chứng attribution hợp lệ: **100,00%** trên các arms contrastive (`C1`, `C2`, `C3`, `C4`).
+- **Bảng Tổng Hợp Kết Quả Thực Nghiệm 6 Arms:**
+
+| Arm | Phương pháp | Macro-F1 | Accuracy | Balanced Acc | Correct / Total | Valid Rate | Attr Valid |
+|:---|:---|---:|---:|---:|---:|---:|---:|
+| **B0** | Canonical Zero-Shot Baseline | **0.3669** | **48.18%** | 0.3953 | **265 / 550** | 100.0% | 0.0% |
+| **G2** | Length-Matched Generic Rules | 0.3471 | 44.18% | 0.4087 | 243 / 550 | 100.0% | 0.0% |
+| **C1** | Generic Contrastive Verification | 0.3299 | 39.64% | 0.3966 | 218 / 550 | 100.0% | 100.0% |
+| **`C2`** | **Historical-Error Contrastive (Primary)** | **0.3177** | **40.36%** | **0.3766** | **222 / 550** | 100.0% | 100.0% |
+| **`C3`** | **Matched Generic Contrastive Control** | 0.3028 | 37.09% | 0.3751 | 204 / 550 | 100.0% | 100.0% |
+| **C4** | Placebo Historical Control | 0.3302 | 40.91% | 0.3838 | 225 / 550 | 100.0% | 100.0% |
+
+- **Kiểm Định Thống Kê Cặp (Paired Statistical Battery):**
+  1. **Primary Hypothesis ($C2$ vs $C3$ - Grounded Error vs Matched Generic Control):**
+     * Cả hai cùng đúng: 190 | Cả hai cùng sai: 314.
+     * $C2$ sửa đúng từ $C3$ (Corrected): **32 claims**.
+     * $C2$ làm sai từ $C3$ (Harmed): **14 claims**.
+     * **Lợi ích ròng (Net Claim Benefit):** **+18 claims**.
+     * Exact McNemar test $p$-value: **0.01135** (Statistically Significant tại $\alpha = 0.05$, Odds Ratio: 2.286).
+     * $\Delta\text{Accuracy}$: **+0.0329** (95% Paired Bootstrap CI: `[+0.0091, +0.0582]`, khoảng tin cậy hoàn toàn dương).
+     * $\Delta\text{Macro-F1}$: **+0.0152** (95% Paired Bootstrap CI: `[-0.0026, +0.0332]`).
+     * *Kết luận Primary Hypothesis:* **GO**. Mẫu lỗi lịch sử có provenance mang lại lợi ích thực sự có ý nghĩa thống kê về độ chính xác so với chỉ dẫn generic được đối sánh chặt chẽ về token budget và cấu trúc câu.
+  2. **Secondary Hypotheses (Hiệu chỉnh Holm-Bonferroni, FWER $\alpha = 0.05$):**
+     * $C2$ vs $B0$: Net benefit: **-43 claims** (Corrected: 45, Harmed: 88), McNemar $p = 0.00024$ (Significant sau Holm, $\alpha_{\text{thresh}} = 0.0125$), $\Delta\text{Macro-F1} = -0.0490$ (95% CI `[-0.0860, -0.0126]`).
+     * $C2$ vs $G2$: Net benefit: -21 claims, McNemar $p = 0.08481$, $\Delta\text{Macro-F1} = -0.0292$.
+     * $C2$ vs $C1$: Net benefit: +4 claims, McNemar $p = 0.72395$, $\Delta\text{Macro-F1} = -0.0120$.
+     * $C2$ vs $C4$: Net benefit: -3 claims, McNemar $p = 0.79815$, $\Delta\text{Macro-F1} = -0.0123$.
+- **Phân Tích Chi Tiết Per-Class F1 across 4 Classes:**
+  * Supported ($N=147$): B0: 0.6096, G2: 0.5663, C1: 0.6145, C2: 0.5796, C3: 0.5492, C4: 0.6055.
+  * Refuted ($N=317$): B0: **0.5943** (Recall: 49.2%), G2: 0.5491 (Recall: 43.2%), C1: 0.4252 (Recall: 28.7%), C2: **0.4834** (Recall: 34.4%), C3: 0.4460 (Recall: 30.6%), C4: 0.4653 (Recall: 32.8%).
+  * Not Enough Evidence ($N=46$): B0: 0.0980, G2: 0.0723, C1: 0.1237, C2: 0.0440, C3: 0.0444, C4: 0.0980.
+  * Conflicting Evidence ($N=40$): B0: 0.1657 (Recall: 37.5%), G2: 0.2008 (Recall: 60.0%), C1: 0.1564 (Recall: 47.5%), C2: 0.1639 (Recall: **50.0%**), C3: 0.1714 (Recall: **60.0%**), C4: 0.1518 (Recall: 42.5%).
+- **Chẩn Đoán Khoa Học Sâu Sắc (Critical Scientific Takeaways):**
+  1. **Hiệu ứng gia tăng của Historical Error Patterns là có thật ($C2 > C3$):** Khi so sánh trong cùng một kiến trúc đối chiếu (contrastive procedure), việc áp dụng pattern lỗi lịch sử cụ thể (`C2`) vượt trội hơn hẳn so với directive chung chung (`C3`) với Net Benefit +18 claims ($p=0.01135$).
+  2. **Nghịch lý Kiến trúc Contrastive Verification ($C \ll B0$):** Tuy nhiên, bản thân toàn bộ kiến trúc Contrastive Verification (buộc mô hình tìm kiếm supporting IDs, refuting IDs và cân nhắc mâu thuẫn) lại gây sụt giảm hiệu năng nghiêm trọng so với Zero-Shot trực tiếp ($B0$, Macro-F1: 0.3669 vs 0.3177 ở C2). Lý do: Mô hình trở nên quá nhạy cảm với các chi tiết nhỏ trong các đoạn trích, dẫn đến over-prediction vào lớp `Conflicting Evidence/Cherrypicking` (Recall tăng vọt lên 50% – 60%) và làm sụp đổ Recall của lớp đa số `Refuted` (từ 49.2% xuống 34.4%).
+- **Quyết Định Tiêu Chuẩn Thực Nghiệm:** **GO cho giả thuyết cục bộ ($C2$ vs $C3$), nhưng REJECT việc thay thế baseline $B0$ bằng kiến trúc Contrastive hiện tại.**
+- **Artifacts Đã Niêm Phong:** Lưu tại `outputs/m20d-contrastive-verification-v1/` gồm `DECISION_REPORT.md`, `FINAL_REPORT.md`, `metrics_by_arm.csv`, `per_class_metrics.csv`, `paired_transitions.csv`, `statistical_tests.json`, `predictions.jsonl`, `selection_traces.jsonl`, `prompt_receipts.jsonl`.
