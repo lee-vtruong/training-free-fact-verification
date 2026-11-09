@@ -2358,6 +2358,52 @@
   * Smoke test: `python scripts/run_m20b_experiment.py --smoke-only` chạy thành công mượt mà trong 3.25 giây, sinh đầy đủ 16 artifacts trong `outputs/m20b-instance-grounded-v1/`.
 - **Trạng thái Milestone:** **M2.0b SẴN SÀNG TRIỂN KHAI THỰC NGHIỆM TRÊN SERVER (CODE & AUDIT COMPLETE)**.
 
+## 2026-11-09 08:36 +07:00 — Thực thi M2.0b Pilot trên GPU RTX 5090 và Kết quả Nghiệm thu Thực nghiệm
+
+- **Môi trường & Tài nguyên:** `hvtham-server`, GPU NVIDIA GeForce RTX 5090 32GB (VRAM cấp phát ~17 GB, công suất trung bình 270–300W, nhiệt độ 58°C).
+- **Quy mô thực thi:** 50 claims độc lập từ `development_pilot_fold` (Train Fold-2) $\times$ 6 arms (`B0`, `G2`, `E1`, `B1`, `B2`, `B3`) = đúng **300 lượt suy luận frozen Qwen3-8B BF16** với greedy decoding ($T=0$).
+- **Thời gian hoàn thành:** 1.519,35 giây (~25,3 phút).
+- **Kết quả Thực nghiệm Chính thức qua 6 Arms:**
+  * **B0 (Locked Canonical Zero-Shot Baseline):** Accuracy = **50.00%** (25/50), Macro-F1 = **0.3138**, Balanced Acc = 0.3246, Valid = 100.0%.
+  * **G2 (Length-Matched Generic Rules):** Accuracy = **46.00%** (23/50), Macro-F1 = **0.2962**, Balanced Acc = 0.3089, Valid = 100.0%.
+  * **E1 (Global Error-Derived Rules):** Accuracy = **48.00%** (24/50), Macro-F1 = **0.3327**, Balanced Acc = 0.3864, Valid = 100.0%.
+  * **B1 (Instance-Grounded Error Intervention — Primary Arm):** Accuracy = **52.00%** (26/50), Macro-F1 = **0.3078**, Balanced Acc = 0.3175, Valid = 100.0%.
+  * **B2 (Instance-Grounded Generic Control — Matched Control):** Accuracy = **52.00%** (26/50), Macro-F1 = **0.3166**, Balanced Acc = 0.3324, Valid = 100.0%.
+  * **B3 (Irrelevant Historical Control):** Accuracy = **50.00%** (25/50), Macro-F1 = **0.2949**, Balanced Acc = 0.3097, Valid = 100.0%.
+- **Chỉ số Chi tiết theo Lớp của B1:**
+  * Lớp `Refuted`: Recall = **65.62%** (cao nhất trong toàn bộ 6 arms, vượt trội so với $B0$ 59.38%, $G2$ 53.12%, $E1$ 50.00%, $B2$ 62.50%); F1 = **0.6885** (cao nhất).
+  * Lớp `Supported`: Recall = 36.36%, F1 = 0.4000.
+  * Lớp `Conflicting Evidence`: Recall = 25.00%, F1 = 0.1429.
+  * Lớp `Not Enough Evidence`: F1 = 0.0000 (support = 3).
+- **Kiểm định Thống kê & Phân tích Chuyển dịch Lỗi (5.000 Lượt Paired Bootstrap & Exact McNemar):**
+  * **$B1 \text{ vs } B2$ (Primary Comparison — Error vs Generic Grounded):**
+    - Corrected = **1**, Harmed = **1**, Net Benefit = **0 claims**.
+    - McNemar exact $p = 1.00000$ (Odds Ratio: 1.000).
+    - $\Delta\text{Macro-F1} = -0.0092$, 95% Paired Bootstrap CI: `[-0.0645, +0.0294]`.
+    - $\Delta\text{Accuracy} = -0.0004$, 95% Paired Bootstrap CI: `[-0.0600, +0.0600]`.
+  * **$B1 \text{ vs } B0$ (Grounded Error vs Zero-Shot Baseline):**
+    - Corrected = **2**, Harmed = **1**, Net Benefit = **+1 claim** (+2.00% Accuracy).
+    - $\Delta\text{Accuracy} = +0.0204$, 95% Paired Bootstrap CI: `[-0.0400, +0.1000]`.
+  * **$B1 \text{ vs } E1$ (Grounded Error vs Global Error Rules):**
+    - Corrected = **7**, Harmed = **5**, Net Benefit = **+2 claims** (+4.00% Accuracy).
+    - McNemar exact $p = 0.77441$.
+  * **$B1 \text{ vs } G2$ (Grounded Error vs Generic Rules):**
+    - Corrected = **4**, Harmed = **1**, Net Benefit = **+3 claims** (+6.00% Accuracy).
+    - McNemar exact $p = 0.37500$ (Odds Ratio: 4.000).
+  * **$B1 \text{ vs } B3$ (Grounded Error vs Irrelevant Control):**
+    - Corrected = **2**, Harmed = **1**, Net Benefit = **+1 claim** (+2.00% Accuracy).
+- **Độ phủ Can thiệp & Kiểm toán Neo giữ Dẫn chứng (Coverage & Grounding Audit):**
+    * Can thiệp kích hoạt (`INTERVENE`): **27 / 50 claims (54.0%)**.
+    * Rút lui an toàn (`NO_INTERVENTION` $\rightarrow B0$): **23 / 50 claims (46.0%)**.
+    * Tuân thủ 100% điều kiện neo giữ dẫn chứng, loại bỏ hiện tượng ảo giác quy tắc.
+- **Quyết định Khoa học:** **`MODIFY`**.
+  * *Lý do:* $B1$ cho thấy cải thiện rõ rệt về Accuracy so với zero-shot $B0$ (+2.00%), $E1$ (+4.00%) và $G2$ (+6.00%), đồng thời đạt Recall và F1 cao nhất ở lớp `Refuted` (65.62% / 0.6885). Tuy nhiên, trong phép so sánh matched-control tiên quyết với $B2$, khoảng tin cậy 95% Bootstrap CI vẫn chứa điểm 0 (`[-0.0645, +0.0294]`) do kích thước mẫu pilot (50 claims) còn hẹp và ngân sách can thiệp cần được tinh chỉnh thêm độ nhạy cho lớp `Supported`.
+- **Hồ sơ Artifacts Đã Niêm phong:**
+  * Toàn bộ tại `outputs/m20b-instance-grounded-v1/`:
+    `BASELINE_AUDIT.md`, `baseline_per_claim_diff.csv`, `TRACK_A_ERROR_ANALYSIS.md`, `track_a_transitions.json`, `development_manifest.json`, `memory_eligibility_manifest.json`, `selection_traces.jsonl`, `grounding_audit.json`, `config_lock.json`, `predictions.jsonl` (300 records), `metrics_by_arm.csv`, `per_class_metrics.csv`, `confusion_matrices.json`, `statistical_tests.json`, `DECISION_REPORT.md`, `run_receipt.json`.
+- **Trạng thái Milestone:** **M2.0b PILOT THỰC NGHIỆM ĐÃ HOÀN TẤT VÀ NIÊM PHONG (100% EXECUTED & SEALED)**.
+
+
 
 
 
