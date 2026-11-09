@@ -2316,6 +2316,49 @@
     `FINAL_REPORT.md`, `DECISION_REPORT.md`, `metrics_by_arm.csv`, `per_class_metrics.csv`, `statistical_tests.json`, `confusion_matrices.json`, `rules_manifest.json`, `predictions.jsonl` (2.500 records), `prompt_receipts.jsonl` (2.500 records), `config_lock.json`, `run_receipt.json`.
 - **Trạng thái Milestone:** **M2.0-A HOÀN THÀNH TOÀN DIỆN & NIÊM PHONG (100% COMPLETE)**. Sẵn sàng báo cáo và chuyển sang bước tiếp theo.
 
+## 2026-11-09 07:22 +07:00 — Triển khai M2.0b: Baseline Audit & Instance-Grounded Error Intervention
+
+- **Mục tiêu:**
+  1. **Phase A (Mandatory Baseline Audit):** Đối chiếu claim-by-claim giữa M1.9g B0 (Acc 60.00%, Macro-F1 0.4838) và M2.0a B0 (Acc 54.00%, Macro-F1 0.4192), xác định chính xác nguyên nhân chênh lệch và khóa hợp đồng prompt baseline kinh điển (canonical contract).
+  2. **Phase B (Track A Error Analysis):** Phân tích sâu 54 claims corrected và 54 claims harmed của M2.0a E1 vs B0; làm rõ cơ chế đánh đổi triệt tiêu (zero-sum trade-off) khi dùng quy tắc khái quát không neo giữ dẫn chứng.
+  3. **Phase E (Development Split & Leakage Isolation):** Phân vùng tập huấn luyện chính thức (Official Train, 3.068 claims) thành `historical_source_fold` (Train Fold-1, 80%) và `development_pilot_fold` (Train Fold-2, 20%); cách ly hoàn toàn 500 claims Official Dev và quarantine 5 claims train-dev overlap.
+  4. **Phase C & D (Instance-Grounded Error Intervention & 6-Arm Protocol):** Triển khai `InstanceGroundedSelector` với bộ lọc neo giữ dẫn chứng (Evidence-Grounding Filter) và ngưỡng rút lui an toàn `NO_INTERVENTION` ($\rightarrow B0$); thiết kế 6 arms: `B0` (Locked Zero-shot), `G2` (Length-matched Generic), `E1` (Global Error Rules), `B1` (Instance-Grounded Error — Primary), `B2` (Instance-Grounded Generic Control — Matched), `B3` (Irrelevant Control).
+  5. **Phase F & G (Evaluator & Pre-registered Decision Battery):** Kiểm định chính $B1 \text{ vs } B2$ qua paired McNemar, bootstrap 95% CI Macro-F1, bảo toàn chuyển dịch lỗi và báo cáo quyết định khoa học.
+- **Phát hiện Cốt lõi của Phase A (Baseline Audit):**
+  - Đối chiếu prompt cho thấy: M1.9g B0 sử dụng system prompt súc tích (40 từ, chỉ liệt kê tên nhãn không kèm định nghĩa). Trong khi đó, M2.0a B0 đưa thêm 131 từ định nghĩa ngữ nghĩa dài dòng cho 4 lớp (đặc biệt yêu cầu *"direct, unambiguous corroboration for all factual assertions"*).
+  - Phân tích cơ chế suy luận của mô hình đóng băng Qwen3-8B BF16: Khi có định nghĩa quá khắt khe, mô hình tăng vọt ngưỡng chứng minh của lớp `Supported`, dẫn đến việc từ chối hàng loạt các câu đúng có diễn ngôn tương đương và đẩy nhầm sang `Conflicting Evidence/Cherrypicking` hoặc `Not Enough Evidence`, kéo tụt Accuracy từ 60.00% xuống 54.00%.
+  - **Khóa Hợp đồng Baseline:** Khóa chặt system prompt súc tích kinh điển của M1.9g làm tiêu chuẩn bất biến cho mọi arm zero-shot và baseline của M2.0b trở về sau.
+- **Phát hiện Cốt lõi của Phase B (Track A Analysis):**
+  - M2.0a E1 vs B0: Đúng 54 corrected và 54 harmed (Net Benefit = 0, McNemar $p = 1.0000$).
+  - Chuyển dịch theo nhãn:
+    * Lớp `Refuted`: 46 corrected, 28 harmed $\rightarrow$ Net **+18 claims** (F1 tăng từ 0.6574 lên 0.6930).
+    * Lớp `Supported`: 3 corrected, 20 harmed $\rightarrow$ Net **-17 claims** (F1 sụt từ 0.6667 xuống 0.5909).
+  - Chứng minh thực nghiệm: Quy tắc lỗi trừu tượng toàn cục (global ungrounded rules) gây tổn hại nghiêm trọng cho lớp `Supported`. Do đó, can thiệp tri thức lỗi bắt buộc phải được neo giữ từ vựng và thực thể cụ thể với các đoạn trích bằng chứng mục tiêu (evidence grounding).
+- **Phân vùng Dữ liệu & Ngăn chặn Rò rỉ (Phase E):**
+  - Official Train (3.068 claims):
+    * `historical_source_fold` (Train Fold-1): 2.460 claims.
+    * `development_pilot_fold` (Train Fold-2): 603 claims.
+    * `quarantined`: 5 claims (`train:1340`, `train:1341`, `train:1536`, `train:1539`, `train:1948`).
+    * **Zero Dev 500 Gold Exposure:** Loại bỏ hoàn toàn mọi ID `dev:0`..`dev:499` khỏi việc xây dựng bộ nhớ và phân vùng phát triển.
+- **Các Modules Đã Triển khai:**
+  * `src/tffv/experiments/m20b_schemas.py`: Data models cho 6 arms, `InterventionDecision`, `SelectionTrace`, `GroundingAuditRecord`, `M20bTransitionStats`.
+  * `src/tffv/experiments/m20b_baseline_audit.py`: So sánh chi tiết M1.9g vs M2.0a, xuất `baseline_per_claim_diff.csv` và `BASELINE_AUDIT.md`.
+  * `src/tffv/experiments/m20b_track_a_analysis.py`: Khảo sát 54 corrected / 54 harmed, xuất `TRACK_A_ERROR_ANALYSIS.md` và `track_a_transitions.json`.
+  * `src/tffv/experiments/m20b_development_split.py`: Phân vùng hash-deterministic độc lập, xuất `development_manifest.json` và `memory_eligibility_manifest.json`.
+  * `src/tffv/experiments/m20b_selector.py`: Lập chỉ mục TF-IDF, tính điểm relevance và Evidence-Grounding Filter với ngưỡng rút lui `NO_INTERVENTION`.
+  * `src/tffv/experiments/m20b_prompts.py`: Render chuẩn hóa cho 6 arms với prompt kinh điển và kiểm tra tính bất biến của đoạn trích dẫn chứng.
+  * `src/tffv/experiments/m20b_evaluator.py`: Đánh giá 6 arms, kiểm định paired McNemar, bootstrap 95% CI, độ phủ can thiệp và xuất `DECISION_REPORT.md`.
+  * `src/tffv/experiments/m20b_orchestrator.py`: Điều phối toàn bộ pipeline, hỗ trợ an toàn nối tiếp (checkpoint/resume).
+  * `scripts/run_m20b_experiment.py`: CLI Runner hỗ trợ `--audit-only`, `--smoke-only`, `--pilot`, `--eval-only`, `--run-gpu`.
+  * `scripts/launch_m20b.sh`, `scripts/status_m20b.sh`, `scripts/stop_m20b.sh`: Bộ scripts quản lý tiến trình nền trên server.
+  * `tests/test_m20b_intervention.py`: 7 bài kiểm thử unit tests bao quát toàn diện các ràng buộc và định lý bảo toàn.
+- **Kiểm thử & Xác minh Local Windows:**
+  * Lệnh: `python -m pytest tests/test_m20b_intervention.py -v --basetemp=outputs/pytest_tmp`
+  * Kết quả: **7/7 PASSED** (100% passed).
+  * Smoke test: `python scripts/run_m20b_experiment.py --smoke-only` chạy thành công mượt mà trong 3.25 giây, sinh đầy đủ 16 artifacts trong `outputs/m20b-instance-grounded-v1/`.
+- **Trạng thái Milestone:** **M2.0b SẴN SÀNG TRIỂN KHAI THỰC NGHIỆM TRÊN SERVER (CODE & AUDIT COMPLETE)**.
+
+
 
 
 
