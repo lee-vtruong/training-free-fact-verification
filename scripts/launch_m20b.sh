@@ -23,8 +23,10 @@ if [ -f "$PID_FILE" ]; then
     fi
 fi
 
+PYTHON_BIN="python"
 if [ -f "$PROJECT_ROOT/.venv/bin/activate" ]; then
     source "$PROJECT_ROOT/.venv/bin/activate"
+    PYTHON_BIN="$PROJECT_ROOT/.venv/bin/python"
 fi
 
 export HF_HOME="${HF_HOME:-/home/stackops/whale/cache/huggingface}"
@@ -40,7 +42,7 @@ echo " Output Directory: $OUTPUT_DIR"
 echo " Log File:         $LOG_FILE"
 echo "======================================================================"
 
-nohup python "$SCRIPT_DIR/run_m20b_experiment.py" \
+nohup "$PYTHON_BIN" "$SCRIPT_DIR/run_m20b_experiment.py" \
     --output-dir "$OUTPUT_DIR" \
     --run-gpu \
     "$@" > "$LOG_FILE" 2>&1 &

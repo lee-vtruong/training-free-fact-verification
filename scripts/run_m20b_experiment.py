@@ -107,23 +107,30 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_retrieval_receipts(path_str: str) -> Dict[str, List[Dict[str, Any]]]:
-    path = Path(path_str)
-    if not path.exists():
-        print(f"[Warning] Retrieval receipts not found at {path}. Using synthetic passages for test.")
-        return {}
+def load_retrieval_receipts(primary_path_str: str) -> Dict[str, List[Dict[str, Any]]]:
+    receipts: Dict[str, List[Dict[str, Any]]] = {}
+    candidate_paths = [
+        Path(primary_path_str),
+        PROJECT_ROOT / "outputs" / "m18e-full-history-pf1000-v1" / "retrieval_receipts.jsonl",
+        PROJECT_ROOT / "outputs" / "m19g-evidence-complete-v1" / "dev_retrieval_receipts.jsonl",
+    ]
 
-    receipts = {}
-    with open(path, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            rec = json.loads(line)
-            sid = rec.get("claim_id") or rec.get("sample_id")
-            passages = rec.get("passages", rec.get("evidence", []))
-            if sid:
-                receipts[sid] = passages
+    for p in candidate_paths:
+        if not p.exists():
+            continue
+        print(f"[M2.0b] Loading retrieval receipts from: {p}...")
+        with open(p, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                rec = json.loads(line)
+                sid = rec.get("claim_id") or rec.get("sample_id")
+                passages = rec.get("passages", rec.get("evidence", []))
+                if sid and sid not in receipts:
+                    receipts[sid] = passages
+
+    print(f"[M2.0b] Total retrieval receipts loaded: {len(receipts)} claims.")
     return receipts
 
 
