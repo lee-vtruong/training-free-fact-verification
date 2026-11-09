@@ -2520,3 +2520,56 @@
   * *Lý do:* $B1$ (Instance-Grounded Error Intervention) tạo hiệu ứng ròng tiêu cực so với đối chứng $B2$ (-1 claim, $\Delta\text{Macro-F1} = -0.0055$), không đạt điều kiện tiên quyết để trở thành giải pháp cốt lõi cho Milestone tiếp theo.
   * *Hàm ý khoa học:* Việc truy xuất trực tiếp các case lỗi cụ thể từ quá khứ (instance-level error memory) không mang lại năng lực sửa sai khái quát hóa trên holdout so với generic reasoning rules ($G2$, Macro-F1: 0.4159). Nguy cơ gây nhiễu và over-correction ở các case cụ thể làm triệt tiêu lợi ích sửa lỗi.
 - **Artifacts Đã Niêm Phong:** Toàn bộ lưu tại `outputs/m20c-independent-holdout-v1/` bao gồm `DECISION_REPORT.md`, `FINAL_REPORT.md`, `metrics_by_arm.csv`, `per_class_metrics.csv`, `paired_transitions.csv`, `statistical_tests.json`, `predictions.jsonl`, `selection_traces.jsonl`, `prompt_receipts.jsonl`.
+
+
+## 2026-11-09 17:30 +07:00 — M2.0d: Triển Khai Training-Free Contrastive Evidence Verification (Track C)
+
+- **Mục tiêu:** Thiết kế và triển khai phương pháp Contrastive Evidence Verification (Track C) nhằm đối chiếu các giả thuyết phán quyết dựa trên bằng chứng, kết hợp mẫu lỗi lịch sử có provenance từ Train Fold-1 mà không cập nhật trọng số mô hình.
+- **Phase A (Kiểm toán Dữ liệu & Phơi nhiễm - Dataset Exposure Audit):**
+  * Kiểm toán toàn bộ 3.568 claims (3.068 Train, 500 Dev) qua các mốc M1.6 – M2.0c.
+  * **Xác định hiện trạng:** Không còn phân vùng đánh giá nào hoàn toàn chưa tiếp xúc (untouched) trong AVeriTeC (Dev 500 đã dùng ở M1.9g/M2.0a; 603 claims Train Fold-2 đã dùng ở M2.0b pilot và M2.0c holdout; Test chính thức là blind test không có nhãn công khai).
+  * **Giải pháp phân vùng:**
+    - Development Subset: 50 claims (Train Fold-2) dùng cho phát triển và smoke test.
+    - Technical Smoke Subset: 20 claims (`train:3018` – `train:3037`).
+    - Matched Benchmark Evaluation Subset: 550 claims (Train Fold-2) dùng để đối chiếu trực tiếp với kết quả M2.0c, với cam kết khoa học rõ ràng rằng đây không phải là unseen blind test.
+    - Selectable Historical Memory Pool: Cách ly 100% tại Train Fold-1 (2.460 claims), loại bỏ hoàn toàn các claims Dev, Development, Benchmark và 8 claims trùng/cận trùng.
+  * Xuất `DATASET_EXPOSURE_AUDIT.md`, `track_c_split_manifest.json`, `memory_eligibility_manifest.json`.
+- **Phase B (Khóa Hợp đồng Kỹ thuật):**
+  * Cố định Qwen3-8B BF16, greedy decoding ($T=0$), `enable_thinking=False`, `max_new_tokens=512`, `R4-PF1000-v1` Top-8 passages, 4 nhãn AVeriTeC. Xuất `config_lock.json`.
+- **Phase C & F (Contrastive Prompting & Hardened Parser):**
+  * Module `src/tffv/experiments/m20d_contrastive.py`: Xây dựng prompt đối chiếu có cấu trúc gồm: (1) Supporting passages, (2) Refuting passages, (3) Scope & entity alignment, (4) Sufficiency vs conflict.
+  * Yêu cầu đầu ra bắt buộc: `[EVIDENCE ATTRIBUTION]` (Supporting IDs, Refuting IDs, Scope assessment, Sufficiency assessment) và `[VERDICT]`.
+  * Bộ phân tích `ContrastiveVerdictParser`: Chống echo, trích xuất danh sách IDs hợp lệ (1–8), phát hiện nhãn mơ hồ và trả về `UNPARSEABLE` khi không hợp lệ.
+- **Phase D (Tích hợp Error Patterns có Provenance):**
+  * Module `src/tffv/experiments/m20d_error_patterns.py`: Định nghĩa 6 patterns quy nạp từ Train Fold-1:
+    - `PAT-TEMP-01`: Mâu thuẫn thời gian và ngày xuất bản.
+    - `PAT-NUM-02`: Sai lệch số lượng, đơn vị và tỷ lệ.
+    - `PAT-NEG-03`: Bỏ sót phủ định mệnh đề phụ và đảo cực.
+    - `PAT-ENT-04`: Nhầm lẫn thực thể và quy kết phát ngôn.
+    - `PAT-SUFF-05`: Thiếu chứng cứ vs suy diễn vội vã.
+    - `PAT-CONF-06`: Tranh chấp nguồn tin cậy vs trích đoạn cắt xén.
+  * Bộ chọn `HistoricalPatternSelector`: Chỉ dùng đặc trưng claim và evidence tại inference time (không dùng target gold).
+  * Đối chứng C3: Chỉ dẫn generic đối sánh chuẩn xác về độ dài và cấu trúc câu.
+  * Đối chứng C4: Mẫu placebo chọn ngẫu nhiên có khóa seed theo SHA256(claim_id).
+  * Cơ chế Fallback: Khi `NO_PATTERN_SELECTED`, các arms C2, C3, C4 đồng loạt quay về quy trình contrastive chuẩn (C1).
+- **Phase E (6 Experimental Arms):**
+  * `B0`: Canonical Zero-Shot Baseline.
+  * `G2`: Length-Matched Generic Rules.
+  * `C1`: Generic Contrastive Verification.
+  * **`C2`**: Historical-Error-Informed Contrastive Verification (Phương pháp chính).
+  * **`C3`**: Matched Generic Contrastive Control (Đối chứng chính của C2).
+  * `C4`: Placebo Control (Mẫu lỗi xáo trộn/không liên quan).
+- **Phase H & I (Đánh giá Thống kê & Ra quyết định):**
+  * Module `src/tffv/experiments/m20d_evaluator.py`:
+    - Primary comparison: C2 vs C3 trên Macro-F1 với Paired Bootstrap 95% CI (5.000 resamples), Net Claim Benefit, và exact McNemar test.
+    - Secondary comparisons: C2 vs B0, G2, C1, C4 kèm hiệu chỉnh Holm-Bonferroni.
+    - Phân tích phân nhóm theo `PATTERN_SELECTED` vs `NO_PATTERN_SELECTED`.
+    - Phân tích độ hợp lệ của evidence attribution.
+    - Tự động xuất `DECISION_REPORT.md` (GO / NO-GO / INCONCLUSIVE) và `FINAL_REPORT.md`.
+- **Triển khai Runner & Scripts:**
+  * `src/tffv/experiments/m20d_runner.py`: CLI hỗ trợ `--audit-only`, `--preflight-only`, `--smoke-only`, `--dry-run`, `--run-gpu`, `--resume`, `--limit`.
+  * Scripts: `scripts/run_m20d_preflight.sh`, `scripts/run_m20d_contrastive.sh`, `scripts/status_m20d.sh`, `scripts/stop_m20d.sh`.
+- **Kiểm thử & Xác minh:**
+  * 17/17 tests PASSED (bao gồm 6 unit tests mới tại `tests/test_m20d_contrastive.py`).
+  * Preflight verification đạt `PASSED` và smoke test trên 20 development claims hoàn tất thành công 100% trên CPU.
+- **Trạng thái Milestone:** **M2.0d SẴN SÀNG THỰC THI (PREFLIGHT PASSED, CODE SEALED, CHỜ LỆNH CHẠY GPU)**.
