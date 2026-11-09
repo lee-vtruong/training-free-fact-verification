@@ -2619,3 +2619,94 @@
   2. **Nghịch lý Kiến trúc Contrastive Verification ($C \ll B0$):** Tuy nhiên, bản thân toàn bộ kiến trúc Contrastive Verification (buộc mô hình tìm kiếm supporting IDs, refuting IDs và cân nhắc mâu thuẫn) lại gây sụt giảm hiệu năng nghiêm trọng so với Zero-Shot trực tiếp ($B0$, Macro-F1: 0.3669 vs 0.3177 ở C2). Lý do: Mô hình trở nên quá nhạy cảm với các chi tiết nhỏ trong các đoạn trích, dẫn đến over-prediction vào lớp `Conflicting Evidence/Cherrypicking` (Recall tăng vọt lên 50% – 60%) và làm sụp đổ Recall của lớp đa số `Refuted` (từ 49.2% xuống 34.4%).
 - **Quyết Định Tiêu Chuẩn Thực Nghiệm:** **GO cho giả thuyết cục bộ ($C2$ vs $C3$), nhưng REJECT việc thay thế baseline $B0$ bằng kiến trúc Contrastive hiện tại.**
 - **Artifacts Đã Niêm Phong:** Lưu tại `outputs/m20d-contrastive-verification-v1/` gồm `DECISION_REPORT.md`, `FINAL_REPORT.md`, `metrics_by_arm.csv`, `per_class_metrics.csv`, `paired_transitions.csv`, `statistical_tests.json`, `predictions.jsonl`, `selection_traces.jsonl`, `prompt_receipts.jsonl`.
+
+
+## 2026-11-09 22:15 +07:00 — M2.0e: Kiểm Toán Tái Lập Baseline & Đánh Giá Khả Thi Selective Contrastive Verification
+
+- **Mục tiêu:** Thực hiện kiểm toán pháp y nguyên nhân sai lệch baseline giữa M2.0c và M2.0d trên 550 claims benchmark, và đánh giá tính khả thi của cơ chế định tuyến chọn lọc (Selective Routing) dựa trên rủi ro tại thời điểm suy luận (inference-time risk features).
+- **Phase A (Kiểm toán Pháp y Baseline Reproducibility):**
+  * Đối chiếu 1.100 cặp dự đoán (550 B0, 550 G2) giữa M2.0c và M2.0d:
+    - Claim IDs, Claim texts, Gold labels: 100% khớp tuyệt đối (0 sai lệch).
+    - Top-8 Retrieved Evidence: 100% khớp byte-for-byte SHA256 (0 sai lệch).
+    - Model Checkpoint & Revision: 100% khớp (Qwen3-8B BF16 `b968826d9c46dd6066d109eabc6255188de91218`).
+    - Decoding: 100% khớp (Greedy, $T=0$, `enable_thinking=False`, `max_new_tokens=512`).
+    - Prompt SHA-256: **0/550 khớp (100% sai lệch trên cả B0 và G2)**.
+  * **Nguyên nhân cốt lõi (Root Cause):** **PROMPT_TEMPLATE_MISMATCH (100%)**.
+    - Contract B0 ở M2.0c là CoT Reasoning-first (`Explanation:` trước `Verdict:`), không có định nghĩa nhãn.
+    - Contract B0 ở M2.0d là Direct Classification (có đầy đủ định nghĩa 4 nhãn, prompt kết thúc bằng `Verdict:` trực tiếp).
+    - Contract G2 ở M2.0c gồm 4 quy tắc chuẩn hóa thực thể, tần suất tuyệt đối, trích dẫn suy đoán và kiêng dè. G2 ở M2.0d gồm 4 quy tắc khác về bằng chứng trực tiếp, thời gian, con số và trích đoạn chọn lọc.
+  * **Kiểm tra chéo bộ phân tích (Offline Cross-Parser Audit):**
+    - Reparse kết quả M2.0c bằng parser M2.0d chỉ làm thay đổi 1/550 B0 (0.18%) và 3/550 G2 (0.55%), chứng minh parser không phải là nguyên nhân gây sụt giảm điểm.
+  * **Kết luận Phase A:** **PASSED (VALID_PROTOCOL_DIFFERENCE)**. Đây là sự khác biệt hợp lệ giữa hai contract prompt khác nhau, không phải lỗi rò rỉ dữ liệu hay bất định phần cứng. Hai mốc được định danh là `v1_cot_reasoning` (M2.0c) và `v2_direct_contrastive` (M2.0d).
+- **Phase B (Chẩn Đoán Cơ Chế Chuyển Dịch Tương Phản):**
+  * Phân tích 45 ca hưởng lợi (Benefit) và 88 ca bị hại (Harm) của C2 so với B0:
+    - **Bẫy mâu thuẫn (The Contradiction Trap):** 76,1% tổng số ca bị hại (67/88) là các claim mà B0 đoán đúng `Refuted` (53 ca) hoặc `Supported` (14 ca), nhưng C2 lại lật thành `Conflicting Evidence/Cherrypicking`.
+    - Nguyên nhân: Việc ép buộc mô hình sinh cấu trúc `[EVIDENCE ATTRIBUTION]` khiến mô hình trở nên quá nhạy cảm với các dị biệt nhỏ về hành văn giữa 8 passages, ngộ nhận sự không đồng nhất ngữ cảnh thành mâu thuẫn sự thật.
+  * Kiểm toán attribution: 100% passage IDs trích dẫn đều hợp lệ (1–8), không có trích dẫn ngoài dải hoặc bịa đặt số ID.
+- **Phase C & D (Đặc Trưng Rủi Ro & Đánh Giá Định Tuyến Selective Replay):**
+  * Xây dựng bảng đặc trưng chỉ dùng thông tin có sẵn trước khi biết nhãn vàng (`risk_features.csv`).
+  * Khả năng dự đoán lợi ích C2:
+    - Độ tin cậy mẫu lỗi lịch sử (`pattern_selection_score`): AUROC = **0.539** (gần như ngẫu nhiên).
+    - Mật độ tín hiệu bề mặt (`salient_signal_count`): AUROC = **0.528**.
+    - Rủi ro nhãn dự đoán của B0 (`is_b0_ambiguous_pred` khi B0 đoán NEI hoặc Conflicting): AUROC = **0.656** (dự đoán lỗi B0 đạt **0.773**).
+  * Mô phỏng định tuyến chọn lọc (Selective Replay - POST-HOC EXPLORATORY):
+    - Khi chỉ route 197 claims (35,8% ngân sách) mà B0 dự đoán NEI/Conflicting sang C2:
+      * Net claim benefit trong nhóm được can thiệp: **+21 claims** (29 corrected, 8 harmed, ratio: 3.63:1).
+      * Accuracy toàn tập tăng từ **48,18% lên 52,00%** (+3,82 điểm %, 95% Bootstrap CI: `[+0.0182, +0.0600]`).
+      * Tuy nhiên, Macro-F1 lại giảm nhẹ từ **0.3669 xuống 0.3583** (-0.0086) do lớp thiểu số `Not Enough Evidence` (N=46) bị sụt giảm F1 (từ 0.0980 xuống 0.0253).
+- **Phase E (Quyết Định Tiêu Chuẩn Thực Nghiệm):** **INCONCLUSIVE**
+  * *Lý do:* Mặc dù selective routing theo độ bất định nhãn B0 có thể cải thiện Accuracy (+21 claims), các đặc trưng mẫu lỗi lịch sử (historical error memory) không cung cấp tín hiệu phân tách hữu hiệu (AUROC ~0.53). Đồng thời, trade-off giữa Accuracy và Macro-F1 đối với lớp NEI cần được khắc phục.
+  * Toàn bộ kết quả mang tính chất khám phá post-hoc trên tập 550 benchmark claims đã phơi nhiễm. Để phát triển M2.0f, bắt buộc phải thử nghiệm trên một benchmark độc lập mới (FEVER / HoVer).
+- **Artifacts Đã Niêm Phong:** Lưu tại `outputs/m20e-selective-feasibility-v1/` gồm `BASELINE_REPRODUCIBILITY.md`, `PREFLIGHT_REPORT.md`, `baseline_per_claim_diff.csv`, `contrastive_transition_analysis.csv`, `historical_pattern_analysis.csv`, `attribution_integrity_audit.md`, `risk_features.csv`, `risk_metrics.json`, `routing_budget_analysis.csv`, `routing_replay_results.csv`, `statistical_tests.json`, `DECISION_REPORT.md`, `M20F_METHOD_PROPOSAL.md`, `run_receipt.json`, cùng 5 biểu đồ PNG tại `figures/`.
+
+
+## 2026-11-09 23:00 +07:00 — M2.0f: Triển Khai Factorial Ablation of Attribution & Historical Error Knowledge
+
+- **Mục tiêu:** Thực hiện thiết kế thực nghiệm 2x2 Factorial Ablation nhằm cô lập và kiểm chứng thực nghiệm hai nguyên nhân cốt lõi dẫn đến hiện tượng sụt giảm hiệu năng toàn cục của C2 Contrastive ở M2.0d:
+  1. Yếu tố A (Knowledge Factor): Biểu diễn suy luận chuẩn (Matched Gold ICL) vs Biểu diễn tương phản lỗi quá khứ (Historical Correct/Wrong Error ICL).
+  2. Yếu tố B (Attribution Factor): Suy luận trực tiếp không ép cấu trúc (No Forced Attribution) vs Ép buộc trích xuất bằng chứng (Forced Structured Evidence Attribution).
+  3. Hai nhánh đối chứng chuẩn hóa (Controls): Canonical Zero-Shot Baseline ($B0$) và Generic Evidence-Guided Rules Control ($G2$).
+- **Nguyên Tắc Thiết Kế Thực Nghiệm & Kiểm Soát Biến Độc Lập:**
+  * **Strictly Training-Free:** Giữ nguyên mô hình Qwen3-8B BF16 hoàn toàn đông băng, greedy decoding ($T=0$, `enable_thinking=False`, `max_new_tokens=512`).
+  * **Đồng nhất Bằng chứng Tuyệt đối:** Toàn bộ 6 arms nhận cùng khối Top-8 PF1000 passages khớp byte-for-byte mã băm SHA-256.
+  * **Khóa Exemplars & Cân Bằng Token Budget Ngặt Nghèo:**
+    - Hai ca minh họa được chọn lọc khắt khe từ Train Fold-1: `train:2956` (Gold: Supported, Lỗi quá khứ: NEI do bỏ sót số liệu) và `train:2961` (Gold: Refuted, Lỗi quá khứ: NEI/Supported do bỏ sót phát ngôn phủ định).
+    - Cùng chung 2 exemplar IDs và số lượng ví dụ ($k=2$) xuyên suốt các arms $A1, A2, A3, A4$.
+    - Cân bằng độ dài token chặt chẽ: Độ chênh lệch giữa $A1$ (159 từ) và $A3$ (166 từ) là 7 từ ($\le 15$ words); độ chênh lệch giữa $A2$ (247 từ) và $A4$ (254 từ) là 7 từ ($\le 15$ words).
+- **Kiểm Toán Nguồn Gốc & Cách Ly Dữ Liệu (Data Provenance & Isolation Audit):**
+  * **Tập đánh giá chẩn đoán (550 Claims):** Thuộc Train Fold-2 (được dùng để chẩn đoán nguyên nhân bẫy mâu thuẫn từ M2.0d/e; không giả định là dữ liệu holdout chưa từng tiếp xúc).
+  * **Exemplar Memory Pool:** Cách ly 100% trong Train Fold-1. Mã định danh `train:2956` và `train:2961` được kiểm toán độc lập: 0% trùng lặp với 550 evaluation claims, 50 pilot claims, 500 official dev claims hoặc quarantined groups.
+  * Xuất `exemplar_manifest.json`, `config_lock.json`, `PREFLIGHT_REPORT.md`.
+- **Cấu Trúc 6 Arms Nghiên Cứu:**
+  * **B0 (Control):** Canonical Zero-Shot Baseline.
+  * **G2 (Control):** Generic Evidence-Guided Rules Control (4 quy tắc tổng quát).
+  * **A1 (Cell [Gold, NoAttr]):** Matched Gold ICL, không ép buộc cấu trúc attribution (suy luận trực tiếp dẫn đến phán quyết).
+  * **A2 (Cell [Gold, ForcedAttr]):** Matched Gold ICL kết hợp cấu trúc `[EVIDENCE ATTRIBUTION]` bắt buộc.
+  * **A3 (Cell [Error, NoAttr]):** Historical Correct/Wrong Error ICL, không ép buộc cấu trúc attribution.
+  * **A4 (Cell [Error, ForcedAttr]):** Historical Correct/Wrong Error ICL kết hợp cấu trúc `[EVIDENCE ATTRIBUTION]` bắt buộc.
+- **Phương Pháp Phân Tích & Chỉ Số Thống Kê:**
+  * **Hiệu ứng chính của Forced Attribution (Factor B):**
+    $$\Delta_{\text{Attr}} = \frac{1}{2}\left[(A2 - A1) + (A4 - A3)\right]$$
+    *Kiểm chứng giả thuyết: Bản thân cấu trúc ép buộc trích xuất ID và phân tích scope/sufficiency là tác nhân gây ra Bẫy mâu thuẫn (Contradiction Trap).*
+  * **Hiệu ứng chính của Historical Error Knowledge (Factor A):**
+    $$\Delta_{\text{Error}} = \frac{1}{2}\left[(A3 - A1) + (A4 - A2)\right]$$
+    *Kiểm chứng giả thuyết: Tri thức lỗi lịch sử có thực sự mang lại lợi thế vượt trội so với suy luận đúng chuẩn (Gold ICL) khi đã kiểm soát token budget hay không.*
+  * **Hiệu ứng tương tác (Interaction Effect $A \times B$):**
+    $$\text{Interaction} = (A4 - A3) - (A2 - A1)$$
+  * **Đo lường & Phân tích Bẫy mâu thuẫn (Contradiction Trap Diagnostics):**
+    - Đo tỷ lệ claims nhị phân (`Refuted`, `Supported`) bị lật thành `Conflicting Evidence/Cherrypicking` và `Not Enough Evidence`.
+    - Tính tỷ trọng đóng góp của bẫy mâu thuẫn trong tổng số ca bị hại (Harmed claims).
+  * **Thống kê suy luận:** Paired bootstrap 95% Confidence Intervals ($\ge 5.000$ resamples) cho tất cả các hiệu ứng và chênh lệch cặp; exact McNemar test hai phía.
+- **Mã Nguồn & Kiến Trúc Đã Xây Dựng:**
+  * `src/tffv/experiments/m20f_schemas.py`: Data contracts (`M20fArm`, `KnowledgeFactor`, `AttributionFactor`, `ExemplarDemonstration`, `M20fPredictionRecord`).
+  * `src/tffv/experiments/m20f_exemplars.py`: Module format exemplars có đối sánh token budget hoàn hảo.
+  * `src/tffv/experiments/m20f_prompts.py`: Module sinh prompt 6 arms với băm SHA-256 xác định.
+  * `src/tffv/experiments/m20f_evaluator.py`: Đánh giá 2x2 factorial, bootstrap CIs, transitions, bẫy mâu thuẫn, xuất CSVs, JSONs, `FINAL_REPORT.md` và `DECISION_REPORT.md`.
+  * `src/tffv/experiments/m20f_runner.py`: Runner đa chế độ (`--preflight-only`, `--smoke-only`, `--dry-run`, `--run-gpu`), tích hợp `M20fPreflightAuditor` và mock verifier.
+  * Shell scripts: `scripts/run_m20f_preflight.sh`, `scripts/run_m20f_smoke.sh`, `scripts/run_m20f_ablation.sh`, `scripts/launch_m20f.sh`, `scripts/status_m20f.sh`, `scripts/stop_m20f.sh`.
+- **Kết Quả Kiểm Thử Phần Mềm (Local Windows CPU):**
+  * `M20fPreflightAuditor`: Đạt `PASSED` 100% trên cả 3 điều kiện bất biến (`EXEMPLAR_ISOLATION`, `RETRIEVAL_COVERAGE`, `TOKEN_BUDGET_BALANCE`).
+  * Unit tests: `tests/test_m20f_factorial.py` (11/11 PASSED) + `tests/test_m20e_diagnostics.py` (5/5 PASSED) -> **16/16 tests PASSED**.
+  * Pipeline end-to-end CPU smoke test (`--smoke-only --overwrite`): Hoàn thành 30/30 inferences, sinh trọn vẹn 13 artifacts trong `outputs/m20f-factorial-ablation-v1/`.
+- **Trạng thái Milestone:** **M2.0f SẴN SÀNG THỰC THI (CODE SEALED, CPU TESTS PASSED, PREFLIGHT PASSED, CHỜ CHẠY GPU TRÊN SERVER)**.
+
