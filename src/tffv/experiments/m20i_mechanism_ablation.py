@@ -27,7 +27,7 @@ if str(SRC_ROOT) not in sys.path:
 
 from tffv.experiments.m20d_contrastive import ContrastiveVerdictParser
 from tffv.experiments.m20g_exemplars import CERTIFIED_EXEMPLAR_BANK, ExemplarItem, ExemplarManager
-from tffv.experiments.m20i_evaluator import M20iStatisticalEvaluator
+from tffv.experiments.m20i_evaluator import CANONICAL_CLASSES, M20iStatisticalEvaluator
 from tffv.experiments.m20i_placebos import MATCHED_PLACEBO_MISTAKES
 from tffv.experiments.m20i_preflight import M20iPreflightAuditor
 from tffv.experiments.m20i_prompts import M20iPromptBuilder
