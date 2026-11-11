@@ -557,7 +557,7 @@ def run_pipeline(args: argparse.Namespace) -> None:
     conf_matrices = {}
     for arm_name, recs in evaluator.records_by_arm.items():
         y_true = [r.gold_label for r in recs]
-        y_pred = [r.parsed_verdict for r in recs]
+        y_pred = [r.parsed_verdict if r.parsed_verdict is not None else "UNPARSEABLE" for r in recs]
         cm = confusion_matrix(y_true, y_pred, labels=CANONICAL_CLASSES).tolist()
         conf_matrices[arm_name] = cm
     with open(output_dir / "confusion_matrices.json", "w", encoding="utf-8") as f:

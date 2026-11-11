@@ -45,7 +45,8 @@ class M20iStatisticalEvaluator:
             return {}
 
         y_true = [r.gold_label for r in recs]
-        y_pred = [r.parsed_verdict for r in recs]
+        # Treat None or UNPARSEABLE as an incorrect class distinct from the 4 valid ones
+        y_pred = [r.parsed_verdict if r.parsed_verdict is not None else "UNPARSEABLE" for r in recs]
 
         acc = float(accuracy_score(y_true, y_pred))
         macro_f1 = float(f1_score(y_true, y_pred, average="macro", zero_division=0))
@@ -101,8 +102,8 @@ class M20iStatisticalEvaluator:
             return {}
 
         y_true = [test_recs[cid].gold_label for cid in common_ids]
-        y_test = [test_recs[cid].parsed_verdict for cid in common_ids]
-        y_ctrl = [ctrl_recs[cid].parsed_verdict for cid in common_ids]
+        y_test = [test_recs[cid].parsed_verdict if test_recs[cid].parsed_verdict is not None else "UNPARSEABLE" for cid in common_ids]
+        y_ctrl = [ctrl_recs[cid].parsed_verdict if ctrl_recs[cid].parsed_verdict is not None else "UNPARSEABLE" for cid in common_ids]
 
         acc_test = accuracy_score(y_true, y_test)
         acc_ctrl = accuracy_score(y_true, y_ctrl)
