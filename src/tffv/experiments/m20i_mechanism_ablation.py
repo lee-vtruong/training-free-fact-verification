@@ -332,27 +332,42 @@ def run_pipeline(args: argparse.Namespace) -> None:
                 self.m = m
                 self.t = t
 
-            def verify(self, system_instruction: str, user_prompt: str) -> str:
-                full_prompt = (
-                    f"<|im_start|>system\n{system_instruction}<|im_end|>\n"
-                    f"<|im_start|>user\n{user_prompt}<|im_end|>\n"
-                    f"<|im_start|>assistant\n"
+            def verify(self, system_instruction: str, user_prompt: str) -> Tuple[str, int, int]:
+                messages = [
+                    {"role": "system", "content": system_instruction},
+                    {"role": "user", "content": user_prompt},
+                ]
+                full_prompt = self.t.apply_chat_template(
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True,
+                    enable_thinking=False,
                 )
-                inputs = self.t(full_prompt, return_tensors="pt").to(self.m.device)
+                inputs = self.t([full_prompt], return_tensors="pt").to(self.m.device)
+                prompt_tokens = inputs.input_ids.shape[1]
                 with torch.no_grad():
                     outputs = self.m.generate(
                         **inputs,
                         max_new_tokens=512,
                         do_sample=False,
-                        temperature=0.0,
                         pad_token_id=self.t.eos_token_id,
                     )
-                gen_tokens = outputs[0][inputs.input_ids.shape[1] :]
-                return self.t.decode(gen_tokens, skip_special_tokens=True).strip()
+                gen_tokens = outputs[0][prompt_tokens:]
+                completion = self.t.decode(gen_tokens, skip_special_tokens=True).strip()
+                output_tokens = len(gen_tokens)
+                return completion, prompt_tokens, output_tokens
 
         verifier = LiveGPUVerifier(model, tokenizer)
     else:
-        verifier = MockM20iVerifier()
+        class LocalMockVerifier:
+            def verify(self, system_instruction: str, user_prompt: str) -> Tuple[str, int, int]:
+                base_mock = MockM20iVerifier()
+                completion = base_mock.verify(system_instruction, user_prompt)
+                p_tok = len((system_instruction + user_prompt).split())
+                o_tok = len(completion.split())
+                return completion, p_tok, o_tok
+
+        verifier = LocalMockVerifier()
 
     # 9. Execution of the 5 Arms
     predictions: List[M20iPredictionRecord] = []
@@ -409,7 +424,7 @@ def run_pipeline(args: argparse.Namespace) -> None:
             prompt_receipts.append(receipt_entry)
 
             t0 = time.time()
-            completion = verifier.verify(sys_inst, user_pr)
+            completion, p_tok, o_tok = verifier.verify(sys_inst, user_pr)
             lat = time.time() - t0
 
             pv, pst, _ = ContrastiveVerdictParser.parse_completion(completion)
@@ -428,7 +443,7 @@ def run_pipeline(args: argparse.Namespace) -> None:
                 parsed_verdict=pv,
                 parse_status=pst,
                 prompt_tokens=p_tok,
-                output_tokens=len(completion.split()),
+                output_tokens=o_tok,
                 latency_seconds=lat,
             )
             predictions.append(rec)
