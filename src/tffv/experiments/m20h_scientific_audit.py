@@ -82,9 +82,10 @@ class M20hScientificAuditor:
         if self.train_raw_path.exists():
             with open(self.train_raw_path, "r", encoding="utf-8") as f:
                 raw_list = json.load(f)
-                for item in raw_list:
-                    sid = f"train:{item['claim_id']}"
-                    self.train_data[sid] = item
+                for idx, item in enumerate(raw_list):
+                    cid = item.get("claim_id", item.get("id", idx))
+                    self.train_data[f"train:{cid}"] = item
+                    self.train_data[f"train:{idx}"] = item
 
         # Load exemplar catalog and outer split from m20g
         cat_path = self.m20g_dir / "exemplar_catalog.json"
