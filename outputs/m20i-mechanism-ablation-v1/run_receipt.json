@@ -1,0 +1,14 @@
+{
+  "milestone": "M2.0i",
+  "timestamp": "2026-11-11T17:19:58Z",
+  "total_records": 2750,
+  "arms_evaluated": [
+    "F0_neutral_expl",
+    "F1_header_only",
+    "F2_observed_mistake",
+    "F3_full_historical_error",
+    "F4_matched_placebo"
+  ],
+  "decision": "FRAMING_SUPPORTED",
+  "is_gpu_live": false
+}

@@ -1,0 +1,23 @@
+{
+  "certified_bank_size": 10,
+  "bank_sample_ids": [
+    "train:2956",
+    "train:37",
+    "train:622",
+    "train:47",
+    "train:48",
+    "train:1863",
+    "train:35",
+    "train:49",
+    "train:8",
+    "train:12"
+  ],
+  "bank_groups": [
+    "grp-16097fa1c40f653a",
+    "grp-ad2fe96a6908a131",
+    "grp-89b80b7304ffaec0",
+    "grp-6fb1c68e6783b216",
+    "grp-d131cd3e0c0942e2",
+    "grp-1faaa8020afd400a"
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "milestone": "M2.0i",
+  "description": "Matched Placebo Assignment Manifest with 1:1 Word Count Controls",
+  "total_exemplars": 10,
+  "assignments": [
+    {
+      "sample_id": "train:2956",
+      "gold_verdict": "Supported",
+      "actual_observed_mistake": "Earlier baseline concluded 'Not Enough Evidence' by overlooking the explicit numerical figure.",
+      "actual_word_count": 12,
+      "actual_char_count": 94,
+      "placebo_observed_mistake": "Earlier baseline concluded an alternate outcome by misinterpreting general narrative contextual descriptions.",
+      "placebo_word_count": 12,
+      "placebo_char_count": 109,
+      "word_count_delta": 0,
+      "char_count_delta": 15
+    },
+    {
+      "sample_id": "train:37",
+      "gold_verdict": "Supported",
+      "actual_observed_mistake": "Earlier baseline confused local growth projections with final World Bank published growth rates.",
+      "actual_word_count": 13,
+      "actual_char_count": 96,
+      "placebo_observed_mistake": "Earlier baseline confused secondary background news commentary with published macroeconomic GDP growth tables.",
+      "placebo_word_count": 13,
+      "placebo_char_count": 110,
+      "word_count_delta": 0,
+      "char_count_delta": 14
+    },
+    {
+      "sample_id": "train:622",
+      "gold_verdict": "Supported",
+      "actual_observed_mistake": "Earlier baseline perceived conflicting media articles rather than prioritizing the primary USDA press release.",
+      "actual_word_count": 14,
+      "actual_char_count": 110,
+      "placebo_observed_mistake": "Earlier baseline prioritized peripheral news commentary rather than consulting official primary published agency records.",
+      "placebo_word_count": 14,
+      "placebo_char_count": 121,
+      "word_count_delta": 0,
+      "char_count_delta": 11
+    },
+    {
+      "sample_id": "train:47",
+      "gold_verdict": "Refuted",
+      "actual_observed_mistake": "Earlier baseline assumed high regional drinking rates established the absolute continental top ranking.",
+      "actual_word_count": 13,
+      "actual_char_count": 103,
+      "placebo_observed_mistake": "Earlier baseline assumed regional demographic trends established absolute verified continental national statistical values.",
+      "placebo_word_count": 13,
+      "placebo_char_count": 123,
+      "word_count_delta": 0,
+      "char_count_delta": 20
+    },
+    {
+      "sample_id": "train:48",
+      "gold_verdict": "Refuted",
+      "actual_observed_mistake": "Earlier baseline accepted anecdotal claims without verifying cross-national per capita metrics.",
+      "actual_word_count": 11,
+      "actual_char_count": 95,
+      "placebo_observed_mistake": "Earlier baseline accepted preliminary survey summaries without reviewing published comparative tables.",
+      "placebo_word_count": 11,
+      "placebo_char_count": 102,
+      "word_count_delta": 0,
+      "char_count_delta": 7
+    },
+    {
+      "sample_id": "train:1863",
+      "gold_verdict": "Refuted",
+      "actual_observed_mistake": "Earlier baseline mistook receiving a committee advisory report for formal presidential executive approval.",
+      "actual_word_count": 13,
+      "actual_char_count": 106,
+      "placebo_observed_mistake": "Earlier baseline mistook preliminary committee advisory deliberations for formal executive government policy decisions.",
+      "placebo_word_count": 13,
+      "placebo_char_count": 119,
+      "word_count_delta": 0,
+      "char_count_delta": 13
+    },
+    {
+      "sample_id": "train:35",
+      "gold_verdict": "Not Enough Evidence",
+      "actual_observed_mistake": "Earlier baseline declared support based on a single quarter's dip, overlooking incomplete annual data.",
+      "actual_word_count": 14,
+      "actual_char_count": 102,
+      "placebo_observed_mistake": "Earlier baseline presumed definitive trends based on preliminary quarterly figures without formal annual audits.",
+      "placebo_word_count": 14,
+      "placebo_char_count": 112,
+      "word_count_delta": 0,
+      "char_count_delta": 10
+    },
+    {
+      "sample_id": "train:49",
+      "gold_verdict": "Not Enough Evidence",
+      "actual_observed_mistake": "Earlier baseline equated partial provincial sample estimates with a verified nationwide demographic figure.",
+      "actual_word_count": 13,
+      "actual_char_count": 107,
+      "placebo_observed_mistake": "Earlier baseline generalized localized urban sample estimates to broader population demographic summary metrics.",
+      "placebo_word_count": 13,
+      "placebo_char_count": 112,
+      "word_count_delta": 0,
+      "char_count_delta": 5
+    },
+    {
+      "sample_id": "train:8",
+      "gold_verdict": "Conflicting Evidence/Cherrypicking",
+      "actual_observed_mistake": "Earlier baseline rejected the entire statement as Refuted because one of the listed conflicts lacked primary documentation.",
+      "actual_word_count": 17,
+      "actual_char_count": 123,
+      "placebo_observed_mistake": "Earlier baseline rejected the entire composite statement because one of the listed sub-points lacked independent separate documentation.",
+      "placebo_word_count": 17,
+      "placebo_char_count": 136,
+      "word_count_delta": 0,
+      "char_count_delta": 13
+    },
+    {
+      "sample_id": "train:12",
+      "gold_verdict": "Conflicting Evidence/Cherrypicking",
+      "actual_observed_mistake": "Earlier baseline labeled the claim outright false, overlooking documented acceleration in specific quarterly GDP metrics.",
+      "actual_word_count": 15,
+      "actual_char_count": 121,
+      "placebo_observed_mistake": "Earlier baseline labeled the statement invalid, overlooking documented acceleration across specific intermediate economic reporting periods.",
+      "placebo_word_count": 15,
+      "placebo_char_count": 140,
+      "word_count_delta": 0,
+      "char_count_delta": 19
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+arm_name,verdict_class,precision,recall,f1,support
+F0_neutral_expl,Supported,0.6338,0.6122,0.6228,147
+F0_neutral_expl,Refuted,0.8405,0.4322,0.5708,317
+F0_neutral_expl,Not Enough Evidence,0.1064,0.2174,0.1429,46
+F0_neutral_expl,Conflicting Evidence/Cherrypicking,0.1126,0.4250,0.1780,40
+F1_header_only,Supported,0.6194,0.6531,0.6358,147
+F1_header_only,Refuted,0.8531,0.4763,0.6113,317
+F1_header_only,Not Enough Evidence,0.1558,0.2609,0.1951,46
+F1_header_only,Conflicting Evidence/Cherrypicking,0.1135,0.4000,0.1768,40
+F2_observed_mistake,Supported,0.6218,0.5034,0.5564,147
+F2_observed_mistake,Refuted,0.7909,0.5489,0.6480,317
+F2_observed_mistake,Not Enough Evidence,0.1163,0.2174,0.1515,46
+F2_observed_mistake,Conflicting Evidence/Cherrypicking,0.1040,0.3250,0.1576,40
+F3_full_historical_error,Supported,0.6345,0.6259,0.6301,147
+F3_full_historical_error,Refuted,0.7520,0.6025,0.6690,317
+F3_full_historical_error,Not Enough Evidence,0.1395,0.1304,0.1348,46
+F3_full_historical_error,Conflicting Evidence/Cherrypicking,0.1204,0.3250,0.1757,40
+F4_matched_placebo,Supported,0.6039,0.6327,0.6179,147
+F4_matched_placebo,Refuted,0.7738,0.6151,0.6854,317
+F4_matched_placebo,Not Enough Evidence,0.1176,0.1304,0.1237,46
+F4_matched_placebo,Conflicting Evidence/Cherrypicking,0.1304,0.3000,0.1818,40

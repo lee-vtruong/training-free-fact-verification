@@ -1,0 +1,5 @@
+comparison,corrected,harmed,both_correct,both_wrong,net_benefit,mcnemar_stat
+F3_vs_F4_placebo,36,40,266,208,-4,0.12
+F3_vs_F1_header,65,38,237,210,27,6.56
+F3_vs_F2_mistake,63,32,239,216,31,9.47
+F3_vs_F0_neutral,77,29,225,219,48,20.84

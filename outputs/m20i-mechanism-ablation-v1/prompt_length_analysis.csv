@@ -1,0 +1,6 @@
+arm_name,mean_prompt_tokens,median_prompt_tokens,mean_output_tokens
+F0_neutral_expl,1333.9,1320.0,149.4
+F1_header_only,1341.9,1328.0,109.1
+F2_observed_mistake,1395.9,1382.0,153.7
+F3_full_historical_error,1396.9,1383.0,178.2
+F4_matched_placebo,1398.9,1385.0,179.6

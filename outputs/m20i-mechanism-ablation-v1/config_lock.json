@@ -1,0 +1,26 @@
+{
+  "milestone": "M2.0i",
+  "description": "Mechanism Identification & Final Ablation Study",
+  "timestamp": "2026-11-11T13:45:00Z",
+  "arms": [
+    "F0_neutral_expl",
+    "F1_header_only",
+    "F2_observed_mistake",
+    "F3_full_historical_error",
+    "F4_matched_placebo"
+  ],
+  "k_shots": 2,
+  "seed": 1,
+  "model_architecture": {
+    "model_name": "Qwen/Qwen3-8B",
+    "weights_mode": "frozen_bf16",
+    "temperature": 0.0,
+    "max_new_tokens": 512,
+    "enable_thinking": false
+  },
+  "retrieval": {
+    "protocol": "R4-PF1000-v1",
+    "num_passages": 8
+  },
+  "primary_endpoint": "Delta_Macro_F1 (F3 - F4)"
+}
