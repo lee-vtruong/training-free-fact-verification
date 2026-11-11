@@ -84,8 +84,10 @@ class M20hScientificAuditor:
                 raw_list = json.load(f)
                 for idx, item in enumerate(raw_list):
                     cid = item.get("claim_id", item.get("id", idx))
+                    # Prefer exact claim_id mapping, fall back to index if claim_id not present
                     self.train_data[f"train:{cid}"] = item
-                    self.train_data[f"train:{idx}"] = item
+                    if f"train:{idx}" not in self.train_data:
+                        self.train_data[f"train:{idx}"] = item
 
         # Load exemplar catalog and outer split from m20g
         cat_path = self.m20g_dir / "exemplar_catalog.json"

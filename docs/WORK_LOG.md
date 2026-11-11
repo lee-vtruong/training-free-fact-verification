@@ -2886,7 +2886,50 @@
   * `tests/test_m20h_audit.py`: Bộ 6 unit tests kiểm thử toàn bộ các pha với mock fixtures.
 - **Kết Quả Kiểm Thử (CPU Local Windows):**
   * Chạy `python -m pytest`: Toàn bộ 32/32 tests (`test_m20e`, `test_m20f`, `test_m20g`, `test_m20h`) đều **PASSED** 100% trong 18.35s.
-- **Trạng thái Hiện Tại:** Pipeline M2.0h đã hoàn thành lập trình và kiểm thử unit test 100%. Đang chờ file `predictions.jsonl` (27 MB) được người dùng đồng bộ từ server về local để chạy full kiểm toán 20,200 records.
+- **Trạng thái Hiện Tại:** Pipeline M2.0h đã hoàn thành kiểm toán độc lập trên toàn bộ 20.200 predictions và niêm phong 13 artifacts tại `outputs/m20h-scientific-validation-v1/`. Kết luận: `VALIDATED_WITH_LIMITATIONS`.
+
+## 2026-11-11 20:45 +07:00 — M2.0i: Triển Khai Nghiên Cứu Bóc Tách Cơ Chế Tri Thức (Mechanism Identification & Final Ablation Study)
+
+- **Mục tiêu:** Trả lời dứt khoát câu hỏi nghiên cứu: Sự cải thiện của Historical Error K4 (+10.62% ở k=2, 59.40% ở outer-fold) thực sự bắt nguồn từ thông tin sai sót lịch sử (historical mistake content), từ định dạng tương phản (contrastive framing), hay chỉ đơn thuần là do độ dài token prompt (length confounding)?
+- **Quy tắc làm việc:** Tuân thủ nghiêm ngặt quy tắc pair-programming:
+  * Chỉ viết/sửa code, tests, docs và configs trên Windows local.
+  * Chỉ chạy CPU-only unit tests và CPU preflight dry-run.
+  * Không SSH vào GPU server, không chạy GPU jobs, không tự ý commit/push.
+  * Niêm phong toàn bộ artifacts các milestone trước (M2.0g, M2.0h).
+- **Thiết kế Thử nghiệm Factorial 5-Arm (M2.0i):**
+  * **F0 (Neutral Explanation):** Gold label + Neutral explanation, standard `[VERIFICATION REASONING]` header. Không có framing tương phản hay mistake info.
+  * **F1 (Header-Only Framing):** Thêm header `[HISTORICAL ERROR CONTRAST]` nhưng giữ nguyên nội dung F0 (không có Observed Mistake).
+  * **F2 (Observed Mistake Only):** Giữ header `[VERIFICATION REASONING]`, bổ sung dòng `- Observed Mistake: <actual_mistake>`.
+  * **F3 (Full Historical Error K4):** Cấu hình chuẩn K4 từ M2.0g: Header `[HISTORICAL ERROR CONTRAST]` + Actual Observed Mistake + Corrective Resolution.
+  * **F4 (Matched Placebo Mistake):** Cùng cấu trúc và header với F3, nhưng thay actual Observed Mistake bằng **Matched Placebo Mistake** trung tính, độc lập với target gold và có **đúng 1:1 số lượng từ (exact word count)** đối sánh với từng exemplar trong 10 certified exemplars.
+- **Tiêu Chí Đánh Giá Chính (Primary Endpoint):**
+  * $\Delta\text{Macro-F1}$ giữa F3 và F4 (Matched Placebo Control).
+  * Tiêu chí quyết định:
+    - `CONTENT_SUPPORTED`: F3 vượt trội F4 có ý nghĩa thống kê về Macro-F1 với 95% Bootstrap CI strictly $> 0$.
+    - `FRAMING_SUPPORTED`: F3 vượt trội F0 nhưng không vượt trội F4 (hiệu năng đến từ định dạng tương phản hoặc salience).
+    - `INCONCLUSIVE`: Hiệu ứng nhỏ hoặc nằm trong biên độ bất định.
+    - `INVALID`: Rò rỉ dữ liệu, lỗi phân tích cú pháp hoặc lỗi thực thi.
+- **Mã Nguồn Đã Viết & Cấu Trúc File:**
+  * `src/tffv/experiments/m20i_schemas.py`: Định nghĩa `MechanismArm`, `ProvenanceLevel`, `M20iPredictionRecord`.
+  * `src/tffv/experiments/m20i_placebos.py`: Đăng ký 10 matched placebo mistakes với độ dài 1:1 từ tuyệt đối so với 10 actual mistakes.
+  * `src/tffv/experiments/m20i_prompts.py`: Bộ sinh prompt chuẩn xác cho 5 arms F0, F1, F2, F3, F4.
+  * `src/tffv/experiments/m20i_evaluator.py`: Đánh giá thống kê, paired bootstrap 95% CI (5,000 resamples), McNemar test, và phân rã tương tác 2x2 Factorial.
+  * `src/tffv/experiments/m20i_preflight.py`: Kiểm toán preflight fail-closed: kiểm tra số lượng exemplar, đối sánh 1:1 từ của placebo, cô lập nhóm (100% group isolation), tính toàn vẹn retrieval receipts và tự suy diễn.
+  * `src/tffv/experiments/m20i_mechanism_ablation.py`: Runner hoàn chỉnh hỗ trợ `--dry-run`, `--preflight-only`, `--resume`, mock verification và GPU live. Tự động sinh toàn bộ 19 manifests, reports, worksheets và data files.
+  * `scripts/run_m20i_ablation.sh`: Shell wrapper cho server execution.
+  * `tests/test_m20i_mechanism.py`: 9 unit tests bao phủ toàn bộ schemas, prompt balance, placebo matching, preflight gates, và statistical evaluation.
+- **Kết Quả Kiểm Thử (CPU Local Windows):**
+  * Unit tests M20i: 9/9 tests passed (100%).
+  * Unit tests toàn bộ suite (`test_m20g`, `test_m20h`, `test_m20i`): 25/25 tests **PASSED** trong 7.69s.
+  * Preflight Dry-run (`python src/tffv/experiments/m20i_mechanism_ablation.py --dry-run`): **PASS** tuyệt đối trên 550 benchmark claims:
+    - `EXEMPLAR_BANK_COUNT`: PASS (10/10).
+    - `PLACEBO_WORD_MATCH`: PASS (10/10 exact 1:1 word match).
+    - `GROUP_ISOLATION`: PASS (6 exemplar groups vs 431 eval groups, 0 leaks).
+    - `RETRIEVAL_COMPLETENESS`: PASS (100% of 550 evaluation claims have Top-8 retrieval receipts).
+    - `SELF_DEMONSTRATION_LEAKAGE`: PASS (0 evaluation claims appear in exemplar bank).
+  * Tạo thành công các tài liệu: `P2_HUMAN_REVIEW_WORKSHEET.md`, `exposure_audit.md`, `placebo_assignment_manifest.json`, `config_lock.json`, `evaluation_manifest.json`.
+- **Trạng thái:** Toàn bộ mã nguồn, cấu hình và tài liệu cho M2.0i đã sẵn sàng trên local Windows. Không thực hiện SSH, GPU run hoặc git commit/push tự động theo đúng quy tắc làm việc.
+
 
 
 
