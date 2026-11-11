@@ -1,0 +1,25 @@
+{
+  "milestone": "M2.0h",
+  "timestamp_utc": "2026-11-11T12:39:33.317733+00:00",
+  "total_records_audited": 20200,
+  "determination": "VALIDATED_WITH_LIMITATIONS",
+  "engineering_validity": "PASS",
+  "statistical_evidence": "ROBUST",
+  "provenance_classification": "P2_DOMINANT",
+  "generalization_validity": "SUPPORTED",
+  "artifacts_generated": [
+    "PREFLIGHT_REPORT.md",
+    "E1_ROBUSTNESS_AUDIT.md",
+    "E2_COMPONENT_AUDIT.md",
+    "K4_PROVENANCE_AUDIT.md",
+    "k4_provenance_records.csv",
+    "E3_SOURCE_FOLD_AUDIT.md",
+    "MILESTONE_RECONCILIATION.md",
+    "per_claim_metric_recheck.csv",
+    "paired_statistical_recheck.json",
+    "prompt_length_analysis.csv",
+    "leakage_audit.json",
+    "DECISION_REPORT.md",
+    "run_receipt.json"
+  ]
+}

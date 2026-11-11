@@ -1,0 +1,5 @@
+arm_name,mean_prompt_tokens,median_prompt_tokens,mean_output_tokens
+E2_K1_gold_only,1238.9,1225.0,130.4
+E2_K2_neutral_expl,1333.9,1320.0,149.4
+E2_K3_wrong_pred,1331.9,1318.0,121.7
+E2_K4_grounded_error,1396.9,1383.0,178.2

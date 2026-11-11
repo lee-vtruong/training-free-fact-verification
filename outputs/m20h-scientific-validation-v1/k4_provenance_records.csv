@@ -1,0 +1,11 @@
+sample_id,group_id,gold_label,historical_wrong_label,provenance_classification,generator_origin,validator_status,identical_resolution_to_neutral
+train:2956,grp-16097fa1c40f653a,Supported,Not Enough Evidence,P1_VALIDATED_GROUNDED,"M1.8g Substantive Recovery (Qwen3-14B Judge Revalidated)",LLM_JUDGE_VALIDATED,True
+train:37,grp-d131cd3e0c0942e2,Supported,Refuted,P2_SOURCE_TRACEABLE_UNVALIDATED,"M1.6.2d/M1.6.2e Candidate Triage Bank (E3 Top-8 Reasoning Error, 0 Human Reviews)",TRIAGE_DRAFT_PENDING_REVIEW,True
+train:622,grp-1faaa8020afd400a,Supported,Conflicting Evidence/Cherrypicking,P2_SOURCE_TRACEABLE_UNVALIDATED,"AVeriTeC Train Fold-1 Primary Agency Report (USDA Press Release)",UNVALIDATED_PRIMARY_SOURCE,True
+train:47,grp-ad2fe96a6908a131,Refuted,Supported,P2_SOURCE_TRACEABLE_UNVALIDATED,"M1.6.2d/M1.6.2e Candidate Triage Bank (E3 Top-8 Reasoning Error, 0 Human Reviews)",TRIAGE_DRAFT_PENDING_REVIEW,True
+train:48,grp-ad2fe96a6908a131,Refuted,Supported,P2_SOURCE_TRACEABLE_UNVALIDATED,"M1.6.2d/M1.6.2e Candidate Triage Bank (E3 Top-8 Reasoning Error, 0 Human Reviews)",TRIAGE_DRAFT_PENDING_REVIEW,True
+train:1863,grp-6fb1c68e6783b216,Refuted,Conflicting Evidence/Cherrypicking,P2_SOURCE_TRACEABLE_UNVALIDATED,"M1.6.2d/M1.6.2e Candidate Triage Bank (E3 Top-8 Reasoning Error, 0 Human Reviews)",TRIAGE_DRAFT_PENDING_REVIEW,True
+train:35,grp-d131cd3e0c0942e2,Not Enough Evidence,Supported,P2_SOURCE_TRACEABLE_UNVALIDATED,"M1.6.2d/M1.6.2e Candidate Triage Bank (E3 Top-8 Reasoning Error, 0 Human Reviews)",TRIAGE_DRAFT_PENDING_REVIEW,True
+train:49,grp-ad2fe96a6908a131,Not Enough Evidence,Supported,P2_SOURCE_TRACEABLE_UNVALIDATED,"M1.6.2d/M1.6.2e Candidate Triage Bank (E3 Top-8 Reasoning Error, 0 Human Reviews)",TRIAGE_DRAFT_PENDING_REVIEW,True
+train:8,grp-89b80b7304ffaec0,Conflicting Evidence/Cherrypicking,Refuted,P2_SOURCE_TRACEABLE_UNVALIDATED,"M1.6.2d/M1.6.2e Candidate Triage Bank (E3 Top-8 Reasoning Error, 0 Human Reviews)",TRIAGE_DRAFT_PENDING_REVIEW,True
+train:12,grp-89b80b7304ffaec0,Conflicting Evidence/Cherrypicking,Refuted,P2_SOURCE_TRACEABLE_UNVALIDATED,"M1.6.2d/M1.6.2e Candidate Triage Bank (E3 Top-8 Reasoning Error, 0 Human Reviews)",TRIAGE_DRAFT_PENDING_REVIEW,True

@@ -1,0 +1,9 @@
+{
+  "benchmark_evaluation_group_leaks": 0,
+  "outer_fold_group_leaks": 0,
+  "self_target_exemplar_leaks": 0,
+  "target_gold_verdict_leaks": 0,
+  "verdict_parser_mismatches": 0,
+  "gold_label_mismatches": 0,
+  "audit_status": "CLEAN_ZERO_LEAKAGE"
+}
